@@ -40,7 +40,7 @@ function LanguageContextProvider({ children }: { children: ReactNode }) {
 
   function selectLanguage(value: string): void {
     setSelectedLanguage(value);
-    setIsSelectLanguage(!isSelectLanguage);
+    setIsSelectLanguage(true);
   }
 
   return (

@@ -8,6 +8,8 @@ import config from '../../config/config.json';
 import FrequentQuestion from '../FrequentQuestion/FrequentQuestion';
 import InputEvaluate from '../InputEvaluate/InputEvaluate';
 import { FeedbackAttributes } from '../../types/feedback/feedback.type';
+import { TranslateAttributes } from '../../types/languages/translate.type';
+import Description from '../../components/Text/Description';
 
 export default function Feedback() {
   //Init Component
@@ -85,12 +87,12 @@ export default function Feedback() {
                 <InputEvaluate
                   id={feedback}
                   getDataForm={({ id, value }) => getDataForm({ id, value })}
-                  content={userLanguage[feedback]}
+                  content={userLanguage[feedback as keyof TranslateAttributes]}
                 />
               </Fragment>
             );
           })}
-          <p>{userLanguage?.feedback_comments}</p>
+          <Description content={userLanguage?.feedback_comments} tag={'p'} className={''}/>
           {/* Input Comment */}
           <Input
             variant="text"

@@ -2,13 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-#root {
+/* If addding some new color, you must add into tailwindcss.config.js
+Provide all colors into project
+*/
+
+:root {
   --text: rgb(60, 64, 70);
-  --bot: rgb(255, 188, 73);
-  --user: rgb(255, 107, 108);
+  --bot: rgb(255, 188, 73, 0.5);
+  --user: rgb(255, 107, 108, 0.5);
   --primary: rgb(230, 230, 230);
-  --secondary: #3341f6;
+  --secondary: rgb(51, 65, 246);
   --third: rgb(240, 242, 246);
+
+  /* Notifications */
+  --sucess: rgb(153, 204, 51);
+  --warning: rgb(255, 204, 0, 0.3);
+  --error: rgb(255, 153, 102);
+  --information: rgba(200, 231, 255, 0.5);
 }
 
 p,
@@ -23,15 +33,30 @@ ol {
 }
 
 h1 {
-  @apply font-bold;
+  @apply font-bold text-2xl px-2;
+}
+
+h2 {
+  @apply font-bold text-sm px-2;
 }
 
 h3 {
   @apply font-bold;
 }
 
+h4 {
+}
+
+p {
+  @apply font-light;
+}
+
+hr {
+  @apply my-2;
+}
+
 input[type='number'] {
-  @apply rounded-md h-8 w-full bg-third;
+  @apply rounded-md h-8 w-full bg-white;
   /*Firefox*/
   -moz-appearance: textfield;
 }
@@ -41,49 +66,9 @@ input[type='number'] {
   @apply flex flex-row h-screen w-screen;
 }
 
+/* SideBar */
 #side-bar {
-  @apply relative flex shrink flex-col bg-third w-1/5 h-full p-8 overflow-y-auto gap-2 items-center;
-}
-
-#header-language {
-  @apply relative flex flex-col flex-1 gap-4;
-}
-
-#main {
-  @apply relative flex-1 bg-primary h-full w-full overflow-y-scroll overflow-x-hidden p-16;
-}
-
-/* Tab Panel */
-#tab-panel {
-  @apply flex flex-row my-4 gap-4 w-screen border-slate-300;
-}
-
-.tab-selected {
-  @apply text-secondary;
-}
-
-.tab {
-  @apply text-text;
-}
-
-/* Panel */
-
-/* Chat */
-
-#chat {
-  @apply flex flex-col gap-4;
-}
-
-.chat-info {
-  @apply flex flex-col;
-}
-
-.chat-info-hidden {
-  @apply hidden;
-}
-
-input[type='text'] {
-  @apply rounded-md h-8 w-full bg-third;
+  @apply absolute flex shrink flex-col z-20  bg-third w-1/5 h-screen pt-16 p-8 overflow-y-auto gap-2 items-center min-w-72 md:min-w-72;
 }
 
 /* Statut Login */
@@ -91,31 +76,121 @@ input[type='text'] {
   @apply flex flex-col mt-4 gap-2 w-full;
 }
 
-/* IconButtons */
-.icons-actions {
-  @apply absolute z-10 top-4 w-4;
+/* Main Page */
+
+#main {
+  @apply relative flex-1 bg-primary h-full w-full overflow-y-scroll overflow-x-hidden px-4 pt-12 pb-4;
 }
 
-.left {
-  @apply left-8;
+.main-reduce {
+  @apply md:ml-96;
 }
 
-.right {
-  @apply right-8;
+/* Header */
+#header-language {
+  @apply relative flex flex-col flex-1 gap-4 mt-4 items-center;
+}
+
+/* Panel */
+#tab-panel {
+  @apply flex flex-row my-4 gap-4 h-max w-full rounded-3xl shadow-sm bg-third justify-start items-center px-4;
+}
+
+.tab-selected {
+  @apply text-white bg-black rounded-3xl px-4 py-2;
+}
+
+.tab {
+  @apply text-text;
+}
+
+/* Chat */
+#chat {
+  @apply flex flex-col h-fit gap-4;
+}
+
+/* Information */
+.chat-information {
+  @apply flex flex-col bg-warning p-2 rounded-xl text-sm text-justify;
+}
+
+.chat-info {
+  @apply flex-1 p-2 gap-2 transition ease-in-out delay-150 duration-150 text-sm;
+}
+
+.chat-info-hidden {
+  @apply hidden transition ease-in-out delay-150 duration-150;
+}
+
+/* Messages */
+#list-messages {
+  @apply relative flex flex-col h-full mt-2 gap-6;
+}
+
+.message {
+  @apply flex flex-row w-full whitespace-pre-wrap;
+}
+
+.message-bot {
+  @apply flex flex-row justify-start rounded-3xl gap-4;
+}
+
+.message-user {
+  @apply flex flex-row justify-end rounded-3xl gap-4;
+}
+
+.icon-bot {
+  @apply bg-bot;
+}
+.icon-user {
+  @apply bg-user;
+}
+
+.icon {
+  @apply h-8 rounded-xl px-2;
+}
+
+.text--bot {
+  @apply bg-slate-100 border-2 border-slate-300 hover:border-indigo-300 rounded-tr-lg rounded-b-lg text-justify justify-center content-center p-4;
+}
+
+.text--user {
+  @apply bg-black border-2 border-slate-200 rounded-tl-lg rounded-b-lg justify-center content-center p-4 text-justify text-white;
 }
 
 /* Input Message */
+input[type='text'] {
+  @apply rounded-xl border border-solid border-slate-100 h-fit w-full bg-white pr-9;
+}
+
+.container-icons-actions {
+  @apply absolute flex flex-row z-10 top-4 w-52;
+}
+
+/* IconButtons */
+.icons-actions {
+  @apply absolute flex flex-row z-10 top-4 w-52;
+}
+
+.left {
+  @apply w-fit h-fit left-[-18px] bg-third border border-solid border-slate-200 rounded-3xl p-2 hover:left-1 ease-in-out hover:duration-75 ease-in-out hover:delay-75 ease-in-out;
+}
+
+.right {
+  @apply w-fit right-8 gap-4;
+}
+
+/* Input Message */
+.container-input {
+  @apply relative flex flex-row w-full;
+}
 
 .input-user {
   @apply p-4;
 }
 
-.container-input {
-  @apply relative flex flex-row w-full;
-}
-
 .icon-send-message {
-  @apply right-2 absolute inline-block border-secondary hover:text-third hover:text-secondary h-full p-1;
+  @apply absolute right-2 inline-block border-secondary hover:text-third hover:text-secondary h-full;
 }
 
 /* Inputs Evaluate */
@@ -141,7 +216,7 @@ input::-webkit-inner-spin-button {
 
 /* Buttons */
 .btn_actions {
-  @apply font-medium cursor-pointer w-52 h-8 rounded-md border;
+  @apply font-medium cursor-pointer w-fit h-fit rounded-md border p-2;
 }
 
 .contained {
@@ -155,7 +230,7 @@ input::-webkit-inner-spin-button {
 /* Menu Modal */
 
 #menu-modal {
-  @apply absolute flex flex-col z-10 right-8 top-12 rounded-lg shadow-xl bg-third p-2 w-52;
+  @apply absolute flex flex-col z-10 right-0 mt-10 rounded-lg shadow-xl bg-third p-2 w-52;
 }
 
 .list-menu-modal {
@@ -164,10 +239,6 @@ input::-webkit-inner-spin-button {
 
 .menu-modal-item {
   @apply w-full list-none cursor-pointer hover:bg-user hover:w-full;
-}
-
-hr {
-  @apply my-2;
 }
 
 /* Modal parameter */
@@ -180,35 +251,6 @@ hr {
   @apply w-1/2 h-1/2 bg-third rounded-lg;
 }
 
-/* Message */
-
-#list-messages {
-  @apply flex flex-col w-full h-full gap-4;
-}
-
-.message {
-  @apply flex flex-row w-full;
-}
-
-.message-bot {
-  @apply flex flex-row justify-start bg-third rounded-lg whitespace-pre-wrap gap-4 p-2;
-}
-
-.message-user {
-  @apply flex flex-row justify-end bg-third rounded-lg whitespace-pre-wrap gap-4 p-2;
-}
-
-.icon-bot {
-  @apply h-8 rounded-lg px-2 bg-bot;
-}
-.icon-user {
-  @apply h-8 rounded-lg px-2 bg-user;
-}
-
-.text {
-  @apply justify-center content-center;
-}
-
 #frequently-question-box {
   @apply flex flex-col gap-4;
 }
@@ -218,13 +260,23 @@ hr {
 }
 
 #form {
-  @apply flex flex-col gap-1;
+  @apply flex flex-col gap-2;
 }
 
-.box-language {
-  @apply flex flex-col gap-8;
+/* Loader */
+
+.wrapper {
+  @apply relative w-16 h-8 bg-black rounded-xl;
 }
 
-.box-language-list {
-  @apply flex flex-row gap-8 w-full h-1/2;
+.circle {
+  @apply absolute  w-2 h-2 bg-white top-[40%] left-[25%] rounded-xl animate-loading origin-[50%];
+}
+
+.circle:nth-child(2) {
+  @apply left-[45%] delay-200;
+}
+
+.circle:nth-child(3) {
+  @apply right-[20%] left-auto delay-300;
 }

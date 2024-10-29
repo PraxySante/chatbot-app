@@ -37,7 +37,7 @@ export interface IIconButton {
 }
 
 export interface IInput {
-  variant: 'text' | 'number';
+  variant: 'text' | 'number' | 'textarea';
   score?: number;
   content?: string;
   onChange?: (e?: any) => void;
@@ -45,7 +45,7 @@ export interface IInput {
 
 export interface ILink {
   id: string;
-  className: 'menu-modal-item';
+  className: 'menu-modal-item' | 'tab-selected' | 'tab';
   name: string;
   onClick: (menuItem: string) => void;
 }

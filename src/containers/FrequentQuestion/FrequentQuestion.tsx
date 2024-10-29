@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLanguage } from '../../hooks/UseLanguage';
 import CheckBox from '../../components/Buttons/CheckBox';
 import { IFrenquentQuestion } from '../../types/feedback/feedback.interface';
+import Title from '../../components/Text/Title';
 
 export default function FrequentQuestion({ getDataForm }: IFrenquentQuestion) {
   // Init Component
@@ -20,7 +21,11 @@ export default function FrequentQuestion({ getDataForm }: IFrenquentQuestion) {
     <>
       <section id="frequently-question-box">
         {/* Title */}
-        <h3>Feedback {userLanguage!.feedback_scale}</h3>
+        <Title
+          className="text-wrap"
+          content={`Feedback ${userLanguage!.feedback_scale}`}
+          tag={'h2'}
+        />
         {/* Checkbox */}
         <CheckBox
           className="frequently-question-items"

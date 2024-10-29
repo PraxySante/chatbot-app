@@ -7,7 +7,7 @@ const axiosOpenAI = axios.create({
 
 // Configuration DIRECTUS SECRET to connect DIRECTUS URL
 axiosOpenAI.defaults.headers.common['Authorization'] =
-  import.meta.env.VITE_MIXTRAL_API_KEY;
+  import.meta.env.VITE_OPEN_API_KEY;
 // Configuration Content Type
 axiosOpenAI.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded';

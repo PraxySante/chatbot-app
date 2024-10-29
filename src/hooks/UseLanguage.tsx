@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
-import { LanguageContextAttributes } from '../types/languages.context.type';
+import { LanguageContextAttributes } from '../types/languages/languages.context.type';
 
 // Custom Hook to use context
 function useLanguage(): LanguageContextAttributes {

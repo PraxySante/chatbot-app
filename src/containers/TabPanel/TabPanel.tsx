@@ -1,6 +1,8 @@
 import { tabPanelAttributes } from '../../types/panel/tab.type';
 import { useLanguage } from '../../hooks/UseLanguage';
 import { IPanel } from '../../types/panel/panel.interface';
+import Link from '../../components/Link/Link';
+import { Fragment } from 'react/jsx-runtime';
 
 export default function TabPanel({ selectedPanel, setSelectedPanel }: IPanel) {
   //Init Component
@@ -23,13 +25,14 @@ export default function TabPanel({ selectedPanel, setSelectedPanel }: IPanel) {
       {/* Rendering Tab Panel */}
       {tabPanel.map((tab: tabPanelAttributes, index: number) => {
         return (
-          <a
-            onClick={() => setSelectedPanel(tab.id)}
-            className={selectedPanel === tab.id ? 'tab-selected' : 'tab'}
-            key={index}
-          >
-            {tab.name}
-          </a>
+          <Fragment key={index}>
+            <Link
+              id={tab.id}
+              className={selectedPanel === tab.id ? 'tab-selected' : 'tab'}
+              name={tab.name}
+              onClick={() => setSelectedPanel(tab.id)}
+            />
+          </Fragment>
         );
       })}
     </div>

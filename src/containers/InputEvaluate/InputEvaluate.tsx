@@ -3,6 +3,8 @@ import Input from '../../components/Inputs/Input';
 import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import { IInputEvaluate } from '../../types/inputs/inputs.interface';
+import Title from '../../components/Text/Title';
+import Description from '../../components/Text/Description';
 
 export default function InputEvaluate({
   id,
@@ -12,6 +14,19 @@ export default function InputEvaluate({
   // Init Component
   // Hook State to get score for each input
   const [score, setScore] = useState<number>(0);
+  const [isShowInformation, setIsShowinformation] = useState<boolean>(false);
+  const [contentTitle, setContentTitle] = useState<string>('');
+  const [contentInformation, setContentInformation] = useState<string>('');
+
+  useEffect(() => {
+    const startPoint = content.indexOf('*') + 2;
+    const endPoint = content.lastIndexOf('*') - 3;
+
+    const contentTitle = content.slice(startPoint, endPoint);
+    const contentInformation = content.slice(endPoint + 4, content.length);
+    setContentTitle(contentTitle);
+    setContentInformation(contentInformation);
+  }, []);
 
   // Hook to render each score according user action
   useEffect(() => {
@@ -39,9 +54,26 @@ export default function InputEvaluate({
     return <Input score={score} variant={'number'} />;
   }
 
+  function showInformation() {
+    setIsShowinformation(!isShowInformation);
+  }
+
   return (
     <>
-      <p id={id}>{content}</p>
+      <div className="flex flex-row w-fit" onClick={showInformation}>
+        <IconButton
+          className="border border-solid border-slate-200 w-fit h-fit rounded-xl"
+          icon={isShowInformation ? icons?.showText : icons?.reduceText}
+        />
+        <Title content={contentTitle} tag={'h2'} className={''} />
+      </div>
+      <Description
+        id={id}
+        content={contentInformation}
+        tag={'p'}
+        className={isShowInformation ? 'text-sm w-52' : 'hidden'}
+      />
+
       <div className="container-input">
         {/* Render input component according new score  */}
         {renderingScore()}

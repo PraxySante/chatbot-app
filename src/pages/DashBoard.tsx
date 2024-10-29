@@ -4,17 +4,15 @@ import { useLanguage } from '../hooks/UseLanguage';
 import icons from '../constants/icons';
 
 import Header from '../containers/Header/Header';
-import SideBar from '../containers/SideBar/SideBar';
 import TabPanel from '../containers/TabPanel/TabPanel';
 import Panel from '../containers/Panel/Panel';
 import ModalMenu from '../containers/ModalMenu/ModalMenu';
 import IconButton from '../components/Buttons/IconButton';
 import ModalParameter from '../containers/ModalParameter/ModalParameter';
-
-type ModalParameterAttributes = {
-  menuItem: string;
-  isOpen: boolean;
-};
+import { ModalParameterAttributes } from '../types/modal/modal.type';
+import SelectLanguage from '../containers/SelectLanguage/SelectLanguage';
+import config from '../config/config.json';
+import SideBar from '../containers/SideBar/SideBar';
 
 export default function DashBoard() {
   // Check status authentification from Auth0
@@ -23,7 +21,7 @@ export default function DashBoard() {
   const { selectedLanguage } = useLanguage();
 
   // Check opening sideBar default is true
-  const [isOpenSideBar, setIsOpenSideBar] = useState<boolean>(true);
+  const [isOpenSideBar, setIsOpenSideBar] = useState<boolean>(false);
 
   // Check opening ModalMenu default is false
   const [isOpenModalMenu, setIsOpenModalMenu] = useState<boolean>(false);
@@ -39,6 +37,8 @@ export default function DashBoard() {
     renderingModalParameter;
   }, [setIsOpenModalParameter]);
 
+  useEffect(() => {}, [selectedPanel]);
+
   // Function to switch Open/Close SideBar
   function toggleOpenCloseSideBar() {
     setIsOpenSideBar(!isOpenSideBar);
@@ -47,6 +47,13 @@ export default function DashBoard() {
   // Function to switch Open/Close ModalMenu
   function toggleOpenCloseModalMenu() {
     setIsOpenModalMenu(!isOpenModalMenu);
+  }
+
+  // Function to switch Open/Close ModalMenu
+  function closeModalByClickBackGround() {
+    if (isOpenModalMenu) {
+      setIsOpenModalMenu(!isOpenModalMenu);
+    }
   }
 
   // Rendering Modal Parameter according user selection
@@ -67,7 +74,7 @@ export default function DashBoard() {
   return (
     <>
       {/* Dashboard section */}
-      <div id="dashboard">
+      <div id="dashboard" onClick={closeModalByClickBackGround}>
         {/* Rendering ModalParameter */}
         {renderingModalParameter()}
         {/* Sidebar section */}
@@ -80,28 +87,22 @@ export default function DashBoard() {
             />
           </span>
         )}
-        {/*  SideBar */}
-        {isOpenSideBar && (
-          <SideBar toggleOpenCloseSideBar={toggleOpenCloseSideBar} />
-        )}
-
-        {/* Main section */}
-        <section id="main">
-          {/* Button toggle Open/Close Modal Parameter */}
-          <span className="icons-actions right">
-            <IconButton
-              onClick={toggleOpenCloseModalMenu}
-              icon={icons.menuBar}
-            />
-          </span>
-
-          {/* Button toggle Open/Close ModalMenu Parameters */}
+        <span className="icons-actions right">
+          <SelectLanguage />
+          <IconButton onClick={toggleOpenCloseModalMenu} icon={icons.menuBar} />
           {isOpenModalMenu ? (
             <ModalMenu setIsOpenModalParameter={setIsOpenModalParameter} />
           ) : null}
-          {/* Header */}
-          <Header />
+        </span>
+        {/*  SideBar */}
+        {isOpenSideBar ? (
+          <SideBar toggleOpenCloseSideBar={toggleOpenCloseSideBar} />
+        ) : null}
 
+        {/* Main section */}
+        <section id="main" className={isOpenSideBar ? 'main-reduce' : ''}>
+          {/* Button toggle Open/Close Modal Parameter */}
+          {/* Button toggle Open/Close ModalMenu Parameters */}
           {isAuthenticated && selectedLanguage ? (
             <>
               {/* Tab Panel */}
@@ -112,7 +113,12 @@ export default function DashBoard() {
               {/* Panel */}
               <Panel selectedPanel={selectedPanel} />
             </>
-          ) : null}
+          ) : (
+            <>
+              {/* Header */}
+              <Header />
+            </>
+          )}
         </section>
       </div>
     </>

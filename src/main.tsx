@@ -2,24 +2,28 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import { LanguageContextProvider } from './context/LanguageContext.tsx';
+import { ChatContextProvider } from './context/ChatContext.tsx';
 import AuthProvider from './hooks/AuthProvider.tsx';
 
 import './reset.css';
 import './index.css';
 
-//const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {import.meta.env.VITE_AUTH0_DOMAIN ?
+    {import.meta.env.VITE_AUTH0_DOMAIN ? (
       <AuthProvider>
-        <LanguageContextProvider>
-          <App />
-        </LanguageContextProvider>
+        <ChatContextProvider>
+          <LanguageContextProvider>
+            <App />
+          </LanguageContextProvider>
+        </ChatContextProvider>
       </AuthProvider>
-      :
+    ) : (
       <LanguageContextProvider>
-        <App />
-      </LanguageContextProvider>}
+        <ChatContextProvider>
+          <App />
+        </ChatContextProvider>
+      </LanguageContextProvider>
+    )}
   </StrictMode>
 );

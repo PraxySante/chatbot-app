@@ -1,6 +1,7 @@
 import Button from '../../components/Buttons/Button';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useLanguage } from '../../hooks/UseLanguage';
+import Description from '../../components/Text/Description';
 
 export default function Auth() {
   // Init Component
@@ -11,7 +12,11 @@ export default function Auth() {
 
   return (
     <>
-      <p>{userLanguage?.chat_login_message}</p>
+      <Description
+        content={userLanguage ? userLanguage?.chat_login_message : ''}
+        tag={'p'}
+        className={''}
+      />
       {/*Button Login/Logout*/}
       {!isLoading ? (
         <Button

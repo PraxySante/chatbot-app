@@ -8,9 +8,12 @@ import {
 } from '../../helpers/historyChat.function';
 import Information from '../Information/Information';
 import ListMessages from '../ListMessages/ListMessages';
+import { useChat } from '../../hooks/ChatProvider';
 
 export default function Chat() {
   //Init Component
+  //
+  const { isRestart } = useChat();
   // Check selected language by user
   const { userLanguage } = useLanguage();
   // Check user data
@@ -34,6 +37,18 @@ export default function Chat() {
     }
     renderingMessages();
   }, [setMessages]);
+
+  useEffect(() => {
+    if (isRestart) {
+      setMessages([
+        {
+          id: 0,
+          name: 'bot',
+          message: `${userLanguage?.voc_hello} ${user?.nickname}! ${userLanguage?.chat_first_message}`,
+        },
+      ]);
+    }
+  }, [isRestart]);
 
   // Function to get new message
   function getMessage(name: string, message: string) {

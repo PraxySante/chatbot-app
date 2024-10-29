@@ -4,12 +4,16 @@ import Link from '../../components/Link/Link';
 import { Fragment } from 'react/jsx-runtime';
 import { resetMessageLocalStorage } from '../../helpers/historyChat.function';
 import { IMenu } from '../../types/modal/modal.interface';
+import { useChat } from '../../hooks/ChatProvider';
 
 export default function ModalMenu({ setIsOpenModalParameter }: IMenu) {
+
+  // 
+  const { selectedRestart } = useChat();
   // Function user selection on modal menu
   function onClick(menuItem: string) {
     if (menuItem === 're-run') {
-      // ! Reset chat
+      selectedRestart();
       resetMessageLocalStorage();
     } else {
       // Switch and open Modal Parameter

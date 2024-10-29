@@ -8,6 +8,7 @@ import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import StatutLogin from '../StatutLogin/StatutLogin';
 import Feedback from '../Feedback/Feedback';
+import { useChat } from '../../hooks/ChatProvider';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
@@ -17,6 +18,8 @@ interface ISideBar {
 
 export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
   //Init Component
+  // Restart Chat
+  const { selectedRestart } = useChat();
   // Check selected language by user
   const { userLanguage, selectedLanguage } = useLanguage();
   // Check user authentified
@@ -24,7 +27,7 @@ export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
 
   // Function restart chat
   function restartChat() {
-    console.log('restart');
+    selectedRestart();
   }
 
   return (
