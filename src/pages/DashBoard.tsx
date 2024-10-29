@@ -11,7 +11,6 @@ import IconButton from '../components/Buttons/IconButton';
 import ModalParameter from '../containers/ModalParameter/ModalParameter';
 import { ModalParameterAttributes } from '../types/modal/modal.type';
 import SelectLanguage from '../containers/SelectLanguage/SelectLanguage';
-import config from '../config/config.json';
 import SideBar from '../containers/SideBar/SideBar';
 
 export default function DashBoard() {
@@ -36,8 +35,6 @@ export default function DashBoard() {
   useEffect(() => {
     renderingModalParameter;
   }, [setIsOpenModalParameter]);
-
-  useEffect(() => {}, [selectedPanel]);
 
   // Function to switch Open/Close SideBar
   function toggleOpenCloseSideBar() {
