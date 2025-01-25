@@ -1,10 +1,11 @@
 import { createElement } from 'react';
 
 type DescriptionAttributes = {
-  id?:string
+  id?: string;
   content: string;
   tag: 'p';
   className: string;
+  children?: JSX.Element;
 };
 
 export default function Description({
@@ -12,6 +13,7 @@ export default function Description({
   tag,
   content,
   className,
+  children,
 }: DescriptionAttributes) {
-  return <>{createElement(tag, { className, id }, content)}</>;
+  return <>{createElement(tag, { className, id }, content, children)} </>;
 }

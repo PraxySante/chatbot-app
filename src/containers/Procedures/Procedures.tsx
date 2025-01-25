@@ -20,10 +20,15 @@ export default function Procedures({}) {
         tag={'h3'}
         className={''}
       />
-      {isLoading ? (
-        <section>
+      {isLoading && userLanguage ? (
+        <section className="flex flex-col">
           <Title
-            content={userLanguage ? userLanguage?.procedure_not_yet : ''}
+            content={userLanguage?.procedure_not_yet}
+            tag={'h4'}
+            className={''}
+          />
+          <Title
+            content={userLanguage?.procedure_responses_files}
             tag={'h4'}
             className={''}
           />
@@ -32,11 +37,6 @@ export default function Procedures({}) {
         <section>
           {userLanguage && (
             <>
-              <Title
-                content={userLanguage?.procedure_responses_files}
-                tag={'h4'}
-                className={''}
-              />
               <Button
                 type={'button'}
                 content={userLanguage?.procedure_download}

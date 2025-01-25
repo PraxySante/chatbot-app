@@ -8,17 +8,15 @@ import AuthProvider from './hooks/AuthProvider.tsx';
 import './reset.css';
 import './index.css';
 
-console.log(import.meta.env.VITE_AUT0_OPT)
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {import.meta.env.VITE_OPT_AUT0 ? (
+    {import.meta.env.VITE_OPT_AUT0_ACCOUNT ? (
       <AuthProvider>
-        <ChatContextProvider>
-          <LanguageContextProvider>
+        <LanguageContextProvider>
+          <ChatContextProvider>
             <RoutesProvider />
-          </LanguageContextProvider>
-        </ChatContextProvider>
+          </ChatContextProvider>
+        </LanguageContextProvider>
       </AuthProvider>
     ) : (
       <LanguageContextProvider>

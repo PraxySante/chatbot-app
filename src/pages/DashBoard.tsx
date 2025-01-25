@@ -12,12 +12,17 @@ import ModalParameter from '../containers/ModalParameter/ModalParameter';
 import { ModalParameterAttributes } from '../types/modal/modal.type';
 import SelectLanguage from '../containers/SelectLanguage/SelectLanguage';
 import SideBar from '../containers/SideBar/SideBar';
+import Button from '../components/Buttons/Button';
+import { useChat } from '../hooks/ChatProvider';
 
 export default function DashBoard() {
+  //Init Component
+  // Restart Chat
+  const { selectedRestart } = useChat();
   // Check status authentification from Auth0
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   // Check language selected
-  const { selectedLanguage } = useLanguage();
+  const { userLanguage, selectedLanguage } = useLanguage();
 
   // Check opening sideBar default is true
   const [isOpenSideBar, setIsOpenSideBar] = useState<boolean>(false);
@@ -53,8 +58,14 @@ export default function DashBoard() {
     }
   }
 
+  // Function restart chat
+  function restartChat() {
+    selectedRestart();
+  }
+
   // Rendering Modal Parameter according user selection
   function renderingModalParameter() {
+
     return (
       <>
         {/* Modal Parameter */}
@@ -73,26 +84,43 @@ export default function DashBoard() {
       {/* Dashboard section */}
       <div id="dashboard" onClick={closeModalByClickBackGround}>
         {/* Rendering ModalParameter */}
-        {renderingModalParameter()}
+        {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' &&
+          renderingModalParameter()}
+
         {/* Sidebar section */}
         {/* Button toggle Open/Close SideBar */}
-        {!isOpenSideBar && (
-          <span className="icons-actions left">
-            <IconButton
-              onClick={toggleOpenCloseSideBar}
-              icon={icons.arrowRight}
-            />
-          </span>
-        )}
+        {import.meta.env.VITE_OPT_SIDEBAR === 'true' ? (
+          <>
+            {!isOpenSideBar ? (
+              <span className="icons-actions left">
+                <IconButton
+                  onClick={toggleOpenCloseSideBar}
+                  icon={icons.arrowRight}
+                />
+              </span>
+            ) : null}
+          </>
+        ) : null}
+
+        {/* Icons */}
         <span className="icons-actions right">
           <SelectLanguage />
-          <IconButton onClick={toggleOpenCloseModalMenu} icon={icons.menuBar} />
-          {isOpenModalMenu ? (
-            <ModalMenu setIsOpenModalParameter={setIsOpenModalParameter} />
-          ) : null}
+
+          {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' && (
+            <>
+              <IconButton
+                onClick={toggleOpenCloseModalMenu}
+                icon={icons.menuBar}
+              />
+              {isOpenModalMenu ? (
+                <ModalMenu setIsOpenModalParameter={setIsOpenModalParameter} />
+              ) : null}
+            </>
+          )}
         </span>
+
         {/*  SideBar */}
-        {isOpenSideBar ? (
+        {import.meta.env.VITE_OPT_SIDEBAR === 'true' && isOpenSideBar ? (
           <SideBar toggleOpenCloseSideBar={toggleOpenCloseSideBar} />
         ) : null}
 
@@ -100,7 +128,27 @@ export default function DashBoard() {
         <section id="main" className={isOpenSideBar ? 'main-reduce' : ''}>
           {/* Button toggle Open/Close Modal Parameter */}
           {/* Button toggle Open/Close ModalMenu Parameters */}
-          {isAuthenticated && selectedLanguage ? (
+          
+          {import.meta.env.VITE_OPT_AUT0_ACCOUNT === 'true' ? (
+            <>
+              {isAuthenticated && selectedLanguage ? (
+                <>
+                  {/* Tab Panel */}
+                  <TabPanel
+                    selectedPanel={selectedPanel}
+                    setSelectedPanel={setSelectedPanel}
+                  />
+                  {/* Panel */}
+                  <Panel selectedPanel={selectedPanel} />
+                </>
+              ) : (
+                <>
+                  {/* Header */}
+                  <Header />
+                </>
+              )}
+            </>
+          ) : (
             <>
               {/* Tab Panel */}
               <TabPanel
@@ -109,11 +157,6 @@ export default function DashBoard() {
               />
               {/* Panel */}
               <Panel selectedPanel={selectedPanel} />
-            </>
-          ) : (
-            <>
-              {/* Header */}
-              <Header />
             </>
           )}
         </section>

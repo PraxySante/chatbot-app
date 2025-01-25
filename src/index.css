@@ -83,7 +83,7 @@ input[type='number'] {
 }
 
 .main-reduce {
-  @apply md:ml-96;
+  @apply md:ml-80;
 }
 
 /* Header */
@@ -132,7 +132,7 @@ input[type='number'] {
 }
 
 .message-bot {
-  @apply flex flex-row justify-start rounded-3xl gap-4;
+  @apply flex flex-row text-pretty w-3/4 justify-start rounded-3xl gap-4;
 }
 
 .message-user {

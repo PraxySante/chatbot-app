@@ -3,11 +3,10 @@ import { useLanguage } from '../../hooks/UseLanguage';
 import Input from '../../components/Inputs/Input';
 import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
-import { sendMessageToChatBot } from '../../helpers/chatEngine.function';
 import { IInputMessage } from '../../types/messages/messages.interface';
+import { useChat } from '../../hooks/ChatProvider';
 
 export default function InputMessage({
-  getMessage,
   setIsBotWritten,
   setIsUserWritten,
 }: IInputMessage) {
@@ -16,6 +15,7 @@ export default function InputMessage({
   const [userContent, setUserContent] = useState<string>('');
   // Check selected language
   const { userLanguage } = useLanguage();
+  const {requestChatConversation} = useChat()
 
   // Function Get any change from user message
   function onChange(e: any): void {
@@ -24,16 +24,13 @@ export default function InputMessage({
       setIsUserWritten(true);
     } else {
       setIsUserWritten(false);
-
     }
   }
 
   // Function preparing message to ChatBot
   function sendMessage(e: any): void {
-    //sendMessageToChatBot({ content: userContent, updateMessageInRealTime });
     e.preventDefault();
     // Record message written by user
-    getMessage('user', userContent);
     requestToChatBot(userContent);
   }
 
@@ -41,14 +38,8 @@ export default function InputMessage({
   async function requestToChatBot(userContent: string) {
     setIsUserWritten(false);
     setIsBotWritten(true);
-    if (userLanguage) {
-      const response: any = await sendMessageToChatBot({
-        content: userContent,
-      });
-      // Record message written by bot
-      getMessage(response.name, response.message);
-      setIsBotWritten(false);
-    }
+    await requestChatConversation(userContent);
+    setIsBotWritten(false);
   }
 
   return (

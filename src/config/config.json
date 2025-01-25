@@ -1,7 +1,4 @@
 {
-  "sidebar":true,
-  "isAuthenticated":true,
-  "logo": "https://www.cliniquesdeleurope.be/themes/custom/ceez_theme/logo.png",
   "languages": [
     {
       "id": "fr",

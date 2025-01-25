@@ -1,5 +1,15 @@
 export type MessageAttributes = {
   id: number;
-  name: string;
-  message: string;
+  role: string;
+  content: string;
+  date: string;
+  doc_type?: string;
+  doc_ref?: string;
+  doc_name?: string;
+};
+
+export type SourceAttributes = {
+  doc_type?: string;
+  doc_ref?: string;
+  doc_name?: string;
 };

@@ -38,7 +38,7 @@ export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
           <IconButton onClick={toggleOpenCloseSideBar} icon={icons.arrowLeft} />
         </span>
         {/* Logo */}
-        {config && <Image imgSource={config?.logo} />}
+        {config && <Image imgSource={import.meta.env.VITE_CHATBOT_LOGO} />}
         {selectedLanguage ? (
           <>
             {/* Login Session  */}

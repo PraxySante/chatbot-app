@@ -1,78 +1,71 @@
-import { useEffect, useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useLanguage } from '../../hooks/UseLanguage';
 import { MessageAttributes } from '../../types/messages/messages.type';
-import {
-  getMessageLocalStorage,
-  setMessageLocalStorage,
-} from '../../helpers/historyChat.function';
 import Information from '../Information/Information';
-import ListMessages from '../ListMessages/ListMessages';
 import { useChat } from '../../hooks/ChatProvider';
+import Message from '../Message/Message';
+import { useState } from 'react';
+import MessageLoading from '../Loading/MessageLoading';
+import Button from '../../components/Buttons/Button';
+import InputMessage from '../InputMessage/InputMessage';
 
 export default function Chat() {
   //Init Component
   //
-  const { isRestart } = useChat();
+  const { isRestart, messages, reformulateChatConversation } = useChat();
   // Check selected language by user
   const { userLanguage } = useLanguage();
-  // Check user data
-  const { user } = useAuth0();
-  // Init newMessage to implement newMessage into Chat between user and bot
-  const newMessage: MessageAttributes[] = [];
-  // Stock message and Init message bot
-  const [messages, setMessages] = useState<MessageAttributes[]>([
-    {
-      id: 0,
-      name: 'bot',
-      message: `${userLanguage?.voc_hello} ${user?.nickname}! ${userLanguage?.chat_first_message}`,
-    },
-  ]);
 
-  // Loading messages from localStorage or current chat with new message
-  useEffect(() => {
-    const getMessages: MessageAttributes[] | null = getMessageLocalStorage();
-    if (getMessages) {
-      setMessages(getMessages);
-    }
-    renderingMessages();
-  }, [setMessages]);
+  const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
+  const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (isRestart) {
-      setMessages([
-        {
-          id: 0,
-          name: 'bot',
-          message: `${userLanguage?.voc_hello} ${user?.nickname}! ${userLanguage?.chat_first_message}`,
-        },
-      ]);
-    }
-  }, [isRestart]);
-
-  // Function to get new message
-  function getMessage(name: string, message: string) {
-    // Pushing new message into alt array
-    newMessage.push({ id: messages.length + 1, name: name, message: message });
-    // Pushing new message with historic message
-    setMessages(() => {
-      return [...messages, ...newMessage];
-    });
-    // Pushing all datas into localStorage
-    setMessageLocalStorage([...messages, ...newMessage]);
+  function renderLoadingMessage() {
+    return (
+      <>
+        {isUserWritten && <MessageLoading />}
+        {isBotWritten && <MessageLoading />}
+      </>
+    );
   }
-
-  // Rendering all data messages
-  function renderingMessages() {
-    return <ListMessages getMessage={getMessage} messages={messages} />;
-  }
-
   return (
     <section id="chat">
       {/* Data Inofrmation chat */}
       <Information />
       {/* List messages chat */}
-      {renderingMessages()}
+      <div id="list-messages">
+        {/* Render all messages exist */}
+        {messages.map((message: MessageAttributes, index: number) => {
+          return (
+            <Message
+              key={index}
+              id={message.id}
+              content={message.content}
+              role={message.role}
+              date={message.date}
+            />
+          );
+        })}
+
+        {renderLoadingMessage()}
+        {messages.length > 1 &&
+        messages[messages.length - 1].role === 'assistant' &&
+        userLanguage ? (
+          <>
+            {/* <IconButton icon={icons?.thumbdown} />
+            <IconButton icon={icons?.thumbup} /> */}
+            <Button
+              type={'button'}
+              content={userLanguage?.reformulate_button}
+              onClick={() => reformulateChatConversation()}
+            />
+          </>
+        ) : null}
+
+        {/* Including Input  */}
+        <InputMessage
+          setIsBotWritten={setIsBotWritten}
+          setIsUserWritten={setIsUserWritten}
+        />
+      </div>
     </section>
   );
 }
