@@ -1,0 +1,20 @@
+# Étape 1 : Construire le code
+FROM node:18 AS builder
+WORKDIR /src/app
+
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Étape 2 : Exécuter le code transpilé
+FROM node:18 AS runner
+WORKDIR /usr/src/app
+
+COPY --from=builder /usr/src/app/dist ./dist
+COPY package*.json ./
+
+RUN npm install
+
+EXPOSE 8000
+CMD ["node", "./dist/app.js"]
