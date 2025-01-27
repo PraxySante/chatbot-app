@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { PanelAttributes } from '../../types/panel/panel.type';
 import Chat from '../Chat/Chat';
 import Procedures from '../Procedures/Procedures';
 
-export default function Panel({ selectedPanel }: PanelAttributes) {
+export default function Panel() {
+  const [selectedPanel, setSelectedPanel] = useState<string>('chat');
+
   // Hook to render Panel according user selection
   useEffect(() => {
     renderPanel();
@@ -13,9 +15,19 @@ export default function Panel({ selectedPanel }: PanelAttributes) {
   function renderPanel() {
     switch (selectedPanel) {
       case 'chat':
-        return <Chat />;
+        return (
+          <Chat
+            selectedPanel={selectedPanel}
+            setSelectedPanel={setSelectedPanel}
+          />
+        );
       case 'procedure':
-        return <Procedures />;
+        return (
+          <Procedures
+            selectedPanel={selectedPanel}
+            setSelectedPanel={setSelectedPanel}
+          />
+        );
       default:
         break;
     }

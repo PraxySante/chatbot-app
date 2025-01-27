@@ -1,9 +1,8 @@
 type ImageAttributes = {
-	imgSource: string;
+  imgSource: string;
+	classname: string;
 };
 
-export default function Image({ imgSource }: ImageAttributes) {
-	return (
-		<img src={imgSource} alt="" />
-	);
+export default function Image({ imgSource, classname }: ImageAttributes) {
+  return <img className={classname} src={imgSource} alt="" />;
 }

@@ -3,12 +3,21 @@ import { MessageAttributes } from '../../types/messages/messages.type';
 import Information from '../Information/Information';
 import { useChat } from '../../hooks/ChatProvider';
 import Message from '../Message/Message';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import MessageLoading from '../Loading/MessageLoading';
 import Button from '../../components/Buttons/Button';
 import InputMessage from '../InputMessage/InputMessage';
+import TabPanel from '../TabPanel/TabPanel';
 
-export default function Chat() {
+interface IChatAttributes {
+  selectedPanel: string;
+  setSelectedPanel: Dispatch<SetStateAction<string>>;
+}
+
+export default function Chat({
+  selectedPanel,
+  setSelectedPanel,
+}: IChatAttributes) {
   //Init Component
   //
   const { isRestart, messages, reformulateChatConversation } = useChat();
@@ -30,6 +39,13 @@ export default function Chat() {
     <section id="chat">
       {/* Data Inofrmation chat */}
       <Information />
+      <div className="flex relative w-screen h-12 justify-center">
+        <TabPanel
+          selectedPanel={selectedPanel}
+          setSelectedPanel={setSelectedPanel}
+        />
+      </div>
+
       {/* List messages chat */}
       <div id="list-messages">
         {/* Render all messages exist */}
@@ -61,11 +77,13 @@ export default function Chat() {
         ) : null}
 
         {/* Including Input  */}
+      </div>
+      <section id="input">
         <InputMessage
           setIsBotWritten={setIsBotWritten}
           setIsUserWritten={setIsUserWritten}
         />
-      </div>
+      </section>
     </section>
   );
 }

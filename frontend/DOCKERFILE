@@ -1,0 +1,27 @@
+# Dockerfile pour le frontend (React)
+FROM node:18 as build
+
+# Répertoire de travail
+WORKDIR /src
+
+# Copie des fichiers nécessaires
+COPY frontend/package*.json ./
+RUN npm install
+
+# Copie du code source
+COPY frontend/src/ ./
+
+# Construction de l'application React
+RUN npm run build
+
+# Serveur Nginx pour servir l'application
+# FROM nginx:alpine
+
+# Copie du build React dans le répertoire de Nginx
+# COPY --from=build /app/build /usr/share/nginx/html
+
+# Expose le port de l'application React
+# EXPOSE 80
+
+# Démarrer Nginx
+# CMD ["nginx", "-g", "daemon off;"]

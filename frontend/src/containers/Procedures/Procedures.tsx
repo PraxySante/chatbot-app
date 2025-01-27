@@ -1,11 +1,17 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useLanguage } from '../../hooks/UseLanguage';
 import Button from '../../components/Buttons/Button';
 import Title from '../../components/Text/Title';
 import Description from '../../components/Text/Description';
 import ReaderDocument from '../ReaderDocument/ReaderDocument';
+import TabPanel from '../TabPanel/TabPanel';
 
-export default function Procedures({}) {
+interface IProcedureAttributes {
+  selectedPanel: string;
+  setSelectedPanel: Dispatch<SetStateAction<string>>;
+}
+
+export default function Procedures({selectedPanel, setSelectedPanel}:IProcedureAttributes) {
   const { userLanguage } = useLanguage();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -14,7 +20,14 @@ export default function Procedures({}) {
   }, []);
 
   return (
-    <>
+    <section>
+      <div className="flex relative w-screen h-12 justify-center">
+
+       <TabPanel
+        selectedPanel={selectedPanel}
+        setSelectedPanel={setSelectedPanel}
+      />
+      </div>
       <Title
         content={userLanguage ? userLanguage?.procedure_visualize : ''}
         tag={'h3'}
@@ -62,6 +75,6 @@ export default function Procedures({}) {
           )}
         </section>
       )}
-    </>
+    </section>
   );
 }

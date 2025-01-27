@@ -34,7 +34,7 @@ export default function DashBoard() {
     useState<ModalParameterAttributes | null>(null);
 
   // Selected Panel default 'chat'
-  const [selectedPanel, setSelectedPanel] = useState<string>('chat');
+
 
   // Hook to render ModalParameter according user selection
   useEffect(() => {
@@ -65,7 +65,6 @@ export default function DashBoard() {
 
   // Rendering Modal Parameter according user selection
   function renderingModalParameter() {
-
     return (
       <>
         {/* Modal Parameter */}
@@ -81,6 +80,13 @@ export default function DashBoard() {
 
   return (
     <>
+      {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' && (
+        <>
+          {isOpenModalMenu ? (
+            <ModalMenu setIsOpenModalParameter={setIsOpenModalParameter} />
+          ) : null}
+        </>
+      )}
       {/* Dashboard section */}
       <div id="dashboard" onClick={closeModalByClickBackGround}>
         {/* Rendering ModalParameter */}
@@ -102,23 +108,6 @@ export default function DashBoard() {
           </>
         ) : null}
 
-        {/* Icons */}
-        <span className="icons-actions right">
-          <SelectLanguage />
-
-          {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' && (
-            <>
-              <IconButton
-                onClick={toggleOpenCloseModalMenu}
-                icon={icons.menuBar}
-              />
-              {isOpenModalMenu ? (
-                <ModalMenu setIsOpenModalParameter={setIsOpenModalParameter} />
-              ) : null}
-            </>
-          )}
-        </span>
-
         {/*  SideBar */}
         {import.meta.env.VITE_OPT_SIDEBAR === 'true' && isOpenSideBar ? (
           <SideBar toggleOpenCloseSideBar={toggleOpenCloseSideBar} />
@@ -128,35 +117,31 @@ export default function DashBoard() {
         <section id="main" className={isOpenSideBar ? 'main-reduce' : ''}>
           {/* Button toggle Open/Close Modal Parameter */}
           {/* Button toggle Open/Close ModalMenu Parameters */}
-          
+
           {import.meta.env.VITE_OPT_AUT0_ACCOUNT === 'true' ? (
             <>
               {isAuthenticated && selectedLanguage ? (
                 <>
-                  {/* Tab Panel */}
-                  <TabPanel
-                    selectedPanel={selectedPanel}
-                    setSelectedPanel={setSelectedPanel}
-                  />
                   {/* Panel */}
-                  <Panel selectedPanel={selectedPanel} />
+                  <Panel />
                 </>
               ) : (
                 <>
                   {/* Header */}
-                  <Header />
+                  <Header
+                    toggleOpenCloseModalMenu={toggleOpenCloseModalMenu}
+                  />
                 </>
               )}
             </>
           ) : (
             <>
-              {/* Tab Panel */}
-              <TabPanel
-                selectedPanel={selectedPanel}
-                setSelectedPanel={setSelectedPanel}
-              />
+              {/* Header */}
+                <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
+                <hr />
+
               {/* Panel */}
-              <Panel selectedPanel={selectedPanel} />
+              <Panel />
             </>
           )}
         </section>
