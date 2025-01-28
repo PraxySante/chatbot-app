@@ -10,8 +10,7 @@ export default function Video({ fileDocument }: VideoType) {
           title="Youtube iframe"
           width="640"
           height="360"
-          //"//www.youtube-nocookie.com/embed/9-Hmn_vO7Sc?theme=light&amp;rel=&amp;controls=&amp;showinfo=&amp;autoplay=&amp;mute=&amp;start=&amp;end=&amp;loop=&amp;enablejsapi="
-          src={fileDocument}
+          src={`//www.${fileDocument}?theme=light&amp;rel=&amp;controls=&amp;showinfo=&amp;autoplay=&amp;mute=&amp;start=&amp;end=&amp;loop=&amp;enablejsapi=`}
           allowFullScreen={false}
         ></iframe>
       </div>
