@@ -20,9 +20,9 @@ export default function Message({
     return (
       <>
         {/* Render message bot left side - icon and text */}
-        {role === 'assistant' ? (
+        {role === "assistant" ? (
           <article>
-            <span className="flex flex-row gap-2">
+            <span className="flex flex-row justify-start gap-2">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
               <TransformMarkDownToMessage
                 id={`text-bot-${id}`}
@@ -68,7 +68,7 @@ export default function Message({
   return (
     <section
       className={
-        role === 'assitant' ? 'message justify-start' : 'message justify-end'
+        role === 'assistant' ? 'message justify-start' : 'message justify-end'
       }
     >
       <div className={role === 'assitant' ? 'message-bot' : 'message-user'}>

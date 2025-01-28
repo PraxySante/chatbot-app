@@ -121,7 +121,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
 
     if (responseChatConversation.sources) {
       responseChatConversation.sources.map(
-        (source: SourceType, index: number) => {
+        (source: SourceType) => {
           lengthMessage++;
           const sourceProcedures ={
             id: lengthMessage,

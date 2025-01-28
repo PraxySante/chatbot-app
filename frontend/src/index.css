@@ -31,7 +31,7 @@ h4,
 ul,
 li,
 ol {
-  color: var(--text);
+  @apply text-text;
 }
 
 h1 {
@@ -55,6 +55,10 @@ p {
 
 hr {
   @apply my-2;
+}
+
+a {
+  @apply text-white
 }
 
 input[type='number'] {
@@ -138,7 +142,7 @@ input[type='number'] {
 
 /* Messages */
 #list-messages {
-  @apply relative flex flex-col h-full mt-2 gap-6 overflow-y-scroll;
+  @apply relative flex flex-col h-full mt-2 gap-6 overflow-y-scroll overflow-x-hidden;
 }
 
 .message {
@@ -146,7 +150,7 @@ input[type='number'] {
 }
 
 .message-bot {
-  @apply flex flex-row text-pretty w-3/4 justify-start rounded-3xl gap-4;
+  @apply flex flex-row text-pretty justify-start rounded-3xl gap-4;
 }
 
 .message-user {
@@ -165,7 +169,7 @@ input[type='number'] {
 }
 
 .text--bot {
-  @apply bg-secondary border-2 border-slate-300 hover:border-indigo-300 rounded-tr-lg rounded-b-lg text-justify justify-center content-center p-4;
+  @apply bg-secondary w-fit border-2 border-slate-300 hover:border-indigo-300 rounded-tr-lg rounded-b-lg text-justify justify-center content-center p-4;
 }
 
 .text--user {
@@ -193,7 +197,7 @@ input[type='text'] {
 }
 
 .left {
-  @apply w-fit h-fit left-[-18px] bg-third border border-solid border-slate-200 rounded-3xl p-2 hover:left-1 ease-in-out hover:duration-75 ease-in-out hover:delay-75 ease-in-out;
+  @apply w-fit h-fit left-[-18px] bg-secondary border border-solid border-slate-200 rounded-3xl p-2 hover:left-1 ease-in-out hover:duration-75 ease-in-out hover:delay-75 ease-in-out;
 }
 
 .right {
@@ -289,7 +293,7 @@ input::-webkit-inner-spin-button {
 /* Loader */
 
 .wrapper {
-  @apply absolute bottom-20 w-16 h-8 bg-third rounded-xl;
+  @apply absolute bottom-24 w-fit h-8 bg-third rounded-xl;
 }
 
 .wrapper-user {

@@ -35,8 +35,8 @@ export default function Chat({
   function renderLoadingMessage() {
     return (
       <>
-        {isUserWritten && <MessageLoading className="wrapper-user" />}
-        {isBotWritten && <MessageLoading className="wrapper-bot" />}
+        {isUserWritten && <MessageLoading className="wrapper-user" role={'user'} />}
+        {isBotWritten && <MessageLoading className="wrapper-bot" role={'assistant'} />}
       </>
     );
   }
