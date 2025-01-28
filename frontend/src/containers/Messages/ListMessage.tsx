@@ -4,6 +4,7 @@ import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import Message from './Message/Message';
 import { useChat } from '../../hooks/ChatProvider';
+import Video from '../Procedures/Video/Video';
 
 type MessageType = {
   message: MessageAttributes;
@@ -22,6 +23,14 @@ export default function ListMessage({
   function renderingMessage() {
     switch (message.role) {
       case 'assistant':
+        if (message.doc_type === 'video') {
+          return (
+            <span className="flex flex-row justify-start cursor-pointer">
+              <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+              {message.doc_ref && <Video fileDocument={message.doc_ref} />}
+            </span>
+          );
+        }
         if (message.doc_type) {
           return (
             <span
