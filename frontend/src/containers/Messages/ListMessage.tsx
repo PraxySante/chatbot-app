@@ -5,6 +5,8 @@ import icons from '../../constants/icons';
 import Message from './Message/Message';
 import { useChat } from '../../hooks/ChatProvider';
 import Video from '../Procedures/Video/Video';
+import Button from '../../components/Buttons/Button';
+import { Icon } from '@react-pdf-viewer/core';
 
 type MessageType = {
   message: MessageAttributes;
@@ -38,7 +40,13 @@ export default function ListMessage({
               onClick={() => handleClick(message.content)}
             >
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
-              <Message message={message} />
+              <Button
+                type={'button'}
+                content={message.content}
+                onClick={() => handleClick(message.content)}
+              ><IconButton icon={icons.chain} /></Button>
+              
+              {/* <Message message={message} /> */}
             </span>
           );
         } else {

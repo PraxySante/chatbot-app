@@ -6,6 +6,7 @@ export interface IButton {
   type: 'button' | 'submit';
   content: string;
   onClick: (e?: any) => void;
+  children?:any
 }
 
 export interface IButtonRadio {

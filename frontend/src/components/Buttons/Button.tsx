@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { IButton } from '../../types/inputs/inputs.interface';
 
-export default function Button({ type, content, onClick }: IButton) {
+export default function Button({ type, content, onClick, children }: IButton) {
   const [contentClassName, setContentClassName] = useState<string>('');
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function Button({ type, content, onClick }: IButton) {
   return (
     <>
       <button className={contentClassName} type={type} onClick={onClick}>
-        {content}
+        {content}{children}
       </button>
     </>
   );
