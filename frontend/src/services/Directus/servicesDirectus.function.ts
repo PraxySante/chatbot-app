@@ -1,4 +1,4 @@
-import axiosDirectus from "./axiosConfiguration/axiosDirectus.service";
+import axiosDirectus from "../axiosConfiguration/axiosDirectus.service";
 
  type postDirectusAttributes = {
    user: string;

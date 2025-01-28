@@ -15,7 +15,7 @@ export default function InputMessage({
   const [userContent, setUserContent] = useState<string>('');
   // Check selected language
   const { userLanguage } = useLanguage();
-  const {requestChatConversation} = useChat()
+  const { requestChatConversation, stockMessageUser } = useChat();
 
   // Function Get any change from user message
   function onChange(e: any): void {
@@ -27,25 +27,42 @@ export default function InputMessage({
     }
   }
 
-  // Function preparing message to ChatBot
-  function sendMessage(e: any): void {
-    e.preventDefault();
-    // Record message written by user
-    requestToChatBot(userContent);
+  // Function sending message atfer press enter
+  async function handleKeyDown(e: any): Promise<void> {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      // Record message written by user
+      await stockMessageUser(userContent);
+      setIsUserWritten(false);
+      setIsBotWritten(true);
+      // Request message to bot
+      await requestChatConversation(userContent);
+      setIsBotWritten(false);
+      setUserContent('');
+    }
   }
 
-  // Function request message to chatbot
-  async function requestToChatBot(userContent: string) {
+  // Function preparing message to ChatBot
+  async function sendMessage(e: any): Promise<void> {
+    e.preventDefault();
+    // Record message written by user
+    await stockMessageUser(userContent);
     setIsUserWritten(false);
     setIsBotWritten(true);
+    // Request message to bot
     await requestChatConversation(userContent);
     setIsBotWritten(false);
+    setUserContent('');
   }
 
   return (
     <form className="container-input">
       <Input
+        value={userContent}
         onChange={onChange}
+        handleKeyDown={(e) => {
+          handleKeyDown(e);
+        }}
         variant={'text'}
         content={userLanguage ? userLanguage?.chat_question_title : ''}
       />

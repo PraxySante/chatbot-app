@@ -7,8 +7,8 @@ import SeparateLine from '../../components/SeparateLine/SeparateLine';
 import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import StatutLogin from '../StatutLogin/StatutLogin';
-import Feedback from '../Feedback/Feedback';
 import { useChat } from '../../hooks/ChatProvider';
+import Feedback from '../Feedback/Feedback';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
@@ -38,7 +38,7 @@ export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
           <IconButton onClick={toggleOpenCloseSideBar} icon={icons.arrowLeft} />
         </span>
         {/* Logo */}
-        {config && <Image imgSource={import.meta.env.VITE_CHATBOT_LOGO} />}
+        {config && <Image imgSource={import.meta.env.VITE_CHATBOT_LOGO} classname={''} />}
         {selectedLanguage ? (
           <>
             {/* Login Session  */}

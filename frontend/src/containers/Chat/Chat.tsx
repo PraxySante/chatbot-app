@@ -3,11 +3,12 @@ import { MessageAttributes } from '../../types/messages/messages.type';
 import Information from '../Information/Information';
 import { useChat } from '../../hooks/ChatProvider';
 import Message from '../Message/Message';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import MessageLoading from '../Loading/MessageLoading';
 import Button from '../../components/Buttons/Button';
 import InputMessage from '../InputMessage/InputMessage';
 import TabPanel from '../TabPanel/TabPanel';
+import Title from '../../components/Text/Title';
 
 interface IChatAttributes {
   selectedPanel: string;
@@ -20,70 +21,80 @@ export default function Chat({
 }: IChatAttributes) {
   //Init Component
   //
-  const { isRestart, messages, reformulateChatConversation } = useChat();
+  const { messages, reformulateChatConversation } = useChat();
   // Check selected language by user
   const { userLanguage } = useLanguage();
 
   const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
 
+  useEffect(() => {
+    renderingMessages();
+  }, [messages]);
+
   function renderLoadingMessage() {
     return (
       <>
-        {isUserWritten && <MessageLoading />}
-        {isBotWritten && <MessageLoading />}
+        {isUserWritten && <MessageLoading className="wrapper-user" />}
+        {isBotWritten && <MessageLoading className="wrapper-bot" />}
       </>
     );
   }
+
+  /* Render all messages exist */
+  function renderingMessages() {
+    return messages.map((message: MessageAttributes, index: number) => {
+      return (
+        <Message
+          key={index}
+          id={message.id}
+          content={message.content}
+          role={message.role}
+          date={message.date}
+        />
+      );
+    });
+  }
+
   return (
-    <section id="chat">
-      {/* Data Inofrmation chat */}
-      <Information />
-      <div className="flex relative w-screen h-12 justify-center">
-        <TabPanel
-          selectedPanel={selectedPanel}
-          setSelectedPanel={setSelectedPanel}
-        />
-      </div>
-
-      {/* List messages chat */}
-      <div id="list-messages">
-        {/* Render all messages exist */}
-        {messages.map((message: MessageAttributes, index: number) => {
-          return (
-            <Message
-              key={index}
-              id={message.id}
-              content={message.content}
-              role={message.role}
-              date={message.date}
-            />
-          );
-        })}
-
-        {renderLoadingMessage()}
-        {messages.length > 1 &&
-        messages[messages.length - 1].role === 'assistant' &&
-        userLanguage ? (
-          <>
-            {/* <IconButton icon={icons?.thumbdown} />
+    <>
+      <section id="chat-room">
+        {/* Data Inofrmation chat */}
+        <Title content={"Posez vos questions concernant le fonctionnement de l'Hôpital Foch 🏥"} tag={'h1'} className={''}></Title>
+        <Information />
+        <div className="absolute sticky flex w-screen justify-center z-10">
+          <TabPanel
+            selectedPanel={selectedPanel}
+            setSelectedPanel={setSelectedPanel}
+          />
+        </div>
+        {/* List messages chat */}
+        <div id="list-messages">
+          {renderingMessages()}
+          {messages.length > 1 &&
+          messages[messages.length - 1].role === 'assistant' &&
+          userLanguage ? (
+            <>
+              {/* <IconButton icon={icons?.thumbdown} />
             <IconButton icon={icons?.thumbup} /> */}
-            <Button
-              type={'button'}
-              content={userLanguage?.reformulate_button}
-              onClick={() => reformulateChatConversation()}
-            />
-          </>
-        ) : null}
+              <Button
+                type={'button'}
+                content={userLanguage?.reformulate_button}
+                onClick={() => reformulateChatConversation()}
+              />
+            </>
+          ) : null}
 
-        {/* Including Input  */}
-      </div>
-      <section id="input">
-        <InputMessage
-          setIsBotWritten={setIsBotWritten}
-          setIsUserWritten={setIsUserWritten}
-        />
+          {/* Including Input  */}
+        </div>
+        {renderLoadingMessage()}
+        <section id="input">
+          <InputMessage
+            setIsBotWritten={setIsBotWritten}
+            setIsUserWritten={setIsUserWritten}
+          />
+        </section>
       </section>
-    </section>
+    </>
   );
 }

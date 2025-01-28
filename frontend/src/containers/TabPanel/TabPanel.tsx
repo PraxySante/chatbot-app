@@ -3,6 +3,7 @@ import { useLanguage } from '../../hooks/UseLanguage';
 import { IPanel } from '../../types/panel/panel.interface';
 import Link from '../../components/Link/Link';
 import { Fragment } from 'react/jsx-runtime';
+import icons from '../../constants/icons';
 
 export default function TabPanel({ selectedPanel, setSelectedPanel }: IPanel) {
   //Init Component
@@ -13,10 +14,12 @@ export default function TabPanel({ selectedPanel, setSelectedPanel }: IPanel) {
     {
       id: 'chat',
       name: 'Chat',
+      icon: icons?.chat,
     },
     {
       id: 'procedure',
       name: userLanguage ? userLanguage?.procedure_visualize : '',
+      icon: icons?.procedure,
     },
   ];
 
@@ -31,7 +34,10 @@ export default function TabPanel({ selectedPanel, setSelectedPanel }: IPanel) {
               className={selectedPanel === tab.id ? 'tab-selected' : 'tab'}
               name={tab.name}
               onClick={() => setSelectedPanel(tab.id)}
-            />
+            >
+              {tab.icon}
+              {tab.name}
+            </Link>
           </Fragment>
         );
       })}

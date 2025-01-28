@@ -3,6 +3,7 @@ import IconButton from '../../components/Buttons/IconButton';
 import Description from '../../components/Text/Description';
 import icons from '../../constants/icons';
 import { MessageAttributes } from '../../types/messages/messages.type';
+import TransformMarkDownToMessage from './TransformMarkDownToMessage';
 
 export default function Message({
   id,
@@ -12,7 +13,7 @@ export default function Message({
 }: MessageAttributes) {
   useEffect(() => {
     renderingMessage();
-  }, [role]);
+  }, [content]);
 
   // Function rendering message according user or bot
   function renderingMessage() {
@@ -23,17 +24,15 @@ export default function Message({
           <article>
             <span className="flex flex-row gap-2">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
-              <Description
+              <TransformMarkDownToMessage
                 id={`text-bot-${id}`}
                 content={content}
-                tag={'p'}
                 className={'text--bot'}
               />
-
             </span>
             <span className="flex flex-row justify-end font-size ml-16">
               <Description
-                content={`${name} - ${date}`}
+                content={`${role} - ${date}`}
                 tag={'p'}
                 className={'text-xs'}
               />
@@ -44,17 +43,17 @@ export default function Message({
             {/* Render message user right side - text and icon*/}
             <article>
               <span className="flex flex-row gap-2 justify-end">
-                <Description
+                <TransformMarkDownToMessage
                   id={`text-user-${id}`}
                   content={content}
-                  tag={'p'}
                   className={'text--user'}
                 />
+
                 <IconButton className={'icon icon-user'} icon={icons?.user} />
               </span>
               <span className="flex flex-row justify-start font-size">
                 <Description
-                  content={`${name} - ${date}`}
+                  content={`${role} - ${date}`}
                   tag={'p'}
                   className={'text-xs'}
                 />
@@ -67,7 +66,7 @@ export default function Message({
   }
 
   return (
-    <article
+    <section
       className={
         role === 'assitant' ? 'message justify-start' : 'message justify-end'
       }
@@ -75,6 +74,6 @@ export default function Message({
       <div className={role === 'assitant' ? 'message-bot' : 'message-user'}>
         {renderingMessage()}
       </div>
-    </article>
+    </section>
   );
 }

@@ -2,23 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* If addding some new color, you must add into tailwindcss.config.js
 Provide all colors into project
 */
 
 :root {
-  --text: rgb(60, 64, 70);
-  --bot: rgb(255, 188, 73, 0.5);
-  --user: rgb(255, 107, 108, 0.5);
-  --primary: rgb(230, 230, 230);
-  --secondary: rgb(51, 65, 246);
-  --third: rgb(240, 242, 246);
+  --text: theme('colors.text');
+  --bot: theme('colors.bot');
+  --user: theme('colors.user');
+  --primary: theme('colors.primary');
+  --secondary: theme('colors.secondary');
+  --third: theme('colors.third');
+  --bg:theme('colors.bg')
 
   /* Notifications */
-  --sucess: rgb(153, 204, 51);
-  --warning: rgb(255, 204, 0, 0.3);
-  --error: rgb(255, 153, 102);
-  --information: rgba(200, 231, 255, 0.5);
+  --sucess: theme('colors.sucess');
+  --warning: theme('colors.warning');
+  --error: theme('colors.error');
+  --information: theme('colors.information');
 }
 
 p,
@@ -68,7 +70,7 @@ input[type='number'] {
 
 /* SideBar */
 #side-bar {
-  @apply absolute flex shrink flex-col z-20  bg-third w-1/5 h-screen pt-16 p-8 overflow-y-auto gap-2 items-center min-w-72 md:min-w-72;
+  @apply absolute flex shrink flex-col z-20 bg-white w-1/5 h-screen pt-16 p-8 overflow-y-auto gap-2 items-center min-w-72 md:min-w-72;
 }
 
 /* Statut Login */
@@ -79,7 +81,7 @@ input[type='number'] {
 /* Main Page */
 
 #main {
-  @apply relative flex-1 bg-primary h-full w-full overflow-y-scroll overflow-x-hidden px-4 pb-4;
+  @apply relative flex-1 bg-bg h-full w-full overflow-x-hidden overflow-y-hidden px-4 pb-4;
 }
 
 .main-reduce {
@@ -93,25 +95,37 @@ input[type='number'] {
 
 /* Panel */
 #tab-panel {
-  @apply absolute flex flex-row gap-4 h-max w-fit rounded-3xl shadow-sm bg-third justify-center items-center px-4;
+  @apply cursor-pointer absolute flex flex-row h-max w-fit rounded-md shadow-sm bg-white border border-solid border-gray-200 justify-center items-center;
 }
 
+/* Styles communs aux boutons */
+.tab, .tab-selected {
+  @apply flex flex-row w-fit px-4 py-2 text-sm gap-2 font-medium text-black bg-transparent hover:bg-primary hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white;
+}
+
+/* Bouton sélectionné */
 .tab-selected {
-  @apply text-white bg-black w-fit rounded-3xl px-4 py-2;
+  @apply rounded-md text-white bg-primary;
 }
 
-.tab {
-  @apply text-text;
+/* Bouton gauche (premier) */
+.tab:first-child {
+  @apply rounded-l-md;
+}
+
+/* Bouton droit (dernier) */
+.tab:last-child {
+  @apply rounded-r-md;
 }
 
 /* Chat */
-#chat {
-  @apply flex flex-col h-full gap-4;
+#chat-room {
+  @apply flex flex-col h-full gap-4 pb-24;
 }
 
 /* Information */
 .chat-information {
-  @apply flex flex-col bg-warning p-2 rounded-xl text-sm text-justify ;
+  @apply absolute sticky bg-transparent flex flex-col bg-warning p-2 rounded-xl text-sm text-justify;
 }
 
 .chat-info {
@@ -124,7 +138,7 @@ input[type='number'] {
 
 /* Messages */
 #list-messages {
-  @apply relative flex flex-col h-full mt-2 gap-6;
+  @apply relative flex flex-col h-full mt-2 gap-6 overflow-y-scroll;
 }
 
 .message {
@@ -151,11 +165,17 @@ input[type='number'] {
 }
 
 .text--bot {
-  @apply bg-slate-100 border-2 border-slate-300 hover:border-indigo-300 rounded-tr-lg rounded-b-lg text-justify justify-center content-center p-4;
+  @apply bg-secondary border-2 border-slate-300 hover:border-indigo-300 rounded-tr-lg rounded-b-lg text-justify justify-center content-center p-4;
 }
 
 .text--user {
-  @apply bg-black border-2 border-slate-200 rounded-tl-lg rounded-b-lg justify-center content-center p-4 text-justify text-white;
+  @apply bg-third border-2 border-slate-200 rounded-tl-lg rounded-b-lg justify-center content-center p-4 text-justify text-white;
+}
+
+/* Procedures */ 
+.tab-procedure{
+  @apply cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-third hover:border-gray-300 dark:hover:text-third
+
 }
 
 /* Input Message */
@@ -195,8 +215,8 @@ input[type='text'] {
 
 /* Inputs Evaluate */
 
-input{
-  @apply relative flex bottom-0;
+#input {
+  @apply absolute sticky w-full flex bottom-0;
 }
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -269,7 +289,15 @@ input::-webkit-inner-spin-button {
 /* Loader */
 
 .wrapper {
-  @apply relative w-16 h-8 bg-black rounded-xl;
+  @apply absolute bottom-20 w-16 h-8 bg-third rounded-xl;
+}
+
+.wrapper-user {
+  @apply right-4
+}
+
+.wrapper-bot {
+  @apply left-4
 }
 
 .circle {

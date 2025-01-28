@@ -1,5 +1,5 @@
 import colors from 'tailwindcss/colors';
-import animation from 'tailwindcss/animation';
+import config from './src/config/config.json';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -8,17 +8,18 @@ export default {
     extend: {
       colors: {
         ...colors,
-        text: 'var(--text)',
-        bot: 'var(--bot)',
-        user: 'var(--user)',
-        primary: 'var(--primay)',
-        secondary: 'var(--secondary)',
-        third: 'var(--third)',
+        text: config.design.text,
+        bot: config.design.bot,
+        user: config.design.user,
+        primary: config.design.primary,
+        secondary: config.design.secondary,
+        third: config.design.third,
+        bg:'rgb(255, 255, 255)',
 
-        sucess: 'var(--sucess)',
-        warning: 'var(--warning)',
-        error: 'var(--error)',
-        information: 'var(--information)',
+        sucess: config.design.sucess,
+        warning: config.design.warning,
+        error: config.design.error,
+        information: config.design.information,
       },
       animation: {
         loading: 'loading 0.5s alternate infinite ease',

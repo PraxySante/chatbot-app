@@ -1,16 +1,14 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { createContext, Dispatch, ReactNode, useEffect, useState } from 'react';
-import {
-  endChat,
-  pingPongChat,
-  reformulateChat,
-  requestApiFrontChatBot,
-  sendMessageApiFrontChatBot,
-  startApiFrontChatBot,
-} from '../services/chatbot.service';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 import { MessageAttributes } from '../types/messages/messages.type';
 import { useLanguage } from '../hooks/UseLanguage';
 import { MessageType, SourceType } from '../types/chatbot/chatbot.type';
+import { pingPongChat } from '../services/ChatBot/pingChat.service';
+import { requestApiFrontChatBot } from '../services/ChatBot/requestApiFrontChatBot.service';
+import { startApiFrontChatBot } from '../services/ChatBot/startApiFrontChatBot.service';
+import { sendMessageApiFrontChatBot } from '../services/ChatBot/sendMessageApiFronChatBot.service';
+import { reformulateChat } from '../services/ChatBot/reformulateChat.service';
+import { endChat } from '../services/ChatBot/endChat.service';
 
 export type ChatContextAttributes = {
   isRestart: boolean;
@@ -19,8 +17,10 @@ export type ChatContextAttributes = {
   verifyStartChat?: () => void;
   messages: MessageAttributes[];
   requestChatConversation: (userContent: string) => void;
+  stockMessageUser: (userContent: string) => void;
   reformulateChatConversation: () => void;
   endConversation: () => void;
+  procedures: any;
 };
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
@@ -32,6 +32,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
   const [isStart, setIsStart] = useState<boolean>(false);
   const [messages, setMessages] = useState<MessageAttributes[]>([]);
   const [historyChat, setHistoryChat] = useState<MessageType[]>([]);
+  const [procedures, setProcedures]= useState<any[]>([])
 
   useEffect(() => {
     async function start() {
@@ -83,7 +84,24 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function stockMessageUser(userContent: string) {
+    let lengthMessage = messages.length + 1;
+
+    const newMessages: MessageAttributes[] = [
+      {
+        id: lengthMessage,
+        role: 'user',
+        content: userContent,
+        date: new Date().toLocaleDateString(selectedLanguage),
+      },
+    ];
+    updateMessages(newMessages);
+    updateHistoryChat(newMessages);
+  }
+
   async function requestChatConversation(userContent: string) {
+    let lengthMessage = messages.length + 1;
+    
     const responseChatConversation: any = await sendMessageApiFrontChatBot(
       historyChat,
       {
@@ -92,10 +110,9 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    let lengthMessage = messages.length + 1;
     const newMessages: MessageAttributes[] = [
       {
-        id: lengthMessage,
+        id: lengthMessage + 1,
         role: responseChatConversation.details.role,
         content: responseChatConversation.details.content,
         date: new Date().toLocaleDateString(selectedLanguage),
@@ -106,15 +123,26 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
       responseChatConversation.sources.map(
         (source: SourceType, index: number) => {
           lengthMessage++;
-          newMessages.push({
+          const sourceProcedures ={
             id: lengthMessage,
             role: responseChatConversation.details.role,
             content: source.doc_name,
             doc_type: source.doc_type,
             doc_ref: source.doc_ref,
             date: new Date().toLocaleDateString(selectedLanguage),
-          });
+          }
+          newMessages.push(sourceProcedures);
+          if (messages.length > 0) {
+            setProcedures((prevHistoryChat) => {
+              return [...prevHistoryChat, ...[sourceProcedures]];
+            })
+          } else {      
+            setProcedures(() => {
+              return [...messages, ...[sourceProcedures]];
+            });
+          }
         }
+        
       );
       updateMessages(newMessages);
     }
@@ -149,16 +177,29 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
     await endChat();
   }
 
+
   function updateMessages(newMessage: MessageAttributes[]) {
-    setMessages(() => {
-      return [...messages, ...newMessage];
-    });
+    if (messages.length > 0) {
+      setMessages((prevHistoryChat) => {
+        return [...prevHistoryChat, ...newMessage];
+      })
+    } else {      
+      setMessages(() => {
+        return [...messages, ...newMessage];
+      });
+    }
   }
 
   function updateHistoryChat(newMessage: MessageType[]) {
-    setHistoryChat(() => {
-      return [...messages, ...newMessage];
-    });
+    if (messages.length > 0) {
+      setHistoryChat((prevHistoryChat) => {
+        return [...prevHistoryChat, ...newMessage];
+      })
+    } else {      
+      setHistoryChat(() => {
+        return [...messages, ...newMessage];
+      });
+    }
   }
 
   return (
@@ -173,8 +214,10 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
               verifyStartChat,
               messages,
               requestChatConversation,
+              stockMessageUser,
               reformulateChatConversation,
               endConversation,
+              procedures
             }}
           >
             {children}
@@ -188,8 +231,10 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
             isStart,
             messages,
             requestChatConversation,
+            stockMessageUser,
             reformulateChatConversation,
-            endConversation,
+              endConversation,
+              procedures
           }}
         >
           {children}

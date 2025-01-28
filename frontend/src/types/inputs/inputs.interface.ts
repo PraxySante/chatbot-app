@@ -37,15 +37,19 @@ export interface IIconButton {
 }
 
 export interface IInput {
+  value: string;
   variant: 'text' | 'number' | 'textarea';
   score?: number;
   content?: string;
   onChange?: (e?: any) => void;
+  handleKeyDown: (e: any) => void;
+  isReset?: boolean;
 }
 
 export interface ILink {
+  children: any;
   id: string;
-  className: 'menu-modal-item' | 'tab-selected' | 'tab';
+  className: 'menu-modal-item' | 'tab-selected' | 'tab' | 'tab-procedure';
   name: string;
   onClick: (menuItem: string) => void;
 }

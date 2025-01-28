@@ -4,21 +4,16 @@ import { useLanguage } from '../hooks/UseLanguage';
 import icons from '../constants/icons';
 
 import Header from '../containers/Header/Header';
-import TabPanel from '../containers/TabPanel/TabPanel';
 import Panel from '../containers/Panel/Panel';
 import ModalMenu from '../containers/ModalMenu/ModalMenu';
 import IconButton from '../components/Buttons/IconButton';
 import ModalParameter from '../containers/ModalParameter/ModalParameter';
 import { ModalParameterAttributes } from '../types/modal/modal.type';
-import SelectLanguage from '../containers/SelectLanguage/SelectLanguage';
 import SideBar from '../containers/SideBar/SideBar';
-import Button from '../components/Buttons/Button';
-import { useChat } from '../hooks/ChatProvider';
 
 export default function DashBoard() {
   //Init Component
-  // Restart Chat
-  const { selectedRestart } = useChat();
+
   // Check status authentification from Auth0
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   // Check language selected
@@ -32,9 +27,6 @@ export default function DashBoard() {
   // Check opening ModalParameter default is false
   const [isOpenModalParameter, setIsOpenModalParameter] =
     useState<ModalParameterAttributes | null>(null);
-
-  // Selected Panel default 'chat'
-
 
   // Hook to render ModalParameter according user selection
   useEffect(() => {
@@ -56,11 +48,6 @@ export default function DashBoard() {
     if (isOpenModalMenu) {
       setIsOpenModalMenu(!isOpenModalMenu);
     }
-  }
-
-  // Function restart chat
-  function restartChat() {
-    selectedRestart();
   }
 
   // Rendering Modal Parameter according user selection

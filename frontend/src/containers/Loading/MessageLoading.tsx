@@ -1,7 +1,11 @@
-export default function MessageLoading() {
+type MessageLoadingType = {
+  className: string;
+};
+
+export default function MessageLoading({ className }: MessageLoadingType) {
   return (
     <>
-      <section className="wrapper">
+      <section className={`wrapper ${className}`}>
         <div className="circle"></div>
         <div className="circle"></div>
         <div className="circle"></div>

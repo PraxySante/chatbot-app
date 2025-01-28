@@ -19,7 +19,7 @@ export default function Information() {
   return (
     <>
       {/* Title */}
-      <h1>{userLanguage?.chat_title}</h1>
+      {/* <h1>{userLanguage?.chat_title}</h1> */}
       {/* Button Open/Close data information */}
       <section className="chat-information" onClick={toggleOpenCloseInfomation}>
         <span className="flex gap-1">
