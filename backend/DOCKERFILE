@@ -1,20 +1,19 @@
-# Étape 1 : Construire le code
-FROM node:18 AS builder
+# backend/Dockerfile
+FROM node:18
+
+# Répertoire de travail
 WORKDIR /src/app
 
-COPY package*.json ./
+# Copier les fichiers et installer les dépendances
+COPY package.json ./
 RUN npm install
+
+# Copier le code source
 COPY . .
 RUN npm run build
 
-# Étape 2 : Exécuter le code transpilé
-FROM node:18 AS runner
-WORKDIR /usr/src/app
-
-COPY --from=builder /usr/src/app/dist ./dist
-COPY package*.json ./
-
-RUN npm install
-
+# Exposer le port pour le backend
 EXPOSE 8000
-CMD ["node", "./dist/app.js"]
+
+# Commande de démarrage
+CMD [ "npm", "run", "start" ]

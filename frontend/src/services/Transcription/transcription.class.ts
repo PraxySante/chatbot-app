@@ -97,7 +97,11 @@ export default class Transcription {
     }
   }
 
-  decreaseSampleRate(buffer: string | any[], inputSampleRate: number, outputSampleRate: number) {
+  decreaseSampleRate(
+    buffer: string | any[],
+    inputSampleRate: number,
+    outputSampleRate: number
+  ) {
     if (inputSampleRate < outputSampleRate) {
       console.error('Sample rate too small.');
       return null;
@@ -141,7 +145,7 @@ export default class Transcription {
   async startTranscription(isDictation: boolean): Promise<void> {
     const response = await startTranscription(this.authToken);
 
-    const { status, message, data } = response.data;
+    const { message, data } = response.data;
 
     if (data.uuid) {
       this.transcriptionUuid = data.uuid;

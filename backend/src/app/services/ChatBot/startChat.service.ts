@@ -3,8 +3,6 @@ import { axiosChatBot } from "./axiosChatBot.service";
 
 export async function startChatApiBot(ip: string) {
 	const storedCache = await getKey(ip);
-	console.log(storedCache?.uuid);
-
 	try {
 		const response: any = await axiosChatBot.get("/chat/start", {
 			headers: {

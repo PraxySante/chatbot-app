@@ -16,5 +16,5 @@ const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, async () => {
 	await connectRedis();
-	console.log(`🚀 Server listening at http://localhost:${PORT}/api 🚀 `);
+	console.log(`🚀 Server listening 🚀 `);
 });

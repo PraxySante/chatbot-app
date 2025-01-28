@@ -1,4 +1,4 @@
 export interface IPanel {
-  selectedPanel: string;
-  setSelectedPanel: (id: string) => void;
+  selectedPanel: 'chat' | 'procedure';
+  setSelectedPanel: (id: 'chat' | 'procedure') => void;
 }

@@ -9,7 +9,7 @@ export type MessageAttributes = {
 };
 
 export type SourceAttributes = {
-  doc_type?: string;
+  doc_type?: 'doc' | 'url' |'reformulate';
   doc_ref?: string;
   doc_name?: string;
 };

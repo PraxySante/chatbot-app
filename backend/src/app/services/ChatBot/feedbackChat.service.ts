@@ -21,8 +21,6 @@ export async function feedbackApiChatBot(
 				},
 			}
 		);
-		console.log("🚀 ~ feedbackApiChatBot ~ response:", response);
-
 		let { data, status, details } = response;
 
 		if (details) {

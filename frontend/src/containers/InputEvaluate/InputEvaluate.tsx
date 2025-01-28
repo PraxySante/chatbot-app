@@ -51,7 +51,7 @@ export default function InputEvaluate({
 
   // Function render each score according user action
   function renderingScore() {
-    return <Input score={score} variant={'number'} />;
+    return <Input score={score} variant={'number'} value={''} />;
   }
 
   function showInformation() {

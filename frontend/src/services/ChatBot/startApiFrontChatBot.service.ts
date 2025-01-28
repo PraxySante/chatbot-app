@@ -11,7 +11,6 @@ export async function startApiFrontChatBot(): Promise<
       language: 'fr',
     });
     const { data, status } = response;
-    console.log('🚀 ~ data, status:', data);
     if (status === 200) {
       return data as MessageType;
     } else {

@@ -15,7 +15,7 @@ export default function MessageLoading({
         <button
           disabled
           type="button"
-          className="flex flex-row p-2 w-fit h-fit text-sm font-medium text-gray-900 bg-third text-white rounded-lg border border border-gray-200 hover:bg-gray-100 hover:text-secondary focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-secondary inline-flex items-center"
+          className="loader"
         >
           {icons.spinner}
           {role === 'assistant'

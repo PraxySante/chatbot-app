@@ -92,12 +92,17 @@ export default function Feedback() {
               </Fragment>
             );
           })}
-          <Description content={userLanguage?.feedback_comments} tag={'p'} className={''}/>
+          <Description
+            content={userLanguage?.feedback_comments}
+            tag={'p'}
+            className={''}
+          />
           {/* Input Comment */}
           <Input
             variant="text"
             onChange={(e) => getComment(e)}
             content={'Ecrire votre commentaire'}
+            value={''}
           />
           {/* Button Feedback Form */}
           <Button

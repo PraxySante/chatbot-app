@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { PanelAttributes } from '../../types/panel/panel.type';
 import Chat from '../Chat/Chat';
 import Procedures from '../Procedures/Procedures';
 
 export default function Panel() {
-  const [selectedPanel, setSelectedPanel] = useState<string>('chat');
+  const [selectedPanel, setSelectedPanel] = useState<'chat'|'procedure'>('chat');
 
   // Hook to render Panel according user selection
   useEffect(() => {

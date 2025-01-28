@@ -32,8 +32,9 @@ export default function ModalMenu({ setIsOpenModalParameter }: IMenu) {
                   className="menu-modal-item"
                   key={index}
                   onClick={onClick}
-                  name={menu.name}
-                />
+                >
+                  {menu.name}
+                </Link>
                 {/* Render separate line each two links */}
                 {index % 2 ? <SeparateLine /> : null}
               </Fragment>

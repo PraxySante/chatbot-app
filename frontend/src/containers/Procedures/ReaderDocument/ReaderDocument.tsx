@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import file from "../../constants/RH Journée d'accueil - HR Onthaaldag copy.pdf";
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
-import IconButton from '../../components/Buttons/IconButton';
-import icons from '../../constants/icons';
+import icons from '../../../constants/icons';
+import IconButton from '../../../components/Buttons/IconButton';
 
-export default function ReaderDocument() {
+export default function ReaderDocument({ fileDocument }: any) {
   const [selectedPages, setSelectedPages] = useState<number>(1);
   const [numPages, setNumPages] = useState<number>(0);
 
@@ -46,7 +45,7 @@ export default function ReaderDocument() {
     <div className="Example">
       <div className="Example__container__document">
         <Document
-          file={file}
+          file={fileDocument}
           onLoadSuccess={onDocumentLoadSuccess}
           onLoadError={console.error}
           options={options}

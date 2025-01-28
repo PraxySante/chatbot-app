@@ -32,7 +32,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
   const [isStart, setIsStart] = useState<boolean>(false);
   const [messages, setMessages] = useState<MessageAttributes[]>([]);
   const [historyChat, setHistoryChat] = useState<MessageType[]>([]);
-  const [procedures, setProcedures]= useState<any[]>([])
+  const [procedures, setProcedures] = useState<any[]>([]);
 
   useEffect(() => {
     async function start() {
@@ -101,7 +101,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
 
   async function requestChatConversation(userContent: string) {
     let lengthMessage = messages.length + 1;
-    
+
     const responseChatConversation: any = await sendMessageApiFrontChatBot(
       historyChat,
       {
@@ -120,30 +120,27 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
     ];
 
     if (responseChatConversation.sources) {
-      responseChatConversation.sources.map(
-        (source: SourceType) => {
-          lengthMessage++;
-          const sourceProcedures ={
-            id: lengthMessage,
-            role: responseChatConversation.details.role,
-            content: source.doc_name,
-            doc_type: source.doc_type,
-            doc_ref: source.doc_ref,
-            date: new Date().toLocaleDateString(selectedLanguage),
-          }
-          newMessages.push(sourceProcedures);
-          if (messages.length > 0) {
-            setProcedures((prevHistoryChat) => {
-              return [...prevHistoryChat, ...[sourceProcedures]];
-            })
-          } else {      
-            setProcedures(() => {
-              return [...messages, ...[sourceProcedures]];
-            });
-          }
+      responseChatConversation.sources.map((source: SourceType) => {
+        lengthMessage++;
+        const sourceProcedures = {
+          id: lengthMessage,
+          role: responseChatConversation.details.role,
+          content: source.doc_name,
+          doc_type: source.doc_type,
+          doc_ref: source.doc_ref,
+          date: new Date().toLocaleDateString(selectedLanguage),
+        };
+        newMessages.push(sourceProcedures);
+        if (messages.length > 0) {
+          setProcedures((prevHistoryChat) => {
+            return [...prevHistoryChat, ...[sourceProcedures]];
+          });
+        } else {
+          setProcedures(() => {
+            return [...messages, ...[sourceProcedures]];
+          });
         }
-        
-      );
+      });
       updateMessages(newMessages);
     }
 
@@ -166,7 +163,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
         id: lengthMessage,
         role: proposition.role,
         content: proposition.content,
-        doc_type: 'proposition',
+        doc_type: 'reformulate',
         date: new Date().toLocaleDateString(selectedLanguage),
       });
     });
@@ -177,13 +174,12 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
     await endChat();
   }
 
-
   function updateMessages(newMessage: MessageAttributes[]) {
     if (messages.length > 0) {
       setMessages((prevHistoryChat) => {
         return [...prevHistoryChat, ...newMessage];
-      })
-    } else {      
+      });
+    } else {
       setMessages(() => {
         return [...messages, ...newMessage];
       });
@@ -194,8 +190,8 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
     if (messages.length > 0) {
       setHistoryChat((prevHistoryChat) => {
         return [...prevHistoryChat, ...newMessage];
-      })
-    } else {      
+      });
+    } else {
       setHistoryChat(() => {
         return [...messages, ...newMessage];
       });
@@ -217,7 +213,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
               stockMessageUser,
               reformulateChatConversation,
               endConversation,
-              procedures
+              procedures,
             }}
           >
             {children}
@@ -233,8 +229,8 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
             requestChatConversation,
             stockMessageUser,
             reformulateChatConversation,
-              endConversation,
-              procedures
+            endConversation,
+            procedures,
           }}
         >
           {children}

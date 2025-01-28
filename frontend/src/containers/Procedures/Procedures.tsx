@@ -7,8 +7,8 @@ import TabProcedures from './TabProcedures';
 import DisplayProcedures from './DisplayProcedure';
 
 interface IProcedureAttributes {
-  selectedPanel: string;
-  setSelectedPanel: Dispatch<SetStateAction<string>>;
+  selectedPanel: 'chat' | 'procedure';
+  setSelectedPanel: Dispatch<SetStateAction<'chat' | 'procedure'>>;
 }
 
 export default function Procedures({
@@ -46,7 +46,7 @@ export default function Procedures({
           />
         </section>
       ) : (
-        <section>
+        <section className="md:flex mt-2">
           <>
             <TabProcedures SetSelectedProcedure={SetSelectedProcedure} />
             <DisplayProcedures selectedProcedure={selectedProcedure} />

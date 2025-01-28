@@ -1,34 +1,38 @@
 version: "3.9"
+
+# Service Backend
 services:
   backend:
     build:
       context: ./backend
-    container_name: backend
-    environment:
-      - NODE_ENV=production
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
     depends_on:
       - redis
     networks:
       - app-network
 
+  # Service Frontend
   frontend:
     build:
       context: ./frontend
-    container_name: frontend
-    environment:
-      - REACT_APP_API_URL=http://backend:8000
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./frontend/.env
     depends_on:
       - backend
     networks:
       - app-network
-    ports:
-      - "3000:80" # Seul le frontend expose un port public
 
+  # Service Redis
   redis:
     image: redis:latest
-    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
     networks:
       - app-network
 

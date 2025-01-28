@@ -28,12 +28,6 @@ export async function requestChatToApiChatBot(
 		}
 
 		if (status === 200) {
-			const test = {
-				status: status,
-				details: data.message,
-				sources: [...data.sources],
-			};
-			console.log("🚀 ~ requestChatToApiChatBot ~ test:", test);
 			return {
 				status: status,
 				details: data.message,

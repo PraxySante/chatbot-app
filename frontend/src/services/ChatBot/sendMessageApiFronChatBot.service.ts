@@ -13,7 +13,6 @@ export async function sendMessageApiFrontChatBot(
       history: [...historyMessages],
       message: requestMessageUser,
     });
-    console.log("🚀 ~ response:", response)
     const { data, status } = response;
     if (status === 200) {
       return data as ResponseMessageType;

@@ -42,7 +42,7 @@ export interface IInput {
   score?: number;
   content?: string;
   onChange?: (e?: any) => void;
-  handleKeyDown: (e: any) => void;
+  handleKeyDown?: (e: any) => void;
   isReset?: boolean;
 }
 
@@ -50,6 +50,6 @@ export interface ILink {
   children: any;
   id: string;
   className: 'menu-modal-item' | 'tab-selected' | 'tab' | 'tab-procedure';
-  name: string;
+  name?: string;
   onClick: (menuItem: string) => void;
 }

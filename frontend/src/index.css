@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* If addding some new color, you must add into tailwindcss.config.js
 Provide all colors into project
 */
@@ -14,10 +13,7 @@ Provide all colors into project
   --primary: theme('colors.primary');
   --secondary: theme('colors.secondary');
   --third: theme('colors.third');
-  --bg:theme('colors.bg')
-
-  /* Notifications */
-  --sucess: theme('colors.sucess');
+  --bg: theme('colors.bg') /* Notifications */ --sucess: theme('colors.sucess');
   --warning: theme('colors.warning');
   --error: theme('colors.error');
   --information: theme('colors.information');
@@ -58,13 +54,13 @@ hr {
 }
 
 a {
-  @apply text-white
+  @apply text-gray-600;
 }
 
 input[type='number'] {
   @apply rounded-md h-8 w-full bg-white;
   /*Firefox*/
-  -moz-appearance: textfield;
+  --moz-appearance: textfield;
 }
 
 /* Dashboard */
@@ -103,7 +99,8 @@ input[type='number'] {
 }
 
 /* Styles communs aux boutons */
-.tab, .tab-selected {
+.tab,
+.tab-selected {
   @apply flex flex-row w-fit px-4 py-2 text-sm gap-2 font-medium text-black bg-transparent hover:bg-primary hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white;
 }
 
@@ -158,10 +155,10 @@ input[type='number'] {
 }
 
 .icon-bot {
-  @apply bg-bot;
+  @apply bg-secondary;
 }
 .icon-user {
-  @apply bg-user;
+  @apply bg-third;
 }
 
 .icon {
@@ -169,17 +166,16 @@ input[type='number'] {
 }
 
 .text--bot {
-  @apply bg-secondary w-fit border-2 border-slate-300 hover:border-indigo-300 rounded-tr-lg rounded-b-lg text-justify justify-center content-center p-4;
+  @apply bg-secondary w-fit border-2 border-slate-300 hover:border-indigo-300 rounded-tr-lg rounded-b-lg text-justify justify-center content-center p-2;
 }
 
 .text--user {
-  @apply bg-third border-2 border-slate-200 rounded-tl-lg rounded-b-lg justify-center content-center p-4 text-justify text-white;
+  @apply bg-third border-2 border-slate-200 rounded-tl-lg rounded-b-lg justify-center content-center p-2 text-justify;
 }
 
-/* Procedures */ 
-.tab-procedure{
-  @apply cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-third hover:border-gray-300 dark:hover:text-third
-
+/* Procedures */
+.tab-procedure {
+  @apply cursor-pointer inline-flex items-center px-4 py-3 text-white bg-blue-700 rounded-lg w-full dark:bg-blue-600;
 }
 
 /* Input Message */
@@ -197,7 +193,7 @@ input[type='text'] {
 }
 
 .left {
-  @apply w-fit h-fit left-[-18px] bg-secondary border border-solid border-slate-200 rounded-3xl p-2 hover:left-1 ease-in-out hover:duration-75 ease-in-out hover:delay-75 ease-in-out;
+  @apply w-fit h-fit left-[-18px] bg-gray-400 border border-solid border-slate-200 rounded-3xl p-2 hover:left-1 ease-in-out hover:duration-75 ease-in-out hover:delay-75 ease-in-out;
 }
 
 .right {
@@ -297,21 +293,13 @@ input::-webkit-inner-spin-button {
 }
 
 .wrapper-user {
-  @apply right-4
+  @apply right-4;
 }
 
 .wrapper-bot {
-  @apply left-4
+  @apply left-4;
 }
 
-.circle {
-  @apply absolute  w-2 h-2 bg-white top-[40%] left-[25%] rounded-xl animate-loading origin-[50%];
-}
-
-.circle:nth-child(2) {
-  @apply left-[45%] delay-200;
-}
-
-.circle:nth-child(3) {
-  @apply right-[20%] left-auto delay-300;
+.loader {
+  @apply flex flex-row p-2 w-fit h-fit text-sm font-medium text-gray-900 bg-third text-white rounded-lg border border border-gray-200 hover:bg-gray-100 hover:text-secondary focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-secondary inline-flex items-center;
 }

@@ -11,8 +11,8 @@ import TabPanel from '../TabPanel/TabPanel';
 import Title from '../../components/Text/Title';
 
 interface IChatAttributes {
-  selectedPanel: string;
-  setSelectedPanel: Dispatch<SetStateAction<string>>;
+  selectedPanel: 'chat' | 'procedure';
+  setSelectedPanel: Dispatch<SetStateAction<'chat' | 'procedure'>>;
 }
 
 export default function Chat({
@@ -32,11 +32,21 @@ export default function Chat({
     renderingMessages();
   }, [messages]);
 
+  async function clickReformulateMessage() {
+    setIsBotWritten(true);
+    await reformulateChatConversation();
+    setIsBotWritten(false);
+  }
+
   function renderLoadingMessage() {
     return (
       <>
-        {isUserWritten && <MessageLoading className="wrapper-user" role={'user'} />}
-        {isBotWritten && <MessageLoading className="wrapper-bot" role={'assistant'} />}
+        {isUserWritten && (
+          <MessageLoading className="wrapper-user" role={'user'} />
+        )}
+        {isBotWritten && (
+          <MessageLoading className="wrapper-bot" role={'assistant'} />
+        )}
       </>
     );
   }
@@ -47,10 +57,8 @@ export default function Chat({
       return (
         <Message
           key={index}
-          id={message.id}
-          content={message.content}
-          role={message.role}
-          date={message.date}
+          message={message}
+          setSelectedPanel={setSelectedPanel}
         />
       );
     });
@@ -60,7 +68,13 @@ export default function Chat({
     <>
       <section id="chat-room">
         {/* Data Inofrmation chat */}
-        <Title content={"Posez vos questions concernant le fonctionnement de l'Hôpital Foch 🏥"} tag={'h1'} className={''}></Title>
+        <Title
+          content={
+            "Posez vos questions concernant le fonctionnement de l'Hôpital Foch 🏥"
+          }
+          tag={'h1'}
+          className={''}
+        ></Title>
         <Information />
         <div className="absolute sticky flex w-screen justify-center z-10">
           <TabPanel
@@ -80,7 +94,7 @@ export default function Chat({
               <Button
                 type={'button'}
                 content={userLanguage?.reformulate_button}
-                onClick={() => reformulateChatConversation()}
+                onClick={() => clickReformulateMessage()}
               />
             </>
           ) : null}

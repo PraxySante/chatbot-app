@@ -15,9 +15,9 @@ export default function DashBoard() {
   //Init Component
 
   // Check status authentification from Auth0
-  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated } = useAuth0();
   // Check language selected
-  const { userLanguage, selectedLanguage } = useLanguage();
+  const { selectedLanguage } = useLanguage();
 
   // Check opening sideBar default is true
   const [isOpenSideBar, setIsOpenSideBar] = useState<boolean>(false);
@@ -115,17 +115,15 @@ export default function DashBoard() {
               ) : (
                 <>
                   {/* Header */}
-                  <Header
-                    toggleOpenCloseModalMenu={toggleOpenCloseModalMenu}
-                  />
+                  <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
                 </>
               )}
             </>
           ) : (
             <>
               {/* Header */}
-                <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
-                <hr />
+              <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
+              <hr />
 
               {/* Panel */}
               <Panel />

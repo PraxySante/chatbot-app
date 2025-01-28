@@ -1,5 +1,5 @@
 export type tabPanelAttributes = {
-  id: string;
+  id: 'chat' | 'procedure';
   name: string;
   icon: JSX.Element
 };

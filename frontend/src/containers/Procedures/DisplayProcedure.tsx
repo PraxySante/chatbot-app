@@ -1,9 +1,9 @@
 import Description from '../../components/Text/Description';
-import ReaderDocument from '../ReaderDocument/ReaderDocument';
 import { useLanguage } from '../../hooks/UseLanguage';
 import Button from '../../components/Buttons/Button';
 import { useChat } from '../../hooks/ChatProvider';
 import { useEffect } from 'react';
+import ReaderDocument from './ReaderDocument/ReaderDocument';
 
 type DisplayProcedureType = {
   selectedProcedure: number;
@@ -13,7 +13,6 @@ export default function DisplayProcedures({
   selectedProcedure,
 }: DisplayProcedureType) {
   const { userLanguage } = useLanguage();
-
   const { procedures } = useChat();
 
   useEffect(() => {
@@ -38,7 +37,9 @@ export default function DisplayProcedures({
         case 'doc':
           return (
             <>
-              <ReaderDocument />
+              <ReaderDocument
+                fileDocument={procedures[selectedProcedure].content}
+              />
             </>
           );
         default:
@@ -80,13 +81,12 @@ export default function DisplayProcedures({
   return (
     <>
       {userLanguage && (
-        <>
+        <section className="p-6 bg-primary text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full">
           <Description
             content={userLanguage?.procedure_title}
             tag={'p'}
             className={''}
           />
-
 
           <Description
             content={userLanguage?.procedure_file_displayed}
@@ -94,7 +94,7 @@ export default function DisplayProcedures({
             className={''}
           />
           {renderingProcedure()}
-        </>
+        </section>
       )}
     </>
   );
