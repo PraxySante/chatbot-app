@@ -199,8 +199,11 @@ input[type='number'] {
 }
 
 /* Procedures */
+#procedure{
+  @apply h-full
+}
 .tab-procedure {
-  @apply cursor-pointer inline-flex items-center px-4 py-3 text-white bg-blue-700 rounded-lg w-full dark:bg-blue-600;
+  @apply cursor-pointer inline-flex items-center px-4 py-3 text-white bg-secondary rounded-lg w-full overflow-y-scroll overflow-x-hidden;
 }
 
 /* Input Message */

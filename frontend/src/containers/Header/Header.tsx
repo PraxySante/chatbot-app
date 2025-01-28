@@ -19,7 +19,7 @@ export default function Header({
 
   return (
     <div id="header">
-      t{/* Login/Logout selection */}
+      {/* Login/Logout selection */}
       {/* {isSelectLanguage ? !isAuthenticated ? <Auth /> : null : null} */}
       {/* Icons */}
       <span className="icons-actions gap-2 items-center left-10">
@@ -41,10 +41,10 @@ export default function Header({
           />
         </span>
       </span>
-      <span className="icons-actions right">
-        <SelectLanguage />
+      <span className="icons-actions right xs:flex xs:flex-col">
         {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' && (
           <>
+            <SelectLanguage />
             <IconButton
               onClick={toggleOpenCloseModalMenu}
               icon={icons.menuBar}

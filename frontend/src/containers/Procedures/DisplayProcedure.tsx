@@ -4,6 +4,9 @@ import Button from '../../components/Buttons/Button';
 import { useChat } from '../../hooks/ChatProvider';
 import { useEffect } from 'react';
 import ReaderDocument from './ReaderDocument/ReaderDocument';
+import Image from '../../components/Logo/Logo';
+import Title from '../../components/Text/Title';
+import Video from './Video/Video';
 
 type DisplayProcedureType = {
   selectedProcedure: number;
@@ -25,6 +28,13 @@ export default function DisplayProcedures({
         case 'url':
           return (
             <>
+              {userLanguage && (
+                <Description
+                  content={userLanguage?.procedure_file_displayed}
+                  tag={'p'}
+                  className={''}
+                />
+              )}
               <Button
                 type={'button'}
                 content={procedures[selectedProcedure].content}
@@ -37,21 +47,49 @@ export default function DisplayProcedures({
         case 'doc':
           return (
             <>
-              <ReaderDocument
-                fileDocument={procedures[selectedProcedure].content}
-              />
-            </>
-          );
-        default:
-          return (
-            <>
-              {userLanguage ? (
+              {userLanguage && (
                 <>
+                  <Description
+                    content={userLanguage?.procedure_file_displayed}
+                    tag={'p'}
+                    className={''}
+                  />
                   <Button
                     type={'button'}
                     content={userLanguage?.procedure_download}
                     onClick={() => console.log('click')}
                   />
+                  <ReaderDocument
+                    fileDocument={procedures[selectedProcedure].content}
+                  />
+                </>
+              )}
+            </>
+          );
+          case 'video':
+            return (
+              <>
+                {userLanguage && (
+                  <>
+                    <Description
+                      content={userLanguage?.procedure_file_displayed}
+                      tag={'p'}
+                      className={''}
+                    />
+
+                    <Video
+                      fileDocument={procedures[selectedProcedure].content}
+                    />
+                  </>
+                )}
+              </>
+            );
+        default:
+          return (
+            <>
+              {userLanguage ? (
+                <>
+                  <Image imgSource={'./no-data.jpg'} classname={''} />
                   <Description
                     content={userLanguage?.procedure_not_yet}
                     tag={'p'}
@@ -67,11 +105,14 @@ export default function DisplayProcedures({
       return (
         <>
           {userLanguage ? (
-            <Description
-              content={userLanguage?.procedure_not_yet}
-              tag={'p'}
-              className={''}
-            />
+            <>
+              <Image imgSource={'./no-data.jpg'} classname={'w-1/2 h-1/2'} />
+              <Description
+                content={userLanguage?.procedure_not_yet}
+                tag={'p'}
+                className={''}
+              />
+            </>
           ) : null}
         </>
       );
@@ -81,16 +122,10 @@ export default function DisplayProcedures({
   return (
     <>
       {userLanguage && (
-        <section className="p-6 bg-primary text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full">
-          <Description
+        <section className="flex flex-col justify-center items-center p-4 gap-4 border border-black outlined text-medium text-white rounded-lg h-full w-full overflow-y-scroll overflow-x-hidden ">
+          <Title
             content={userLanguage?.procedure_title}
-            tag={'p'}
-            className={''}
-          />
-
-          <Description
-            content={userLanguage?.procedure_file_displayed}
-            tag={'p'}
+            tag={'h3'}
             className={''}
           />
           {renderingProcedure()}
