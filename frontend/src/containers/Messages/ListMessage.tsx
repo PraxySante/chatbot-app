@@ -1,0 +1,92 @@
+import { Dispatch, SetStateAction, useEffect } from 'react';
+import { MessageAttributes } from '../../types/messages/messages.type';
+import IconButton from '../../components/Buttons/IconButton';
+import icons from '../../constants/icons';
+import Message from './Message/Message';
+import { useChat } from '../../hooks/ChatProvider';
+
+type MessageType = {
+  message: MessageAttributes;
+  setSelectedPanel: Dispatch<SetStateAction<'chat' | 'procedure'>>;
+};
+export default function ListMessage({
+  message,
+  setSelectedPanel,
+}: MessageType) {
+  const { stockMessageUser, requestChatConversation } = useChat();
+
+  useEffect(() => {
+    renderingMessage();
+  }, [message]);
+
+  function renderingMessage() {
+    switch (message.role) {
+      case 'assistant':
+        if (message.doc_type) {
+          return (
+            <span
+              className="flex flex-row justify-start cursor-pointer"
+              onClick={() => handleClick(message.content)}
+            >
+              <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+              <Message message={message} />
+            </span>
+          );
+        } else {
+          return (
+            <span className="flex flex-row justify-start">
+              <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+              <Message message={message} />
+            </span>
+          );
+        }
+
+      case 'user':
+        return (
+          <>
+            <span className="flex flex-row justify-end">
+              <Message message={message} />
+              <IconButton className={'icon icon-user'} icon={icons?.user} />
+            </span>
+          </>
+        );
+      default:
+        break;
+    }
+  }
+
+  async function handleClick(requestReformulation: string) {
+    switch (message.doc_type) {
+      case 'url':
+        setSelectedPanel('procedure');
+        break;
+
+      case 'doc':
+        setSelectedPanel('procedure');
+        break;
+
+      case 'reformulate':
+        await stockMessageUser(requestReformulation);
+        await requestChatConversation(requestReformulation);
+        break;
+
+      default:
+        break;
+    }
+  }
+  return (
+    <section
+      className={
+        message.role === 'assistant'
+          ? 'message justify-start'
+          : 'message justify-end'
+      }
+    >
+      <div
+        className={message.role === 'assitant' ? 'message-bot' : 'message-user'}
+      >
+        {renderingMessage()}
+      </div>
+    </section>
+  );
+}

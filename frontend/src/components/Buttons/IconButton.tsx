@@ -16,7 +16,7 @@ export default function IconButton({
     } else {
       setFormatClassName('');
     }
-  }, []);
+  }, [className]);
 
   return (
     <>
