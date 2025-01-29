@@ -10,8 +10,10 @@ const ErrorContext = createContext<ErrorContext | undefined>(undefined);
 function ErrorHandlerProvider({ children }: { children: ReactNode }) {
   const [messageError, setMessageError] = useState<string>('');
 
-  function getMessageError(value: string) { }
-  
+  function getMessageError(value: string) {
+    setMessageError(value);
+  }
+
   return (
     <ErrorContext.Provider value={{ messageError, getMessageError }}>
       {children}
