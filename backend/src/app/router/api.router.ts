@@ -7,7 +7,7 @@ import verifyOrigin from "../middlewares/verify.origin";
 
 export const router = Router();
 
-router.post("/request", controllerWrapper(apiController.getRequestToken));
+router.post("/auth", controllerWrapper(apiController.getRequestToken));
 
 router.post(
 	"/start",

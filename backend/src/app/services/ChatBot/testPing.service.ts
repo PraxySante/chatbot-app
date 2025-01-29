@@ -1,16 +1,11 @@
+import { AxiosResponse } from "axios";
 import { axiosChatBot } from "./axiosChatBot.service";
 
-export async function testPingApiChatBot() {
+export async function testPingApiChatBot(): Promise<AxiosResponse<any, number> | { }> {
 	try {
-		const response = await axiosChatBot.get("/ping");
-		const { data, status } = response;
-		if (status === 200) {
-			return data;
-		} else {
-			return data;
-		}
+		return axiosChatBot.get("/ping");
 	} catch (error: any) {
 		console.error(error);
-		return{ message: "failure", details: error?.message };
+		return error; 
 	}
 }

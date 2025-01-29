@@ -1,5 +1,7 @@
 import { client as redisClient } from "../services/Redis/redis.service";
 
+const ONE_HOUR = 60 * 60;
+
 async function isKeyExist(key: string) {
 	try {
 		const value = await redisClient.get(key);
@@ -25,7 +27,7 @@ async function setKey(key: string, value: any) {
 	try {
 		const isExist = await isKeyExist(key);
 		if (!isExist) {
-			await redisClient.set(key, value, { EX: 60 * 60 });
+			await redisClient.set(key, value, { EX: ONE_HOUR });
 		}
 	} catch (error: any) {
 		console.error("Impossible to be connected to Redis", error?.message);
@@ -51,7 +53,7 @@ async function removeKey(key: string) {
 			await redisClient.del(key);
 		}
 	} catch (error: any) {
-		console.error("Impossible to be connected to Redis", error?.message);
+		console.error("Failed to connect to Redis", error?.message);
 	}
 }
 

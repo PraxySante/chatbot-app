@@ -101,7 +101,7 @@ export default function DisplayProcedures({
           );
       }
     } else {
-      console.error('Erreur affichage');
+      console.error('View error');
       return (
         <>
           {userLanguage ? (

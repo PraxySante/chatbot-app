@@ -27,15 +27,14 @@ export async function requestChatToApiChatBot(
 			return { status: status, message: "failure", details: details };
 		}
 
-		if (status === 200) {
-			return {
+		if (status !== 200) {
+			return { status: status, message: "failure", details: details };
+    }
+    return {
 				status: status,
 				details: data.message,
 				sources: [...data.sources],
 			};
-		} else {
-			return { status: status, message: "failure", details: details };
-		}
 	} catch (error: any) {
 		console.error(error.message);
 		return {

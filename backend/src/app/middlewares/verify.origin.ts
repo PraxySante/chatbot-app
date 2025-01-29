@@ -9,16 +9,23 @@ export default async function verifyOrigin(
 	const { project, language } = req.body;
 	const { ip } = req;
 
+  // validate body 
 	if (!project || !language) {
-		return res.status(400).json("Bad request, missing origin and language !");
-	} else {
-		if (ip) {
-			const storedData = await getKey(ip);
-			if (storedData?.project !== project) {
-				return res
-					.status(400)
-					.json("Bad request, missing origin and language !");
-			}
-		}
+		return res.status(400).json("Bad request, missing project or language.");
 	}
+  
+  // check ip exist
+	if (!ip) {
+    return res.status(400).json("Bad request, no ip provided.");
+  }
+  
+  // check good project
+	const storedData = await getKey(ip);
+	if (storedData?.project !== project) {
+		return res
+			.status(400)
+			.json("Bad request, wrong project.");
+	}
+
+  next();
 }

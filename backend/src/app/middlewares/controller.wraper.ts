@@ -5,7 +5,7 @@ export default function controllerWrapper(controllerMw: any) {
 		try {
 			await controllerMw(req, res, next);
 
-			// Si la réponse n'est pas encore terminée, appeler `next`
+			// If the response isn't done, call `next`
 			if (!res.headersSent) {
 				next();
 			}

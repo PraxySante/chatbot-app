@@ -6,11 +6,14 @@ export default async function verifyAuthRedis(
 	res: Response,
 	next: NextFunction
 ) {
-	if (req.ip) {
-		let storedCache = await getKey(req.ip);
-		if (!storedCache) {
-			console.error("Not found");
-			return { status: 401, message: "failure", details: "Not Authentified !" };
-		}
+	if (!req.ip) {
+    return { status: 400, message: 'Failure', details: "Missing ip in headers."};
+  }
+
+	let storedCache = await getKey(req.ip);
+	if (!storedCache) {
+		console.error(`Stored cache not found for ip ${req.ip}`);
+		return { status: 401, message: "Failure", details: "Not Authentified." };
 	}
+	next();
 }

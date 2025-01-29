@@ -6,7 +6,7 @@ export async function requestApiFrontChatBot(): Promise<
   string | ReponseFailureType
 > {
   try {
-    const response: AxiosResponse = await axiosAuthSecret.post('/request', {
+    const response: AxiosResponse = await axiosAuthSecret.post('/auth', {
       project: 'Foch',
       language: 'fr',
     });

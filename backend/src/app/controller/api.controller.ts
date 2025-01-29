@@ -11,58 +11,66 @@ export default {
 	async getRequestToken(req: Request, res: Response, next: NextFunction) {
 		const { project, language } = req.body;
 		const { ip } = req;
-		if (ip) {
-			const response = await getTokenAndStartChat(ip, project, language);
-			return res.status(response?.status).send(response?.details);
-		}
+		if (!ip) {
+      return res.status(400).json({"message": "Failure", "details": "Missing ip in request headers."})
+    }
+		const response = await getTokenAndStartChat(ip, project, language);
+		return res.status(response?.status).send(response?.details);
 	},
 
 	async startChat(req: Request, res: Response, next: NextFunction) {
 		const { ip } = req;
-		if (ip) {
-			const response = await startChatApiBot(ip);
-			return res.status(response?.status).json(response?.details);
-		}
+    if (!ip) {
+      return res.status(400).json({"message": "Failure", "details": "Missing ip in request headers."})
+    }
+
+		const response = await startChatApiBot(ip);
+		return res.status(response?.status).json(response?.details);
 	},
 
 	async continueChat(req: Request, res: Response, next: NextFunction) {
 		const { history, message } = req.body;
 		const { ip } = req;
-		if (ip) {
-			const response = await requestChatToApiChatBot(ip, history, message);
-			if (response.sources?.length !== 0) {
-				return res.status(response?.status).json(response);
-			} else {
-				return res.status(response?.status).json(response);
-			}
+    if (!ip) {
+      return res.status(400).json({"message": "Failure", "details": "Missing ip in request headers."})
+    }
+		const response = await requestChatToApiChatBot(ip, history, message);
+		if (response.sources?.length !== 0) {
+			return res.status(response?.status).json(response);
+		} else {
+			return res.status(response?.status).json(response);
 		}
 	},
 
 	async reformulationChat(req: Request, res: Response, next: NextFunction) {
 		const { ip } = req;
-		if (ip) {
-			const response = await reformulationChatToApiChatBot(ip);
-			return res.status(response?.status).send(response?.details);
-		}
+    if (!ip) {
+      return res.status(400).json({"message": "Failure", "details": "Missing ip in request headers."})
+    }
+		const response = await reformulationChatToApiChatBot(ip);
+		return res.status(response?.status).send(response?.details);
 	},
 
 	async endChat(req: Request, res: Response, next: NextFunction) {
 		const { ip } = req;
-		if (ip) {
-			const response = await endChatApiBot(ip);
-			await removeKey(ip);
-			await removeKey(`user-${ip}`);
-			console.log(`conversation is ended`);
-			return res.status(response?.status).send(response?.details);
-		}
+    if (!ip) {
+      return res.status(400).json({"message": "Failure", "details": "Missing ip in request headers."})
+    }
+		const response = await endChatApiBot(ip);
+		await removeKey(ip);
+		await removeKey(`user-${ip}`);
+		console.log(`Conversation is ended`);
+		return res.status(response?.status).send(response?.details);
+		
 	},
 
 	async feedbackChat(req: Request, res: Response, next: NextFunction) {
 		const { note, comment } = req.body;
 		const { ip } = req;
-		if (ip) {
-			const response = await feedbackApiChatBot(ip, note, comment);
-			return res.status(response?.status).send(response?.details);
-		}
+    if (!ip) {
+      return res.status(400).json({"message": "Failure", "details": "Missing ip in request headers."})
+    }
+		const response = await feedbackApiChatBot(ip, note, comment);
+		return res.status(response?.status).send(response?.details);
 	},
 };
