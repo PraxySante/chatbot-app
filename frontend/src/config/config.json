@@ -1,0 +1,54 @@
+{
+  "languages": [
+    {
+      "id": "fr",
+      "name": "Français",
+      "icon": "🇫🇷"
+    },
+    {
+      "id": "nl",
+      "name": "Nederlands",
+      "icon": "🇳🇱"
+    }
+  ],
+  "modalMenu": [
+    {
+      "id": "re-run",
+      "name": "Rerun"
+    },
+    {
+      "id": "settings",
+      "name": "Settings"
+    },
+    {
+      "id": "print",
+      "name": "Print"
+    },
+    {
+      "id": "record-screencast",
+      "name": "Record ad screencast"
+    },
+    {
+      "id": "about",
+      "name": "About"
+    }
+  ],
+  "feedback": [
+    "feedback_exhaustivity",
+    "feedback_accuracy",
+    "feedback_hallucinations"
+  ],
+  "design": {
+    "primary": "rgb(0,75,125)",
+    "secondary": "rgb(0,125,190)",
+    "third": "rgb(150,190,50)",
+    "text": "rgb(0,0,0)",
+    "bot": "rgb(255, 188, 73, 0.5)",
+    "user": "rgb(255, 107, 108, 0.5)",
+    "radiant": "linear-gradient(90deg, rgba(150,190,50,1) 0%, rgba(0,125,190,1) 100%)",
+    "sucess": "rgb(153, 204, 51)",
+    "warning": "rgb(255, 204, 0, 0.3)",
+    "error": "rgb(255, 153, 102)",
+    "information": "rgba(200, 231, 255, 0.5)"
+  }
+}
