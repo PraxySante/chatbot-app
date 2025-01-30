@@ -6,6 +6,7 @@ import { endChatApiBot } from "../services/ChatBot/endChat.service";
 import { feedbackApiChatBot } from "../services/ChatBot/feedbackChat.service";
 import { reformulationChatToApiChatBot } from "../services/ChatBot/reformulationChat.service";
 import { startChatApiBot } from "../services/ChatBot/startChat.service";
+import { ResponseFailureType, ResponseSuccessType } from "../types/chatbot.type";
 
 export default {
 	/**
@@ -149,13 +150,18 @@ export default {
 				details: "Missing ip in request headers.",
 			});
 		}
-		const { status, details } = await requestChatToApiChatBot(
+		const response : ResponseFailureType | ResponseSuccessType = await requestChatToApiChatBot(
 			ip,
 			history,
 			message
 		);
 
-		return res.status(status).json(details);
+		if ('sources' in response) {			
+			return res.status(response.status).json({ details: response.details, sources: response.sources });
+		}
+
+		return res.status(response.status).json(response.details);
+		
 	},
 
 	/**
@@ -222,7 +228,7 @@ export default {
 			});
 		}
 		const { status, details } = await reformulationChatToApiChatBot(ip);
-		console.log("🚀 ~ status, details:", status, details)
+		console.log("🚀 ~ status, details:", status, details);
 		return res.status(status).send(details);
 	},
 

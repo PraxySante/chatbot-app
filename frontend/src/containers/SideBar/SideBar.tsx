@@ -1,12 +1,10 @@
 import { lazy } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useLanguage } from '../../hooks/UseLanguage';
 import config from '../../config/config.json';
 import Button from '../../components/Buttons/Button';
 import SeparateLine from '../../components/SeparateLine/SeparateLine';
 import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
-import StatutLogin from '../StatutLogin/StatutLogin';
 import { useChat } from '../../hooks/ChatProvider';
 import Feedback from '../Feedback/Feedback';
 
@@ -21,9 +19,7 @@ export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
   // Restart Chat
   const { selectedRestart } = useChat();
   // Check selected language by user
-  const { userLanguage, selectedLanguage } = useLanguage();
-  // Check user authentified
-  const { isAuthenticated } = useAuth0();
+  const { userLanguage } = useLanguage();
 
   // Function restart chat
   function restartChat() {
@@ -38,26 +34,22 @@ export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
           <IconButton onClick={toggleOpenCloseSideBar} icon={icons.arrowLeft} />
         </span>
         {/* Logo */}
-        {config && <Image imgSource={import.meta.env.VITE_CHATBOT_LOGO} classname={''} />}
-        {selectedLanguage ? (
+        {config && (
+          <Image imgSource={import.meta.env.VITE_CHATBOT_LOGO} classname={''} />
+        )}
+        {userLanguage && (
           <>
-            {/* Login Session  */}
-            <StatutLogin />
-            {userLanguage && isAuthenticated ? (
-              <>
-                {/* Button restart */}
-                <Button
-                  content={userLanguage?.chat_restart}
-                  onClick={restartChat}
-                  type={'button'}
-                />
-                <SeparateLine />
-                {/* Feedback Form  */}
-                <Feedback />
-              </>
-            ) : null}
+            {/* Button restart */}
+            <Button
+              content={userLanguage?.chat_restart}
+              onClick={restartChat}
+              type={'button'}
+            />
+            <SeparateLine />
+            {/* Feedback Form  */}
+            <Feedback />
           </>
-        ) : null}
+        )}
       </section>
     </>
   );

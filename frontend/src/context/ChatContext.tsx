@@ -9,6 +9,7 @@ import { startApiFrontChatBot } from '../services/ChatBot/startApiFrontChatBot.s
 import { sendMessageApiFrontChatBot } from '../services/ChatBot/sendMessageApiFronChatBot.service';
 import { reformulateChat } from '../services/ChatBot/reformulateChat.service';
 import { endChat } from '../services/ChatBot/endChat.service';
+import { feedbackApiFrontChatBot } from '../services/ChatBot/feedbackApiFrontChatBot.service';
 
 export type ChatContextAttributes = {
   isRestart: boolean;
@@ -21,6 +22,7 @@ export type ChatContextAttributes = {
   reformulateChatConversation: () => void;
   endConversation: () => void;
   procedures: any;
+  sendFeedback: (vote: number, comment: string) => void;
 };
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
@@ -41,8 +43,20 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
     start();
   }, []);
 
+  useEffect(() => {
+    async function start() {
+      await startConversation();
+    }
+    if (isRestart) {
+      start();
+    }
+  }, [isRestart]);
+
   function selectedRestart(): void {
     setIsStart(!isStart);
+    setMessages([]);
+    setHistoryChat([]);
+    setProcedures([]);
     setIsRestart(!isRestart);
   }
 
@@ -170,6 +184,10 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
     updateMessages(newMessages);
   }
 
+  async function sendFeedback(vote: number, comment: string) {
+    await feedbackApiFrontChatBot(vote, comment);
+  }
+
   async function endConversation() {
     await endChat();
   }
@@ -214,6 +232,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
               reformulateChatConversation,
               endConversation,
               procedures,
+              sendFeedback,
             }}
           >
             {children}
@@ -231,6 +250,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
             reformulateChatConversation,
             endConversation,
             procedures,
+            sendFeedback,
           }}
         >
           {children}

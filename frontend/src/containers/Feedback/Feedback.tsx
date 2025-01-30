@@ -1,57 +1,52 @@
-import { Fragment } from 'react/jsx-runtime';
 import { useState } from 'react';
 import { useLanguage } from '../../hooks/UseLanguage';
 import SeparateLine from '../../components/SeparateLine/SeparateLine';
 import Input from '../../components/Inputs/Input';
 import Button from '../../components/Buttons/Button';
-import config from '../../config/config.json';
-import FrequentQuestion from '../FrequentQuestion/FrequentQuestion';
 import InputEvaluate from '../InputEvaluate/InputEvaluate';
-import { FeedbackAttributes } from '../../types/feedback/feedback.type';
-import { TranslateAttributes } from '../../types/languages/translate.type';
-import Description from '../../components/Text/Description';
+import TransformMarkDownToMessage from '../Messages/Message/TransformMarkDownToMessage';
+import { useChat } from '../../hooks/ChatProvider';
 
 export default function Feedback() {
   //Init Component
   // Check selected language by user
   const { userLanguage } = useLanguage();
+  const { sendFeedback } = useChat();
 
-  // Using Hook State to contain all data feedback
-  const [containerFeedback, setContainerFeedback] = useState<
-    FeedbackAttributes[] | undefined
-  >([]);
   // Using Hook State to contain comment
   const [comment, setComment] = useState<string>('');
+  const [vote, setVote] = useState<number>(0);
 
   // Function to get all data from feedback and including in containerFeedback
-  function getDataForm({ id, value }: FeedbackAttributes) {
+  function getDataForm(value: number) {
+    setVote(value);
     // Update useState concerning user selection
-    setContainerFeedback(
-      (containerFeedback: FeedbackAttributes[] | undefined) => {
-        // Condition if containerFeedback exists
-        if (containerFeedback) {
-          // Searching if Feedback already added
-          // ! foundIndex = -1 not exists / 0 : exists
-          const foundIndex = containerFeedback.findIndex(
-            (container: FeedbackAttributes) => {
-              // Returning all data
-              return container.id === id;
-            }
-          );
-          if (foundIndex !== -1) {
-            // Get all data from found Feedback
-            const updatedFeedback = [...containerFeedback];
-            // Updating Feedback if already added
-            updatedFeedback[foundIndex].value = value;
-            // Return Feedback updated
-            return updatedFeedback;
-          } else {
-            // Adding new Feedback with all data (id and value)
-            return [...containerFeedback, { id, value }];
-          }
-        }
-      }
-    );
+    // setContainerFeedback(
+    //   (containerFeedback: FeedbackAttributes[] | undefined) => {
+    //     // Condition if containerFeedback exists
+    //     if (containerFeedback) {
+    //       // Searching if Feedback already added
+    //       // ! foundIndex = -1 not exists / 0 : exists
+    //       const foundIndex = containerFeedback.findIndex(
+    //         (container: FeedbackAttributes) => {
+    //           // Returning all data
+    //           return container.id === id;
+    //         }
+    //       );
+    //       if (foundIndex !== -1) {
+    //         // Get all data from found Feedback
+    //         const updatedFeedback = [...containerFeedback];
+    //         // Updating Feedback if already added
+    //         updatedFeedback[foundIndex].value = value;
+    //         // Return Feedback updated
+    //         return updatedFeedback;
+    //       } else {
+    //         // Adding new Feedback with all data (id and value)
+    //         return [...containerFeedback, { id, value }];
+    //       }
+    //     }
+    //   }
+    // );
   }
 
   // Function Get all comment from user
@@ -60,49 +55,35 @@ export default function Feedback() {
   }
 
   // Function to send Feedback form
-  // ! Must finished to connect Directus
   async function onSubmit(): Promise<void> {
-    //const test = await axiosConfig.get('/');
-    getDataForm({ id: 'comment', value: comment });
-    console.log(containerFeedback);
-    setContainerFeedback([]);
+    await sendFeedback(vote, comment);
+    setComment('');
   }
 
   return (
     <>
       {userLanguage ? (
         <div id="form">
-          {/* Frequently Question Session */}
-          <FrequentQuestion
-            getDataForm={({ id, value }: FeedbackAttributes) =>
-              getDataForm({ id, value })
-            }
-          />
           {/* Separatline */}
           <SeparateLine />
-          {config?.feedback.map((feedback: any, index: number) => {
-            return (
-              <Fragment key={index}>
-                {/* Input Evaluate Feedback */}
-                <InputEvaluate
-                  id={feedback}
-                  getDataForm={({ id, value }) => getDataForm({ id, value })}
-                  content={userLanguage[feedback as keyof TranslateAttributes]}
-                />
-              </Fragment>
-            );
-          })}
-          <Description
-            content={userLanguage?.feedback_comments}
-            tag={'p'}
-            className={''}
+
+          <InputEvaluate
+            id={'feedback'}
+            getDataForm={(value) => getDataForm(value)}
+            content={'Feedback'}
           />
+
+          <TransformMarkDownToMessage
+            id={'comment'}
+            content={userLanguage?.feedback_comments}
+          />
+
           {/* Input Comment */}
           <Input
             variant="text"
             onChange={(e) => getComment(e)}
             content={'Ecrire votre commentaire'}
-            value={''}
+            value={comment}
           />
           {/* Button Feedback Form */}
           <Button

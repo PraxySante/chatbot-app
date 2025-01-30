@@ -26,7 +26,7 @@ export interface ICheckBox {
 export interface IInputEvaluate {
   id: string;
   content: string;
-  getDataForm: ({ id, value }: FeedbackAttributes) => void;
+  getDataForm: (value:number) => void;
 }
 
 export interface IIconButton {

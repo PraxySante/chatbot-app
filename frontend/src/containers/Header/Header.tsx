@@ -32,12 +32,12 @@ export default function Header({
           <Title
             content={import.meta.env.VITE_CHATBOT_NAME}
             tag={'h3'}
-            className={''}
+            className={'sm:text-sm'}
           />
           <Description
             content={'Réponds généralement immédiatemment...'}
             tag={'p'}
-            className={''}
+            className={'text-xs'}
           />
         </span>
       </span>

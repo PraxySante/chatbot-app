@@ -6,6 +6,7 @@ import Message from './Message/Message';
 import { useChat } from '../../hooks/ChatProvider';
 import Video from '../Procedures/Video/Video';
 import Button from '../../components/Buttons/Button';
+import FeedbackLight from '../Feedback/FeedbackLight';
 
 type MessageType = {
   message: MessageAttributes;
@@ -46,18 +47,17 @@ export default function ListMessage({
               >
                 <IconButton icon={icons.chain} />
               </Button>
-
-              {/* <Message message={message} /> */}
             </span>
           );
-        } else {
-          return (
+        }
+        return (
+          <>
             <span className="flex flex-row justify-start">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
               <Message message={message} />
             </span>
-          );
-        }
+          </>
+        );
 
       case 'user':
         return (

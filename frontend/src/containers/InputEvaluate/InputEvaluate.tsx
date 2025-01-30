@@ -4,10 +4,10 @@ import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import { IInputEvaluate } from '../../types/inputs/inputs.interface';
 import Title from '../../components/Text/Title';
-import Description from '../../components/Text/Description';
+import { useLanguage } from '../../hooks/UseLanguage';
+import TransformMarkDownToMessage from '../Messages/Message/TransformMarkDownToMessage';
 
 export default function InputEvaluate({
-  id,
   content,
   getDataForm,
 }: IInputEvaluate) {
@@ -15,18 +15,7 @@ export default function InputEvaluate({
   // Hook State to get score for each input
   const [score, setScore] = useState<number>(0);
   const [isShowInformation, setIsShowinformation] = useState<boolean>(false);
-  const [contentTitle, setContentTitle] = useState<string>('');
-  const [contentInformation, setContentInformation] = useState<string>('');
-
-  useEffect(() => {
-    const startPoint = content.indexOf('*') + 2;
-    const endPoint = content.lastIndexOf('*') - 3;
-
-    const contentTitle = content.slice(startPoint, endPoint);
-    const contentInformation = content.slice(endPoint + 4, content.length);
-    setContentTitle(contentTitle);
-    setContentInformation(contentInformation);
-  }, []);
+  const { userLanguage } = useLanguage();
 
   // Hook to render each score according user action
   useEffect(() => {
@@ -46,7 +35,7 @@ export default function InputEvaluate({
     // Update score
     setScore(score);
     // Get data from user action and including into feedback
-    getDataForm({ id: `${id.replace('feedback_', '')}`, value: score });
+    getDataForm(score);
   }
 
   // Function render each score according user action
@@ -65,14 +54,15 @@ export default function InputEvaluate({
           className="border border-solid border-slate-200 w-fit h-fit rounded-xl"
           icon={isShowInformation ? icons?.showText : icons?.reduceText}
         />
-        <Title content={contentTitle} tag={'h2'} className={''} />
+        <Title content={content} tag={'h2'} className={''} />
       </div>
-      <Description
-        id={id}
-        content={contentInformation}
-        tag={'p'}
-        className={isShowInformation ? 'text-sm w-52' : 'hidden'}
-      />
+      {userLanguage && (
+        <TransformMarkDownToMessage
+          id={'feedback_comment'}
+          content={userLanguage?.feedback_accuracy}
+          className={isShowInformation ? 'text-sm w-52' : 'hidden'}
+        />
+      )}
 
       <div className="container-input">
         {/* Render input component according new score  */}
