@@ -1,31 +1,48 @@
 import { NextFunction, Request, Response } from "express";
-import { getKey } from "../datamapper/redis.datamapper";
+import { getKeyRedis } from "../datamapper/redis.datamapper";
 
+/**
+ * Request and control project and language
+ *
+ * @param {Request} req - Object contains data :
+ * - **IP du client** (`req.ip`)
+ * - **Body** (`req.body`):
+ *   - `project`: Company name
+ *   - `language`: Language selected
+ * @example
+ * Requête POST avec un body JSON :
+ * { projet: "Praxy IA", language: "fr", ..,
+ * @param {Response} res - Return response failed or success
+ * @param {NextFunction} _ - Next not used
+ * @returns {Promise<Response>} - Return response JSON :
+ * - **details**
+ * - **status**
+ * @throws {400} - Missing ip in request headers
+ * @example
+ * {
+ * "Bad request, missing project or language..",
+ * "Bad request, no ip provided."
+ * "Bad request, wrong project.""
+ * }
+ * @throws {500} - Internal Server Error - catched by ControllerWrapper
+ */
 export default async function verifyOrigin(
 	req: Request,
 	res: Response,
-	next: NextFunction
-) {
+	_: NextFunction
+): Promise<void | Response> {
 	const { project, language } = req.body;
 	const { ip } = req;
 
-  // validate body 
+	// validate body
 	if (!project || !language) {
 		return res.status(400).json("Bad request, missing project or language.");
 	}
-  
-  // check ip exist
+
+	// check ip exist
 	if (!ip) {
-    return res.status(400).json("Bad request, no ip provided.");
-  }
-  
-  // check good project
-	const storedData = await getKey(ip);
-	if (storedData?.project !== project) {
-		return res
-			.status(400)
-			.json("Bad request, wrong project.");
+		return res.status(400).json("Bad request, no ip provided.");
 	}
 
-  next();
+
 }

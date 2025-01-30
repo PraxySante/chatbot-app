@@ -1,31 +1,88 @@
-import { getKey } from "../../datamapper/redis.datamapper";
+import { getKeyRedis } from "../../datamapper/redis.datamapper";
+import {
+	ResponseErrorType,
+	ResponseFailureType,
+	ResponseMessageType,
+	ResponseReformulationType,
+	ResponseSuccessType,
+} from "../../types/chatbot.type";
+import { ResponseKeyRedisType } from "../../types/redis.type";
 import { axiosChatBot } from "./axiosChatBot.service";
 
-export async function reformulationChatToApiChatBot(ip: string) {
-	const storedCache = await getKey(ip);
+/** 
+	 * Request axios reformulate conversation API-chatbot
+	 *
+	 * @param {Param} uuid - String uuid
+	 *  - Data from Redis
+	 * @param {Param} authToken - String token
+	 *   - Data from Redis
+	 * @returns {Promise<ResponseFailureType | ResponseSuccessType>} - Return response JSON :
+	 * - **details**
+	 * - **status**
+	 * @example
+	 * Response 200 - Success 
+	 * {
+    "reformulations": [
+        {
+            "role": "assistant",
+            "content": ". Comment puis-je procéder pour prendre un rendez-vous à l'Hôpital Foch ?"
+        },
+        {
+            "role": "assistant",
+            "content": ". Quelles sont les étapes à suivre pour réserver une consultation à l'Hôpital Foch ?"
+        },
+        {
+            "role": "assistant",
+            "content": ". Quels sont les moyens disponibles pour fixer un rendez-vous à l'Hôpital Foch ?"
+        }
+    ]
+}
+	 * @throws {400} - Missing ip in request headers
+	 * @example
+	 * {
+	 * message: "Failure",
+	 * details: "Missing data",
+	 * }
+	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
+	 */
+export async function reformulationChatToApiChatBot(
+	ip: string
+): Promise<ResponseSuccessType | ResponseFailureType> {
+	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
+		await getKeyRedis(ip);
+
+		// Message Error Typed - error message from Redis
+		if (status !== 200 && typeof details === "string") {
+			return { status: status, details: details };
+		}
+	
+		// Message Error Typed - check structure auth
+		if (typeof details !== "object" || !("authToken" in details)) {
+			return { status: 401, details: "Not authorized" };
+		}
+	
 
 	// The request body can be empty.
 	try {
-		const response: any = await axiosChatBot.post(
-			`/chat/reformulate/${storedCache?.uuid}`,
+		const responseApi: ResponseReformulationType | ResponseErrorType =
+		await axiosChatBot.post(
+			`/chat/reformulate/${details?.uuid}`,
 			{},
 			{
 				headers: {
-					Authorization: `Bearer ${storedCache?.authToken}`,
+					Authorization: `Bearer ${details?.authToken}`,
 				},
 			}
 		);
-		let { data, status, details } = response;
-
-		if (details) {
-			return { status: status, message: "failure", details: details };
+		
+		if ('details' in responseApi) {
+			return { status: responseApi.status, details: responseApi.details };
 		}
 
-		if (status === 200) {
-			return { status: status, details: data.reformulations };
-		} else {
-			return { status: status, message: "failure", details: details };
-		}
+		return {
+			status: responseApi.status,
+			details: [...responseApi.data.reformulations],
+		};
 	} catch (error: any) {
 		console.error(error.message);
 		return {

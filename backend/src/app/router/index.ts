@@ -8,7 +8,7 @@ router.use(apiRouter);
 router.use(testRouter);
 
 router.use((req, res) => {
-	if (!res.headersSent) {		
-		res.status(404).json({ error: "Ressource not found" });
+	if (!res.headersSent) {
+		res.status(404).json({ error: "Ressource not found 2" });
 	}
 });
