@@ -7,12 +7,12 @@ import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
 export async function feedbackApiFrontChatBot(
   vote: number,
-  comment: string | ''
+  comment: string
 ): Promise<MessageType | ReponseFailureType> {
   try {
     const response: AxiosResponse = await axiosAuthSecret.post(`/feedback`, {
       note: vote,
-      comment: comment,
+      comment: comment || '',
       project: 'Foch',
       language: 'fr',
     });

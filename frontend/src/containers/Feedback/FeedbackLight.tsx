@@ -1,13 +1,14 @@
 import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
+import { useChat } from '../../hooks/ChatProvider';
 import { useLanguage } from '../../hooks/UseLanguage';
-import { feedbackApiFrontChatBot } from '../../services/ChatBot/feedbackApiFrontChatBot.service';
 
 export default function FeedbackLight() {
   const { userLanguage } = useLanguage();
+  const { sendFeedback } = useChat();
 
   async function voteFeedback(vote: number) {
-    await feedbackApiFrontChatBot(vote);
+    await sendFeedback(vote, '');
   }
 
   return (

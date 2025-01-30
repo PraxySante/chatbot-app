@@ -9,9 +9,7 @@ import InputMessage from '../InputMessage/InputMessage';
 import TabPanel from '../TabPanel/TabPanel';
 import Title from '../../components/Text/Title';
 import ListMessage from '../Messages/ListMessage';
-import icons from '../../constants/icons';
-import IconButton from '../../components/Buttons/IconButton';
-import { feedbackApiFrontChatBot } from '../../services/ChatBot/feedbackApiFrontChatBot.service';
+
 import FeedbackLight from '../Feedback/FeedbackLight';
 
 interface IChatAttributes {

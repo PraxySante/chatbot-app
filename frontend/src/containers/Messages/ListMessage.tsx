@@ -6,7 +6,6 @@ import Message from './Message/Message';
 import { useChat } from '../../hooks/ChatProvider';
 import Video from '../Procedures/Video/Video';
 import Button from '../../components/Buttons/Button';
-import FeedbackLight from '../Feedback/FeedbackLight';
 
 type MessageType = {
   message: MessageAttributes;
