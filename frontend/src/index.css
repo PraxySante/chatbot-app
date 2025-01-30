@@ -71,7 +71,7 @@ input[type='number'] {
 
 /* SideBar */
 #side-bar {
-  @apply absolute flex shrink flex-col z-20 bg-white w-1/5 h-screen pt-16 p-8 overflow-y-auto gap-2 items-center min-w-72 md:min-w-72;
+  @apply absolute flex shrink flex-col z-20 bg-gray-200 w-1/5 h-screen pt-16 p-8 overflow-y-auto gap-2 items-center min-w-72 md:min-w-72;
 }
 
 /* Statut Login */
