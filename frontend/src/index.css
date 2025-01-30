@@ -96,13 +96,13 @@ input[type='number'] {
 
 /* Panel */
 #tab-panel {
-  @apply cursor-pointer absolute flex flex-row h-max w-fit rounded-md shadow-sm bg-white border border-solid border-gray-200 justify-center items-center;
+  @apply cursor-pointer absolute flex flex-row h-fit w-fit rounded-md shadow-sm bg-white border border-solid border-gray-200 justify-center items-center;
 }
 
 /* Styles communs aux boutons */
 .tab,
 .tab-selected {
-  @apply flex flex-row w-fit px-4 py-2 text-sm gap-2 font-medium text-black bg-transparent hover:bg-primary hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white;
+  @apply flex flex-row justify-center items-center w-fit px-4 py-2 text-xs font-medium text-black bg-transparent hover:bg-primary hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white sm:text-sm;
 }
 
 /* Bouton sélectionné */
@@ -172,7 +172,7 @@ input[type='number'] {
 }
 
 .message-user {
-  @apply flex flex-col rounded-tl-lg rounded-b-lg justify-end gap-2;
+  @apply flex flex-col text-white rounded-tl-lg rounded-b-lg justify-end gap-2;
 }
 
 .message-assistant,
@@ -268,7 +268,7 @@ input::-webkit-inner-spin-button {
 
 /* Buttons */
 .btn_actions {
-  @apply font-medium cursor-pointer w-fit h-fit rounded-md border p-2;
+  @apply text-black font-medium cursor-pointer w-fit h-fit rounded-md border p-2;
 }
 
 .contained {
@@ -276,7 +276,7 @@ input::-webkit-inner-spin-button {
 }
 
 .outlined {
-  @apply border-primary bg-white hover:text-secondary hover:border-secondary;
+  @apply border-primary bg-white hover:text-third hover:border-secondary;
 }
 
 /* Menu Modal */
@@ -310,7 +310,7 @@ input::-webkit-inner-spin-button {
 /* Loader */
 
 .wrapper {
-  @apply absolute bottom-24 w-fit h-8 bg-third rounded-xl;
+  @apply  bottom-24 w-fit h-8 bg-third rounded-xl;
 }
 
 .wrapper-user {

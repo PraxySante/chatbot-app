@@ -12,22 +12,22 @@ export default function FeedbackLight() {
   }
 
   return (
-    <span className="text-sm font-normal flex flex-row w-fit gap-1 items-center border rounded-lg border-gray-200 outline ml-1 p-2">
+    <span className="text-sm font-normal flex flex-row w-fit gap-2 items-center border rounded-lg border-gray-200 outline ml-1 py-1 px-2">
       {userLanguage?.feedback_send}
       <IconButton
         onClick={() => voteFeedback(0)}
-        icon={icons?.thumbdown}
-        className="text-red-600 border-black-200 outline rounded-xl p-[1px]"
+        icon={'🙁'}
+        className="text-red-600 outline rounded-xl px-1"
       />
       <IconButton
         onClick={() => voteFeedback(2)}
-        icon={icons?.neutral}
-        className="border-black-200 outline rounded-xl p-[1px]"
+        icon={'😑'}
+        className="text-orange-500 outline rounded-xl px-1"
       />
       <IconButton
         onClick={() => voteFeedback(5)}
-        icon={icons?.thumbup}
-        className="text-third border-black-200 outline rounded-xl p-[1px]"
+        icon={'🙂'}
+        className="text-green-500 outline rounded-xl px-1"
       />
     </span>
   );

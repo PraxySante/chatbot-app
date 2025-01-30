@@ -2,7 +2,7 @@ import { useLanguage } from '../../hooks/UseLanguage';
 import { MessageAttributes } from '../../types/messages/messages.type';
 import Information from '../Information/Information';
 import { useChat } from '../../hooks/ChatProvider';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
 import MessageLoading from '../Loading/MessageLoading';
 import Button from '../../components/Buttons/Button';
 import InputMessage from '../InputMessage/InputMessage';
@@ -11,6 +11,8 @@ import Title from '../../components/Text/Title';
 import ListMessage from '../Messages/ListMessage';
 
 import FeedbackLight from '../Feedback/FeedbackLight';
+import IconButton from '../../components/Buttons/IconButton';
+import icons from '../../constants/icons';
 
 interface IChatAttributes {
   selectedPanel: 'chat' | 'procedure';
@@ -32,11 +34,7 @@ export default function Chat({
 
   useEffect(() => {
     renderingMessages();
-  }, [messages]);
-
-  useEffect(() => {
-    renderLoadingMessage();
-  }, [isUserWritten, isBotWritten]);
+  }, [messages, isBotWritten, isUserWritten]);
 
   async function clickReformulateMessage() {
     setIsBotWritten(true);
@@ -44,30 +42,33 @@ export default function Chat({
     setIsBotWritten(false);
   }
 
-  function renderLoadingMessage() {
+  /* Render all messages exist */
+  function renderingMessages() {
+    return messages.map((message: MessageAttributes, index: number) => (
+      <Fragment key={index}>
+        <ListMessage message={message} setSelectedPanel={setSelectedPanel} setIsBotWritten={setIsBotWritten} />
+        {renderLoadingMessage(index, message.role)}
+      </Fragment>
+    ));
+  }
+
+  function renderLoadingMessage(index: number, role: string) {
     return (
       <>
-        {isUserWritten && (
-          <MessageLoading className="wrapper-user" role={'user'} />
+        {index === messages.length - 1 && role === 'user' && isBotWritten && (
+          <span className="flex flex-row justify-start">
+            <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+            <MessageLoading className="wrapper-bot" role={'assistant'} />
+          </span>
         )}
-        {isBotWritten && (
-          <MessageLoading className="wrapper-bot" role={'assistant'} />
+        {index === messages.length - 1 && isUserWritten && (
+          <span className="flex flex-row justify-end">
+            <MessageLoading className="wrapper-user" role={'user'} />
+            <IconButton className={'icon icon-user'} icon={icons?.user} />
+          </span>
         )}
       </>
     );
-  }
-
-  /* Render all messages exist */
-  function renderingMessages() {
-    return messages.map((message: MessageAttributes, index: number) => {
-      return (
-        <ListMessage
-          key={index}
-          message={message}
-          setSelectedPanel={setSelectedPanel}
-        />
-      );
-    });
   }
 
   return (
@@ -95,19 +96,18 @@ export default function Chat({
           {messages.length > 1 &&
           messages[messages.length - 1].role === 'assistant' &&
           userLanguage ? (
-            <span className="flex flex-col gap-2 mb-2">
+            <span className="flex flex-row justify-start gap-2 mb-2">
               <Button
                 type={'button'}
                 content={userLanguage?.reformulate_button}
                 onClick={() => clickReformulateMessage()}
-                />
-                <FeedbackLight />
+              />
+              <FeedbackLight />
             </span>
           ) : null}
 
           {/* Including Input  */}
         </div>
-        {renderLoadingMessage()}
         <section id="input">
           <InputMessage
             setIsBotWritten={setIsBotWritten}

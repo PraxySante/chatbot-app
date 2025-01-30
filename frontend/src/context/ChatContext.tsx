@@ -83,7 +83,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
               id: 0,
               role: `${responseStartChat.role}`,
               content: `${responseStartChat.content}`,
-              date: new Date().toLocaleDateString(selectedLanguage),
+              date: new Date().toLocaleTimeString(selectedLanguage),
             },
           ]);
 
@@ -106,11 +106,12 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
         id: lengthMessage,
         role: 'user',
         content: userContent,
-        date: new Date().toLocaleDateString(selectedLanguage),
+        date: new Date().toLocaleTimeString(selectedLanguage),
       },
     ];
     updateMessages(newMessages);
     updateHistoryChat(newMessages);
+    await requestChatConversation(userContent)
   }
 
   async function requestChatConversation(userContent: string) {
@@ -129,7 +130,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
         id: lengthMessage + 1,
         role: responseChatConversation.details.role,
         content: responseChatConversation.details.content,
-        date: new Date().toLocaleDateString(selectedLanguage),
+        date: new Date().toLocaleTimeString(selectedLanguage),
       },
     ];
 
@@ -142,7 +143,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
           content: source.doc_name,
           doc_type: source.doc_type,
           doc_ref: source.doc_ref,
-          date: new Date().toLocaleDateString(selectedLanguage),
+          date: new Date().toLocaleTimeString(selectedLanguage),
         };
         newMessages.push(sourceProcedures);
         if (messages.length > 0) {
@@ -178,7 +179,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
         role: proposition.role,
         content: proposition.content,
         doc_type: 'reformulate',
-        date: new Date().toLocaleDateString(selectedLanguage),
+        date: new Date().toLocaleTimeString(selectedLanguage),
       });
     });
     updateMessages(newMessages);

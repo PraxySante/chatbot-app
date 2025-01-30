@@ -8,7 +8,7 @@ export async function pingPongChat(): Promise<PingType | ReponseFailureType> {
     const response: AxiosResponse = await axiosAuthSecret.get('/test');
     const { data, status } = response;
     if (status === 200) {
-      return data as PingType;
+      return data.ping as PingType;
     } else {
       return data as ReponseFailureType;
     }

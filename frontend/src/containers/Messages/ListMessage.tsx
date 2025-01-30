@@ -9,13 +9,15 @@ import Button from '../../components/Buttons/Button';
 
 type MessageType = {
   message: MessageAttributes;
+  setIsBotWritten: Dispatch<SetStateAction<boolean>>;
   setSelectedPanel: Dispatch<SetStateAction<'chat' | 'procedure'>>;
 };
 export default function ListMessage({
   message,
   setSelectedPanel,
+  setIsBotWritten,
 }: MessageType) {
-  const { stockMessageUser, requestChatConversation } = useChat();
+  const { stockMessageUser } = useChat();
 
   useEffect(() => {
     renderingMessage();
@@ -35,9 +37,7 @@ export default function ListMessage({
         if (message.doc_type) {
           return (
             <span
-              className="flex flex-row justify-start cursor-pointer"
-              onClick={() => handleClick(message.content)}
-            >
+              className="flex flex-row justify-start cursor-pointer">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
               <Button
                 type={'button'}
@@ -83,8 +83,8 @@ export default function ListMessage({
         break;
 
       case 'reformulate':
+        setIsBotWritten(true)
         await stockMessageUser(requestReformulation);
-        await requestChatConversation(requestReformulation);
         break;
 
       default:

@@ -4,10 +4,14 @@ export default function controllerWrapper(controllerMw: any) {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			await controllerMw(req, res, next);
-			next();
+			if (!res.headersSent) {
+				next();
+			}
 		} catch (error: any) {
 			console.error(error);
-			res.status(500).json({ error: "500 Internal Server Error" });
+			if (!res.headersSent) {
+				res.status(500).json({ error: "500 Internal Server Error" });
+			}
 		}
 	};
 }

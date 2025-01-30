@@ -15,7 +15,7 @@ export default function InputMessage({
   const [userContent, setUserContent] = useState<string>('');
   // Check selected language
   const { userLanguage } = useLanguage();
-  const { requestChatConversation, stockMessageUser } = useChat();
+  const {stockMessageUser } = useChat();
 
   // Function Get any change from user message
   function onChange(e: any): void {
@@ -29,16 +29,14 @@ export default function InputMessage({
 
   // Function sending message atfer press enter
   async function handleKeyDown(e: any): Promise<void> {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && e.target.value !== "") {
       e.preventDefault();
       // Record message written by user
-      await stockMessageUser(userContent);
+      setUserContent('');
       setIsUserWritten(false);
       setIsBotWritten(true);
-      // Request message to bot
-      await requestChatConversation(userContent);
+      await stockMessageUser(userContent);
       setIsBotWritten(false);
-      setUserContent('');
     }
   }
 
@@ -46,13 +44,13 @@ export default function InputMessage({
   async function sendMessage(e: any): Promise<void> {
     e.preventDefault();
     // Record message written by user
-    await stockMessageUser(userContent);
-    setIsUserWritten(false);
-    setIsBotWritten(true);
-    // Request message to bot
-    await requestChatConversation(userContent);
-    setIsBotWritten(false);
-    setUserContent('');
+    if (userContent !== "") {
+      setUserContent('');
+      setIsUserWritten(false);
+      setIsBotWritten(true);
+      await stockMessageUser(userContent);
+      setIsBotWritten(false);
+    }
   }
 
   return (
