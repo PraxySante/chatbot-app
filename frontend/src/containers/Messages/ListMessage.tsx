@@ -44,7 +44,7 @@ export default function ListMessage({
                 content={message.content}
                 onClick={() => handleClick(message.content)}
               >
-                <IconButton icon={icons.chain} />
+                {message.doc_type !== 'reformulate' && <IconButton icon={icons.chain} />}
               </Button>
             </span>
           );

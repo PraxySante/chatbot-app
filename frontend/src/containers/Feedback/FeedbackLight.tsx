@@ -1,10 +1,7 @@
 import IconButton from '../../components/Buttons/IconButton';
-import icons from '../../constants/icons';
 import { useChat } from '../../hooks/ChatProvider';
-import { useLanguage } from '../../hooks/UseLanguage';
 
 export default function FeedbackLight() {
-  const { userLanguage } = useLanguage();
   const { sendFeedback } = useChat();
 
   async function voteFeedback(vote: number) {
@@ -13,7 +10,7 @@ export default function FeedbackLight() {
 
   return (
     <span className="text-sm font-normal flex flex-row w-fit gap-2 items-center border rounded-lg border-gray-200 outline ml-1 py-1 px-2">
-      {userLanguage?.feedback_send}
+      <p className='hidden md:inline'>{'Envoyez votre avis'}</p>
       <IconButton
         onClick={() => voteFeedback(0)}
         icon={'🙁'}

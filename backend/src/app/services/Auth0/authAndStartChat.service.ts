@@ -1,9 +1,10 @@
-import { createKeyRedis } from "../../datamapper/redis.datamapper";
+import { createKeyRedis, getKeyRedis } from "../../datamapper/redis.datamapper";
 import { ResponseAuthChatBot } from "../../types/auth.type";
 import {
 	ResponseSuccessType,
 	ResponseFailureType,
 } from "../../types/chatbot.type";
+import { ResponseKeyRedisType } from "../../types/redis.type";
 import { connectAuth0 } from "./connect.service";
 
 /**
@@ -47,37 +48,42 @@ export async function authAndStartChat(
 		};
 	}
 
-	const responseApi: ResponseFailureType | ResponseAuthChatBot =
-		await connectAuth0();
+	const responseRedis: ResponseKeyRedisType | ResponseFailureType =
+	await getKeyRedis(ip);
+		// Message Error Typed - error message from Redis
+	if (responseRedis.status !== 200 && typeof responseRedis.details === "string") {
 
-	// Message Error Typed
-	const { status, details } = responseApi;
-
-	if (responseApi.message === "failure" && typeof details === "string") {
-		return { status: status, details: details };
-	}
+		const responseApi: ResponseFailureType | ResponseAuthChatBot =
+			await connectAuth0();
 
 		// Message Error Typed
-	if (typeof details !== "object" || !("access_token" in details)) {
-		return { status: 401, details: "Not authorized" };
-	}
+		const { status, details } = responseApi;
+		if (responseApi.message === "failure" && typeof details === "string") {
+			return { status: status, details: details };
+		}
 
-	// Create an user into Redis
-	await createKeyRedis(
-		ip,
-		JSON.stringify({
-			authToken: details.access_token,
-			token_expires_in: Date.now() + details.expires_in,
-			startTime: Date.now(),
-			project: project,
-			language: language,
-			uuid: "",
-		})
-	);
+		// Message Error Typed
+		if (typeof details !== "object" || !("access_token" in details)) {
+			return { status: 401, details: "Not authorized" };
+		}
+
+		// Create an user into Redis
+		await createKeyRedis(
+			ip,
+			JSON.stringify({
+				authToken: details.access_token,
+				token_expires_in: Date.now() + details.expires_in,
+				startTime: Date.now(),
+				project: project,
+				language: language,
+				uuid: "",
+			})
+		);
+	}
 
 	// Message Success Typed
 	return {
-		status: status,
+		status: 200,
 		details: "Success connection",
 	};
 }

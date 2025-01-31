@@ -13,6 +13,8 @@ import ListMessage from '../Messages/ListMessage';
 import FeedbackLight from '../Feedback/FeedbackLight';
 import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
+import { useNotification } from '../../hooks/NotificationProvider';
+import Notification from '../Notification/Notification';
 
 interface IChatAttributes {
   selectedPanel: 'chat' | 'procedure';
@@ -28,7 +30,7 @@ export default function Chat({
   const { messages, reformulateChatConversation } = useChat();
   // Check selected language by user
   const { userLanguage } = useLanguage();
-
+  const { messageNotification } = useNotification();
   const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
 
@@ -36,17 +38,30 @@ export default function Chat({
     renderingMessages();
   }, [messages, isBotWritten, isUserWritten]);
 
+  useEffect(() => {
+    renderingNotification();
+  }, [messageNotification]);
+
   async function clickReformulateMessage() {
     setIsBotWritten(true);
     await reformulateChatConversation();
-    setIsBotWritten(false);
+  }
+
+  function renderingNotification() {
+    setTimeout(() => {
+      return <Notification />;
+    }, 100);
   }
 
   /* Render all messages exist */
   function renderingMessages() {
     return messages.map((message: MessageAttributes, index: number) => (
       <Fragment key={index}>
-        <ListMessage message={message} setSelectedPanel={setSelectedPanel} setIsBotWritten={setIsBotWritten} />
+        <ListMessage
+          message={message}
+          setSelectedPanel={setSelectedPanel}
+          setIsBotWritten={setIsBotWritten}
+        />
         {renderLoadingMessage(index, message.role)}
       </Fragment>
     ));
@@ -88,6 +103,7 @@ export default function Chat({
             selectedPanel={selectedPanel}
             setSelectedPanel={setSelectedPanel}
           />
+          {messageNotification && <Notification />}
         </div>
         {/* List messages chat */}
         <div id="list-messages">
@@ -96,7 +112,7 @@ export default function Chat({
           {messages.length > 1 &&
           messages[messages.length - 1].role === 'assistant' &&
           userLanguage ? (
-            <span className="flex flex-row justify-start gap-2 mb-2">
+            <span className="flex flex-row justify-start gap-2 mb-2 text-xs">
               <Button
                 type={'button'}
                 content={userLanguage?.reformulate_button}

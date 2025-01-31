@@ -1,6 +1,5 @@
-import { lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { useLanguage } from '../../hooks/UseLanguage';
-import config from '../../config/config.json';
 import Button from '../../components/Buttons/Button';
 import SeparateLine from '../../components/SeparateLine/SeparateLine';
 import IconButton from '../../components/Buttons/IconButton';
@@ -34,9 +33,10 @@ export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
           <IconButton onClick={toggleOpenCloseSideBar} icon={icons.arrowLeft} />
         </span>
         {/* Logo */}
-        {config && (
+        <Suspense fallback={<div>Chargement du logo...</div>}>
           <Image imgSource={import.meta.env.VITE_CHATBOT_LOGO} classname={''} />
-        )}
+        </Suspense>
+
         {userLanguage && (
           <>
             {/* Button restart */}

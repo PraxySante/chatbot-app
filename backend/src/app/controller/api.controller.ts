@@ -228,7 +228,6 @@ export default {
 			});
 		}
 		const { status, details } = await reformulationChatToApiChatBot(ip);
-		console.log("🚀 ~ status, details:", status, details);
 		return res.status(status).send(details);
 	},
 

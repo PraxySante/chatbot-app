@@ -8,14 +8,15 @@ import AuthProvider from './hooks/AuthProvider.tsx';
 import './reset.css';
 import './index.css';
 import { NotificationHandlerProvider } from './context/NotificationContext.tsx';
+import { useNotification } from './hooks/NotificationProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {import.meta.env.VITE_OPT_AUT0_ACCOUNT ? (
+    {import.meta.env.VITE_OPT_AUT0_ACCOUNT === true ? (
       <AuthProvider>
         <LanguageContextProvider>
           <NotificationHandlerProvider>
-            <ChatContextProvider>
+            <ChatContextProvider useNotification={useNotification}>
               <RoutesProvider />
             </ChatContextProvider>
           </NotificationHandlerProvider>
@@ -24,7 +25,7 @@ createRoot(document.getElementById('root')!).render(
     ) : (
       <LanguageContextProvider>
         <NotificationHandlerProvider>
-          <ChatContextProvider>
+          <ChatContextProvider useNotification={useNotification}>
             <RoutesProvider />
           </ChatContextProvider>
         </NotificationHandlerProvider>
