@@ -1,11 +1,18 @@
-import { AxiosResponse } from "axios";
 import { axiosChatBot } from "./axiosChatBot.service";
+import {
+	PingType,
+	ResponseFailureType,
+	ResponsePingType,
+} from "../../types/chatbot.type";
 
-export async function testPingApiChatBot(): Promise<AxiosResponse<any, number> | { }> {
+export async function testPingApiChatBot(): Promise<
+	PingType | ResponseFailureType
+> {
 	try {
-		return axiosChatBot.get("/ping");
+		const responseApi: ResponsePingType = await axiosChatBot.get("/ping");
+		const { status, data } = responseApi;
+		return { status: status, details: data };
 	} catch (error: any) {
-		console.error(error);
-		return error; 
+		return { status: error.status, details: error.message };
 	}
 }

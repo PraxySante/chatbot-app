@@ -8,7 +8,11 @@ export default function CheckBox({
 }: ICheckBox) {
   return (
     <div className={className}>
-      <input type="checkbox" name={groupName} onClick={selectedItem} />
+      <input
+        type="checkbox"
+        name={groupName}
+        onClick={selectedItem}
+      />
       <label htmlFor={groupName}>{content}</label>
     </div>
   );

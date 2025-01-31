@@ -9,13 +9,15 @@ import Button from '../../components/Buttons/Button';
 
 type MessageType = {
   message: MessageAttributes;
+  setIsBotWritten: Dispatch<SetStateAction<boolean>>;
   setSelectedPanel: Dispatch<SetStateAction<'chat' | 'procedure'>>;
 };
 export default function ListMessage({
   message,
   setSelectedPanel,
+  setIsBotWritten,
 }: MessageType) {
-  const { stockMessageUser, requestChatConversation } = useChat();
+  const { stockMessageUser } = useChat();
 
   useEffect(() => {
     renderingMessage();
@@ -35,29 +37,26 @@ export default function ListMessage({
         if (message.doc_type) {
           return (
             <span
-              className="flex flex-row justify-start cursor-pointer"
-              onClick={() => handleClick(message.content)}
-            >
+              className="flex flex-row justify-start cursor-pointer">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
               <Button
                 type={'button'}
                 content={message.content}
                 onClick={() => handleClick(message.content)}
               >
-                <IconButton icon={icons.chain} />
+                {message.doc_type !== 'reformulate' && <IconButton icon={icons.chain} />}
               </Button>
-
-              {/* <Message message={message} /> */}
             </span>
           );
-        } else {
-          return (
+        }
+        return (
+          <>
             <span className="flex flex-row justify-start">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
               <Message message={message} />
             </span>
-          );
-        }
+          </>
+        );
 
       case 'user':
         return (
@@ -84,8 +83,8 @@ export default function ListMessage({
         break;
 
       case 'reformulate':
+        setIsBotWritten(true)
         await stockMessageUser(requestReformulation);
-        await requestChatConversation(requestReformulation);
         break;
 
       default:

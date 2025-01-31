@@ -40,8 +40,8 @@
   ],
   "design": {
     "primary": "rgb(0,75,125)",
-    "secondary": "rgb(0,125,190)",
-    "third": "rgb(150,190,50)",
+    "secondary": "rgb(160,160,160)",
+    "third": "rgb(164,160,160)",
     "text": "rgb(0,0,0)",
     "bot": "rgb(255, 188, 73, 0.5)",
     "user": "rgb(255, 107, 108, 0.5)",

@@ -1,20 +1,50 @@
 import { NextFunction, Request, Response } from "express";
-import { axiosChatBot } from "../services/ChatBot/axiosChatBot.service";
 import { testPingApiChatBot } from "../services/ChatBot/testPing.service";
-
+import { PingType, ResponseFailureType } from "../types/chatbot.type";
 
 export default {
-	async testPing(req: Request, res: Response, next: NextFunction) {
-		const responseApi = await testPingApiChatBot();
-    if (responseApi?.error_code === 400) {
-      return res.status(400).json(responseApi.error);
-    }
-		const { detail, status } = responseApi;
+	/**
+	 * Reformulate request from conversation chatbot-user
+	 *
+	 * @param {Request} req - Object contains data :
+	 * - **IP du client** (`req.ip`)
+	 * - **Body** (`req.body`):
+	 *   - `project`: Company name
+	 *   - `language`: Language selected
+	 * @example
+	 * Requête POST avec un body JSON :
+	 * { projet: "Praxy IA", language: "fr" }
+		messsage='prendre un rdv ?' }
+	 * @param {Response} res - Return response failed or success
+	 * @param {NextFunction} _ - Next not used
+	 * @returns {Promise<Response>} - Return response JSON :
+	 * - **details**
+	 * - **status**
+	 * @exemple
+	 * Response 200 - Success 
+	 * {
+	 * ping: "pong"
+	 * }
+	 * @throws {404} - Not found
+	 * @example
+	 * {
+	 * details: "Not Found",
+	 * }
+	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
+	 */
+	async testPing(
+		_: Request,
+		res: Response,
+		__: NextFunction
+	): Promise<Response> {
+		const responseApi: any = await testPingApiChatBot();
 
-		if (!details) {
-			return res.status(status).json(responseApi.ping);
+		const { status, details } = responseApi;
+		// If error return error message
+		if (status !== 200) {
+			return res.status(status).json(details);
 		}
-
-		return res.status(400).json(details);
+		// Return message success
+		return res.status(status).json(details);
 	},
 };

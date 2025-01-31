@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import { LanguageAttributes } from '../languages/languages.config.type';
-import { FeedbackAttributes } from '../feedback/feedback.type';
 
 export interface IButton {
   type: 'button' | 'submit';
@@ -26,7 +25,7 @@ export interface ICheckBox {
 export interface IInputEvaluate {
   id: string;
   content: string;
-  getDataForm: ({ id, value }: FeedbackAttributes) => void;
+  getDataForm: (value:number) => void;
 }
 
 export interface IIconButton {

@@ -13,7 +13,8 @@ Provide all colors into project
   --primary: theme('colors.primary');
   --secondary: theme('colors.secondary');
   --third: theme('colors.third');
-  --bg: theme('colors.bg') /* Notifications */ --sucess: theme('colors.sucess');
+  --bg: theme('colors.bg') /* Notifications */
+  --sucess: theme('colors.sucess');
   --warning: theme('colors.warning');
   --error: theme('colors.error');
   --information: theme('colors.information');
@@ -31,7 +32,7 @@ ol {
 }
 
 h1 {
-  @apply font-bold text-2xl px-2;
+  @apply font-bold text-lg px-2;
 }
 
 h2 {
@@ -70,7 +71,7 @@ input[type='number'] {
 
 /* SideBar */
 #side-bar {
-  @apply absolute flex shrink flex-col z-20 bg-white w-1/5 h-screen pt-16 p-8 overflow-y-auto gap-2 items-center min-w-72 md:min-w-72;
+  @apply absolute flex shrink flex-col z-20 bg-gray-200 w-1/5 h-screen pt-16 p-8 overflow-y-auto gap-2 items-center min-w-72 md:min-w-72;
 }
 
 /* Statut Login */
@@ -95,13 +96,13 @@ input[type='number'] {
 
 /* Panel */
 #tab-panel {
-  @apply cursor-pointer absolute flex flex-row h-max w-fit rounded-md shadow-sm bg-white border border-solid border-gray-200 justify-center items-center;
+  @apply cursor-pointer absolute flex flex-row h-fit w-fit rounded-md shadow-sm bg-white border border-solid border-gray-200 justify-center items-center;
 }
 
 /* Styles communs aux boutons */
 .tab,
 .tab-selected {
-  @apply flex flex-row w-fit px-4 py-2 text-sm gap-2 font-medium text-black bg-transparent hover:bg-primary hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white;
+  @apply flex flex-row justify-center items-center w-fit px-4 py-2 text-xs font-medium text-black bg-transparent hover:bg-primary hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white sm:text-sm;
 }
 
 /* Bouton sélectionné */
@@ -171,7 +172,7 @@ input[type='number'] {
 }
 
 .message-user {
-  @apply flex flex-col rounded-tl-lg rounded-b-lg justify-end gap-2;
+  @apply flex flex-col text-white rounded-tl-lg rounded-b-lg justify-end gap-2;
 }
 
 .message-assistant,
@@ -267,7 +268,7 @@ input::-webkit-inner-spin-button {
 
 /* Buttons */
 .btn_actions {
-  @apply font-medium cursor-pointer w-fit h-fit rounded-md border p-2;
+  @apply text-black font-medium cursor-pointer w-fit h-fit rounded-md border p-2;
 }
 
 .contained {
@@ -275,7 +276,7 @@ input::-webkit-inner-spin-button {
 }
 
 .outlined {
-  @apply border-primary bg-white hover:text-secondary hover:border-secondary;
+  @apply border-primary bg-white hover:text-third hover:border-secondary;
 }
 
 /* Menu Modal */
@@ -302,22 +303,14 @@ input::-webkit-inner-spin-button {
   @apply w-1/2 h-1/2 bg-third rounded-lg;
 }
 
-#frequently-question-box {
-  @apply flex flex-col gap-4;
-}
-
-.frequently-question-items {
-  @apply flex flex-row gap-2;
-}
-
 #form {
-  @apply flex flex-col gap-2;
+  @apply flex flex-col justify-around items-center gap-4;
 }
 
 /* Loader */
 
 .wrapper {
-  @apply absolute bottom-24 w-fit h-8 bg-third rounded-xl;
+  @apply  bottom-24 w-fit h-8 bg-third rounded-xl;
 }
 
 .wrapper-user {
@@ -329,5 +322,5 @@ input::-webkit-inner-spin-button {
 }
 
 .loader {
-  @apply flex flex-row p-2 w-fit h-fit text-sm font-medium text-gray-900 bg-third text-white rounded-lg border border border-gray-200 hover:bg-gray-100 hover:text-secondary focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-secondary inline-flex items-center;
+  @apply flex flex-row p-2 w-fit h-fit text-sm font-medium text-gray-900 bg-third text-black rounded-lg border border border-gray-200 hover:bg-gray-100 hover:text-secondary focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-secondary inline-flex items-center;
 }

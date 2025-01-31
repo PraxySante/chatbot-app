@@ -2,16 +2,19 @@ import { useLanguage } from '../../hooks/UseLanguage';
 import { MessageAttributes } from '../../types/messages/messages.type';
 import Information from '../Information/Information';
 import { useChat } from '../../hooks/ChatProvider';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
 import MessageLoading from '../Loading/MessageLoading';
 import Button from '../../components/Buttons/Button';
 import InputMessage from '../InputMessage/InputMessage';
 import TabPanel from '../TabPanel/TabPanel';
 import Title from '../../components/Text/Title';
 import ListMessage from '../Messages/ListMessage';
-import icons from '../../constants/icons';
+
+import FeedbackLight from '../Feedback/FeedbackLight';
 import IconButton from '../../components/Buttons/IconButton';
-import { feedbackApiFrontChatBot } from '../../services/ChatBot/feedbackApiFrontChatBot.service';
+import icons from '../../constants/icons';
+import { useNotification } from '../../hooks/NotificationProvider';
+import Notification from '../Notification/Notification';
 
 interface IChatAttributes {
   selectedPanel: 'chat' | 'procedure';
@@ -27,52 +30,60 @@ export default function Chat({
   const { messages, reformulateChatConversation } = useChat();
   // Check selected language by user
   const { userLanguage } = useLanguage();
-
+  const { messageNotification } = useNotification();
   const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
 
   useEffect(() => {
     renderingMessages();
-  }, [messages]);
+  }, [messages, isBotWritten, isUserWritten]);
 
   useEffect(() => {
-    renderLoadingMessage();
-  }, [isUserWritten, isBotWritten]);
+    renderingNotification();
+  }, [messageNotification]);
 
   async function clickReformulateMessage() {
     setIsBotWritten(true);
     await reformulateChatConversation();
-    setIsBotWritten(false);
   }
 
-  async function voteFeedback(vote: number) {
-    await feedbackApiFrontChatBot(vote);
-  }
-
-  function renderLoadingMessage() {
-    return (
-      <>
-        {isUserWritten && (
-          <MessageLoading className="wrapper-user" role={'user'} />
-        )}
-        {isBotWritten && (
-          <MessageLoading className="wrapper-bot" role={'assistant'} />
-        )}
-      </>
-    );
+  function renderingNotification() {
+    setTimeout(() => {
+      return <Notification />;
+    }, 100);
   }
 
   /* Render all messages exist */
   function renderingMessages() {
-    return messages.map((message: MessageAttributes, index: number) => {
-      return (
+    return messages.map((message: MessageAttributes, index: number) => (
+      <Fragment key={index}>
         <ListMessage
-          key={index}
           message={message}
           setSelectedPanel={setSelectedPanel}
+          setIsBotWritten={setIsBotWritten}
         />
-      );
-    });
+        {renderLoadingMessage(index, message.role)}
+      </Fragment>
+    ));
+  }
+
+  function renderLoadingMessage(index: number, role: string) {
+    return (
+      <>
+        {index === messages.length - 1 && role === 'user' && isBotWritten && (
+          <span className="flex flex-row justify-start">
+            <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+            <MessageLoading className="wrapper-bot" role={'assistant'} />
+          </span>
+        )}
+        {index === messages.length - 1 && isUserWritten && (
+          <span className="flex flex-row justify-end">
+            <MessageLoading className="wrapper-user" role={'user'} />
+            <IconButton className={'icon icon-user'} icon={icons?.user} />
+          </span>
+        )}
+      </>
+    );
   }
 
   return (
@@ -92,44 +103,27 @@ export default function Chat({
             selectedPanel={selectedPanel}
             setSelectedPanel={setSelectedPanel}
           />
+          {messageNotification && <Notification />}
         </div>
         {/* List messages chat */}
         <div id="list-messages">
           {renderingMessages()}
+
           {messages.length > 1 &&
           messages[messages.length - 1].role === 'assistant' &&
           userLanguage ? (
-            <span className="flex flex-row gap-2">
+            <span className="flex flex-row justify-start gap-2 mb-2 text-xs">
               <Button
                 type={'button'}
                 content={userLanguage?.reformulate_button}
                 onClick={() => clickReformulateMessage()}
               />
-              <span className="text-sm font-normal flex flex-row gap-1 items-center border rounded-lg border-black-200 outline p-2">
-                {userLanguage?.feedback_send}
-                <IconButton
-                  onClick={() => voteFeedback(0)}
-                  icon={icons?.thumbdown}
-                  className="text-red-600 border-black-200 outline rounded-xl p-[1px]"
-                />
-                <IconButton
-                  onClick={() => voteFeedback(2)}
-                    icon={icons?.neutral}
-                    className="border-black-200 outline rounded-xl p-[1px]"
-
-                />
-                <IconButton
-                  onClick={() => voteFeedback(5)}
-                  icon={icons?.thumbup}
-                  className="text-third border-black-200 outline rounded-xl p-[1px]"
-                />
-              </span>
+              <FeedbackLight />
             </span>
           ) : null}
 
           {/* Including Input  */}
         </div>
-        {renderLoadingMessage()}
         <section id="input">
           <InputMessage
             setIsBotWritten={setIsBotWritten}

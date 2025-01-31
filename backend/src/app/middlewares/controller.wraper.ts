@@ -4,8 +4,6 @@ export default function controllerWrapper(controllerMw: any) {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			await controllerMw(req, res, next);
-
-			// If the response isn't done, call `next`
 			if (!res.headersSent) {
 				next();
 			}

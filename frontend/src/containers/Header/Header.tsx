@@ -5,6 +5,7 @@ import SelectLanguage from '../SelectLanguage/SelectLanguage';
 import Description from '../../components/Text/Description';
 import Title from '../../components/Text/Title';
 import { lazy } from 'react';
+import { useChat } from '../../hooks/ChatProvider';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
@@ -17,6 +18,7 @@ export default function Header({
 }: IHeaderAttributes) {
   // Init Component
 
+  const { selectedRestart } = useChat();
   return (
     <div id="header">
       {/* Login/Logout selection */}
@@ -32,12 +34,12 @@ export default function Header({
           <Title
             content={import.meta.env.VITE_CHATBOT_NAME}
             tag={'h3'}
-            className={''}
+            className={'sm:text-sm'}
           />
           <Description
             content={'Réponds généralement immédiatemment...'}
             tag={'p'}
-            className={''}
+            className={'text-xs'}
           />
         </span>
       </span>
@@ -51,6 +53,13 @@ export default function Header({
             />
           </>
         )}
+        <div
+          className="flex flex-row gap-2 items-center justify-center border border-gray-100 outline rounded-lg p-1 md:p-2 hover:text-blue pointer-cursor"
+          onClick={()=>selectedRestart()}
+        >
+          <IconButton icon={icons.restart} />
+          <Description content={'Restart'} tag={'p'} className={'hidden sm:text-sm'} />
+        </div>
       </span>
     </div>
   );

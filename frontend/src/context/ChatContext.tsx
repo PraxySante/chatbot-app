@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { createContext, ReactNode, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { MessageAttributes } from '../types/messages/messages.type';
 import { useLanguage } from '../hooks/UseLanguage';
 import { MessageType, SourceType } from '../types/chatbot/chatbot.type';
@@ -9,6 +9,7 @@ import { startApiFrontChatBot } from '../services/ChatBot/startApiFrontChatBot.s
 import { sendMessageApiFrontChatBot } from '../services/ChatBot/sendMessageApiFronChatBot.service';
 import { reformulateChat } from '../services/ChatBot/reformulateChat.service';
 import { endChat } from '../services/ChatBot/endChat.service';
+import { feedbackApiFrontChatBot } from '../services/ChatBot/feedbackApiFrontChatBot.service';
 
 export type ChatContextAttributes = {
   isRestart: boolean;
@@ -21,11 +22,12 @@ export type ChatContextAttributes = {
   reformulateChatConversation: () => void;
   endConversation: () => void;
   procedures: any;
+  sendFeedback: (vote: number, comment: string) => void;
 };
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
-function ChatContextProvider({ children }: { children: ReactNode }) {
+function ChatContextProvider({ children, useNotification }: any) {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { selectedLanguage } = useLanguage();
   const [isRestart, setIsRestart] = useState<boolean>(false);
@@ -33,6 +35,13 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<MessageAttributes[]>([]);
   const [historyChat, setHistoryChat] = useState<MessageType[]>([]);
   const [procedures, setProcedures] = useState<any[]>([]);
+  const { getMessageToNotification } = useNotification();
+
+  if (!useNotification) {
+    throw new Error(
+      'useNotification was not provided to NotificationContentProvider'
+    );
+  }
 
   useEffect(() => {
     async function start() {
@@ -41,9 +50,22 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
     start();
   }, []);
 
+  useEffect(() => {
+    async function start() {
+      await startConversation();
+    }
+    if (isRestart) {
+      start();
+    }
+  }, [isRestart]);
+
   function selectedRestart(): void {
     setIsStart(!isStart);
+    setMessages([]);
+    setHistoryChat([]);
+    setProcedures([]);
     setIsRestart(!isRestart);
+    getMessageToNotification({status:200, message:'Nouvelle session démarrée'});
   }
 
   async function verifyStartChat(): Promise<void> {
@@ -55,31 +77,50 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
   }
 
   async function startConversation() {
-    const responseApi = await pingPongChat();
+    const responseApi: any = await pingPongChat();
+
+    if (responseApi.message === 'failure') {
+      getMessageToNotification(responseApi.status, responseApi.details);
+      return;
+    }
 
     if (responseApi) {
-      const responseRequest = await requestApiFrontChatBot();
+      const responseRequest: any = await requestApiFrontChatBot();
+
+      if (responseRequest.message === 'failure') {
+        getMessageToNotification({
+          status: responseApi.status,
+          message: responseRequest.details,
+        });
+        return;
+      }
 
       if (responseRequest === 'Success connection') {
-        const responseStartChat = await startApiFrontChatBot();
+        const responseStartChat: any = await startApiFrontChatBot();
 
-        if ('role' in responseStartChat && 'content' in responseStartChat) {
-          updateMessages([
-            {
-              id: 0,
-              role: `${responseStartChat.role}`,
-              content: `${responseStartChat.content}`,
-              date: new Date().toLocaleDateString(selectedLanguage),
-            },
-          ]);
-
-          updateHistoryChat([
-            {
-              role: `${responseStartChat.role}`,
-              content: `${responseStartChat.content}`,
-            },
-          ]);
+        if (responseStartChat.message === 'failure') {
+          getMessageToNotification({
+            status: responseApi.status,
+            message: responseStartChat.details,
+          });
+          return;
         }
+
+        updateMessages([
+          {
+            id: 0,
+            role: `${responseStartChat.role}`,
+            content: `${responseStartChat.content}`,
+            date: new Date().toLocaleTimeString(selectedLanguage),
+          },
+        ]);
+
+        updateHistoryChat([
+          {
+            role: `${responseStartChat.role}`,
+            content: `${responseStartChat.content}`,
+          },
+        ]);
       }
     }
   }
@@ -92,11 +133,12 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
         id: lengthMessage,
         role: 'user',
         content: userContent,
-        date: new Date().toLocaleDateString(selectedLanguage),
+        date: new Date().toLocaleTimeString(selectedLanguage),
       },
     ];
     updateMessages(newMessages);
     updateHistoryChat(newMessages);
+    await requestChatConversation(userContent);
   }
 
   async function requestChatConversation(userContent: string) {
@@ -110,12 +152,17 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
       }
     );
 
+    if (responseChatConversation.message === 'failure') {
+      getMessageToNotification(responseChatConversation.status, responseChatConversation.details);
+      return;
+    }
+
     const newMessages: MessageAttributes[] = [
       {
         id: lengthMessage + 1,
         role: responseChatConversation.details.role,
         content: responseChatConversation.details.content,
-        date: new Date().toLocaleDateString(selectedLanguage),
+        date: new Date().toLocaleTimeString(selectedLanguage),
       },
     ];
 
@@ -128,7 +175,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
           content: source.doc_name,
           doc_type: source.doc_type,
           doc_ref: source.doc_ref,
-          date: new Date().toLocaleDateString(selectedLanguage),
+          date: new Date().toLocaleTimeString(selectedLanguage),
         };
         newMessages.push(sourceProcedures);
         if (messages.length > 0) {
@@ -155,6 +202,11 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
   async function reformulateChatConversation() {
     const propositionChatConversation: any = await reformulateChat();
 
+    if (propositionChatConversation.message === 'failure') {
+      getMessageToNotification(propositionChatConversation.status, propositionChatConversation.details);
+      return;
+    }
+
     let lengthMessage = messages.length;
     const newMessages: MessageAttributes[] = [];
     propositionChatConversation.map((proposition: MessageType) => {
@@ -164,14 +216,30 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
         role: proposition.role,
         content: proposition.content,
         doc_type: 'reformulate',
-        date: new Date().toLocaleDateString(selectedLanguage),
+        date: new Date().toLocaleTimeString(selectedLanguage),
       });
     });
     updateMessages(newMessages);
   }
 
+  async function sendFeedback(vote: number, comment: string) {
+    const responseApi: any = await feedbackApiFrontChatBot(vote, comment);
+    if (responseApi.message === 'failure') {
+      getMessageToNotification(responseApi.status, responseApi.details);
+      return;
+    } else {
+      getMessageToNotification(200, 'Feedback envoyé');
+    }
+  }
+
   async function endConversation() {
-    await endChat();
+    const responseApi: any = await endChat();
+    if (responseApi.message === 'failure') {
+      getMessageToNotification(responseApi.status, responseApi.details);
+      return;
+    } else {
+      getMessageToNotification(200, 'Conversation clôturée');
+    }
   }
 
   function updateMessages(newMessage: MessageAttributes[]) {
@@ -214,6 +282,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
               reformulateChatConversation,
               endConversation,
               procedures,
+              sendFeedback,
             }}
           >
             {children}
@@ -231,6 +300,7 @@ function ChatContextProvider({ children }: { children: ReactNode }) {
             reformulateChatConversation,
             endConversation,
             procedures,
+            sendFeedback,
           }}
         >
           {children}
