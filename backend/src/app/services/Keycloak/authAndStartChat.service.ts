@@ -5,7 +5,7 @@ import {
 	ResponseFailureType,
 } from "../../types/chatbot.type";
 import { ResponseKeyRedisType } from "../../types/redis.type";
-import { connectAuth0 } from "./connect.service";
+import { authChatBot } from "./authChatBot.service";
 
 /**
  * Request axios to Auth0 Machine to Machine
@@ -54,7 +54,7 @@ export async function authAndStartChat(
 	if (responseRedis.status !== 200 && typeof responseRedis.details === "string") {
 
 		const responseApi: ResponseFailureType | ResponseAuthChatBot =
-			await connectAuth0();
+		await authChatBot();
 
 		// Message Error Typed
 		const { status, details } = responseApi;

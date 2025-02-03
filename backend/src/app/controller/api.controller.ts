@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { deleteKeyRedis } from "../datamapper/redis.datamapper";
-import { authAndStartChat } from "../services/Auth0/authAndStartChat.service";
+import { authAndStartChat } from "../services/Keycloak/authAndStartChat.service";
 import { requestChatToApiChatBot } from "../services/ChatBot/continueChat.service";
 import { endChatApiBot } from "../services/ChatBot/endChat.service";
 import { feedbackApiChatBot } from "../services/ChatBot/feedbackChat.service";
