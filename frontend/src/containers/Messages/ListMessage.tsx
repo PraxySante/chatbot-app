@@ -9,15 +9,13 @@ import Button from '../../components/Buttons/Button';
 
 type MessageType = {
   message: MessageAttributes;
-  setIsBotWritten: Dispatch<SetStateAction<boolean>>;
   setSelectedPanel: Dispatch<SetStateAction<'chat' | 'procedure'>>;
 };
 export default function ListMessage({
   message,
   setSelectedPanel,
-  setIsBotWritten,
 }: MessageType) {
-  const { stockMessageUser } = useChat();
+  const { stockMessageUser, whoIsWritten } = useChat();
 
   useEffect(() => {
     renderingMessage();
@@ -83,8 +81,8 @@ export default function ListMessage({
         break;
 
       case 'reformulate':
-        setIsBotWritten(true)
         await stockMessageUser(requestReformulation);
+        whoIsWritten('assistant');
         break;
 
       default:

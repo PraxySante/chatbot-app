@@ -39,8 +39,8 @@
     "feedback_hallucinations"
   ],
   "design": {
-    "primary": "rgb(0,75,125)",
-    "secondary": "rgb(160,160,160)",
+    "primary": "rgba(150,190,50,1)",
+    "secondary": "rgba(0,125,190,1)",
     "third": "rgb(164,160,160)",
     "text": "rgb(0,0,0)",
     "bot": "rgb(255, 188, 73, 0.5)",

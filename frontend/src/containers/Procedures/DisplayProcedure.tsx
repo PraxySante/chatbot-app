@@ -101,12 +101,12 @@ export default function DisplayProcedures({
           );
       }
     } else {
-      console.error('View error');
+      console.log('View error');
       return (
         <>
           {userLanguage ? (
             <>
-              <Image imgSource={'./no-data.jpg'} classname={'w-1/2 h-1/2'} />
+              <Image imgSource={'./no-data.jpg'} classname={'w-1/4 h-1/4'} />
               <Description
                 content={userLanguage?.procedure_not_yet}
                 tag={'p'}
@@ -120,9 +120,9 @@ export default function DisplayProcedures({
   }
 
   return (
-    <>
+    <div className='h-full w-full flex flex-col overflow-y-scroll'>
       {userLanguage && (
-        <section className="flex flex-col justify-center items-center p-4 gap-4 border border-black outlined text-medium text-white rounded-lg h-full w-full overflow-y-scroll overflow-x-hidden ">
+        <section className="flex flex-col justify-start items-center p-4 gap-4 border border-black outlined text-medium text-white rounded-lg  ">
           <Title
             content={userLanguage?.procedure_title}
             tag={'h3'}
@@ -131,6 +131,6 @@ export default function DisplayProcedures({
           {renderingProcedure()}
         </section>
       )}
-    </>
+    </div>
   );
 }

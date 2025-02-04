@@ -54,11 +54,11 @@ export default function Header({
           </>
         )}
         <div
-          className="flex flex-row gap-2 items-center justify-center border border-gray-100 outline rounded-lg p-1 md:p-2 hover:text-blue pointer-cursor"
+          className="flex flex-row gap-2 items-center justify-center border border-secondary rounded-lg p-1 md:p-2 text-blue pointer-cursor hover:bg-secondary hover:text-white"
           onClick={()=>selectedRestart()}
         >
           <IconButton icon={icons.restart} />
-          <Description content={'Restart'} tag={'p'} className={'hidden sm:text-sm'} />
+          <Description content={'Restart'} tag={'p'} className={'hidden sm:text-sm hover:text-secondary'} />
         </div>
       </span>
     </div>

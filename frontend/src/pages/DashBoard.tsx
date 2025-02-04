@@ -67,6 +67,7 @@ export default function DashBoard() {
 
   return (
     <>
+      {/* Display Menu parameters according config */}
       {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' && (
         <>
           {isOpenModalMenu ? (

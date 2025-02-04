@@ -15,7 +15,7 @@ export default function MessageLoading({
         <button
           disabled
           type="button"
-          className="loader"
+          className={`loader bg-${role}`}
         >
           {icons.spinner}
           {role === 'assistant'

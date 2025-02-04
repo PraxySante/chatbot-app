@@ -5,7 +5,11 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import icons from '../../../constants/icons';
 import IconButton from '../../../components/Buttons/IconButton';
 
-export default function ReaderDocument({ fileDocument }: any) {
+type ReaderDocumentType = {
+  fileDocument: string;
+};
+
+export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
   const [selectedPages, setSelectedPages] = useState<number>(1);
   const [numPages, setNumPages] = useState<number>(0);
 
@@ -36,24 +40,34 @@ export default function ReaderDocument({ fileDocument }: any) {
       <Page
         key={`page_${selectedPages}`}
         pageNumber={selectedPages}
-        width={800}
       />
     );
   }
 
   return (
-    <div className="Example">
-      <div className="Example__container__document">
-        <Document
-          file={fileDocument}
-          onLoadSuccess={onDocumentLoadSuccess}
-          onLoadError={console.error}
-          options={options}
-        >
-          <IconButton icon={icons?.arrowRight} onClick={changePage} />
-          {renderingPage()}
-        </Document>
-      </div>
-    </div>
+    <>
+      <section className="w-full flex justify-between items-center">
+        <IconButton
+          icon={icons?.arrowLeft}
+          onClick={changePage}
+          className="border border-primary text-primary contained rounded-lg p-2 hover:bg-primary hover:text-white"
+          content={'Précédent'}
+        />
+        <IconButton
+          icon={icons?.arrowRight}
+          onClick={changePage}
+          className="border border-primary text-primary contained rounded-lg p-2 hover:bg-primary hover:text-white"
+          content={'Suivant'}
+        />
+      </section>
+      <Document
+        file={fileDocument}
+        onLoadSuccess={onDocumentLoadSuccess}
+        onLoadError={console.error}
+        options={options}
+      >
+        {renderingPage()}
+      </Document>
+    </>
   );
 }

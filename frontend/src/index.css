@@ -66,12 +66,12 @@ input[type='number'] {
 
 /* Dashboard */
 #dashboard {
-  @apply flex flex-row h-screen w-screen;
+  @apply relative flex flex-row h-screen w-screen;
 }
 
 /* SideBar */
 #side-bar {
-  @apply absolute flex shrink flex-col z-20 bg-gray-200 w-1/5 h-screen pt-16 p-8 overflow-y-auto gap-2 items-center min-w-72 md:min-w-72;
+  @apply absolute flex flex-col z-20 bg-secondary w-1/5 h-screen pt-16 p-8 gap-2 items-center min-w-72 md:min-w-72 text-white;
 }
 
 /* Statut Login */
@@ -125,6 +125,30 @@ input[type='number'] {
   @apply flex flex-col h-full gap-4 pb-24;
 }
 
+.chat-room-containers_tab-procedures {
+  @apply absolute sticky flex w-screen justify-center z-10;
+}
+
+.chat-room-containers_list-messages {
+  @apply relative flex flex-col h-full mt-2 gap-6 overflow-y-scroll overflow-x-hidden;
+}
+
+.chat-room-containers_reformulate {
+  @apply flex flex-row justify-start gap-2 mb-2 text-xs;
+}
+
+.chat-room-containers_loading-bot {
+  @apply flex flex-row justify-start;
+}
+
+.chat-room-containers_loading-user {
+  @apply flex flex-row justify-end;
+}
+
+.chat-room-containers_input-message {
+  @apply absolute sticky w-full flex bottom-0;
+}
+
 /* Information */
 .chat-information {
   @apply absolute sticky bg-transparent flex flex-col bg-warning p-2 rounded-xl text-sm text-justify;
@@ -139,9 +163,6 @@ input[type='number'] {
 }
 
 /* Messages */
-#list-messages {
-  @apply relative flex flex-col h-full mt-2 gap-6 overflow-y-scroll overflow-x-hidden;
-}
 
 .assistant {
   @apply flex flex-col justify-start;
@@ -155,12 +176,12 @@ input[type='number'] {
   @apply flex flex-col w-fit max-w-3xl p-3;
 }
 
-.bg-assistant{
-  @apply bg-secondary;
+.bg-assistant {
+  @apply bg-third;
 }
 
-.bg-user{
-  @apply bg-third;
+.bg-user {
+  @apply bg-primary;
 }
 
 .message-header {
@@ -184,7 +205,7 @@ input[type='number'] {
   @apply text-secondary;
 }
 .icon-user {
-  @apply text-third;
+  @apply text-primary;
 }
 
 .icon {
@@ -196,15 +217,20 @@ input[type='number'] {
 }
 
 .text--user {
-  @apply bg-third border-2 border-slate-200 rounded-tl-lg rounded-b-lg justify-center content-center p-2 text-justify;
+  @apply bg-primary border-2 border-slate-200 rounded-tl-lg rounded-b-lg justify-center content-center p-2 text-justify;
 }
 
 /* Procedures */
-#procedure{
-  @apply h-full
+#procedure {
+  @apply h-full;
 }
+
 .tab-procedure {
-  @apply cursor-pointer inline-flex items-center px-4 py-3 text-white bg-secondary rounded-lg w-full overflow-y-scroll overflow-x-hidden;
+  @apply w-full text-sm cursor-pointer inline-flex items-center px-4 py-3 text-third border outlined border-solid border-primary bg-white rounded-lg hover:bg-primary hover:text-white justify-between;
+}
+
+.tab-procedure_selected {
+  @apply text-sm cursor-pointer inline-flex items-center px-4 py-3 text-white bg-primary rounded-lg w-full justify-between;
 }
 
 /* Input Message */
@@ -222,7 +248,7 @@ input[type='text'] {
 }
 
 .left {
-  @apply w-fit h-fit left-[-18px] bg-gray-400 border border-solid border-slate-200 rounded-3xl p-2 hover:left-1 ease-in-out hover:duration-75 ease-in-out hover:delay-75 ease-in-out;
+  @apply z-20 w-fit h-fit left-[-18px] bg-secondary border contained border-solid border-slate-200 rounded-3xl p-2 hover:left-1 ease-in-out hover:duration-75 ease-in-out hover:delay-75 ease-in-out;
 }
 
 .right {
@@ -235,18 +261,15 @@ input[type='text'] {
 }
 
 .input-user {
-  @apply p-4;
+  @apply p-4 border border-primary outlined;
 }
 
 .icon-send-message {
-  @apply absolute right-2 inline-block border-secondary hover:text-third hover:text-secondary h-full;
+  @apply absolute text-secondary right-2 inline-block  hover:text-third hover:text-secondary h-full;
 }
 
 /* Inputs Evaluate */
 
-#input {
-  @apply absolute sticky w-full flex bottom-0;
-}
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -272,7 +295,7 @@ input::-webkit-inner-spin-button {
 }
 
 .contained {
-  @apply border-secondary hover:text-third hover:bg-secondary;
+  @apply hover:text-white hover:bg-secondary;
 }
 
 .outlined {
@@ -310,17 +333,17 @@ input::-webkit-inner-spin-button {
 /* Loader */
 
 .wrapper {
-  @apply  bottom-24 w-fit h-8 bg-third rounded-xl;
+  @apply bottom-24 w-fit h-8 rounded-xl;
 }
 
 .wrapper-user {
-  @apply right-4;
+  @apply bg-primary right-4;
 }
 
 .wrapper-bot {
-  @apply left-4;
+  @apply bg-secondary left-4;
 }
 
 .loader {
-  @apply flex flex-row p-2 w-fit h-fit text-sm font-medium text-gray-900 bg-third text-black rounded-lg border border border-gray-200 hover:bg-gray-100 hover:text-secondary focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-secondary inline-flex items-center;
+  @apply flex flex-row p-2 w-fit h-fit text-sm font-medium text-gray-900 rounded-lg border border border-gray-200 hover:bg-gray-100 hover:text-secondary focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-secondary inline-flex items-center;
 }

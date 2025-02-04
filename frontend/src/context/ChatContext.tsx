@@ -23,6 +23,9 @@ export type ChatContextAttributes = {
   endConversation: () => void;
   procedures: any;
   sendFeedback: (vote: number, comment: string) => void;
+  whoIsWritten: (role: string) => void;
+  isUserWritten: boolean;
+  isBotWritten: boolean;
 };
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
@@ -30,12 +33,15 @@ const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 function ChatContextProvider({ children, useNotification }: any) {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { selectedLanguage } = useLanguage();
+  const { getMessageToNotification } = useNotification();
   const [isRestart, setIsRestart] = useState<boolean>(false);
   const [isStart, setIsStart] = useState<boolean>(false);
   const [messages, setMessages] = useState<MessageAttributes[]>([]);
   const [historyChat, setHistoryChat] = useState<MessageType[]>([]);
   const [procedures, setProcedures] = useState<any[]>([]);
-  const { getMessageToNotification } = useNotification();
+
+  const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
+  const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
 
   if (!useNotification) {
     throw new Error(
@@ -50,22 +56,33 @@ function ChatContextProvider({ children, useNotification }: any) {
     start();
   }, []);
 
-  useEffect(() => {
-    async function start() {
-      await startConversation();
+  function whoIsWritten(role: string): void {
+    switch (role) {
+      case 'assistant':
+        setIsBotWritten(true);
+        break;
+      case 'user':
+        setIsUserWritten(true);
+        break;
+      case 'none':
+        setIsBotWritten(false);
+        setIsUserWritten(false);
+        break;
+      default:
+        setIsBotWritten(false);
+        setIsUserWritten(false);
+        break;
     }
-    if (isRestart) {
-      start();
-    }
-  }, [isRestart]);
+  }
 
-  function selectedRestart(): void {
+  async function selectedRestart(): Promise<void> {
     setIsStart(!isStart);
-    setMessages([]);
     setHistoryChat([]);
     setProcedures([]);
+    setMessages([]);
     setIsRestart(!isRestart);
-    getMessageToNotification({status:200, message:'Nouvelle session démarrée'});
+    getMessageToNotification(200, 'Nouvelle session démarrée');
+    await startConversation();
   }
 
   async function verifyStartChat(): Promise<void> {
@@ -153,7 +170,10 @@ function ChatContextProvider({ children, useNotification }: any) {
     );
 
     if (responseChatConversation.message === 'failure') {
-      getMessageToNotification(responseChatConversation.status, responseChatConversation.details);
+      getMessageToNotification(
+        responseChatConversation.status,
+        responseChatConversation.details
+      );
       return;
     }
 
@@ -203,7 +223,10 @@ function ChatContextProvider({ children, useNotification }: any) {
     const propositionChatConversation: any = await reformulateChat();
 
     if (propositionChatConversation.message === 'failure') {
-      getMessageToNotification(propositionChatConversation.status, propositionChatConversation.details);
+      getMessageToNotification(
+        propositionChatConversation.status,
+        propositionChatConversation.details
+      );
       return;
     }
 
@@ -283,6 +306,9 @@ function ChatContextProvider({ children, useNotification }: any) {
               endConversation,
               procedures,
               sendFeedback,
+              whoIsWritten,
+              isUserWritten,
+              isBotWritten,
             }}
           >
             {children}
@@ -301,6 +327,9 @@ function ChatContextProvider({ children, useNotification }: any) {
             endConversation,
             procedures,
             sendFeedback,
+            whoIsWritten,
+            isUserWritten,
+            isBotWritten,
           }}
         >
           {children}

@@ -7,6 +7,7 @@ export default function IconButton({
   className,
   icon,
   onClick,
+  content
 }: IIconButton) {
   const [formatClassName, setFormatClassName] = useState<string>('');
 
@@ -26,7 +27,7 @@ export default function IconButton({
         type={type}
         onClick={onClick}
       >
-        {icon}
+        {icon}{content}
       </button>
     </>
   );

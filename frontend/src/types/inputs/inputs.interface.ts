@@ -5,7 +5,7 @@ export interface IButton {
   type: 'button' | 'submit';
   content: string;
   onClick: (e?: any) => void;
-  children?:any
+  children?: any;
 }
 
 export interface IButtonRadio {
@@ -25,7 +25,7 @@ export interface ICheckBox {
 export interface IInputEvaluate {
   id: string;
   content: string;
-  getDataForm: (value:number) => void;
+  getDataForm: (value: number) => void;
 }
 
 export interface IIconButton {
@@ -34,6 +34,7 @@ export interface IIconButton {
   className?: string;
   icon: ReactNode;
   onClick?: (e: any) => void;
+  content?:string
 }
 
 export interface IInput {
@@ -49,7 +50,12 @@ export interface IInput {
 export interface ILink {
   children: any;
   id: string;
-  className: 'menu-modal-item' | 'tab-selected' | 'tab' | 'tab-procedure';
+  className:
+    | 'menu-modal-item'
+    | 'tab-selected'
+    | 'tab'
+    | 'tab-procedure'
+    | 'tab-procedure_selected';
   name?: string;
   onClick: (menuItem: string) => void;
 }
