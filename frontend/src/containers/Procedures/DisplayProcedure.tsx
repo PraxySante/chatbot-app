@@ -89,7 +89,7 @@ export default function DisplayProcedures({
             <>
               {userLanguage ? (
                 <>
-                  <Image imgSource={'./no-data.jpg'} classname={''} />
+                  <Image imgSource={'./no-data.jpg'} classname={'w-1/4'} />
                   <Description
                     content={userLanguage?.procedure_not_yet}
                     tag={'p'}
@@ -106,7 +106,7 @@ export default function DisplayProcedures({
         <>
           {userLanguage ? (
             <>
-              <Image imgSource={'./no-data.jpg'} classname={'w-1/4 h-1/4'} />
+              <Image imgSource={'./no-data.jpg'} classname={'w-1/4'} />
               <Description
                 content={userLanguage?.procedure_not_yet}
                 tag={'p'}
