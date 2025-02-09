@@ -24,10 +24,10 @@ export default function Header({
       {/* Login/Logout selection */}
       {/* {isSelectLanguage ? !isAuthenticated ? <Auth /> : null : null} */}
       {/* Icons */}
-      <span className="icons-actions gap-2 items-center left-10">
+      <span className="icons-actions gap-2 items-center left-5 sm:left-10">
         <span className="relative">
           <Image imgSource={'./bot.png'} classname="w-14 h-14" />
-          <span className="absolute left-1 bottom-0 h-4 w-4 rounded-full bg-green-400"></span>
+          <span className="absolute bottom-0 h-4 w-4 rounded-full bg-green-400"></span>
         </span>
 
         <span className="flex flex-col h-fit">
@@ -37,7 +37,7 @@ export default function Header({
             className={'sm:text-sm'}
           />
           <Description
-            content={'Réponds généralement immédiatemment...'}
+            content={'répond généralement immédiatement...'}
             tag={'p'}
             className={'text-xs'}
           />

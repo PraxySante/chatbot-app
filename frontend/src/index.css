@@ -13,41 +13,37 @@ Provide all colors into project
   --primary: theme('colors.primary');
   --secondary: theme('colors.secondary');
   --third: theme('colors.third');
-  --bg: theme('colors.bg') /* Notifications */
+  --bg: theme('colors.bg'); /* Notifications */
   --sucess: theme('colors.sucess');
   --warning: theme('colors.warning');
   --error: theme('colors.error');
   --information: theme('colors.information');
 }
 
-p,
-h1,
-h2,
-h3,
-h4,
-ul,
+
+ul
 li,
 ol {
-  @apply text-text;
+  @apply text-black;
 }
 
 h1 {
-  @apply font-bold text-lg px-2;
+  @apply text-black font-bold text-lg px-2;
 }
 
 h2 {
-  @apply font-bold text-sm px-2;
+  @apply text-black font-bold text-sm px-2;
 }
 
 h3 {
-  @apply font-bold;
+  @apply text-black font-bold;
 }
 
 h4 {
 }
 
 p {
-  @apply font-light;
+  @apply  font-light;
 }
 
 hr {
@@ -55,7 +51,7 @@ hr {
 }
 
 a {
-  @apply text-white;
+  @apply text-secondary font-medium;
 }
 
 input[type='number'] {
@@ -82,7 +78,7 @@ input[type='number'] {
 /* Main Page */
 
 #main {
-  @apply relative flex-1 bg-bg h-full w-full overflow-x-hidden overflow-y-hidden px-4 pb-4;
+  @apply relative flex-1 bg-bg h-full w-full overflow-x-hidden overflow-y-hidden px-2 pb-4;
 }
 
 .main-reduce {
@@ -96,7 +92,7 @@ input[type='number'] {
 
 /* Panel */
 #tab-panel {
-  @apply cursor-pointer absolute flex flex-row h-fit w-fit rounded-md shadow-sm bg-white border border-solid border-gray-200 justify-center items-center;
+  @apply cursor-pointer absolute flex flex-row h-fit w-fit mt-1 rounded-md shadow-sm bg-white border border-solid border-gray-200 justify-center items-center;
 }
 
 /* Styles communs aux boutons */
@@ -122,15 +118,15 @@ input[type='number'] {
 
 /* Chat */
 #chat-room {
-  @apply flex flex-col h-full gap-4 pb-24;
+  @apply flex flex-col h-full gap-4 pb-24 mt-1;
 }
 
-.chat-room-containers_tab-procedures {
+.chat-room-containers_tab-panel {
   @apply absolute sticky flex w-screen justify-center z-10;
 }
 
 .chat-room-containers_list-messages {
-  @apply relative flex flex-col h-full mt-2 gap-6 overflow-y-scroll overflow-x-hidden;
+  @apply relative flex flex-col mt-8 mb-0 p-2 h-full gap-2 overflow-y-scroll overflow-x-hidden;
 }
 
 .chat-room-containers_reformulate {
@@ -151,11 +147,11 @@ input[type='number'] {
 
 /* Information */
 .chat-information {
-  @apply absolute sticky bg-transparent flex flex-col bg-warning p-2 rounded-xl text-sm text-justify;
+  @apply absolute sticky bg-transparent flex flex-col bg-warning p-2 rounded-xl text-xs sm:text-sm text-justify;
 }
 
 .chat-info {
-  @apply flex-1 p-2 gap-2 transition ease-in-out delay-150 duration-150 text-sm;
+  @apply flex-1 gap-2 transition ease-in-out delay-150 duration-150 text-xs sm:text-sm;
 }
 
 .chat-info-hidden {
@@ -173,27 +169,27 @@ input[type='number'] {
 }
 
 #message {
-  @apply flex flex-col w-fit max-w-3xl p-3;
+  @apply flex flex-col w-fit max-w-3xl p-2;
 }
 
 .bg-assistant {
-  @apply bg-third;
+  @apply border border-secondary border-solid;
 }
 
 .bg-user {
-  @apply bg-primary;
+  @apply border border-primary border-solid;
 }
 
 .message-header {
-  @apply flex text-xs font-semibold text-white;
+  @apply flex text-xs font-medium;
 }
 
 .message-assistant {
-  @apply flex flex-col rounded-tr-lg rounded-b-lg justify-start gap-2 text-wrap;
+  @apply flex flex-col text-black text-justify text-sm rounded-tr-lg rounded-b-lg justify-start gap-2 text-wrap;
 }
 
 .message-user {
-  @apply flex flex-col text-white rounded-tl-lg rounded-b-lg justify-end gap-2;
+  @apply flex flex-col text-black text-justify text-sm rounded-tl-lg rounded-b-lg justify-end gap-2;
 }
 
 .message-assistant,
@@ -252,7 +248,7 @@ input[type='text'] {
 }
 
 .right {
-  @apply w-fit right-8 gap-4;
+  @apply w-fit right-2 gap-4 sm:right-8;
 }
 
 /* Input Message */
@@ -333,17 +329,17 @@ input::-webkit-inner-spin-button {
 /* Loader */
 
 .wrapper {
-  @apply bottom-24 w-fit h-8 rounded-xl;
+  @apply bottom-24 w-fit h-fit rounded-lg;
 }
 
 .wrapper-user {
-  @apply bg-primary right-4;
+  @apply border border-primary border-solid right-4;
 }
 
 .wrapper-bot {
-  @apply bg-secondary left-4;
+  @apply border border-secondary border-solid left-4;
 }
 
 .loader {
-  @apply flex flex-row p-2 w-fit h-fit text-sm font-medium text-gray-900 rounded-lg border border border-gray-200 hover:bg-gray-100 hover:text-secondary focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-secondary inline-flex items-center;
+  @apply flex flex-row p-2 w-fit h-fit text-sm font-normal text-gray-900 rounded-lg border border border-gray-200 hover:bg-gray-100 hover:text-secondary focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-secondary inline-flex items-center;
 }

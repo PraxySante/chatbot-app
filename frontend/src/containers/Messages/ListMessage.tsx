@@ -32,17 +32,28 @@ export default function ListMessage({
             </span>
           );
         }
-        if (message.doc_type) {
+        if (message.doc_type === 'reformulate') {
           return (
-            <span
-              className="flex flex-row justify-start cursor-pointer">
+            <span className="flex flex-row justify-start cursor-pointer">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
               <Button
                 type={'button'}
-                content={message.content}
+                content={`${message.content}`}
+                onClick={() => handleClick(message.content)}
+              ></Button>
+            </span>
+          );
+        }
+        if (message.doc_type) {
+          return (
+            <span className="flex flex-row justify-start cursor-pointer">
+              <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+              <Button
+                type={'button'}
+                content={`Voici un lien qui peut vous intéresser :\n${message.content}`}
                 onClick={() => handleClick(message.content)}
               >
-                {message.doc_type !== 'reformulate' && <IconButton icon={icons.chain} />}
+                <IconButton icon={icons.chain} />
               </Button>
             </span>
           );

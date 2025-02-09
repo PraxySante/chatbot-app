@@ -12,8 +12,11 @@ export default function Button({ type, content, onClick, children }: IButton) {
       case 'Logout':
         setContentClassName('btn_actions contained');
         break;
+      case 'Envoyer':
+          setContentClassName('w-full text-white bg-secondary hover:bg-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center');
+          break;
       default:
-        setContentClassName('btn_actions outlined');
+        setContentClassName('btn_actions border border-solid border-secondary whitespace-pre-line');
         break;
     }
   }, [content]);
