@@ -2,15 +2,17 @@ import Description from '../../components/Text/Description';
 import { useLanguage } from '../../hooks/UseLanguage';
 import Button from '../../components/Buttons/Button';
 import { useChat } from '../../hooks/ChatProvider';
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import ReaderDocument from './ReaderDocument/ReaderDocument';
-import Image from '../../components/Logo/Logo';
 import Title from '../../components/Text/Title';
 import Video from './Video/Video';
 
 type DisplayProcedureType = {
   selectedProcedure: number;
 };
+
+const Image = lazy(() => import('../../components/Logo/Logo'));
+
 
 export default function DisplayProcedures({
   selectedProcedure,
