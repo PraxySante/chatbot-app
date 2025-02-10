@@ -39,7 +39,7 @@ export default function ListMessage({
               <Button
                 type={'button'}
                 content={`${message.content}`}
-                onClick={() => handleClick(message.content)}
+                onClick={() => handleClick(message.content,'')}
               ></Button>
             </span>
           );
@@ -51,7 +51,7 @@ export default function ListMessage({
               <Button
                 type={'button'}
                 content={`Voici un lien qui peut vous intéresser :\n${message.content}`}
-                onClick={() => handleClick(message.content)}
+                onClick={() => handleClick(message.content, message.doc_ref)}
               >
                 <IconButton icon={icons.chain} />
               </Button>
@@ -81,10 +81,10 @@ export default function ListMessage({
     }
   }
 
-  async function handleClick(requestReformulation: string) {
+  async function handleClick(requestReformulation: string, url: string|undefined) {
     switch (message.doc_type) {
       case 'url':
-        setSelectedPanel('procedure');
+        window.open(url, '_blank', 'noopener,noreferrer');
         break;
 
       case 'doc':
@@ -92,8 +92,8 @@ export default function ListMessage({
         break;
 
       case 'reformulate':
-        await stockMessageUser(requestReformulation);
         whoIsWritten('assistant');
+        await stockMessageUser(requestReformulation);
         break;
 
       default:

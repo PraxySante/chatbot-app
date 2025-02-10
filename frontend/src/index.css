@@ -43,7 +43,7 @@ h4 {
 }
 
 p {
-  @apply  font-light;
+  @apply font-normal;
 }
 
 hr {
@@ -186,6 +186,9 @@ input[type='number'] {
 
 .message-assistant {
   @apply flex flex-col text-black text-justify text-sm rounded-tr-lg rounded-b-lg justify-start gap-2 text-wrap;
+}
+.message-assistant, p{
+  @apply flex flex-col py-1
 }
 
 .message-user {

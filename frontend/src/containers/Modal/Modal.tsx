@@ -52,7 +52,7 @@ export default function Modal({ setIsOpenModalFeedback }: ModalType) {
               <Input
                 variant={'textarea'}
                 className={
-                  'flex w-full h-20 border border-solid border-primary justify-center items-start rounded-lg'
+                  'flex w-full h-20 border border-solid border-primary rounded-lg'
                 }
                 onChange={(e) => getComment(e)}
                 content={'Ecrire votre commentaire'}

@@ -27,7 +27,7 @@ export default function Header({
       <span className="icons-actions gap-2 items-center left-5 sm:left-10">
         <span className="relative">
           <Image imgSource={'./bot.png'} classname="w-14 h-14" />
-          <span className="absolute bottom-0 h-4 w-4 rounded-full bg-green-400"></span>
+          {/* <span className="absolute bottom-0 h-4 w-4 rounded-full bg-green-400"></span> */}
         </span>
 
         <span className="flex flex-col h-fit">
