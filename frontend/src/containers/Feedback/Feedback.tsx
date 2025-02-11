@@ -11,15 +11,14 @@ export default function Feedback() {
   //Init Component
   // Check selected language by user
   const { userLanguage } = useLanguage();
-  const { sendFeedback } = useChat();
+  const { sendFeedback,setVoteUser } = useChat();
 
   // Using Hook State to contain comment
   const [comment, setComment] = useState<string>('');
-  const [vote, setVote] = useState<number>(0);
 
   // Function to get all data from feedback and including in containerFeedback
   function getDataForm(value: number) {
-    setVote(value);
+    setVoteUser(value);
     // Update useState concerning user selection
     // setContainerFeedback(
     //   (containerFeedback: FeedbackAttributes[] | undefined) => {
@@ -56,7 +55,7 @@ export default function Feedback() {
 
   // Function to send Feedback form
   async function onSubmit(): Promise<void> {
-    await sendFeedback(vote, comment);
+    await sendFeedback(comment);
     setComment('');
   }
 
@@ -80,7 +79,7 @@ export default function Feedback() {
 
           {/* Input Comment */}
           <Input
-            variant="text"
+            variant="textarea"
             onChange={(e) => getComment(e)}
             content={'Ecrire votre commentaire'}
             value={comment}

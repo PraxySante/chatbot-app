@@ -1,7 +1,14 @@
 import { useLanguage } from '../../hooks/UseLanguage';
 import { MessageAttributes } from '../../types/messages/messages.type';
 import { useChat } from '../../hooks/ChatProvider';
-import { Dispatch, Fragment, SetStateAction, useEffect, useRef } from 'react';
+import {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import MessageLoading from '../Loading/MessageLoading';
 import Button from '../../components/Buttons/Button';
 import ListMessage from '../Messages/ListMessage';
@@ -11,6 +18,7 @@ import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import HeaderChat from './HeaderChat';
 import FooterChat from './FooterChat';
+import Modal from '../Modal/Modal';
 
 interface IChatAttributes {
   selectedPanel: 'chat' | 'procedure';
@@ -23,25 +31,29 @@ export default function Chat({
 }: IChatAttributes) {
   //Init Component
   //
-  const {
-    messages,
-    reformulateChatConversation,
-    isUserWritten,
-    isBotWritten,
-    whoIsWritten,
-  } = useChat();
+  const { messages, reformulateChatConversation, isUserWritten, isBotWritten } =
+    useChat();
   // Check selected language by user
   const { userLanguage } = useLanguage();
   const autoScrollMessage = useRef<HTMLDivElement | null>(null);
+  const [isOpenModalFeedback, setIsOpenModalFeedback] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isOpenModalFeedback) {      
+      renderingModalFeedback();
+    }
+  }, [isOpenModalFeedback]);
 
   useEffect(() => {
     renderingMessages();
-    autoScrollMessage.current?.scrollIntoView({ behavior: 'smooth' });
+    if (autoScrollMessage.current) {
+      autoScrollMessage.current.scrollTop =
+        autoScrollMessage.current.scrollHeight;
+    }
   }, [messages, isBotWritten, isUserWritten]);
 
   async function clickReformulateMessage() {
     await reformulateChatConversation();
-    whoIsWritten('assistant');
   }
 
   /* Render all messages exist */
@@ -73,6 +85,21 @@ export default function Chat({
     );
   }
 
+  function renderingModalFeedback() {
+    const className = isOpenModalFeedback ? "flex flex-row overflow-y-auto overflow-x-hidden absolute z-50 justify-center items-center w-full h-3/4" : "hidden"
+    return (
+      <>
+        <div
+          id="authentication-modal"
+          aria-hidden="true"
+          className={className}
+        >
+          <Modal setIsOpenModalFeedback={setIsOpenModalFeedback}/>
+        </div>
+      </>
+    );
+  }
+
   return (
     <section id="chat-room">
       <HeaderChat
@@ -80,21 +107,25 @@ export default function Chat({
         setSelectedPanel={setSelectedPanel}
       />
       {/* List messages chat */}
-      <div className="chat-room-containers_list-messages">
+      {renderingModalFeedback()}
+
+      <div
+        ref={autoScrollMessage}
+        className="chat-room-containers_list-messages"
+      >
         {renderingMessages()}
         {messages.length > 1 &&
-        messages[messages.length - 1].role === 'assistant' &&
-        userLanguage && (
+          messages[messages.length - 1].role === 'assistant' &&
+          userLanguage && (
             <span className="chat-room-containers_reformulate">
-            <Button
-              type={'button'}
-              content={userLanguage?.reformulate_button}
-              onClick={() => clickReformulateMessage()}
-            />
-            <FeedbackLight />
-          </span>
+              <Button
+                type={'button'}
+                content={userLanguage?.reformulate_button}
+                onClick={() => clickReformulateMessage()}
+              />
+              <FeedbackLight setIsOpenModalFeedback={setIsOpenModalFeedback} />
+            </span>
           )}
-        {/* <div ref={autoScrollMessage}></div> */}
       </div>
       <FooterChat />
     </section>

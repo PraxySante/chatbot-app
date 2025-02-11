@@ -27,7 +27,7 @@ export default function HeaderChat({
   }
 
   return (
-    <>
+    <section className='h-fit'>
       {/* Data Inofrmation chat */}
       <Title
         content={
@@ -37,13 +37,13 @@ export default function HeaderChat({
         className={''}
       ></Title>
       <Information />
-      <div className="chat-room-containers_tab-procedures">
+      <div className="chat-room-containers_tab-panel">
         <TabPanel
           selectedPanel={selectedPanel}
           setSelectedPanel={setSelectedPanel}
         />
         {messageNotification && <Notification />}
       </div>
-    </>
+    </section>
   );
 }

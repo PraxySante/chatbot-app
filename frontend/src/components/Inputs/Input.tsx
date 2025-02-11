@@ -7,11 +7,12 @@ export default function Input({
   onChange,
   handleKeyDown,
   value,
+  className,
 }: IInput) {
   return (
     <input
       value={value ? value?.toString() : ''}
-      className="input-user"
+      className={className ? className : 'input-user'}
       type={variant}
       {...(variant === 'number' && { min: '0', max: '5' })}
       onChange={onChange || (() => {})}

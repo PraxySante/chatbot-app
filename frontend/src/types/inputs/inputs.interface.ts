@@ -42,6 +42,7 @@ export interface IInput {
   variant: 'text' | 'number' | 'textarea';
   score?: number;
   content?: string;
+  className?:string,
   onChange?: (e?: any) => void;
   handleKeyDown?: (e: any) => void;
   isReset?: boolean;

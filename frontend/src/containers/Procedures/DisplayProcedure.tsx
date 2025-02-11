@@ -2,15 +2,17 @@ import Description from '../../components/Text/Description';
 import { useLanguage } from '../../hooks/UseLanguage';
 import Button from '../../components/Buttons/Button';
 import { useChat } from '../../hooks/ChatProvider';
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import ReaderDocument from './ReaderDocument/ReaderDocument';
-import Image from '../../components/Logo/Logo';
 import Title from '../../components/Text/Title';
 import Video from './Video/Video';
 
 type DisplayProcedureType = {
   selectedProcedure: number;
 };
+
+const Image = lazy(() => import('../../components/Logo/Logo'));
+
 
 export default function DisplayProcedures({
   selectedProcedure,
@@ -30,9 +32,9 @@ export default function DisplayProcedures({
             <>
               {userLanguage && (
                 <Description
-                  content={userLanguage?.procedure_file_displayed}
+                  content={'La source est la page internet suivante (cliquez pour être redirigé) :'}
                   tag={'p'}
-                  className={''}
+                  className={'text-black'}
                 />
               )}
               <Button
@@ -50,9 +52,9 @@ export default function DisplayProcedures({
               {userLanguage && (
                 <>
                   <Description
-                    content={userLanguage?.procedure_file_displayed}
+                    content={"La source est un document qui va vous aider dans vos démarches. Une prévisualisation est disponible."}
                     tag={'p'}
-                    className={''}
+                    className={'text-black'}
                   />
                   <Button
                     type={'button'}
@@ -72,9 +74,9 @@ export default function DisplayProcedures({
                 {userLanguage && (
                   <>
                     <Description
-                      content={userLanguage?.procedure_file_displayed}
+                      content={"La source est une vidéo qui vous aidera à mieux comprendre :"}
                       tag={'p'}
-                      className={''}
+                      className={'text-black'}
                     />
 
                     <Video
@@ -89,11 +91,11 @@ export default function DisplayProcedures({
             <>
               {userLanguage ? (
                 <>
-                  <Image imgSource={'./no-data.jpg'} classname={'w-1/4'} />
+                  <Image imgSource={'./no-data.jpg'} classname={'max-w-sm'} />
                   <Description
                     content={userLanguage?.procedure_not_yet}
                     tag={'p'}
-                    className={''}
+                    className={'text-black'}
                   />
                 </>
               ) : null}
@@ -101,16 +103,15 @@ export default function DisplayProcedures({
           );
       }
     } else {
-      console.log('View error');
       return (
         <>
           {userLanguage ? (
             <>
-              <Image imgSource={'./no-data.jpg'} classname={'w-1/4'} />
+              <Image imgSource={'./no-data.jpg'} classname={'max-w-sm'} />
               <Description
                 content={userLanguage?.procedure_not_yet}
                 tag={'p'}
-                className={''}
+                className={'text-black'}
               />
             </>
           ) : null}
@@ -120,13 +121,13 @@ export default function DisplayProcedures({
   }
 
   return (
-    <div className='h-full w-full flex flex-col overflow-y-scroll'>
+    <div className='h-full w-full flex flex-col'>
       {userLanguage && (
         <section className="flex flex-col justify-start items-center p-4 gap-4 border border-black outlined text-medium text-white rounded-lg  ">
           <Title
             content={userLanguage?.procedure_title}
             tag={'h3'}
-            className={''}
+            className={'text-black'}
           />
           {renderingProcedure()}
         </section>

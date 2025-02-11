@@ -22,10 +22,11 @@ export type ChatContextAttributes = {
   reformulateChatConversation: () => void;
   endConversation: () => void;
   procedures: any;
-  sendFeedback: (vote: number, comment: string) => void;
+  sendFeedback: (comment: string) => void;
   whoIsWritten: (role: string) => void;
   isUserWritten: boolean;
   isBotWritten: boolean;
+  setVoteUser:(vote:number)=>void
 };
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
@@ -40,6 +41,7 @@ function ChatContextProvider({ children, useNotification }: any) {
   const [historyChat, setHistoryChat] = useState<MessageType[]>([]);
   const [procedures, setProcedures] = useState<any[]>([]);
 
+  const [vote, setVote] = useState<number>(0)
   const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
 
@@ -220,6 +222,10 @@ function ChatContextProvider({ children, useNotification }: any) {
   }
 
   async function reformulateChatConversation() {
+    let lengthMessage = messages.length;
+
+    whoIsWritten('assistant');
+
     const propositionChatConversation: any = await reformulateChat();
 
     if (propositionChatConversation.message === 'failure') {
@@ -230,8 +236,13 @@ function ChatContextProvider({ children, useNotification }: any) {
       return;
     }
 
-    let lengthMessage = messages.length;
     const newMessages: MessageAttributes[] = [];
+    newMessages.push({
+      id: lengthMessage++,
+      role: 'assistant',
+      content: "Il semble que j'ai mal interprété votre question. Je vais essayer de reformuler votre question pour mieux répondre à vos attentes. Voici 3 propositions de questions similaires à votre question, cliquez sur celle qui correspond au mieux à ce que vous avez en tête :",
+      date: new Date().toLocaleTimeString(selectedLanguage),
+    })
     propositionChatConversation.map((proposition: MessageType) => {
       lengthMessage++;
       newMessages.push({
@@ -242,10 +253,17 @@ function ChatContextProvider({ children, useNotification }: any) {
         date: new Date().toLocaleTimeString(selectedLanguage),
       });
     });
+
     updateMessages(newMessages);
+    whoIsWritten('none');
+
   }
 
-  async function sendFeedback(vote: number, comment: string) {
+  function setVoteUser(vote: number) {
+    setVote(vote);
+  }
+
+  async function sendFeedback( comment: string) {
     const responseApi: any = await feedbackApiFrontChatBot(vote, comment);
     if (responseApi.message === 'failure') {
       getMessageToNotification(responseApi.status, responseApi.details);
@@ -309,6 +327,7 @@ function ChatContextProvider({ children, useNotification }: any) {
               whoIsWritten,
               isUserWritten,
               isBotWritten,
+              setVoteUser
             }}
           >
             {children}
@@ -329,7 +348,8 @@ function ChatContextProvider({ children, useNotification }: any) {
             sendFeedback,
             whoIsWritten,
             isUserWritten,
-            isBotWritten,
+              isBotWritten,
+              setVoteUser
           }}
         >
           {children}
