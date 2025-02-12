@@ -4,10 +4,10 @@ const port = Number(process.env.PORT_REDIS) || 6379;
 const host = process.env.HOST_REDIS;
 
 export const client = createClient({
-	//  socket: {
-	//  	host: host,
-	//  	port: port,
-	//  },
+	  socket: {
+	  	host: host,
+	  	port: port,
+	  },
 });
 
 client.on("error", (err) => console.log("Redis Client Error", err));
