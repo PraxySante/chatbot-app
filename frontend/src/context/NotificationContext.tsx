@@ -1,13 +1,7 @@
 import { ReactNode, createContext, useState } from 'react';
+import { NotifacationContextAttributes } from '../types/provider/provider.type';
 
-type NotifacationContext = {
-  messageNotification: string;
-  getMessageToNotification: (status: number, message: string) => void;
-  isOpen: boolean;
-  changeStatutNotification: (value: boolean) => void;
-};
-
-const NotifacationContext = createContext<NotifacationContext | undefined>(
+const NotifacationContext = createContext<NotifacationContextAttributes | undefined>(
   undefined
 );
 

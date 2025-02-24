@@ -1,13 +1,7 @@
 import { createContext, ReactNode, useLayoutEffect, useState } from 'react';
 import config from '../config/config.json';
 import { TranslateAttributes } from '../types/languages/translate.type';
-
-type LanguageContextAttributes = {
-  isSelectLanguage: boolean;
-  userLanguage: TranslateAttributes | null;
-  selectedLanguage: string;
-  selectLanguage: (value: string) => void;
-};
+import { LanguageContextAttributes } from '../types/languages/languages.context.type';
 
 const LanguageContext = createContext<LanguageContextAttributes | undefined>(
   undefined

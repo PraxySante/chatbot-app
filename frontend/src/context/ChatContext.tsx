@@ -10,24 +10,7 @@ import { sendMessageApiFrontChatBot } from '../services/ChatBot/sendMessageApiFr
 import { reformulateChat } from '../services/ChatBot/reformulateChat.service';
 import { endChat } from '../services/ChatBot/endChat.service';
 import { feedbackApiFrontChatBot } from '../services/ChatBot/feedbackApiFrontChatBot.service';
-
-export type ChatContextAttributes = {
-  isRestart: boolean;
-  selectedRestart: () => void;
-  isStart: boolean;
-  verifyStartChat?: () => void;
-  messages: MessageAttributes[];
-  requestChatConversation: (userContent: string) => void;
-  stockMessageUser: (userContent: string) => void;
-  reformulateChatConversation: () => void;
-  endConversation: () => void;
-  procedures: any;
-  sendFeedback: (comment: string) => void;
-  whoIsWritten: (role: string) => void;
-  isUserWritten: boolean;
-  isBotWritten: boolean;
-  setVoteUser:(vote:number)=>void
-};
+import { ChatContextAttributes } from '../types/provider/provider.type';
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
