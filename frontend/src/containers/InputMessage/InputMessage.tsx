@@ -63,6 +63,12 @@ export default function InputMessage() {
       />
       <IconButton
         type="submit"
+        className="icon-microphone"
+        icon={icons?.microphone}
+        onClick={(e) => sendMessage(e)}
+      />
+      <IconButton
+        type="submit"
         className="icon-send-message"
         icon={icons?.sendMessage}
         onClick={(e) => sendMessage(e)}

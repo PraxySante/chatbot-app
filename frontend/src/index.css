@@ -264,7 +264,11 @@ input[type='text'] {
 }
 
 .icon-send-message {
-  @apply absolute text-secondary right-2 inline-block  hover:text-third hover:text-secondary h-full;
+  @apply absolute text-secondary right-4 inline-block  hover:text-third hover:text-secondary h-full;
+}
+
+.icon-microphone {
+  @apply absolute text-secondary right-14 inline-block  hover:text-third hover:text-secondary h-full;
 }
 
 /* Inputs Evaluate */
