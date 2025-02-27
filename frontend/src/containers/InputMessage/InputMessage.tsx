@@ -5,9 +5,11 @@ import Input from '../../components/Inputs/Input';
 import { useChat } from '../../hooks/ChatProvider';
 import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
+import useTranscription from '../../hooks/TranscriptionProvider';
 
 export default function InputMessage() {
   // Init component
+  const { settingsMicrophone, userSelectedMicrophone, isRecord, stopTranscription, startTranscription } = useTranscription();
   // Hook state to get message written by user and bot
   const [userContent, setUserContent] = useState<string>('');
   // Check selected language
@@ -50,29 +52,44 @@ export default function InputMessage() {
     }
   }
 
+  async function sendTranscription(e: any): Promise<void> {
+    if (!userSelectedMicrophone) {      
+      settingsMicrophone();
+    } else {
+      startTranscription()
+    }
+  }
+
+  async function stop(e:any) {
+    stopTranscription();
+  }
+
   return (
-    <form className="container-input">
-      <Input
-        value={userContent}
-        onChange={onChange}
-        handleKeyDown={(e) => {
-          handleKeyDown(e);
-        }}
-        variant={'text'}
-        content={userLanguage ? userLanguage?.chat_question_title : ''}
-      />
+    <>
+      <form className="container-input">
+        <Input
+          value={userContent}
+          onChange={onChange}
+          handleKeyDown={(e) => {
+            handleKeyDown(e);
+          }}
+          variant={'text'}
+          content={userLanguage ? userLanguage?.chat_question_title : ''}
+        />
+
+        <IconButton
+          type="submit"
+          className="icon-send-message"
+          icon={icons?.sendMessage}
+          onClick={(e) => sendMessage(e)}
+        />
+      </form>
       <IconButton
         type="submit"
         className="icon-microphone"
-        icon={icons?.microphone}
-        onClick={(e) => sendMessage(e)}
+        icon={!isRecord ? icons?.microphone : icons?.spinner}
+        onClick={(e) => !isRecord ? sendTranscription(e): stop(e)}
       />
-      <IconButton
-        type="submit"
-        className="icon-send-message"
-        icon={icons?.sendMessage}
-        onClick={(e) => sendMessage(e)}
-      />
-    </form>
+    </>
   );
 }

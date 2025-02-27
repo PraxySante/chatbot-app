@@ -17,6 +17,7 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.7",
     "@types/redis": "^4.0.10",
+    "@types/ws": "^8.5.14",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "eslint": "^8.57.1",
     "eslint-config-standard-with-typescript": "^43.0.1",
@@ -33,6 +34,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "redis": "^4.7.0"
+    "redis": "^4.7.0",
+    "ws": "^8.18.1"
   }
 }

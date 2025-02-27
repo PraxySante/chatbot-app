@@ -9,6 +9,7 @@ export type ChatContextAttributes = {
   messages: MessageAttributes[];
   requestChatConversation: (userContent: string) => void;
   stockMessageUser: (userContent: string) => void;
+  stockMessageUserTranscription: (userContent: string) => void;
   reformulateChatConversation: () => void;
   endConversation: () => void;
   procedures: any;

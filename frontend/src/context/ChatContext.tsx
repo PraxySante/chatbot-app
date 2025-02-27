@@ -24,7 +24,7 @@ function ChatContextProvider({ children, useNotification }: any) {
   const [historyChat, setHistoryChat] = useState<MessageType[]>([]);
   const [procedures, setProcedures] = useState<any[]>([]);
 
-  const [vote, setVote] = useState<number>(0)
+  const [vote, setVote] = useState<number>(0);
   const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
 
@@ -127,7 +127,8 @@ function ChatContextProvider({ children, useNotification }: any) {
     }
   }
 
-  async function stockMessageUser(userContent: string) {
+  async function stockMessageUser(userContent: any) {
+    console.log('🚀 ~ stockMessageUser ~ userContent:', userContent);
     let lengthMessage = messages.length + 1;
 
     const newMessages: MessageAttributes[] = [
@@ -141,6 +142,21 @@ function ChatContextProvider({ children, useNotification }: any) {
     updateMessages(newMessages);
     updateHistoryChat(newMessages);
     await requestChatConversation(userContent);
+  }
+
+  async function stockMessageUserTranscription(userContent: any) {
+    let lengthMessage = messages.length + 1;
+
+    const newMessages: MessageAttributes[] = [
+      {
+        id: lengthMessage,
+        role: 'user',
+        content: userContent,
+        date: new Date().toLocaleTimeString(selectedLanguage),
+      },
+    ];
+    updateMessages(newMessages);
+    updateHistoryChat(newMessages);
   }
 
   async function requestChatConversation(userContent: string) {
@@ -223,9 +239,10 @@ function ChatContextProvider({ children, useNotification }: any) {
     newMessages.push({
       id: lengthMessage++,
       role: 'assistant',
-      content: "Il semble que j'ai mal interprété votre question. Je vais essayer de reformuler votre question pour mieux répondre à vos attentes. Voici 3 propositions de questions similaires à votre question, cliquez sur celle qui correspond au mieux à ce que vous avez en tête :",
+      content:
+        "Il semble que j'ai mal interprété votre question. Je vais essayer de reformuler votre question pour mieux répondre à vos attentes. Voici 3 propositions de questions similaires à votre question, cliquez sur celle qui correspond au mieux à ce que vous avez en tête :",
       date: new Date().toLocaleTimeString(selectedLanguage),
-    })
+    });
     propositionChatConversation.map((proposition: MessageType) => {
       lengthMessage++;
       newMessages.push({
@@ -239,14 +256,13 @@ function ChatContextProvider({ children, useNotification }: any) {
 
     updateMessages(newMessages);
     whoIsWritten('none');
-
   }
 
   function setVoteUser(vote: number) {
     setVote(vote);
   }
 
-  async function sendFeedback( comment: string) {
+  async function sendFeedback(comment: string) {
     const responseApi: any = await feedbackApiFrontChatBot(vote, comment);
     if (responseApi.message === 'failure') {
       getMessageToNotification(responseApi.status, responseApi.details);
@@ -303,6 +319,7 @@ function ChatContextProvider({ children, useNotification }: any) {
               messages,
               requestChatConversation,
               stockMessageUser,
+              stockMessageUserTranscription,
               reformulateChatConversation,
               endConversation,
               procedures,
@@ -310,7 +327,7 @@ function ChatContextProvider({ children, useNotification }: any) {
               whoIsWritten,
               isUserWritten,
               isBotWritten,
-              setVoteUser
+              setVoteUser,
             }}
           >
             {children}
@@ -325,14 +342,15 @@ function ChatContextProvider({ children, useNotification }: any) {
             messages,
             requestChatConversation,
             stockMessageUser,
+            stockMessageUserTranscription,
             reformulateChatConversation,
             endConversation,
             procedures,
             sendFeedback,
             whoIsWritten,
             isUserWritten,
-              isBotWritten,
-              setVoteUser
+            isBotWritten,
+            setVoteUser,
           }}
         >
           {children}

@@ -326,10 +326,10 @@ input::-webkit-inner-spin-button {
 }
 
 .modal-parameter {
-  @apply w-1/2 h-1/2 bg-third rounded-lg;
+  @apply z-30 p-4 w-fit h-fit bg-white rounded-lg;
 }
 
-#form {
+form {
   @apply flex flex-col justify-around items-center gap-4;
 }
 

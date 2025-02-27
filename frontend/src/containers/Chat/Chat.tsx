@@ -19,6 +19,7 @@ import icons from '../../constants/icons';
 import HeaderChat from './HeaderChat';
 import FooterChat from './FooterChat';
 import Modal from '../Modal/Modal';
+import useTranscription from '../../hooks/TranscriptionProvider';
 
 interface IChatAttributes {
   selectedPanel: 'chat' | 'procedure';
@@ -31,18 +32,34 @@ export default function Chat({
 }: IChatAttributes) {
   //Init Component
   //
-  const { messages, reformulateChatConversation, isUserWritten, isBotWritten } =
-    useChat();
+  const {
+    messages,
+    reformulateChatConversation,
+    isUserWritten,
+    isBotWritten,
+    stockMessageUserTranscription
+  } = useChat();
+  const { returnMessage } = useTranscription();
   // Check selected language by user
   const { userLanguage } = useLanguage();
   const autoScrollMessage = useRef<HTMLDivElement | null>(null);
-  const [isOpenModalFeedback, setIsOpenModalFeedback] = useState<boolean>(false);
+  const [isOpenModalFeedback, setIsOpenModalFeedback] =
+    useState<boolean>(false);
 
   useEffect(() => {
-    if (isOpenModalFeedback) {      
+    if (isOpenModalFeedback) {
       renderingModalFeedback();
     }
   }, [isOpenModalFeedback]);
+
+  useEffect(() => {
+    async function wipTranscribe() {
+      if (returnMessage) {        
+        await stockMessageUserTranscription(returnMessage);
+      }
+    }
+    wipTranscribe();
+  }, [returnMessage]);
 
   useEffect(() => {
     renderingMessages();
@@ -86,15 +103,13 @@ export default function Chat({
   }
 
   function renderingModalFeedback() {
-    const className = isOpenModalFeedback ? "flex flex-row overflow-y-auto overflow-x-hidden absolute z-50 justify-center items-center w-full h-3/4" : "hidden"
+    const className = isOpenModalFeedback
+      ? 'flex flex-row overflow-y-auto overflow-x-hidden absolute z-50 justify-center items-center w-full h-3/4'
+      : 'hidden';
     return (
       <>
-        <div
-          id="authentication-modal"
-          aria-hidden="true"
-          className={className}
-        >
-          <Modal setIsOpenModalFeedback={setIsOpenModalFeedback}/>
+        <div id="authentication-modal" aria-hidden="true" className={className}>
+          <Modal setIsOpenModalFeedback={setIsOpenModalFeedback} />
         </div>
       </>
     );

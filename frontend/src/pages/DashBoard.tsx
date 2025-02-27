@@ -10,6 +10,7 @@ import IconButton from '../components/Buttons/IconButton';
 import ModalParameter from '../containers/ModalParameter/ModalParameter';
 import { ModalParameterAttributes } from '../types/modal/modal.type';
 import SideBar from '../containers/SideBar/SideBar';
+import useTranscription from '../hooks/TranscriptionProvider';
 
 export default function DashBoard() {
   //Init Component
@@ -19,6 +20,8 @@ export default function DashBoard() {
   // Check language selected
   const { selectedLanguage } = useLanguage();
 
+  const { isOpenModal } = useTranscription();
+
   // Check opening sideBar default is true
   const [isOpenSideBar, setIsOpenSideBar] = useState<boolean>(false);
 
@@ -27,11 +30,6 @@ export default function DashBoard() {
   // Check opening ModalParameter default is false
   const [isOpenModalParameter, setIsOpenModalParameter] =
     useState<ModalParameterAttributes | null>(null);
-
-  // Hook to render ModalParameter according user selection
-  useEffect(() => {
-    renderingModalParameter;
-  }, [setIsOpenModalParameter]);
 
   // Function to switch Open/Close SideBar
   function toggleOpenCloseSideBar() {
@@ -52,17 +50,7 @@ export default function DashBoard() {
 
   // Rendering Modal Parameter according user selection
   function renderingModalParameter() {
-    return (
-      <>
-        {/* Modal Parameter */}
-        {isOpenModalParameter && isOpenModalParameter.isOpen && (
-          <ModalParameter
-            setIsOpenModalParameterItem={setIsOpenModalParameter}
-            isOpenModalParameterItem={isOpenModalParameter}
-          />
-        )}
-      </>
-    );
+    return <>{isOpenModal ? <ModalParameter /> : null}</>;
   }
 
   return (
@@ -78,8 +66,9 @@ export default function DashBoard() {
       {/* Dashboard section */}
       <div id="dashboard" onClick={closeModalByClickBackGround}>
         {/* Rendering ModalParameter */}
-        {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' &&
-          renderingModalParameter()}
+        {import.meta.env.VITE_OPT_AUDIO_PARAMETERS === 'true' && isOpenModal
+          ? renderingModalParameter()
+          : null}
 
         {/* Sidebar section */}
         {/* Button toggle Open/Close SideBar */}
