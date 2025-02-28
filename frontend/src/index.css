@@ -271,6 +271,10 @@ input[type='text'] {
   @apply absolute text-secondary right-14 inline-block  hover:text-third hover:text-secondary h-full;
 }
 
+.icon-mute {
+  @apply absolute text-secondary right-28 inline-block  hover:text-third hover:text-secondary h-full;
+}
+
 /* Inputs Evaluate */
 
 /* Chrome, Safari, Edge, Opera */

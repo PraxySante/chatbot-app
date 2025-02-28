@@ -1,5 +1,5 @@
-import { TranslateAttributes } from "../languages/translate.type";
-import { MessageAttributes } from "../messages/messages.type";
+import { TranslateAttributes } from '../languages/translate.type';
+import { MessageAttributes } from '../messages/messages.type';
 
 export type ChatContextAttributes = {
   isRestart: boolean;
@@ -10,6 +10,7 @@ export type ChatContextAttributes = {
   requestChatConversation: (userContent: string) => void;
   stockMessageUser: (userContent: string) => void;
   stockMessageUserTranscription: (userContent: string) => void;
+  stockMessageAssistantTranscription: (reponseChatConversation: any) => void;
   reformulateChatConversation: () => void;
   endConversation: () => void;
   procedures: any;
@@ -17,9 +18,8 @@ export type ChatContextAttributes = {
   whoIsWritten: (role: string) => void;
   isUserWritten: boolean;
   isBotWritten: boolean;
-  setVoteUser:(vote:number)=>void
+  setVoteUser: (vote: number) => void;
 };
-
 
 export type LanguageContextAttributes = {
   isSelectLanguage: boolean;

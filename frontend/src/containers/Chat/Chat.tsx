@@ -19,7 +19,6 @@ import icons from '../../constants/icons';
 import HeaderChat from './HeaderChat';
 import FooterChat from './FooterChat';
 import Modal from '../Modal/Modal';
-import useTranscription from '../../hooks/TranscriptionProvider';
 
 interface IChatAttributes {
   selectedPanel: 'chat' | 'procedure';
@@ -37,9 +36,7 @@ export default function Chat({
     reformulateChatConversation,
     isUserWritten,
     isBotWritten,
-    stockMessageUserTranscription
   } = useChat();
-  const { returnMessage } = useTranscription();
   // Check selected language by user
   const { userLanguage } = useLanguage();
   const autoScrollMessage = useRef<HTMLDivElement | null>(null);
@@ -51,15 +48,6 @@ export default function Chat({
       renderingModalFeedback();
     }
   }, [isOpenModalFeedback]);
-
-  useEffect(() => {
-    async function wipTranscribe() {
-      if (returnMessage) {        
-        await stockMessageUserTranscription(returnMessage);
-      }
-    }
-    wipTranscribe();
-  }, [returnMessage]);
 
   useEffect(() => {
     renderingMessages();

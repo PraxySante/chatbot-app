@@ -1,14 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useLanguage } from '../hooks/UseLanguage';
 import icons from '../constants/icons';
 
 import Header from '../containers/Header/Header';
 import Panel from '../containers/Panel/Panel';
-import ModalMenu from '../containers/ModalMenu/ModalMenu';
 import IconButton from '../components/Buttons/IconButton';
 import ModalParameter from '../containers/ModalParameter/ModalParameter';
-import { ModalParameterAttributes } from '../types/modal/modal.type';
 import SideBar from '../containers/SideBar/SideBar';
 import useTranscription from '../hooks/TranscriptionProvider';
 
@@ -28,8 +26,8 @@ export default function DashBoard() {
   // Check opening ModalMenu default is false
   const [isOpenModalMenu, setIsOpenModalMenu] = useState<boolean>(false);
   // Check opening ModalParameter default is false
-  const [isOpenModalParameter, setIsOpenModalParameter] =
-    useState<ModalParameterAttributes | null>(null);
+  // const [isOpenModalParameter, setIsOpenModalParameter] =
+  //   useState<ModalParameterAttributes | null>(null);
 
   // Function to switch Open/Close SideBar
   function toggleOpenCloseSideBar() {
@@ -56,13 +54,13 @@ export default function DashBoard() {
   return (
     <>
       {/* Display Menu parameters according config */}
-      {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' && (
+      {/* {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' && (
         <>
           {isOpenModalMenu ? (
             <ModalMenu setIsOpenModalParameter={setIsOpenModalParameter} />
           ) : null}
         </>
-      )}
+      )} */}
       {/* Dashboard section */}
       <div id="dashboard" onClick={closeModalByClickBackGround}>
         {/* Rendering ModalParameter */}

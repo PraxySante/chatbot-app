@@ -145,14 +145,13 @@ export default class Transcription {
   async startTranscription(isDictation: boolean): Promise<void> {
     const response = await startTranscription(this.authToken);
 
-    const { message, data } = response.data;
+    const { data } = response.data;
 
     if (data.uuid) {
       this.transcriptionUuid = data.uuid;
       this.startRecording(isDictation);
     } else {
       this.isRecording = false;
-      console.log(message);
     }
   }
 

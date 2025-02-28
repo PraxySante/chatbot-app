@@ -3,6 +3,7 @@ import { getKeyRedis } from "../../datamapper/redis.datamapper";
 import { ResponseFailureType } from "../../types/chatbot.type";
 import { ResponseKeyRedisType } from "../../types/redis.type";
 import { WebSocketTranscription } from "../WebSocketTranscription/WebSocketTranscription.class";
+import { startTranscription } from "../ApiTranscription/transcription.service";
 
 // Modification pour WebSocketServerClass.ts
 export class WebSocketServerClass {
@@ -51,19 +52,19 @@ export class WebSocketServerClass {
 
       const userUuid = `${details.project}-${ip}`;
       const authToken = details?.authToken;
-      console.log("🚀 ~ WebSocketServerClass ~ startConnection ~ authToken:", authToken)
-      console.log("🚀 ~ WebSocketServerClass ~ startConnection ~ userUuid:", userUuid)
       const userLanguage = details?.language;
-      console.log("🚀 ~ WebSocketServerClass ~ startConnection ~ userLanguage:", userLanguage)
+      const uuidChat = details?.uuid;
 
       // Créer une transcription et un WebSocket une seule fois
-      //const uuidTranscription = await startTranscription(authToken);
-      const uuidTranscription = "dfabc069fded42c2b3bf6288a9a748bb"
+      const uuidTranscription = await startTranscription(authToken);
+      //const uuidTranscription = "dfabc069fded42c2b3bf6288a9a748bb"
       
       // Créer une nouvelle connexion WebSocket vers l'API 3
       const wsTranscription = new WebSocketTranscription(
         `${process.env.WS_API_TRANSCRIPTION}/${uuidTranscription}?token=${authToken}&user_uuid=${userUuid}&language=${userLanguage}&dictation_mode=false`,
-        ws
+        ws,
+        uuidChat,
+        authToken
       );
       
       // Démarrer la connexion à l'API 3
@@ -102,7 +103,6 @@ export class WebSocketServerClass {
 
   closeConnection() {
     try {
-      
       this.wss.close();
     } catch (error) {
       console.error(error);

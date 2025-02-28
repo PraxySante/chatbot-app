@@ -1,59 +1,165 @@
 import { WebSocket } from "ws";
+import { ResponseMessageType } from "../../types/chatbot.type";
+import { axiosChatBot } from "../ChatBot/axiosChatBot.service";
 
 export class WebSocketTranscription {
-  wsAddressApi: string = "";
-  protected wsParent!: WebSocket;
-  protected wsTranscription!: WebSocket;
-  protected isConnected: boolean = false;
+	wsAddressApi: string = "";
+	protected wsParent!: WebSocket;
+	protected wsTranscription!: WebSocket;
+	protected uuidChat!: string;
+	protected authToken!: string;
+	protected isConnected: boolean = false;
+	protected historyChat: { role: string; content: string }[] = [];
+	protected requestUserMessage!: { role: string; content: string };
+	protected chatConversation!: any;
 
-  constructor(wsAddressApi: string, wsParent: WebSocket) {
-    this.wsAddressApi = wsAddressApi;
-    this.wsParent = wsParent;
-  }
+	constructor(
+		wsAddressApi: string,
+		wsParent: WebSocket,
+		uuidChat: string,
+		authToken: string
+	) {
+		this.wsAddressApi = wsAddressApi;
+		this.wsParent = wsParent;
+		this.uuidChat = uuidChat;
+		this.authToken = authToken;
+	}
 
-  startWebsocketApi() {
-    console.log("✅ Initialisation WebSocket API Transcription");
-    
-    // Créer la connexion
-    this.wsTranscription = new WebSocket(this.wsAddressApi);
+	startWebsocketApi() {
+		console.log("✅ Initialisation WebSocket API Transcription");
 
-    this.wsTranscription.on("open", () => {
-      console.log("✅ Connecté à l'API Transcription");
-      this.isConnected = true;
-    });
+		// Créer la connexion
+		this.wsTranscription = new WebSocket(this.wsAddressApi);
 
-    this.wsTranscription.on("message", (msg) => {
-      console.log("📩 Message reçu de API 3:", msg.toString()); // Debug API 3 → API 1
-      if (this.wsParent.readyState === WebSocket.OPEN) {
-        this.wsParent.send(msg.toString()); // Relais API3 → Front
-      }
-    });
+		this.wsTranscription.on("open", () => {
+			console.log("✅ Connecté à l'API Transcription");
+			this.isConnected = true;
+		});
 
-    this.wsTranscription.on("close", (code, reason) => {
-      console.log(`❌ Déconnecté de API 3 (Code: ${code}, Reason: ${reason})`);
-      this.isConnected = false;
-    });
+		this.wsTranscription.on("message", (msg) => {
+			if (this.wsParent.readyState === WebSocket.OPEN) {
 
-    this.wsTranscription.on("error", (error) => {
-      console.error("❌ Erreur WebSocketTranscription:", error);
-      this.isConnected = false;
-    });
+				this.wsParent.send(msg.toString());
+				const userMessage = JSON.parse(msg.toString());
 
-    // Écoute des messages du Front à relayer vers API 3
-    this.wsParent.on("message", (message) => {
-      // Vérifier que la connexion est bien établie
-      if (this.isConnected && this.wsTranscription.readyState === WebSocket.OPEN) {
-        console.log("🚀 Relais message du Front vers API 3");
-        this.wsTranscription.send(message);
-      } else {
-        console.log("⚠️ Impossible d'envoyer le message, connexion non établie");
-      }
-    });
-  }
-
-  closeConnection() {
-    if (this.wsTranscription && this.wsTranscription.readyState === WebSocket.OPEN) {
-      this.wsTranscription.close();
+        const transcript = userMessage?.message?.transcript?.[0]?.[1];
+        
+        if (transcript) {
+            const preparedUserMessage = {
+                role: "user",
+                content: transcript,
+            };
+            this.updateHistoryChatAndRequest(preparedUserMessage);
+            this.requestTranscriptionToLLM();
+        } 
     }
-  }
+			
+		});
+
+		this.wsTranscription.on("close", (code, reason) => {
+			console.log(`❌ Déconnecté de API 3 (Code: ${code}, Reason: ${reason})`);
+			this.isConnected = false;
+		});
+
+		this.wsTranscription.on("error", (error) => {
+			console.error("❌ Erreur WebSocketTranscription:", error);
+			this.isConnected = false;
+		});
+
+		// Écoute des messages du Front à relayer vers API 3
+		this.wsParent.on("message", (message) => {
+			// Vérifier que la connexion est bien établie
+			if (
+				this.isConnected &&
+				this.wsTranscription.readyState === WebSocket.OPEN
+			) {
+				this.wsTranscription.send(message);
+			} else {
+				console.log(
+					"⚠️ Impossible d'envoyer le message, connexion non établie"
+				);
+			}
+		});
+	}
+
+	updateHistoryChatAndRequest(preparedMessage: any) {
+		this.historyChat.push(preparedMessage);
+		if (preparedMessage.role !== "assistant") {
+			this.requestUserMessage = preparedMessage;
+		}
+
+		this.chatConversation = {
+			history: this.historyChat,
+			message: this.requestUserMessage,
+		};
+	}
+
+  async requestTranscriptionToLLM() {
+
+		try {
+			const responseApi: ResponseMessageType = await axiosChatBot.post(
+				`/chat/${this.uuidChat}`,
+				this.chatConversation,
+				{
+					headers: {
+						Authorization: `Bearer ${this.authToken}`,
+					},
+				}
+			);
+
+			// if (
+			// 	responseApi.status !== 200 &&
+			// 	typeof responseApi.details === "string"
+			// ) {
+			// 	return {
+			// 		status: responseApi.status,
+			// 		message: "failure",
+			// 		details: responseApi.details,
+			// 	};
+			// }
+
+			const preparedAssistantMessage = {
+				role: "assistant",
+				content: responseApi.data.message.content,
+			};
+
+			this.updateHistoryChatAndRequest(preparedAssistantMessage);
+
+			// Vérifier que la connexion est toujours active
+			if (this.wsParent.readyState === WebSocket.OPEN) {
+				// Envoyer la réponse du LLM au front
+				this.wsParent.send(
+					JSON.stringify({
+						type: "llm_response",
+						data: {
+							status: responseApi.status,
+							details: responseApi.data.message,
+							sources: [...responseApi.data.sources],
+						},
+					})
+				);
+			}
+		} catch (error: any) {
+			console.error(error.message);
+			this.wsParent.send(
+				JSON.stringify({
+					type: "error",
+					data: {
+						status: error.status,
+						message: "failure",
+						details: error?.message,
+					},
+				})
+			);
+		}
+	}
+
+	closeConnection() {
+		if (
+			this.wsTranscription &&
+			this.wsTranscription.readyState === WebSocket.OPEN
+		) {
+			this.wsTranscription.close();
+		}
+	}
 }

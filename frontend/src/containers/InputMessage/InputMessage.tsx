@@ -9,7 +9,7 @@ import useTranscription from '../../hooks/TranscriptionProvider';
 
 export default function InputMessage() {
   // Init component
-  const { settingsMicrophone, userSelectedMicrophone, isRecord, stopTranscription, startTranscription } = useTranscription();
+  const { settingsMicrophone, userSelectedMicrophone, isRecord, stopTranscription, startTranscription, muteTranscription } = useTranscription();
   // Hook state to get message written by user and bot
   const [userContent, setUserContent] = useState<string>('');
   // Check selected language
@@ -52,7 +52,7 @@ export default function InputMessage() {
     }
   }
 
-  async function sendTranscription(e: any): Promise<void> {
+  async function sendTranscription(): Promise<void> {
     if (!userSelectedMicrophone) {      
       settingsMicrophone();
     } else {
@@ -60,8 +60,12 @@ export default function InputMessage() {
     }
   }
 
-  async function stop(e:any) {
+  async function stop() {
     stopTranscription();
+  }
+
+  async function mute() {
+    muteTranscription();
   }
 
   return (
@@ -84,11 +88,17 @@ export default function InputMessage() {
           onClick={(e) => sendMessage(e)}
         />
       </form>
+      {isRecord ? <IconButton
+        type="submit"
+        className="icon-mute"
+        icon={icons?.neutral}
+        onClick={() => mute()}
+      /> : null}
       <IconButton
         type="submit"
         className="icon-microphone"
         icon={!isRecord ? icons?.microphone : icons?.spinner}
-        onClick={(e) => !isRecord ? sendTranscription(e): stop(e)}
+        onClick={() => !isRecord ? sendTranscription(): stop()}
       />
     </>
   );

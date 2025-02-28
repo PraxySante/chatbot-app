@@ -5,12 +5,23 @@ export class WebSocketFront {
   protected microphoneId!: string;
   protected ws!: WebSocket;
   protected messagesTranscription!: any;
+  protected messagesLLM!: any;
+  protected messagesError!:any
   protected audioConfig!: any;
 
-  constructor(wsAddressApi: string, microphoneId: string, messagesTranscription?:any) {
+  constructor(
+    wsAddressApi: string,
+    microphoneId: string,
+    messagesTranscription?: any,
+    messagesLLM?: any,
+    messagesError?:any
+  ) {
     this.wsAddressApi = wsAddressApi;
     this.microphoneId = microphoneId;
     this.messagesTranscription = messagesTranscription;
+    this.messagesLLM = messagesLLM;
+    this.messagesError = messagesError;
+
   }
 
   startWebsocketApi() {
@@ -22,19 +33,33 @@ export class WebSocketFront {
       console.log('Websocket is opened');
     };
     this.ws.onmessage = (e: any) => {
-      console.log('Message received from : ', JSON.parse(e.data));
-      this.messagesTranscription(JSON.parse(e.data))
+
+      const data = JSON.parse(e.data);
+
+      if (data.type === 'llm_response') {
+        this.messagesLLM(JSON.parse(e.data));
+      }
+
+      if (data.type === 'transcript') {
+        this.messagesTranscription(JSON.parse(e.data));
+      }
+
+      if (data.type === 'error') {
+        this.messagesError(JSON.parse(e.data));
+      }
     };
     this.ws.onclose = () => {
       console.log('Websocket is closed');
     };
 
     this.ws.onerror = (e: any) => {
-      console.log('Message received from : ', e);
+			console.error("❌ Erreur WebSocket:", e);
     };
   }
 
-
+  muteWebsocketApi(isMuted: boolean) {
+    this.audioConfig.hasMutedMicrophone(isMuted);
+  }
 
   closeWebsocketApi() {
     this.audioConfig.stopAudioConfig();
@@ -42,5 +67,4 @@ export class WebSocketFront {
       console.log('Websocket is closed');
     };
   }
-
 }

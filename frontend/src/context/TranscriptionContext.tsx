@@ -3,6 +3,7 @@ import { WebSocketFront } from '../services/Transcription/webSocket.class';
 
 type TranscriptionContextProviderAttributes = {
   startTranscription: () => void;
+  muteTranscription: () => void;
   stopTranscription: () => void;
   settingsMicrophone: () => void;
   selectedMicrophone: (microphone: string) => void;
@@ -11,7 +12,9 @@ type TranscriptionContextProviderAttributes = {
   isOpenModal: boolean;
   userSelectedMicrophone: boolean;
   userMicrophone: any;
-  returnMessage: any;
+  messagesUser: any;
+  messagesLLM: any;
+  messagesError: any;
   isRecord: boolean;
 };
 
@@ -22,9 +25,14 @@ const TranscriptionContext = createContext<
 function TranscriptionContextProvider({ children }: { children: ReactNode }) {
   const [listMicrophones, setListMicrophones] = useState<any>([]);
   const [userMicrophone, setUserMicrophone] = useState<any>();
-  const [messages, setMessages] = useState<any>();
-  const [returnMessage, setReturnMessage] = useState<any>('');
+  const [messagesUser, setMessagesUser] = useState<any>();
+  const [messagesLLM, setMessagesLLM] = useState<any>();
+  const [messagesError, setMessagesError] = useState<any>();
+
+
   const [isRecord, setIsRecord] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
+
 
   const [userSelectedMicrophone, setUserSelectedMicrophone] =
     useState<boolean>(false);
@@ -38,23 +46,18 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
     setUserSelectedMicrophone(false);
   }, []);
 
-  useEffect(() => {
-    if (messages?.message?.transcript?.[0]?.[1]) {
-      console.log(
-        '🚀 ~ useEffect ~ message?.message?.transcript?.[0]?.[1]:',
-        messages?.message?.transcript?.[0]?.[1]
-      );
-      setReturnMessage(messages?.message?.transcript?.[0]?.[1]);
-    }
-  }, [messages]);
-
   function startTranscription() {
     wsTranscriptionRef.current = new WebSocketFront(
       `${import.meta.env.VITE_WS_API_CHATBOT}`,
       userMicrophone.id,
       (message: any) => {
-        console.log('message', message);
-        setMessages(message);
+        setMessagesUser(message);
+      },
+      (message: any) => {
+        setMessagesLLM(message);
+      },
+      (message: any) => {
+        setMessagesError(message);
       }
     );
     setIsRecord(!isRecord);
@@ -64,6 +67,11 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
   function stopTranscription() {
     setIsRecord(!isRecord);
     wsTranscriptionRef.current?.closeWebsocketApi();
+  }
+
+  function muteTranscription() {
+    setIsMuted(!isMuted)
+    wsTranscriptionRef.current?.muteWebsocketApi(!isMuted);
   }
 
   async function populateListMicrophone() {
@@ -117,6 +125,7 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
     <TranscriptionContext.Provider
       value={{
         startTranscription,
+        muteTranscription,
         stopTranscription,
         settingsMicrophone,
         selectedMicrophone,
@@ -125,7 +134,9 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
         isOpenModal,
         userSelectedMicrophone,
         userMicrophone,
-        returnMessage,
+        messagesUser,
+        messagesLLM,
+        messagesError,
         isRecord,
       }}
     >

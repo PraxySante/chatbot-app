@@ -14,10 +14,12 @@ import { ChatContextAttributes } from '../types/provider/provider.type';
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
-function ChatContextProvider({ children, useNotification }: any) {
+function ChatContextProvider({ children, useNotification, useTranscription }: any) {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { selectedLanguage } = useLanguage();
   const { getMessageToNotification } = useNotification();
+  const { messagesUser, messagesLLM, messagesError } = useTranscription();
+
   const [isRestart, setIsRestart] = useState<boolean>(false);
   const [isStart, setIsStart] = useState<boolean>(false);
   const [messages, setMessages] = useState<MessageAttributes[]>([]);
@@ -40,6 +42,31 @@ function ChatContextProvider({ children, useNotification }: any) {
     }
     start();
   }, []);
+
+  useEffect(() => {
+    if (messagesUser?.message?.transcript?.[0]?.[1]) {
+      stockMessageUserTranscription(messagesUser?.message?.transcript?.[0]?.[1]);
+    }
+  }, [messagesUser]);
+
+  useEffect(() => {
+    if (messagesLLM) {
+      stockMessageAssistantTranscription(messagesLLM);
+    }
+  }, [messagesLLM]);
+
+  useEffect(() => {
+    if (messagesError) {
+      if (messagesError.type === 'failure') {
+        getMessageToNotification(
+          messagesError.data.status,
+          messagesError.data.details
+        );
+        return;
+      }
+    }
+  }, [messagesError]);
+
 
   function whoIsWritten(role: string): void {
     switch (role) {
@@ -128,7 +155,6 @@ function ChatContextProvider({ children, useNotification }: any) {
   }
 
   async function stockMessageUser(userContent: any) {
-    console.log('🚀 ~ stockMessageUser ~ userContent:', userContent);
     let lengthMessage = messages.length + 1;
 
     const newMessages: MessageAttributes[] = [
@@ -157,6 +183,61 @@ function ChatContextProvider({ children, useNotification }: any) {
     ];
     updateMessages(newMessages);
     updateHistoryChat(newMessages);
+  }
+
+  async function stockMessageAssistantTranscription(
+    responseChatConversation: any
+  ) {
+    let lengthMessage = messages.length + 1;
+
+    if (responseChatConversation.data.message === 'failure') {
+      getMessageToNotification(
+        responseChatConversation.data.status,
+        responseChatConversation.data.details
+      );
+      return;
+    }
+
+    const newMessages: MessageAttributes[] = [
+      {
+        id: lengthMessage + 1,
+        role: responseChatConversation.data.details.role,
+        content: responseChatConversation.data.details.content,
+        date: new Date().toLocaleTimeString(selectedLanguage),
+      },
+    ];
+
+    if (responseChatConversation.data.sources) {
+      responseChatConversation.data.sources.map((source: SourceType) => {
+        lengthMessage++;
+        const sourceProcedures = {
+          id: lengthMessage,
+          role: responseChatConversation.data.details.role,
+          content: source.doc_name,
+          doc_type: source.doc_type,
+          doc_ref: source.doc_ref,
+          date: new Date().toLocaleTimeString(selectedLanguage),
+        };
+        newMessages.push(sourceProcedures);
+        if (messages.length > 0) {
+          setProcedures((prevHistoryChat) => {
+            return [...prevHistoryChat, ...[sourceProcedures]];
+          });
+        } else {
+          setProcedures(() => {
+            return [...messages, ...[sourceProcedures]];
+          });
+        }
+      });
+      updateMessages(newMessages);
+    }
+
+    updateHistoryChat([
+      {
+        role: `${responseChatConversation.data.details.role}`,
+        content: `${responseChatConversation.data.details.content}`,
+      },
+    ]);
   }
 
   async function requestChatConversation(userContent: string) {
@@ -320,6 +401,7 @@ function ChatContextProvider({ children, useNotification }: any) {
               requestChatConversation,
               stockMessageUser,
               stockMessageUserTranscription,
+              stockMessageAssistantTranscription,
               reformulateChatConversation,
               endConversation,
               procedures,
@@ -343,6 +425,7 @@ function ChatContextProvider({ children, useNotification }: any) {
             requestChatConversation,
             stockMessageUser,
             stockMessageUserTranscription,
+            stockMessageAssistantTranscription,
             reformulateChatConversation,
             endConversation,
             procedures,

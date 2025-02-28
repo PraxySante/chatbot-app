@@ -8,7 +8,6 @@ export default function ModalParameter() {
   const { listMicrophones, stateOpenModal, selectedMicrophone, startTranscription, userMicrophone } = useTranscription();
   
   function selectMicrophone(event: React.ChangeEvent<HTMLSelectElement>) {
-    console.log("🚀 ~ selectMicrophone ~ event.target.value:", event.target.value)
     selectedMicrophone(event.target.value);
   }
 
@@ -19,7 +18,6 @@ export default function ModalParameter() {
   
   async function onSubmit(): Promise<void> {
     if (!userMicrophone && listMicrophones.length > 0) {
-      console.log("🚀 ~ onSubmit ~ listMicrophones[0].label:", listMicrophones[0].label)
       selectedMicrophone(listMicrophones[1].label);
     }
     closeModal();

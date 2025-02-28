@@ -37,6 +37,10 @@ export class AudioConfigClass {
       .then(onSuccess, onError);
   }
 
+  hasMutedMicrophone(hasMuted: boolean) {
+    this.globalStream.getAudioTracks()[0].enabled = !hasMuted;
+  }
+
   stopAudioConfig() {
     // Arrêter les pistes audio du stream
     if (this.globalStream) {

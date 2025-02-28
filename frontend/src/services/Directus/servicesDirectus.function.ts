@@ -40,7 +40,6 @@ import axiosDirectus from "../axiosConfiguration/axiosDirectus.service";
        Historic: historic,
        Question_frequente: often_asked,
      });
-     console.log('🚀 ~ postDirectus ~ reponse:', reponse);
    } catch (error) {
      console.error(error);
    }
