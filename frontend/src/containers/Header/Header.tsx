@@ -55,9 +55,13 @@ export default function Header({
         )}
         <div
           className="flex flex-row gap-2 items-center justify-center border border-secondary rounded-lg p-1 md:p-2 text-blue pointer-cursor hover:bg-secondary hover:text-white"
-          onClick={()=>selectedRestart()}
+          onClick={() => selectedRestart()}
         >
-          <IconButton icon={icons.restart} />
+          <IconButton
+            aria-label="Redémarrer une nouvelle conversation"
+            title="Redémarrer une nouvelle conversation"
+            icon={icons.restart}
+          />
           <Description content={'Redémarrer'} tag={'p'} className={'text-md'} />
         </div>
       </span>

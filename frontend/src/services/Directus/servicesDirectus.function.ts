@@ -27,7 +27,7 @@ import axiosDirectus from "../axiosConfiguration/axiosDirectus.service";
    often_asked,
  }: postDirectusAttributes) {
    try {
-     const reponse = await axiosDirectus.post('/', {
+     await axiosDirectus.post('/', {
        User_info: user,
        Date: date,
        Asked_question: userQuestion,

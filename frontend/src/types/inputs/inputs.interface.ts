@@ -29,6 +29,7 @@ export interface IInputEvaluate {
 }
 
 export interface IIconButton {
+  title?: string;
   type?: 'button' | 'submit';
   disabled?: boolean;
   className?: string;

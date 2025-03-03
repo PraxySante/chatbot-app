@@ -17,7 +17,7 @@ export default function InputMessage() {
     stopTranscription,
     startTranscription,
     muteTranscription,
-    isMuted
+    isMuted,
   } = useTranscription();
   // Hook state to get message written by user and bot
   const [userContent, setUserContent] = useState<string>('');
@@ -38,7 +38,6 @@ export default function InputMessage() {
         video: false,
       })
       .then(setAudio);
-    
   }, [userSelectedMicrophone, widthUser]);
 
   // Function Get any change from user message
@@ -88,26 +87,24 @@ export default function InputMessage() {
     if (!userSelectedMicrophone) {
       return;
     }
-    
+
     setIsButtonPressed(true);
-    
+
     if (!isRecord) {
       await startTranscription();
     } else if (isMuted) {
       whoIsWritten('user');
       await muteTranscription();
     }
-    
-
   }
 
   async function handleMicrophoneUp(): Promise<void> {
     if (!userSelectedMicrophone) {
       return;
     }
-    
+
     setIsButtonPressed(false);
-    
+
     if (isRecord && !isMuted) {
       whoIsWritten('none');
       await muteTranscription();
@@ -146,6 +143,8 @@ export default function InputMessage() {
               content={userLanguage ? userLanguage?.chat_question_title : ''}
             />
             <IconButton
+              aria-label="Envoyer vos questions"
+              title="Envoyer vos questions"
               type="submit"
               className="icon-send-message"
               icon={icons?.sendMessage}
@@ -155,6 +154,8 @@ export default function InputMessage() {
         )}
       </form>
       <IconButton
+        aria-label="Maintenir le bouton pour parler et relâcher le bouton pour envoyer"
+        title="Maintenir pour parler, relâcher pour envoyer"
         type="button"
         className={`icon-microphone ${isButtonPressed ? 'active-microphone' : ''}`}
         icon={icons?.microphone}
@@ -165,6 +166,7 @@ export default function InputMessage() {
         onTouchEnd={handleMicrophoneUp}
         onMouseLeave={isButtonPressed ? handleMicrophoneUp : undefined}
       />
+
       {isRecord && !isMuted && (
         <IconButton
           type="button"

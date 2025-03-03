@@ -13,6 +13,7 @@ export default function IconButton({
   onTouchStart,
   onTouchEnd,
   content,
+  title,
 }: IIconButton) {
   const [formatClassName, setFormatClassName] = useState<string>('');
 
@@ -27,6 +28,7 @@ export default function IconButton({
   return (
     <>
       <button
+        title={title}
         disabled={disabled}
         className={formatClassName}
         type={type}
