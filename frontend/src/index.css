@@ -259,10 +259,13 @@ input[type='text'] {
   @apply relative flex flex-row w-full;
 }
 
-.container-input_vizualizer {
-  @apply rounded-xl border contained border-gray-200 h-fit w-full bg-white pr-9;
+.visualizer-container {
+  @apply relative w-full h-[50px] bg-gray-100 border-2 border-gray-300 rounded-lg flex items-center justify-center;
 }
 
+.visualizer-canvas {
+  @apply w-full h-full rounded-lg;
+}
 .input-user {
   @apply p-4 border border-primary outlined;
 }
@@ -275,7 +278,7 @@ input[type='text'] {
   @apply absolute text-secondary right-14 inline-block  hover:text-third hover:text-secondary h-full;
 }
 
-.icon-mute {
+.icon-stop {
   @apply absolute text-secondary right-4 inline-block  hover:text-third hover:text-secondary h-full;
 }
 

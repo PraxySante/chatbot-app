@@ -17,8 +17,9 @@ export default function InputMessage() {
     stopTranscription,
     startTranscription,
     muteTranscription,
+    isMuted
   } = useTranscription();
-  // Hoo state to get message written by user and bot
+  // Hook state to get message written by user and bot
   const [userContent, setUserContent] = useState<string>('');
   // Check selected language
   const { userLanguage } = useLanguage();
@@ -26,6 +27,7 @@ export default function InputMessage() {
 
   const [audio, setAudio] = useState<MediaStream | null>(null);
   const [widthUser, setWidthUser] = useState<any>();
+  const [isButtonPressed, setIsButtonPressed] = useState<boolean>(false);
 
   useEffect(() => {
     const width = document.querySelector('.container-input')?.clientWidth;
@@ -36,7 +38,8 @@ export default function InputMessage() {
         video: false,
       })
       .then(setAudio);
-  }, [isRecord, widthUser]);
+    
+  }, [userSelectedMicrophone, widthUser]);
 
   // Function Get any change from user message
   function onChange(e: any): void {
@@ -48,7 +51,7 @@ export default function InputMessage() {
     }
   }
 
-  // Function sending message atfer press enter
+  // Function sending message after press enter
   async function handleKeyDown(e: any): Promise<void> {
     if (e.key === 'Enter' && e.target.value !== '') {
       e.preventDefault();
@@ -74,41 +77,61 @@ export default function InputMessage() {
     }
   }
 
-  async function sendTranscription(): Promise<void> {
+  async function SelectMicrophone() {
+    //Microphone not selected
     if (!userSelectedMicrophone) {
-      settingsMicrophone();
-    } else {
-      startTranscription();
+      await settingsMicrophone();
     }
   }
 
-  async function stop() {
-    stopTranscription();
+  async function handleMicrophoneDown(): Promise<void> {
+    if (!userSelectedMicrophone) {
+      return;
+    }
+    
+    setIsButtonPressed(true);
+    
+    if (!isRecord) {
+      await startTranscription();
+    } else if (isMuted) {
+      whoIsWritten('user');
+      await muteTranscription();
+    }
+    
+
   }
 
-  async function mute() {
-    muteTranscription();
+  async function handleMicrophoneUp(): Promise<void> {
+    if (!userSelectedMicrophone) {
+      return;
+    }
+    
+    setIsButtonPressed(false);
+    
+    if (isRecord && !isMuted) {
+      whoIsWritten('none');
+      await muteTranscription();
+    }
+  }
+
+  async function stopRecording(): Promise<void> {
+    stopTranscription();
   }
 
   return (
     <>
       <form className="container-input">
-        {isRecord ? (
+        {isRecord && !isMuted ? (
           <Visualizer
             audio={audio}
             mode="continuous"
-            autoStart={isRecord ? true : false}
+            autoStart={true}
             strokeColor="green"
           >
             {({ canvasRef }) => (
-              <>
-                <canvas
-                  ref={canvasRef}
-                  width={widthUser}
-                  height={50}
-                  className=".container-input_vizualizer"
-                />
-              </>
+              <div className="visualizer-container">
+                <canvas ref={canvasRef} className="visualizer-canvas" />
+              </div>
             )}
           </Visualizer>
         ) : (
@@ -131,19 +154,25 @@ export default function InputMessage() {
           </>
         )}
       </form>
-      {isRecord ? (
-        <IconButton
-          type="submit"
-          className="icon-mute"
-          icon={icons?.neutral}
-          onClick={() => mute()}
-        />
-      ) : null}
       <IconButton
-        type="submit"
-        className="icon-microphone"
+        type="button"
+        className={`icon-microphone ${isButtonPressed ? 'active-microphone' : ''}`}
         icon={icons?.microphone}
-        onClick={() => (!isRecord ? sendTranscription() : stop())}
+        onClick={!userSelectedMicrophone ? SelectMicrophone : undefined}
+        onMouseDown={handleMicrophoneDown}
+        onMouseUp={handleMicrophoneUp}
+        onTouchStart={handleMicrophoneDown}
+        onTouchEnd={handleMicrophoneUp}
+        onMouseLeave={isButtonPressed ? handleMicrophoneUp : undefined}
       />
+      {isRecord && !isMuted && (
+        <IconButton
+          type="button"
+          className="icon-stop"
+          icon={icons?.stop}
+          onClick={stopRecording}
+        />
+      )}
     </>
-  );}
+  );
+}

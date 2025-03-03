@@ -39,7 +39,7 @@ export default function ListMessage({
               <Button
                 type={'button'}
                 content={`${message.content}`}
-                onClick={() => handleClick(message.content,'')}
+                onClick={() => handleClick(message.content, '')}
               ></Button>
             </span>
           );
@@ -48,13 +48,20 @@ export default function ListMessage({
           return (
             <span className="flex flex-row justify-start cursor-pointer">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
-              <Button
-                type={'button'}
-                content={`Voici un lien qui peut vous intéresser :\n${message.content}`}
-                onClick={() => handleClick(message.content, message.doc_ref)}
-              >
-                <IconButton icon={icons.chain} />
-              </Button>
+              <span className="w-full flex flex-row justify-start cursor-pointer">
+                {/* <Button
+                  type={'button'}
+                  content={`Voici un lien qui peut vous intéresser :\n${message.content}`}
+                  onClick={() => handleClick(message.content, message.doc_ref)}
+                ></Button> */}
+                <IconButton
+                  className={'flex align-center btn_actions border border-solid border-secondary whitespace-pre-line'}
+                  type={'button'}
+                  icon={icons.chain}
+                  content={`Voici un lien qui peut vous intéresser :\n${message.content}`}
+                  onClick={() => handleClick(message.content, message.doc_ref)}
+                />
+              </span>
             </span>
           );
         }
@@ -81,7 +88,10 @@ export default function ListMessage({
     }
   }
 
-  async function handleClick(requestReformulation: string, url: string|undefined) {
+  async function handleClick(
+    requestReformulation: string,
+    url: string | undefined
+  ) {
     switch (message.doc_type) {
       case 'url':
         window.open(url, '_blank', 'noopener,noreferrer');

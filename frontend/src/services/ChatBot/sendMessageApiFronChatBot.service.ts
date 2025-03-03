@@ -8,8 +8,8 @@ export async function sendMessageApiFrontChatBot(
 ): Promise<ResponseMessageType | ReponseFailureType> {
   try {
     const response: AxiosResponse = await axiosAuthSecret.post(`/chat`, {
-      project: 'Foch',
-      language: 'fr',
+      project: import.meta.env.VITE_BOT_ORIGIN,
+      language: import.meta.env.VITE_BOT_LANGUAGE,
       history: [...historyMessages],
       message: requestMessageUser,
     });

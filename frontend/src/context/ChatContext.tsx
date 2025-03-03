@@ -183,11 +183,14 @@ function ChatContextProvider({ children, useNotification, useTranscription }: an
     ];
     updateMessages(newMessages);
     updateHistoryChat(newMessages);
+    whoIsWritten('assistant');
+
   }
 
   async function stockMessageAssistantTranscription(
     responseChatConversation: any
   ) {
+
     let lengthMessage = messages.length + 1;
 
     if (responseChatConversation.data.message === 'failure') {
@@ -238,6 +241,8 @@ function ChatContextProvider({ children, useNotification, useTranscription }: an
         content: `${responseChatConversation.data.details.content}`,
       },
     ]);
+    whoIsWritten('none');
+
   }
 
   async function requestChatConversation(userContent: string) {

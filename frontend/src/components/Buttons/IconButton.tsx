@@ -10,7 +10,9 @@ export default function IconButton({
   onMouseDown,
   onMouseLeave,
   onMouseUp,
-  content
+  onTouchStart,
+  onTouchEnd,
+  content,
 }: IIconButton) {
   const [formatClassName, setFormatClassName] = useState<string>('');
 
@@ -32,8 +34,11 @@ export default function IconButton({
         onMouseDown={onMouseDown}
         onMouseLeave={onMouseLeave}
         onMouseUp={onMouseUp}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
       >
-        {icon}{content}
+        {icon}
+        {content}
       </button>
     </>
   );

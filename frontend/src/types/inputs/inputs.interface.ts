@@ -37,6 +37,8 @@ export interface IIconButton {
   onMouseDown?: (e?: any) => void;
   onMouseLeave?: (e?: any) => void;
   onMouseUp?: (e?: any) => void;
+  onTouchStart?: (e?: any) => void;
+  onTouchEnd?: (e?: any) => void;
   content?:string
 }
 

@@ -16,6 +16,7 @@ type TranscriptionContextProviderAttributes = {
   messagesLLM: any;
   messagesError: any;
   isRecord: boolean;
+  isMuted: boolean;
 };
 
 const TranscriptionContext = createContext<
@@ -62,6 +63,7 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
     );
     setIsRecord(!isRecord);
     wsTranscriptionRef.current.startWebsocketApi();
+    muteTranscription()
   }
 
   function stopTranscription() {
@@ -138,6 +140,7 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
         messagesLLM,
         messagesError,
         isRecord,
+        isMuted,
       }}
     >
       {children}

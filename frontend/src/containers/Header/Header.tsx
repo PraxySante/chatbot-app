@@ -58,7 +58,7 @@ export default function Header({
           onClick={()=>selectedRestart()}
         >
           <IconButton icon={icons.restart} />
-          <Description content={'Restart'} tag={'p'} className={'hidden sm:text-sm hover:text-secondary'} />
+          <Description content={'Restart'} tag={'p'} className={'text-md'} />
         </div>
       </span>
     </div>
