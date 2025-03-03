@@ -34,6 +34,9 @@ export interface IIconButton {
   className?: string;
   icon: ReactNode;
   onClick?: (e: any) => void;
+  onMouseDown?: (e?: any) => void;
+  onMouseLeave?: (e?: any) => void;
+  onMouseUp?: (e?: any) => void;
   content?:string
 }
 

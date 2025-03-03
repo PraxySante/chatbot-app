@@ -259,6 +259,10 @@ input[type='text'] {
   @apply relative flex flex-row w-full;
 }
 
+.container-input_vizualizer {
+  @apply rounded-xl border contained border-gray-200 h-fit w-full bg-white pr-9;
+}
+
 .input-user {
   @apply p-4 border border-primary outlined;
 }
@@ -272,7 +276,7 @@ input[type='text'] {
 }
 
 .icon-mute {
-  @apply absolute text-secondary right-28 inline-block  hover:text-third hover:text-secondary h-full;
+  @apply absolute text-secondary right-4 inline-block  hover:text-third hover:text-secondary h-full;
 }
 
 /* Inputs Evaluate */
