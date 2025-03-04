@@ -47,7 +47,7 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
     setUserSelectedMicrophone(false);
   }, []);
 
-  function startTranscription() {
+  async function startTranscription() {
     wsTranscriptionRef.current = new WebSocketFront(
       `${import.meta.env.VITE_WS_API_CHATBOT}`,
       userMicrophone.id,
@@ -62,7 +62,7 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
       }
     );
     setIsRecord(!isRecord);
-    wsTranscriptionRef.current.startWebsocketApi();
+    await wsTranscriptionRef.current.startWebsocketApi();
     muteTranscription()
   }
 

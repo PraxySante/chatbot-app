@@ -10,35 +10,42 @@ export class AudioConfigClass {
     this.context = new AudioContext();
   }
 
-  startAudioConfig() {
-    let onSuccess = async (stream: any) => {
-      // Push user config to server
-      this.globalStream = stream;
-      const input = this.context.createMediaStreamSource(stream);
-      const recordingNode = await this.setupRecordingWorkletNode();
-      recordingNode.port.onmessage = (event) => {
-        this.processAudio(event.data);
+  startAudioConfig(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      let onSuccess = async (stream: MediaStream) => {
+        this.globalStream = stream;
+        const input = this.context.createMediaStreamSource(stream);
+        const recordingNode = await this.setupRecordingWorkletNode();
+        recordingNode.port.onmessage = (event) => {
+          this.processAudio(event.data);
+        };
+        input.connect(recordingNode);
+        resolve(); // 🔹 On résout la promesse une fois le micro prêt
       };
-      input.connect(recordingNode);
-    };
-    let onError = (error: any) => {
-      console.error(error);
-    };
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: {
-          deviceId: { exact: this.selectAudioInput },
-          echoCancellation: true,
-          autoGainControl: false,
-          noiseSuppression: true,
-          //latency: 0,
-        },
-      })
-      .then(onSuccess, onError);
+  
+      let onError = (error: any) => {
+        console.error(error);
+        reject(error); // 🔹 On rejette en cas d'erreur
+      };
+  
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: {
+            deviceId: { exact: this.selectAudioInput },
+            echoCancellation: true,
+            autoGainControl: false,
+            noiseSuppression: true,
+          },
+        })
+        .then(onSuccess)
+        .catch(onError);
+    });
   }
 
   hasMutedMicrophone(hasMuted: boolean) {
-    this.globalStream.getAudioTracks()[0].enabled = !hasMuted;
+    if (this.globalStream.getAudioTracks()[0]) {      
+      this.globalStream.getAudioTracks()[0].enabled = !hasMuted;
+    }
   }
 
   stopAudioConfig() {

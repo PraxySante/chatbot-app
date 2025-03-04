@@ -94,7 +94,7 @@ export default function InputMessage() {
       await startTranscription();
     } else if (isMuted) {
       whoIsWritten('user');
-      await muteTranscription();
+      muteTranscription();
     }
   }
 
@@ -107,7 +107,7 @@ export default function InputMessage() {
 
     if (isRecord && !isMuted) {
       whoIsWritten('none');
-      await muteTranscription();
+      muteTranscription();
     }
   }
 

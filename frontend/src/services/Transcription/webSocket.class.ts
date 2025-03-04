@@ -24,10 +24,15 @@ export class WebSocketFront {
 
   }
 
-  startWebsocketApi() {
+  async startWebsocketApi() {
     this.ws = new WebSocket(this.wsAddressApi);
     this.audioConfig = new AudioConfigClass(this.ws, this.microphoneId);
-    this.audioConfig.startAudioConfig();
+    
+    try {
+      await this.audioConfig.startAudioConfig();
+    } catch (error) {
+      console.error("Erreur lors de l'initialisation audio:", error);
+    }
 
     this.ws.onopen = () => {
       console.log('Websocket is opened');
