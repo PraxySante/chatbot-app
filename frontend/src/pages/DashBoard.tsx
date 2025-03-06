@@ -25,9 +25,6 @@ export default function DashBoard() {
 
   // Check opening ModalMenu default is false
   const [isOpenModalMenu, setIsOpenModalMenu] = useState<boolean>(false);
-  // Check opening ModalParameter default is false
-  // const [isOpenModalParameter, setIsOpenModalParameter] =
-  //   useState<ModalParameterAttributes | null>(null);
 
   // Function to switch Open/Close SideBar
   function toggleOpenCloseSideBar() {
@@ -53,14 +50,6 @@ export default function DashBoard() {
 
   return (
     <>
-      {/* Display Menu parameters according config */}
-      {/* {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' && (
-        <>
-          {isOpenModalMenu ? (
-            <ModalMenu setIsOpenModalParameter={setIsOpenModalParameter} />
-          ) : null}
-        </>
-      )} */}
       {/* Dashboard section */}
       <div id="dashboard" onClick={closeModalByClickBackGround}>
         {/* Rendering ModalParameter */}
@@ -92,7 +81,6 @@ export default function DashBoard() {
         <section id="main" className={isOpenSideBar ? 'main-reduce' : ''}>
           {/* Button toggle Open/Close Modal Parameter */}
           {/* Button toggle Open/Close ModalMenu Parameters */}
-
           {import.meta.env.VITE_OPT_AUT0_ACCOUNT === 'true' ? (
             <>
               {isAuthenticated && selectedLanguage ? (

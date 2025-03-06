@@ -44,9 +44,9 @@ export default function Chat({
     useState<boolean>(false);
 
   useEffect(() => {
-    if (isOpenModalFeedback) {
+   
       renderingModalFeedback();
-    }
+    
   }, [isOpenModalFeedback]);
 
   useEffect(() => {

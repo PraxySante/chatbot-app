@@ -10,7 +10,7 @@ const app = express();
 const server = createServer(app);
 new WebSocketServerClass(server);
 
-app.use(cors({ origin: process.env.ORIGIN || "*" }));
+app.use(cors({ origin: process.env.ORIGIN }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

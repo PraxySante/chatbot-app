@@ -24,7 +24,11 @@ export async function feedbackApiFrontChatBot(
     }
   } catch (error: any) {
     console.error(error.message);
-    const data = { message: 'failure', details: error?.message };
+    const data = {
+      status: error?.status,
+      message: 'failure',
+      details: error?.message,
+    };
     return data as ReponseFailureType;
   }
 }

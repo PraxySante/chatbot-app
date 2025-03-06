@@ -27,8 +27,7 @@ export class WebSocketServerClass {
     const ip: string | undefined = req.socket.remoteAddress;
 
     if (!ip) {
-      ws.send(JSON.stringify({ error: "Unauthorized" }));
-      ws.close();
+      ws.close(1008, "Unauthorized");
       return;
     }
 
@@ -38,15 +37,13 @@ export class WebSocketServerClass {
 
       // Message Error Typed - error message from Redis
       if (status !== 200 || typeof details === "string") {
-        ws.send(JSON.stringify({ error: "Unauthorized" }));
-        ws.close();
+        ws.close(1008, "Unauthorized");
         return;
       }
 
       // Message Error Typed - check structure auth
       if (typeof details !== "object" || !("authToken" in details)) {
-        ws.send(JSON.stringify({ error: "Unauthorized" }));
-        ws.close();
+        ws.close(1011, "Transcription initialization failed");
         return;
       }
 
@@ -57,7 +54,6 @@ export class WebSocketServerClass {
 
       // Créer une transcription et un WebSocket une seule fois
       const uuidTranscription = await startTranscription(authToken);
-      //const uuidTranscription = "dfabc069fded42c2b3bf6288a9a748bb"
       
       // Créer une nouvelle connexion WebSocket vers l'API 3
       const wsTranscription = new WebSocketTranscription(
@@ -96,8 +92,7 @@ export class WebSocketServerClass {
       // Le transfert des messages est géré dans WebSocketTranscription
     } catch (error) {
       console.error(error);
-      ws.send(JSON.stringify({ error: "Error System" }));
-      ws.close();
+      ws.close(1011, "Internal Server Error");
     }
   }
 
@@ -105,8 +100,7 @@ export class WebSocketServerClass {
     try {
       this.wss.close();
     } catch (error) {
-      console.error(error);
-      this.wss.close();
+      console.error("Error closing WebSocket server:", error);
     }
   }
 }

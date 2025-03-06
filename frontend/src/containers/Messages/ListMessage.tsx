@@ -49,11 +49,6 @@ export default function ListMessage({
             <span className="flex flex-row justify-start cursor-pointer">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
               <span className="w-full flex flex-row justify-start cursor-pointer">
-                {/* <Button
-                  type={'button'}
-                  content={`Voici un lien qui peut vous intéresser :\n${message.content}`}
-                  onClick={() => handleClick(message.content, message.doc_ref)}
-                ></Button> */}
                 <IconButton
                   className={'flex align-center btn_actions border border-solid border-secondary whitespace-pre-line'}
                   type={'button'}

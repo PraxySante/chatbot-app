@@ -32,6 +32,7 @@ export type ReponseReformulationType = {
 };
 
 export type ReponseFailureType = {
+  status?: number,
   message: string;
   details: string;
 };

@@ -53,17 +53,25 @@ export class WebSocketTranscription {
             this.requestTranscriptionToLLM();
         } 
     }
-			
 		});
 
 		this.wsTranscription.on("close", (code, reason) => {
 			console.log(`❌ Déconnecté de API 3 (Code: ${code}, Reason: ${reason})`);
+
 			this.isConnected = false;
+			if (this.wsParent.readyState === WebSocket.OPEN) {
+				this.wsParent.close(code, reason)
+				return;
+			}
+
 		});
 
 		this.wsTranscription.on("error", (error) => {
 			console.error("❌ Erreur WebSocketTranscription:", error);
 			this.isConnected = false;
+			if (this.wsParent.readyState === WebSocket.OPEN) {
+				this.wsParent.close(1011, "Internal Error")
+			}
 		});
 
 		// Écoute des messages du Front à relayer vers API 3
@@ -74,10 +82,6 @@ export class WebSocketTranscription {
 				this.wsTranscription.readyState === WebSocket.OPEN
 			) {
 				this.wsTranscription.send(message);
-			} else {
-				console.log(
-					"⚠️ Impossible d'envoyer le message, connexion non établie"
-				);
 			}
 		});
 	}
@@ -107,17 +111,6 @@ export class WebSocketTranscription {
 				}
 			);
 
-			// if (
-			// 	responseApi.status !== 200 &&
-			// 	typeof responseApi.details === "string"
-			// ) {
-			// 	return {
-			// 		status: responseApi.status,
-			// 		message: "failure",
-			// 		details: responseApi.details,
-			// 	};
-			// }
-
 			const preparedAssistantMessage = {
 				role: "assistant",
 				content: responseApi.data.message.content,
@@ -141,16 +134,7 @@ export class WebSocketTranscription {
 			}
 		} catch (error: any) {
 			console.error(error.message);
-			this.wsParent.send(
-				JSON.stringify({
-					type: "error",
-					data: {
-						status: error.status,
-						message: "failure",
-						details: error?.message,
-					},
-				})
-			);
+			this.wsParent.close(1011, "Internal Error")
 		}
 	}
 
@@ -159,7 +143,7 @@ export class WebSocketTranscription {
 			this.wsTranscription &&
 			this.wsTranscription.readyState === WebSocket.OPEN
 		) {
-			this.wsTranscription.close();
+			this.wsTranscription.close(1000, "Fermeture normale");
 		}
 	}
 }

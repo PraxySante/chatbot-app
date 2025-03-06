@@ -32,6 +32,7 @@ export class WebSocketFront {
       await this.audioConfig.startAudioConfig();
     } catch (error) {
       console.error("Erreur lors de l'initialisation audio:", error);
+      this.ws.close(1011, "Internal Error")
     }
 
     this.ws.onopen = () => {
@@ -53,12 +54,15 @@ export class WebSocketFront {
         this.messagesError(JSON.parse(e.data));
       }
     };
-    this.ws.onclose = () => {
-      console.log('Websocket is closed');
+    this.ws.onclose = (event :CloseEvent) => {
+      console.log('Websocket is closed : ', event);
+      this.messagesError(event.reason);
     };
 
     this.ws.onerror = (e: any) => {
-			console.error("❌ Erreur WebSocket:", e);
+      console.error("❌ Erreur WebSocket:", e);
+      this.messagesError("Internal Error");
+
     };
   }
 
