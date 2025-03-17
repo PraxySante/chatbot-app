@@ -9,6 +9,8 @@ import './reset.css';
 import './index.css';
 import { NotificationHandlerProvider } from './context/NotificationContext.tsx';
 import { useNotification } from './hooks/NotificationProvider.tsx';
+import { TranscriptionContextProvider } from './context/TranscriptionContext.tsx';
+import useTranscription from './hooks/TranscriptionProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -16,18 +18,22 @@ createRoot(document.getElementById('root')!).render(
       <AuthProvider>
         <LanguageContextProvider>
           <NotificationHandlerProvider>
-            <ChatContextProvider useNotification={useNotification}>
+            <TranscriptionContextProvider>
+            <ChatContextProvider useTranscription={useTranscription} useNotification={useNotification}>
               <RoutesProvider />
             </ChatContextProvider>
+            </TranscriptionContextProvider>
           </NotificationHandlerProvider>
         </LanguageContextProvider>
       </AuthProvider>
     ) : (
       <LanguageContextProvider>
         <NotificationHandlerProvider>
-          <ChatContextProvider useNotification={useNotification}>
-            <RoutesProvider />
-          </ChatContextProvider>
+        <TranscriptionContextProvider>
+            <ChatContextProvider useTranscription={useTranscription} useNotification={useNotification}>
+              <RoutesProvider />
+            </ChatContextProvider>
+            </TranscriptionContextProvider>
         </NotificationHandlerProvider>
       </LanguageContextProvider>
     )}

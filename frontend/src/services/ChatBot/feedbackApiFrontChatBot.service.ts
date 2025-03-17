@@ -13,8 +13,8 @@ export async function feedbackApiFrontChatBot(
     const response: AxiosResponse = await axiosAuthSecret.post(`/feedback`, {
       note: vote,
       comment: comment || '',
-      project: 'Foch',
-      language: 'fr',
+      project: import.meta.env.VITE_BOT_ORIGIN,
+      language: import.meta.env.VITE_BOT_LANGUAGE,
     });
     const { data, status } = response;
     if (status === 200) {
@@ -24,7 +24,11 @@ export async function feedbackApiFrontChatBot(
     }
   } catch (error: any) {
     console.error(error.message);
-    const data = { message: 'failure', details: error?.message };
+    const data = {
+      status: error?.status,
+      message: 'failure',
+      details: error?.message,
+    };
     return data as ReponseFailureType;
   }
 }

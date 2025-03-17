@@ -1,4 +1,3 @@
-
 type HeaderMessageType = {
   role: string;
   date: string;
@@ -6,8 +5,8 @@ type HeaderMessageType = {
 
 export default function HeaderMeassage({ role, date }: HeaderMessageType) {
   return (
-      <span className={`message-header ${role}`}>
-        {role} - {date}
-      </span>
+    <span className={`message-header ${role}`}>
+      {role === 'user' ? 'utilisateur' : role} - {date}
+    </span>
   );
 }

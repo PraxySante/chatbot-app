@@ -7,8 +7,8 @@ export async function endChat(): Promise<
 > {
   try {
     const response: AxiosResponse = await axiosAuthSecret.post(`/end`, {
-       project: 'Foch',
-       language: 'fr',
+       project: import.meta.env.VITE_BOT_ORIGIN,
+       language: import.meta.env.VITE_BOT_LANGUAGE,
     });
     const { data, status } = response;
     if (status === 200) {

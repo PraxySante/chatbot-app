@@ -29,11 +29,17 @@ export interface IInputEvaluate {
 }
 
 export interface IIconButton {
+  title?: string;
   type?: 'button' | 'submit';
   disabled?: boolean;
   className?: string;
   icon: ReactNode;
   onClick?: (e: any) => void;
+  onMouseDown?: (e?: any) => void;
+  onMouseLeave?: (e?: any) => void;
+  onMouseUp?: (e?: any) => void;
+  onTouchStart?: (e?: any) => void;
+  onTouchEnd?: (e?: any) => void;
   content?:string
 }
 
