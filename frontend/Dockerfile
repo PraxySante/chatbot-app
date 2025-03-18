@@ -1,8 +1,11 @@
-# frontend/Dockerfile
-FROM node:18-alpine
+# backend/Dockerfile
+FROM node:18
 
-# Définir le répertoire de travail
-WORKDIR /app
+# Définir les arguments pour le build
+ARG FRONTEND_PORT
+
+# Répertoire de travail
+WORKDIR /src/app
 
 # Copier les fichiers et installer les dépendances
 COPY package.json ./
@@ -10,16 +13,13 @@ RUN npm install
 
 # Copier le code source
 COPY . .
-
-# Construire l'application React
 RUN npm run build
 
-# Utiliser un serveur nginx pour servir l'application
-# FROM nginx:alpine
-# COPY --from=0 /app/build /var/www/html
+# Définir l'environnement
+ENV PORT=${FRONTEND_PORT}
 
-# Exposer le port 3000 pour le frontend
-EXPOSE 5000
+# Exposer le port
+EXPOSE ${FRONTEND_PORT}
 
 # Commande de démarrage
-CMD ["npm", "run", "start"]
+CMD [ "npm", "run", "start" ]
