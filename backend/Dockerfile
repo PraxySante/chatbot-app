@@ -1,8 +1,5 @@
 # backend/Dockerfile
-FROM node:18
-
-# Définir les arguments pour le build
-ARG BACKEND_PORT
+FROM node:18-alpine AS build
 
 # Répertoire de travail
 WORKDIR /src/app
@@ -15,11 +12,8 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Définir l'environnement
-ENV PORT=${BACKEND_PORT}
-
-# Exposer le port
-EXPOSE ${BACKEND_PORT}
+# Exposer le port pour le backend
+EXPOSE 8000
 
 # Commande de démarrage
 CMD [ "npm", "run", "start" ]
