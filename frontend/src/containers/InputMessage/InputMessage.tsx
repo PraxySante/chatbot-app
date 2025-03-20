@@ -44,7 +44,7 @@ export default function InputMessage() {
   function onChange(e: any): void {
     setUserContent(e.target.value);
     if (e.target.value !== '') {
-      whoIsWritten('user');
+      whoIsWritten('user-text');
     } else {
       whoIsWritten('none');
     }
@@ -93,7 +93,7 @@ export default function InputMessage() {
     if (!isRecord) {
       await startTranscription();
     } else if (isMuted) {
-      whoIsWritten('user');
+      whoIsWritten('user-microphone');
       muteTranscription();
     }
   }

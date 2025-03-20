@@ -18,6 +18,7 @@ export type ChatContextAttributes = {
   whoIsWritten: (role: string) => void;
   isUserWritten: boolean;
   isBotWritten: boolean;
+  messageLoading: string;
   setVoteUser: (vote: number) => void;
 };
 

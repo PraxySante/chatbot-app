@@ -62,7 +62,7 @@ export default function Header({
             title="Redémarrer une nouvelle conversation"
             icon={icons.restart}
           />
-          <Description content={'Redémarrer'} tag={'p'} className={'text-md'} />
+          <Description content={'Redémarrer'} tag={'p'} className={'text-md hidden md:flex items-center gap-2'} />
         </div>
       </span>
     </div>
