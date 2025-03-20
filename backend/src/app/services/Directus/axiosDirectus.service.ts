@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const axiosDirectus = axios.create({
   // Configuration to connect to DIRECTUS URL
-  baseURL: import.meta.env.VITE_DIRECTUS_URL,
+  baseURL: process.env.URL_API_DIRECTUS,
   // Configuration DIRECTUS SECRET to connect DIRECTUS URL
   // Configuration Content Type
   headers: {
