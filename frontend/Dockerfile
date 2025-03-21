@@ -1,5 +1,5 @@
 # frontend/Dockerfile
-FROM node:18-alpine
+FROM node:18-alpine AS build
 
 # Définir le répertoire de travail
 WORKDIR /app
@@ -15,11 +15,7 @@ COPY . .
 RUN npm run build
 
 # Utiliser un serveur nginx pour servir l'application
-# FROM nginx:alpine
-# COPY --from=0 /app/build /var/www/html
+FROM nginx:alpine AS prod
 
-# Exposer le port 3000 pour le frontend
-EXPOSE 5000
-
-# Commande de démarrage
-CMD ["npm", "run", "start"]
+COPY --from=build /app/default.conf /etc/nginx/conf.d
+COPY --from=build /app/dist /usr/share/nginx/html

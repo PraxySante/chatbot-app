@@ -14,7 +14,11 @@ import { ChatContextAttributes } from '../types/provider/provider.type';
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
-function ChatContextProvider({ children, useNotification, useTranscription }: any) {
+function ChatContextProvider({
+  children,
+  useNotification,
+  useTranscription,
+}: any) {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { selectedLanguage } = useLanguage();
   const { getMessageToNotification } = useNotification();
@@ -29,6 +33,7 @@ function ChatContextProvider({ children, useNotification, useTranscription }: an
   const [vote, setVote] = useState<number>(0);
   const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
+  const [messageLoading, setMessageLoading] = useState<string>('');
 
   if (!useNotification) {
     throw new Error(
@@ -45,7 +50,9 @@ function ChatContextProvider({ children, useNotification, useTranscription }: an
 
   useEffect(() => {
     if (messagesUser?.message?.transcript?.[0]?.[1]) {
-      stockMessageUserTranscription(messagesUser?.message?.transcript?.[0]?.[1]);
+      stockMessageUserTranscription(
+        messagesUser?.message?.transcript?.[0]?.[1]
+      );
     }
   }, [messagesUser]);
 
@@ -67,20 +74,27 @@ function ChatContextProvider({ children, useNotification, useTranscription }: an
     }
   }, [messagesError]);
 
-
   function whoIsWritten(role: string): void {
     switch (role) {
       case 'assistant':
         setIsBotWritten(true);
+        setMessageLoading('Je réfléchis, je vous réponds dans un instant ...');
         break;
-      case 'user':
+      case 'user-text':
         setIsUserWritten(true);
+        setMessageLoading("Vous êtes entrain d'écrire ...");
+        break;
+      case 'user-microphone':
+        setIsUserWritten(true);
+        setMessageLoading('Vous êtes entrain de parler ...');
         break;
       case 'none':
+        setMessageLoading('');
         setIsBotWritten(false);
         setIsUserWritten(false);
         break;
       default:
+        setMessageLoading('');
         setIsBotWritten(false);
         setIsUserWritten(false);
         break;
@@ -184,13 +198,11 @@ function ChatContextProvider({ children, useNotification, useTranscription }: an
     updateMessages(newMessages);
     updateHistoryChat(newMessages);
     whoIsWritten('assistant');
-
   }
 
   async function stockMessageAssistantTranscription(
     responseChatConversation: any
   ) {
-
     let lengthMessage = messages.length + 1;
 
     if (responseChatConversation.data.message === 'failure') {
@@ -242,7 +254,6 @@ function ChatContextProvider({ children, useNotification, useTranscription }: an
       },
     ]);
     whoIsWritten('none');
-
   }
 
   async function requestChatConversation(userContent: string) {
@@ -414,6 +425,7 @@ function ChatContextProvider({ children, useNotification, useTranscription }: an
               whoIsWritten,
               isUserWritten,
               isBotWritten,
+              messageLoading,
               setVoteUser,
             }}
           >
@@ -438,6 +450,7 @@ function ChatContextProvider({ children, useNotification, useTranscription }: an
             whoIsWritten,
             isUserWritten,
             isBotWritten,
+            messageLoading,
             setVoteUser,
           }}
         >
