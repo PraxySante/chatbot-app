@@ -1,5 +1,5 @@
 # backend/Dockerfile
-FROM node:18-alpine AS build
+FROM node:18-alpine
 
 # Répertoire de travail
 WORKDIR /src/app
