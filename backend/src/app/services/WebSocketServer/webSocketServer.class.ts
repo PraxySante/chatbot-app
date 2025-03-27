@@ -4,6 +4,7 @@ import { ResponseFailureType } from "../../types/chatbot.type";
 import { ResponseKeyRedisType } from "../../types/redis.type";
 import { WebSocketTranscription } from "../WebSocketTranscription/WebSocketTranscription.class";
 import { startTranscription } from "../ApiTranscription/transcription.service";
+import { SUCCESS_OK } from "../../constant/constant";
 
 // Modification pour WebSocketServerClass.ts
 export class WebSocketServerClass {
@@ -36,7 +37,7 @@ export class WebSocketServerClass {
       const { status, details }: ResponseKeyRedisType | ResponseFailureType = await getKeyRedis(ip);
 
       // Message Error Typed - error message from Redis
-      if (status !== 200 || typeof details === "string") {
+      if (status !== SUCCESS_OK || typeof details === "string") {
         ws.close(1008, "Unauthorized");
         return;
       }

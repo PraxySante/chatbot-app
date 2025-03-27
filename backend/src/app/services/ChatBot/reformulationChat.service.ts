@@ -1,8 +1,14 @@
+import {
+	BEARER,
+	ERROR_NOT_AUTHENTIFIED,
+	ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+	FAILURE_MESSAGE,
+	SUCCESS_OK,
+} from "../../constant/constant";
 import { getKeyRedis } from "../../datamapper/redis.datamapper";
 import {
 	ResponseErrorType,
 	ResponseFailureType,
-	ResponseMessageType,
 	ResponseReformulationType,
 	ResponseSuccessType,
 } from "../../types/chatbot.type";
@@ -51,31 +57,33 @@ export async function reformulationChatToApiChatBot(
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
 		await getKeyRedis(ip);
 
-		// Message Error Typed - error message from Redis
-		if (status !== 200 && typeof details === "string") {
-			return { status: status, details: details };
-		}
-	
-		// Message Error Typed - check structure auth
-		if (typeof details !== "object" || !("authToken" in details)) {
-			return { status: 401, details: "Not authorized" };
-		}
-	
+	// Message Error Typed - error message from Redis
+	if (status !== SUCCESS_OK && typeof details === "string") {
+		return { status: status, details: details };
+	}
+
+	// Message Error Typed - check structure auth
+	if (typeof details !== "object" || !("authToken" in details)) {
+		return {
+			status: ERROR_NOT_AUTHENTIFIED,
+			details: ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+		};
+	}
 
 	// The request body can be empty.
 	try {
 		const responseApi: ResponseReformulationType | ResponseErrorType =
-		await axiosChatBot.post(
-			`/chat/reformulate/${details?.uuid}`,
-			{},
-			{
-				headers: {
-					Authorization: `Bearer ${details?.authToken}`,
-				},
-			}
-		);
-		
-		if ('details' in responseApi) {
+			await axiosChatBot.post(
+				`/chat/reformulate/${details?.uuid}`,
+				{},
+				{
+					headers: {
+						Authorization: `${BEARER} ${details?.authToken}`,
+					},
+				}
+			);
+
+		if ("details" in responseApi) {
 			return { status: responseApi.status, details: responseApi.details };
 		}
 
@@ -87,7 +95,7 @@ export async function reformulationChatToApiChatBot(
 		console.error(error.message);
 		return {
 			status: error.status,
-			message: "failure",
+			message: FAILURE_MESSAGE,
 			details: error?.message,
 		};
 	}

@@ -1,6 +1,8 @@
 import { WebSocket } from "ws";
 import { ResponseMessageType } from "../../types/chatbot.type";
 import { axiosChatBot } from "../ChatBot/axiosChatBot.service";
+import { ASSISTANT, BEARER } from "../../constant/constant";
+import { updateConversationDirectus } from "../Directus/update.service";
 
 export class WebSocketTranscription {
 	wsAddressApi: string = "";
@@ -38,21 +40,20 @@ export class WebSocketTranscription {
 
 		this.wsTranscription.on("message", (msg) => {
 			if (this.wsParent.readyState === WebSocket.OPEN) {
-
 				this.wsParent.send(msg.toString());
 				const userMessage = JSON.parse(msg.toString());
 
-        const transcript = userMessage?.message?.transcript?.[0]?.[1];
-        
-        if (transcript) {
-            const preparedUserMessage = {
-                role: "user",
-                content: transcript,
-            };
-            this.updateHistoryChatAndRequest(preparedUserMessage);
-            this.requestTranscriptionToLLM();
-        } 
-    }
+				const transcript = userMessage?.message?.transcript?.[0]?.[1];
+
+				if (transcript) {
+					const preparedUserMessage = {
+						role: "user",
+						content: transcript,
+					};
+					this.updateHistoryChatAndRequest(preparedUserMessage);
+					this.requestTranscriptionToLLM();
+				}
+			}
 		});
 
 		this.wsTranscription.on("close", (code, reason) => {
@@ -60,17 +61,16 @@ export class WebSocketTranscription {
 
 			this.isConnected = false;
 			if (this.wsParent.readyState === WebSocket.OPEN) {
-				this.wsParent.close(code, reason)
+				this.wsParent.close(code, reason);
 				return;
 			}
-
 		});
 
 		this.wsTranscription.on("error", (error) => {
 			console.error("❌ Erreur WebSocketTranscription:", error);
 			this.isConnected = false;
 			if (this.wsParent.readyState === WebSocket.OPEN) {
-				this.wsParent.close(1011, "Internal Error")
+				this.wsParent.close(1011, "Internal Error");
 			}
 		});
 
@@ -88,7 +88,7 @@ export class WebSocketTranscription {
 
 	updateHistoryChatAndRequest(preparedMessage: any) {
 		this.historyChat.push(preparedMessage);
-		if (preparedMessage.role !== "assistant") {
+		if (preparedMessage.role !== ASSISTANT) {
 			this.requestUserMessage = preparedMessage;
 		}
 
@@ -98,21 +98,20 @@ export class WebSocketTranscription {
 		};
 	}
 
-  async requestTranscriptionToLLM() {
-
+	async requestTranscriptionToLLM() {
 		try {
 			const responseApi: ResponseMessageType = await axiosChatBot.post(
 				`/chat/${this.uuidChat}`,
 				this.chatConversation,
 				{
 					headers: {
-						Authorization: `Bearer ${this.authToken}`,
+						Authorization: `${BEARER} ${this.authToken}`,
 					},
 				}
 			);
 
 			const preparedAssistantMessage = {
-				role: "assistant",
+				role: ASSISTANT,
 				content: responseApi.data.message.content,
 			};
 
@@ -134,7 +133,7 @@ export class WebSocketTranscription {
 			}
 		} catch (error: any) {
 			console.error(error.message);
-			this.wsParent.close(1011, "Internal Error")
+			this.wsParent.close(1011, "Internal Error");
 		}
 	}
 

@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useEffect, useRef, useState } from 'react';
+import { createContext, ReactNode, useRef, useState } from 'react';
 import { WebSocketFront } from '../services/Transcription/webSocket.class';
 
 type TranscriptionContextProviderAttributes = {
@@ -42,10 +42,11 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
 
   const wsTranscriptionRef = useRef<WebSocketFront | null>(null);
 
-  useEffect(() => {
-    setIsOpenModal(false);
-    setUserSelectedMicrophone(false);
-  }, []);
+  // useEffect(() => {
+  //   setIsOpenModal(false);
+  //   setUserSelectedMicrophone(false)
+  //   initializeAudioDevices();
+  // }, []);
 
   async function startTranscription() {
     wsTranscriptionRef.current = new WebSocketFront(
@@ -81,14 +82,15 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
       const devices = await navigator.mediaDevices.enumerateDevices();
 
       const devicesAudioInput = devices
-        .filter((device) => device.kind === 'audioinput')
-        .map((device) => {
-          return {
-            id: device.deviceId,
-            label: device.label || `microphone-${device.deviceId}`,
-          };
-        });
+      .filter((device) => device.kind === 'audioinput')
+      .map((device) => {
+        return {
+          id: device.deviceId,
+          label: device.label || `microphone-${device.deviceId}`,
+        };
+      });
       setListMicrophones(devicesAudioInput);
+      setUserMicrophone(devicesAudioInput[0]);
     } catch (error) {
       console.error('Error getting audio devices:', error);
     }
@@ -106,9 +108,9 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
   }
 
   function settingsMicrophone() {
+    initializeAudioDevices();
     if (!userSelectedMicrophone) {
-      stateOpenModal();
-      initializeAudioDevices();
+      //stateOpenModal();
     }
   }
 

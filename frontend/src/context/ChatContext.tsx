@@ -11,6 +11,7 @@ import { reformulateChat } from '../services/ChatBot/reformulateChat.service';
 import { endChat } from '../services/ChatBot/endChat.service';
 import { feedbackApiFrontChatBot } from '../services/ChatBot/feedbackApiFrontChatBot.service';
 import { ChatContextAttributes } from '../types/provider/provider.type';
+import { restartChat } from '../services/ChatBot/restartChat.service';
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
@@ -80,6 +81,10 @@ function ChatContextProvider({
         setIsBotWritten(true);
         setMessageLoading('Je réfléchis, je vous réponds dans un instant ...');
         break;
+      case 'assistant-transcribe':
+        setIsUserWritten(true);
+        setMessageLoading('Retranscription de votre demande ...');
+        break;
       case 'user-text':
         setIsUserWritten(true);
         setMessageLoading("Vous êtes entrain d'écrire ...");
@@ -108,7 +113,7 @@ function ChatContextProvider({
     setMessages([]);
     setIsRestart(!isRestart);
     getMessageToNotification(200, 'Nouvelle session démarrée');
-    await startConversation();
+    await restartConversation();
   }
 
   async function verifyStartChat(): Promise<void> {
@@ -166,6 +171,36 @@ function ChatContextProvider({
         ]);
       }
     }
+  }
+
+  async function restartConversation() {
+
+      const responseRequest: any = await restartChat();
+
+      if (responseRequest.message === 'failure') {
+        getMessageToNotification({
+          status: responseRequest.status,
+          message: responseRequest.details,
+        });
+        return;
+      }
+
+      updateMessages([
+        {
+          id: 0,
+          role: `${responseRequest.role}`,
+          content: `${responseRequest.content}`,
+          date: new Date().toLocaleTimeString(selectedLanguage),
+        },
+      ]);
+
+      updateHistoryChat([
+        {
+          role: `${responseRequest.role}`,
+          content: `${responseRequest.content}`,
+        },
+      ]);
+    
   }
 
   async function stockMessageUser(userContent: any) {

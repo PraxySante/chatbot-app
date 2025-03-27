@@ -1,27 +1,28 @@
+import {
+	FAILURE_MESSAGE,
+	SUCCESS_MESSAGE,
+	SUCCESS_OK,
+} from "../../constant/constant";
 import { ResponseAuthChatBot } from "../../types/auth.type";
 import { ResponseFailureType } from "../../types/chatbot.type";
-import { axiosChatBot } from "../ChatBot/axiosChatBot.service";
 import { axiosKeycloak } from "./axiosKeycloak.service";
 
 export async function authChatBot(): Promise<
 	ResponseAuthChatBot | ResponseFailureType
-  > {
+> {
 	try {
-		const responseApi = await axiosKeycloak.post(
-			"/user/token",
-      {
-        username: process.env.KEYCLOAK_USERNAME,
-        password: process.env.KEYCLOAK_PASSWORD,
-      }
-		);
+		const responseApi = await axiosKeycloak.post("/user/token", {
+			username: process.env.KEYCLOAK_USERNAME,
+			password: process.env.KEYCLOAK_PASSWORD,
+		});
 
 		const { status, data } = responseApi;
 
 		// return Message Error Typed
-		if (status !== 200) {
+		if (status !== SUCCESS_OK) {
 			return {
 				status: status,
-				message: "failure",
+				message: FAILURE_MESSAGE,
 				details: data?.message,
 			};
 		}
@@ -29,7 +30,7 @@ export async function authChatBot(): Promise<
 		// return Message Success Typed
 		return {
 			status: status,
-			message: "success",
+			message: SUCCESS_MESSAGE,
 			details: data,
 		};
 	} catch (error: any) {
@@ -37,7 +38,7 @@ export async function authChatBot(): Promise<
 		// return Message Error Typed
 		return {
 			status: error.status,
-			message: "failure",
+			message: FAILURE_MESSAGE,
 			details: error?.message,
 		};
 	}

@@ -1,14 +1,13 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { ResponseFailureType } from "../../types/chatbot.type";
 import { axiosTranscription } from "./axiosTranscription.service";
-
-type TranscriptionType = {
-	status: number;
-	message: string;
-	data: {
-		uuid: string;
-	};
-};
+import {
+	BEARER,
+	ERROR_SERVER,
+	ERROR_SERVER_MESSAGE,
+	FAILURE_MESSAGE,
+} from "../../constant/constant";
+import { TranscriptionType } from "../../types/transcription.type";
 
 export async function startTranscription(
 	authToken: string
@@ -16,24 +15,24 @@ export async function startTranscription(
 	try {
 		return axiosTranscription.get("/transcribe/start", {
 			headers: {
-				Authorization: `Bearer ${authToken}`,
+				Authorization: `${BEARER} ${authToken}`,
 			},
 		});
 	} catch (error: unknown) {
 		console.error(error);
-    
+
 		if (axios.isAxiosError(error)) {
-			return { 
-				status: error.response?.status || 500, 
-				message: "failure", 
-				details: error.message 
+			return {
+				status: error.response?.status || ERROR_SERVER,
+				message: FAILURE_MESSAGE,
+				details: error.message,
 			};
 		}
-		
-		return { 
-			status: 500, 
-			message: "failure", 
-			details: "Internal Error"
+
+		return {
+			status: ERROR_SERVER,
+			message: FAILURE_MESSAGE,
+			details: ERROR_SERVER_MESSAGE,
 		};
 	}
 }

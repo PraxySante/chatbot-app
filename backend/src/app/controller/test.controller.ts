@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { testPingApiChatBot } from "../services/ChatBot/testPing.service";
-import { PingType, ResponseFailureType } from "../types/chatbot.type";
+import { SUCCESS_OK } from "../constant/constant";
 
 export default {
 	/**
@@ -41,7 +41,7 @@ export default {
 
 		const { status, details } = responseApi;
 		// If error return error message
-		if (status !== 200) {
+		if (status !== SUCCESS_OK) {
 			return res.status(status).json(details);
 		}
 		// Return message success
