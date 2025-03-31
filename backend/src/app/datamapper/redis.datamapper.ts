@@ -152,7 +152,7 @@ async function updateKeyRedis(
 
 		const { status, details } = await getKeyRedis(keyRedis);
 
-		if (status !== 200 && typeof details === "string") {
+		if (status !== SUCCESS_OK && typeof details === "string") {
 			return {
 				status: status,
 				details: details,

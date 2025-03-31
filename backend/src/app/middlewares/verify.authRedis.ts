@@ -57,6 +57,8 @@ export default async function verifyAuthRedis(
 
 	if (status !== SUCCESS_OK && !req.url.includes(RESTART)) {
 		console.log(`${FAILURE_STORED_CACHE} ${req.ip}`);
+		await deleteKeyRedis(`${USER}-${req.ip}`);
+		await deleteKeyRedis(req.ip);
 		return res
 			.status(ERROR_NOT_AUTHENTIFIED)
 			.json(ERROR_NOT_AUTHENTIFIED_MESSSAGE);
@@ -65,6 +67,7 @@ export default async function verifyAuthRedis(
 	if (status !== SUCCESS_OK && req.url.includes(RESTART)) {
 		const { project, language } = req.body;
 		const { ip } = req;
+		await deleteKeyRedis(`${USER}-${req.ip}`);
 		await authAndStartChat(ip, project, language);
 		const { status, details } = await startChatApiBot(ip);
 		return res.status(status).send(details);
@@ -74,8 +77,8 @@ export default async function verifyAuthRedis(
 		const currentTime = Math.floor(Date.now() / MILLISECONDS);
 		if (currentTime > details?.token_expires_in) {
 			console.info(`${FAILURE_TOKEN_EXPIRED} ${req.ip}`);
-			await deleteKeyRedis(req.ip);
 			await deleteKeyRedis(`${USER}-${req.ip}`);
+			await deleteKeyRedis(req.ip);
 			return res
 				.status(ERROR_NOT_AUTHENTIFIED)
 				.json(ERROR_NOT_AUTHENTIFIED_MESSSAGE);

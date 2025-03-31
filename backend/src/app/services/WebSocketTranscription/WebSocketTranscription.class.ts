@@ -1,8 +1,29 @@
 import { WebSocket } from "ws";
-import { ResponseMessageType } from "../../types/chatbot.type";
+import {
+	ResponseFailureType,
+	ResponseMessageType,
+} from "../../types/chatbot.type";
 import { axiosChatBot } from "../ChatBot/axiosChatBot.service";
-import { ASSISTANT, BEARER } from "../../constant/constant";
+import {
+	ASSISTANT,
+	BEARER,
+	ERROR_DATABASE_MESSAGE,
+	ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+	ERROR_SERVER_MESSAGE,
+	FAILURE_COLLECTION_MESSAGE,
+	FAILURE_MESSAGE,
+	SUCCESS_OK,
+	USER,
+} from "../../constant/constant";
+import { createConversationDirectus } from "../Directus/create.service";
+import {
+	ConversationDirectusAttributes,
+	CreateConversationDirectusAttributes,
+} from "../../types/directus.type";
+import { getKeyRedis, updateKeyRedis } from "../../datamapper/redis.datamapper";
 import { updateConversationDirectus } from "../Directus/update.service";
+import { KeyRedisType, ResponseKeyRedisType } from "../../types/redis.type";
+import { readConversationDirectus } from "../Directus/read.service";
 
 export class WebSocketTranscription {
 	wsAddressApi: string = "";
@@ -14,6 +35,7 @@ export class WebSocketTranscription {
 	protected historyChat: { role: string; content: string }[] = [];
 	protected requestUserMessage!: { role: string; content: string };
 	protected chatConversation!: any;
+	protected idDirectus!: string;
 
 	constructor(
 		wsAddressApi: string,
@@ -27,10 +49,10 @@ export class WebSocketTranscription {
 		this.authToken = authToken;
 	}
 
-	startWebsocketApi() {
+	startWebsocketApi(ip: any, uuidTranscription: string, project: string) {
 		console.log("✅ Initialisation WebSocket API Transcription");
 
-		// Créer la connexion
+		// Instance pour connexion vers API Transcription
 		this.wsTranscription = new WebSocket(this.wsAddressApi);
 
 		this.wsTranscription.on("open", () => {
@@ -38,8 +60,83 @@ export class WebSocketTranscription {
 			this.isConnected = true;
 		});
 
-		this.wsTranscription.on("message", (msg) => {
+		this.wsTranscription.on("message", async (msg) => {
+			if (process.env.COLLECTION_DIRECTUS === undefined) {
+				console.error(FAILURE_COLLECTION_MESSAGE);
+				this.wsParent.close(1011, FAILURE_COLLECTION_MESSAGE);
+				return;
+			}
+
+			const { status, details }: ResponseKeyRedisType | ResponseFailureType =
+				await getKeyRedis(ip);
+
+			// Message Error Typed - error message from Redis
+			if (status !== SUCCESS_OK && typeof details === "string") {
+				this.wsParent.close(1011, details);
+				return;
+			}
+
+			// Message Error Typed - check structure auth
+			if (typeof details !== "object" || !("authToken" in details)) {
+				this.wsParent.close(1011, ERROR_NOT_AUTHENTIFIED_MESSSAGE);
+				return;
+			}
+
+			this.idDirectus = details?.idDirectus;
+
 			if (this.wsParent.readyState === WebSocket.OPEN) {
+				await this.getHistoryChatBot(details);
+
+				if (!this.idDirectus) {
+					const data: CreateConversationDirectusAttributes = {
+						Name: project,
+						Uuid_Transcription: uuidTranscription,
+					};
+
+					const responseDirectus:
+						| ConversationDirectusAttributes
+						| ResponseFailureType = await createConversationDirectus(
+						process.env.COLLECTION_DIRECTUS,
+						data
+						);
+
+					if ("details" in responseDirectus) {
+						console.error({
+							status: responseDirectus.status,
+							details: responseDirectus.details,
+						});
+						this.wsParent.close(1011, ERROR_DATABASE_MESSAGE);
+						return;
+					}
+
+					if ("id" in responseDirectus) {
+						await updateKeyRedis(ip, "idDirectus", responseDirectus?.id);
+						this.idDirectus = responseDirectus.id;
+					}
+				} else {
+					const data: CreateConversationDirectusAttributes = {
+						Name: project,
+						Uuid_Transcription: uuidTranscription,
+					};
+
+					const responseDirectus:
+						| ConversationDirectusAttributes
+						| ResponseFailureType = await updateConversationDirectus(
+						this.idDirectus,
+						process.env.COLLECTION_DIRECTUS,
+						data
+					);
+
+					if ("details" in responseDirectus) {
+						console.error({
+							status: responseDirectus.status,
+							details: responseDirectus.details,
+						});
+						this.wsParent.close(1011, ERROR_DATABASE_MESSAGE);
+						return;
+					}
+				}
+
 				this.wsParent.send(msg.toString());
 				const userMessage = JSON.parse(msg.toString());
 
@@ -47,7 +144,7 @@ export class WebSocketTranscription {
 
 				if (transcript) {
 					const preparedUserMessage = {
-						role: "user",
+						role: USER,
 						content: transcript,
 					};
 					this.updateHistoryChatAndRequest(preparedUserMessage);
@@ -57,7 +154,9 @@ export class WebSocketTranscription {
 		});
 
 		this.wsTranscription.on("close", (code, reason) => {
-			console.log(`❌ Déconnecté de API 3 (Code: ${code}, Reason: ${reason})`);
+			console.log(
+				`❌ Déconnecté de API Transcription (Code: ${code}, Reason: ${reason})`
+			);
 
 			this.isConnected = false;
 			if (this.wsParent.readyState === WebSocket.OPEN) {
@@ -67,14 +166,14 @@ export class WebSocketTranscription {
 		});
 
 		this.wsTranscription.on("error", (error) => {
-			console.error("❌ Erreur WebSocketTranscription:", error);
+			console.error("❌ Erreur avec connection ws Api Transcription:", error);
 			this.isConnected = false;
 			if (this.wsParent.readyState === WebSocket.OPEN) {
-				this.wsParent.close(1011, "Internal Error");
+				this.wsParent.close(1011, ERROR_SERVER_MESSAGE);
 			}
 		});
 
-		// Écoute des messages du Front à relayer vers API 3
+		// Écoute des messages du Front à relayer vers API Transcription
 		this.wsParent.on("message", (message) => {
 			// Vérifier que la connexion est bien établie
 			if (
@@ -84,6 +183,42 @@ export class WebSocketTranscription {
 				this.wsTranscription.send(message);
 			}
 		});
+	}
+
+	async getHistoryChatBot(details: KeyRedisType): Promise<void> {
+		if (details?.idDirectus !== "") {
+			if (process.env.COLLECTION_DIRECTUS === undefined) {
+				console.error(FAILURE_COLLECTION_MESSAGE);
+				this.wsParent.close(1011, FAILURE_COLLECTION_MESSAGE);
+				return;
+			}
+
+			const responseDirectus:
+				| ConversationDirectusAttributes
+				| ResponseFailureType = await readConversationDirectus(
+				details?.idDirectus,
+				process.env.COLLECTION_DIRECTUS
+			);
+
+			if ("details" in responseDirectus) {
+				console.error(FAILURE_MESSAGE);
+				this.wsParent.close(1011, ERROR_DATABASE_MESSAGE);
+				return;
+			}
+
+			const historicChat: any = responseDirectus?.Historic;
+			const askedQuestion: any = responseDirectus?.Asked_question;
+			const modelAnswer = responseDirectus?.Model_answer;
+
+			if (responseDirectus?.Historic) {
+				this.historyChat = [
+					...JSON.parse(historicChat),
+					JSON.parse(askedQuestion),
+					JSON.parse(modelAnswer),
+				];
+				return;
+			}
+		}
 	}
 
 	updateHistoryChatAndRequest(preparedMessage: any) {
@@ -99,6 +234,12 @@ export class WebSocketTranscription {
 	}
 
 	async requestTranscriptionToLLM() {
+		if (process.env.COLLECTION_DIRECTUS === undefined) {
+			console.error(FAILURE_COLLECTION_MESSAGE);
+			this.wsParent.close(1011, FAILURE_COLLECTION_MESSAGE);
+			return;
+		}
+
 		try {
 			const responseApi: ResponseMessageType = await axiosChatBot.post(
 				`/chat/${this.uuidChat}`,
@@ -117,6 +258,29 @@ export class WebSocketTranscription {
 
 			this.updateHistoryChatAndRequest(preparedAssistantMessage);
 
+			const data = {
+				Asked_question: this.requestUserMessage,
+				Model_answer: responseApi.data.message,
+				Source_nodes: [...responseApi.data.sources],
+				Historic: [...this.historyChat],
+				isTranscription: true,
+			};
+
+			const responseDirectus:
+				| ConversationDirectusAttributes
+				| ResponseFailureType = await updateConversationDirectus(
+				this.idDirectus,
+				process.env.COLLECTION_DIRECTUS,
+				data
+			);
+
+			if ("details" in responseDirectus) {
+				console.error({
+					status: responseDirectus.status,
+					details: responseDirectus.details,
+				});
+			}
+
 			// Vérifier que la connexion est toujours active
 			if (this.wsParent.readyState === WebSocket.OPEN) {
 				// Envoyer la réponse du LLM au front
@@ -133,7 +297,8 @@ export class WebSocketTranscription {
 			}
 		} catch (error: any) {
 			console.error(error.message);
-			this.wsParent.close(1011, "Internal Error");
+			this.wsParent.close(1011, ERROR_SERVER_MESSAGE);
+			return;
 		}
 	}
 
@@ -143,6 +308,7 @@ export class WebSocketTranscription {
 			this.wsTranscription.readyState === WebSocket.OPEN
 		) {
 			this.wsTranscription.close(1000, "Fermeture normale");
+			return;
 		}
 	}
 }

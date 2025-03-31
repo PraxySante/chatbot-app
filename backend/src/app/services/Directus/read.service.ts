@@ -5,40 +5,18 @@ import axiosDirectus from "./axiosDirectus.service";
 import { FAILURE_MESSAGE, SUCCESS_OK } from "../../constant/constant";
 
 /**
-	 * Request axios Directus - update record 
+	 * Request axios Directus - read record by id
 	 *
 	 * @argument {Argument}
-	 * - **Arguments** (`collection, uuidTranscription, project`):
+	 * - **Arguments** (`collection, id`):
 	 * @param collection 
 	 *   - `collection`: env variable directory to collect new conversation 
 	 * @param id 
 	 *   - `id`: idDirectus conversation recorded
-	 * @param dataDirectus  
-	 *   - `dataDirectus`: Partial dataDirectus to update db
-	 	 	id: 'string';
-			Name: 'string';
-			Date: 'Date';
-			Asked_question: 'MessageType';
-			Model_answer: 'string';
-			Source_nodes: 'string';
-			Satisfaction: 'number';
-			Comments: 'string';
-			Historic: 'MessageType';
 	 * @example
 	 * {
 	  "colection" : '/welcome_chezSam'
     "id": 'un id Directus',
-    "data": 
-	 	{
-			id: 'string';
-			Name: 'string';
-			Date: 'Date';
-			Asked_question: 'MessageType';
-			Model_answer: 'string';
-			Source_nodes: 'string';
-			Satisfaction: 'number';
-			Comments: 'string';
-			Historic: 'MessageType';}
 		}
 	 * @returns {Promise<ResponseFailureType | ConversationDirectusAttributes>} - Return response JSON :
 	 * - **details**
@@ -64,15 +42,13 @@ import { FAILURE_MESSAGE, SUCCESS_OK } from "../../constant/constant";
 	 * }
 	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
 	 */
-export async function updateConversationDirectus(
+export async function readConversationDirectus(
 	id: string,
 	collection: string,
-	dataDirectus: Partial<ConversationDirectusAttributes>
 ): Promise<ConversationDirectusAttributes | ResponseFailureType> {
 	try {
-		const response: AxiosResponse = await axiosDirectus.patch(
-			`/items/${collection}/${id}`,
-			dataDirectus
+		const response: AxiosResponse = await axiosDirectus.get(
+			`/items/${collection}/${id}`
 		);
 		const { data, status } = response;
 		if (status !== SUCCESS_OK) {
@@ -83,7 +59,7 @@ export async function updateConversationDirectus(
 			};
 			return data as ResponseFailureType;
 		}
-		return data as ConversationDirectusAttributes;
+		return data.data as ConversationDirectusAttributes;
 	} catch (error: any) {
 		console.error(error);
 		const data = {

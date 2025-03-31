@@ -15,7 +15,10 @@ import {
 	ResponseMessageType,
 	ResponseSuccessType,
 } from "../../types/chatbot.type";
-import { CreateDirectusAttributes } from "../../types/directus.type";
+import {
+	CreateConversationDirectusAttributes,
+	ConversationDirectusAttributes,
+} from "../../types/directus.type";
 import { ResponseKeyRedisType } from "../../types/redis.type";
 import { createConversationDirectus } from "../Directus/create.service";
 import { updateConversationDirectus } from "../Directus/update.service";
@@ -92,12 +95,17 @@ export async function requestChatToApiChatBot(
 	}
 
 	if (details?.idDirectus === "") {
-		const responseDirectus: CreateDirectusAttributes | ResponseFailureType =
-			await createConversationDirectus(
-				process.env.COLLECTION_DIRECTUS,
-				details.uuid,
-				details?.project
-			);
+		const data: CreateConversationDirectusAttributes = {
+			Name: details?.project,
+			Uuid_LLM: details.uuid,
+		};
+
+		const responseDirectus:
+			| ConversationDirectusAttributes
+			| ResponseFailureType = await createConversationDirectus(
+			process.env.COLLECTION_DIRECTUS,
+			data
+		);
 
 		if ("details" in responseDirectus) {
 			console.error({
@@ -128,7 +136,10 @@ export async function requestChatToApiChatBot(
 			}
 		);
 
-		if (responseApi.status !== SUCCESS_OK && typeof responseApi.details === "string") {
+		if (
+			responseApi.status !== SUCCESS_OK &&
+			typeof responseApi.details === "string"
+		) {
 			return {
 				status: responseApi.status,
 				message: FAILURE_MESSAGE,
@@ -136,19 +147,21 @@ export async function requestChatToApiChatBot(
 			};
 		}
 
-		const data = {
+		const data: Partial<ConversationDirectusAttributes> = {
 			Asked_question: message,
 			Model_answer: responseApi.data.message,
 			Source_nodes: [...responseApi.data.sources],
 			Historic: [...history],
+			Uuid_LLM: details.uuid,
 		};
 
-		const responseDirectus: CreateDirectusAttributes | ResponseFailureType =
-			await updateConversationDirectus(
-				idDirectus,
-				process.env.COLLECTION_DIRECTUS,
-				data
-			);
+		const responseDirectus:
+			| ConversationDirectusAttributes
+			| ResponseFailureType = await updateConversationDirectus(
+			idDirectus,
+			process.env.COLLECTION_DIRECTUS,
+			data
+		);
 
 		if ("details" in responseDirectus) {
 			console.error({
@@ -163,7 +176,6 @@ export async function requestChatToApiChatBot(
 			sources: [...responseApi.data.sources],
 		};
 	} catch (error: any) {
-		
 		console.error(error.message);
 		return {
 			status: error.status,

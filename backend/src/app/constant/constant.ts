@@ -15,7 +15,7 @@ export const FAILURE_MESSAGE = "Failure";
 export const FAILURE_MISSING_IP_HEADERS = "Missing ip in request headers.";
 
 export const FAILURE_STORED_CACHE = "Stored cache not found for ip";
-export const FAILURE_TOKEN_EXPIRED = "Token down for ip";
+export const FAILURE_TOKEN_EXPIRED = "Token expired";
 
 export const FAILURE_COLLECTION_MESSAGE = "Erreur : Collection non définie";
 

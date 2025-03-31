@@ -42,12 +42,6 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
 
   const wsTranscriptionRef = useRef<WebSocketFront | null>(null);
 
-  // useEffect(() => {
-  //   setIsOpenModal(false);
-  //   setUserSelectedMicrophone(false)
-  //   initializeAudioDevices();
-  // }, []);
-
   async function startTranscription() {
     wsTranscriptionRef.current = new WebSocketFront(
       `${import.meta.env.VITE_WS_API_CHATBOT}`,
