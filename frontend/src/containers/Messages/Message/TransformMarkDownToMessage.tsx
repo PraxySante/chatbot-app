@@ -10,7 +10,16 @@ type MarkDownType = {
 export default function TransformMarkDownToMessage({ id, content, className }: MarkDownType) {
   return (
     <div id={id} className={className}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+     <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          a: ({ node, ...props }) => (
+            <a {...props} target="_blank" rel="noopener noreferrer">
+              {props.children}
+            </a>
+          ),
+        }}
+      >{content}</ReactMarkdown>
     </div>
   );
 }

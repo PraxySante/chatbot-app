@@ -96,6 +96,7 @@ export default function InputMessage() {
     isButtonPressedRef.current = false;
     if (isRecord && !isMuted) {
       muteTranscription();
+      whoIsWritten('assistant-transcribe');
     }
   }
 
