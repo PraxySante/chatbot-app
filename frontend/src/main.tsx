@@ -1,4 +1,4 @@
-import { StrictMode, Suspense } from 'react';
+import { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { LanguageContextProvider } from './context/LanguageContext.tsx';
 import { ChatContextProvider } from './context/ChatContext.tsx';
@@ -13,7 +13,6 @@ import { TranscriptionContextProvider } from './context/TranscriptionContext.tsx
 import useTranscription from './hooks/TranscriptionProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
     <Suspense fallback={<div>Chargement...</div>}>
       {import.meta.env.VITE_OPT_AUT0_ACCOUNT === true ? (
         <AuthProvider>
@@ -45,5 +44,4 @@ createRoot(document.getElementById('root')!).render(
         </LanguageContextProvider>
       )}
     </Suspense>
-  </StrictMode>
 );

@@ -1,11 +1,27 @@
-import { getKeyRedis } from "../../datamapper/redis.datamapper";
+import {
+	BEARER,
+	ERROR_DATABASE_MESSAGE,
+	ERROR_NOT_AUTHENTIFIED,
+	ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+	ERROR_SERVER,
+	FAILURE_COLLECTION_MESSAGE,
+	FAILURE_MESSAGE,
+	SUCCESS_OK,
+} from "../../constant/constant";
+import { getKeyRedis, updateKeyRedis } from "../../datamapper/redis.datamapper";
 import {
 	MessageType,
 	ResponseFailureType,
 	ResponseMessageType,
 	ResponseSuccessType,
 } from "../../types/chatbot.type";
+import {
+	CreateConversationDirectusAttributes,
+	ConversationDirectusAttributes,
+} from "../../types/directus.type";
 import { ResponseKeyRedisType } from "../../types/redis.type";
+import { createConversationDirectus } from "../Directus/create.service";
+import { updateConversationDirectus } from "../Directus/update.service";
 import { axiosChatBot } from "./axiosChatBot.service";
 
 /**
@@ -56,19 +72,56 @@ export async function requestChatToApiChatBot(
 	history: MessageType[],
 	message: MessageType
 ): Promise<ResponseFailureType | ResponseSuccessType> {
+	if (process.env.COLLECTION_DIRECTUS === undefined) {
+		console.error(FAILURE_COLLECTION_MESSAGE);
+		return { status: ERROR_SERVER, details: ERROR_DATABASE_MESSAGE };
+	}
+
+	let idDirectus: string = "";
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
 		await getKeyRedis(ip);
 
-		// Message Error Typed - error message from Redis
-		if (status !== 200 && typeof details === "string") {
-			return { status: status, details: details };
+	// Message Error Typed - error message from Redis
+	if (status !== SUCCESS_OK && typeof details === "string") {
+		return { status: status, details: details };
+	}
+
+	// Message Error Typed - check structure auth
+	if (typeof details !== "object" || !("authToken" in details)) {
+		return {
+			status: ERROR_NOT_AUTHENTIFIED,
+			details: ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+		};
+	}
+
+	if (details?.idDirectus === "") {
+		const data: CreateConversationDirectusAttributes = {
+			Name: details?.project,
+			Uuid_LLM: details.uuid,
+		};
+
+		const responseDirectus:
+			| ConversationDirectusAttributes
+			| ResponseFailureType = await createConversationDirectus(
+			process.env.COLLECTION_DIRECTUS,
+			data
+		);
+
+		if ("details" in responseDirectus) {
+			console.error({
+				status: responseDirectus.status,
+				details: responseDirectus.details,
+			});
 		}
-	
-		// Message Error Typed - check structure auth
-		if (typeof details !== "object" || !("authToken" in details)) {
-			return { status: 401, details: "Not authorized" };
+
+		if ("id" in responseDirectus) {
+			await updateKeyRedis(ip, "idDirectus", responseDirectus?.id);
+			idDirectus = responseDirectus.id;
 		}
-	
+	} else {
+		idDirectus = details?.idDirectus;
+	}
+
 	try {
 		const responseApi: ResponseMessageType = await axiosChatBot.post(
 			`/chat/${details?.uuid}`,
@@ -78,17 +131,43 @@ export async function requestChatToApiChatBot(
 			},
 			{
 				headers: {
-					Authorization: `Bearer ${details?.authToken}`,
+					Authorization: `${BEARER} ${details?.authToken}`,
 				},
 			}
 		);
 
-		if (responseApi.status !== 200 && typeof responseApi.details === "string") {
+		if (
+			responseApi.status !== SUCCESS_OK &&
+			typeof responseApi.details === "string"
+		) {
 			return {
 				status: responseApi.status,
-				message: "failure",
+				message: FAILURE_MESSAGE,
 				details: responseApi.details,
 			};
+		}
+
+		const data: Partial<ConversationDirectusAttributes> = {
+			Asked_question: message,
+			Model_answer: responseApi.data.message,
+			Source_nodes: [...responseApi.data.sources],
+			Historic: [...history],
+			Uuid_LLM: details.uuid,
+		};
+
+		const responseDirectus:
+			| ConversationDirectusAttributes
+			| ResponseFailureType = await updateConversationDirectus(
+			idDirectus,
+			process.env.COLLECTION_DIRECTUS,
+			data
+		);
+
+		if ("details" in responseDirectus) {
+			console.error({
+				status: responseDirectus.status,
+				details: responseDirectus.details,
+			});
 		}
 
 		return {
@@ -100,7 +179,7 @@ export async function requestChatToApiChatBot(
 		console.error(error.message);
 		return {
 			status: error.status,
-			message: "failure",
+			message: FAILURE_MESSAGE,
 			details: error?.message,
 		};
 	}

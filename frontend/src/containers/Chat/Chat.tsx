@@ -31,12 +31,8 @@ export default function Chat({
 }: IChatAttributes) {
   //Init Component
   //
-  const {
-    messages,
-    reformulateChatConversation,
-    isUserWritten,
-    isBotWritten,
-  } = useChat();
+  const { messages, reformulateChatConversation, isUserWritten, isBotWritten } =
+    useChat();
   // Check selected language by user
   const { userLanguage } = useLanguage();
   const autoScrollMessage = useRef<HTMLDivElement | null>(null);
@@ -44,9 +40,7 @@ export default function Chat({
     useState<boolean>(false);
 
   useEffect(() => {
-   
-      renderingModalFeedback();
-    
+    renderingModalFeedback();
   }, [isOpenModalFeedback]);
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import Description from '../../components/Text/Description';
 import Title from '../../components/Text/Title';
 import { lazy } from 'react';
 import { useChat } from '../../hooks/ChatProvider';
+import useTranscription from '../../hooks/TranscriptionProvider';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
@@ -19,6 +20,13 @@ export default function Header({
   // Init Component
 
   const { selectedRestart } = useChat();
+  const { stopTranscription, isRecord } = useTranscription();
+
+  function handleClickRestart() {
+    selectedRestart();
+    isRecord ? stopTranscription() : null;
+  }
+
   return (
     <div id="header">
       {/* Login/Logout selection */}
@@ -55,14 +63,18 @@ export default function Header({
         )}
         <div
           className="flex flex-row gap-2 items-center justify-center border border-secondary rounded-lg p-1 md:p-2 text-blue pointer-cursor hover:bg-secondary hover:text-white"
-          onClick={() => selectedRestart()}
+          onClick={() => handleClickRestart()}
         >
           <IconButton
             aria-label="Redémarrer une nouvelle conversation"
             title="Redémarrer une nouvelle conversation"
             icon={icons.restart}
           />
-          <Description content={'Redémarrer'} tag={'p'} className={'text-md hidden md:flex items-center gap-2'} />
+          <Description
+            content={'Redémarrer'}
+            tag={'p'}
+            className={'text-md hidden md:flex items-center gap-2'}
+          />
         </div>
       </span>
     </div>

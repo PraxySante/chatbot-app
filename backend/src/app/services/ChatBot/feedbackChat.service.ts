@@ -1,11 +1,17 @@
+import {
+	ERROR_DATABASE_MESSAGE,
+	ERROR_NOT_AUTHENTIFIED,
+	ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+	ERROR_SERVER,
+	FAILURE_MESSAGE,
+	SUCCESS_OK,
+} from "../../constant/constant";
 import { getKeyRedis } from "../../datamapper/redis.datamapper";
 import {
-	ResponseErrorType,
 	ResponseFailureType,
-	ResponseFeedbackType,
 	ResponseSuccessType,
 } from "../../types/chatbot.type";
-import { axiosChatBot } from "./axiosChatBot.service";
+import { updateConversationDirectus } from "../Directus/update.service";
 
 /**
 	 * Request axios feedback conversation API-chatbot
@@ -40,41 +46,45 @@ export async function feedbackApiChatBot(
 ): Promise<ResponseFailureType | ResponseSuccessType> {
 	const { status, details }: any = await getKeyRedis(ip);
 
-		// Message Error Typed - error message from Redis
-		if (status !== 200 && typeof details === "string") {
-			return { status: status, details: details };
-		}
-	
-		// Message Error Typed - check structure auth
-		if (typeof details !== "object" || !("authToken" in details)) {
-			return { status: 401, details: "Not authorized" };
-		}
+	// Message Error Typed - error message from Redis
+	if (status !== SUCCESS_OK && typeof details === "string") {
+		return { status: status, details: details };
+	}
+
+	// Message Error Typed - check structure auth
+	if (typeof details !== "object" || !("authToken" in details)) {
+		return {
+			status: ERROR_NOT_AUTHENTIFIED,
+			details: ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+		};
+	}
 
 	try {
-		const responseApi: ResponseFeedbackType| ResponseErrorType = await axiosChatBot.post(
-			`/chat/feedback/${details?.uuid}`,
-			{
-				note: note,
-				comment: comment,
-			},
-			{
-				headers: {
-					Authorization: `Bearer ${details?.authToken}`,
-				},
-			}
-		);
+		const data = {
+			Satisfaction: note,
+			Comments: comment,
+		};
 
-		if ('details' in responseApi) {
-			return { status: responseApi.status, details: responseApi.details };
+		if (process.env.COLLECTION_DIRECTUS === undefined) {
+			return { status: ERROR_SERVER, details: ERROR_DATABASE_MESSAGE };
 		}
 
+		const responseApi: any = await updateConversationDirectus(
+			details?.idDirectus,
+			process.env.COLLECTION_DIRECTUS,
+			data
+		);
+
+		if ("details" in responseApi) {
+			return { status: responseApi.status, details: responseApi.details };
+		}
 
 		return { status: status, details: responseApi.data.message };
 	} catch (error: any) {
 		console.error(error);
 		return {
 			status: error.status,
-			message: "failure",
+			message: FAILURE_MESSAGE,
 			details: error?.message,
 		};
 	}

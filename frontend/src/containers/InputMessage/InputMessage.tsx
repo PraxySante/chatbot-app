@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../../hooks/UseLanguage';
 import Input from '../../components/Inputs/Input';
 
@@ -27,7 +27,13 @@ export default function InputMessage() {
 
   const [audio, setAudio] = useState<MediaStream | null>(null);
   const [widthUser, setWidthUser] = useState<any>();
-  const [isButtonPressed, setIsButtonPressed] = useState<boolean>(false);
+  const isButtonPressedRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (!userSelectedMicrophone) {
+      settingsMicrophone();
+    }
+  }, []);
 
   useEffect(() => {
     const width = document.querySelector('.container-input')?.clientWidth;
@@ -76,20 +82,8 @@ export default function InputMessage() {
     }
   }
 
-  async function SelectMicrophone() {
-    //Microphone not selected
-    if (!userSelectedMicrophone) {
-      await settingsMicrophone();
-    }
-  }
-
   async function handleMicrophoneDown(): Promise<void> {
-    if (!userSelectedMicrophone) {
-      return;
-    }
-
-    setIsButtonPressed(true);
-
+    isButtonPressedRef.current = true;
     if (!isRecord) {
       await startTranscription();
     } else if (isMuted) {
@@ -99,15 +93,10 @@ export default function InputMessage() {
   }
 
   async function handleMicrophoneUp(): Promise<void> {
-    if (!userSelectedMicrophone) {
-      return;
-    }
-
-    setIsButtonPressed(false);
-
+    isButtonPressedRef.current = false;
     if (isRecord && !isMuted) {
-      whoIsWritten('none');
       muteTranscription();
+      whoIsWritten('assistant-transcribe');
     }
   }
 
@@ -153,18 +142,18 @@ export default function InputMessage() {
           </>
         )}
       </form>
+
       <IconButton
         aria-label="Maintenir le bouton pour parler et relâcher le bouton pour envoyer"
         title="Maintenir pour parler, relâcher pour envoyer"
         type="button"
-        className={`icon-microphone ${isButtonPressed ? 'active-microphone' : ''}`}
+        className={`icon-microphone ${isButtonPressedRef.current ? 'active-microphone' : ''}`}
         icon={icons?.microphone}
-        onClick={!userSelectedMicrophone ? SelectMicrophone : undefined}
         onMouseDown={handleMicrophoneDown}
         onMouseUp={handleMicrophoneUp}
         onTouchStart={handleMicrophoneDown}
         onTouchEnd={handleMicrophoneUp}
-        onMouseLeave={isButtonPressed ? handleMicrophoneUp : undefined}
+        onMouseLeave={handleMicrophoneUp}
       />
 
       {isRecord && !isMuted && (

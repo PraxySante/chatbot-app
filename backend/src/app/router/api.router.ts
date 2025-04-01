@@ -40,6 +40,13 @@ router.post(
 );
 
 router.post(
+	"/restart",
+	controllerWrapper(verifyOrigin),
+	controllerWrapper(verifyAuthRedis),
+	controllerWrapper(apiController.restartChat)
+);
+
+router.post(
 	"/end",
 	controllerWrapper(verifyOrigin),
 	controllerWrapper(verifyAuthRedis),
