@@ -9,6 +9,7 @@ import IconButton from '../components/Buttons/IconButton';
 import ModalParameter from '../containers/ModalParameter/ModalParameter';
 import SideBar from '../containers/SideBar/SideBar';
 import useTranscription from '../hooks/TranscriptionProvider';
+import Recaptcha from '../components/Recaptcha/Recaptcha';
 
 export default function DashBoard() {
   //Init Component
@@ -98,7 +99,8 @@ export default function DashBoard() {
           ) : (
             <>
               {/* Header */}
-              <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
+                <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
+                <Recaptcha/>
               <hr />
 
               {/* Panel */}

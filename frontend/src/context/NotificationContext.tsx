@@ -43,15 +43,17 @@ function NotificationHandlerProvider({ children }: { children: ReactNode }) {
           setIsOpen(true);
           break;
         case 401:
-          setMessageNotification(
-            `Session perdue, redemarrer une nouvelle session ou contacter un administrateur.`
-          );
+          !value
+            ? setMessageNotification(
+                `Session perdue, redemarrer une nouvelle session ou contacter un administrateur.`
+              )
+            : setMessageNotification(value);
           setIsOpen(true);
           break;
         case 200:
           !value
             ? setMessageNotification(
-                `Session perdue, redemarrer une nouvelle session ou contacter un administrateur.`
+                `La requete a bien été réalisé.`
               )
             : setMessageNotification(value);
 

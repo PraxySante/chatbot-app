@@ -4,17 +4,7 @@ import { SUCCESS_OK } from "../constant/constant";
 
 export default {
 	/**
-	 * Reformulate request from conversation chatbot-user
-	 *
-	 * @param {Request} req - Object contains data :
-	 * - **IP du client** (`req.ip`)
-	 * - **Body** (`req.body`):
-	 *   - `project`: Company name
-	 *   - `language`: Language selected
-	 * @example
-	 * Requête POST avec un body JSON :
-	 * { projet: "Praxy IA", language: "fr" }
-		messsage='prendre un rdv ?' }
+	 * Test to control between api chabot and api llm
 	 * @param {Response} res - Return response failed or success
 	 * @param {NextFunction} _ - Next not used
 	 * @returns {Promise<Response>} - Return response JSON :
