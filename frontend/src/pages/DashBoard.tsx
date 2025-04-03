@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useLanguage } from '../hooks/UseLanguage';
 import icons from '../constants/icons';
 
 import Header from '../containers/Header/Header';
 import Panel from '../containers/Panel/Panel';
-import ModalMenu from '../containers/ModalMenu/ModalMenu';
 import IconButton from '../components/Buttons/IconButton';
 import ModalParameter from '../containers/ModalParameter/ModalParameter';
-import { ModalParameterAttributes } from '../types/modal/modal.type';
 import SideBar from '../containers/SideBar/SideBar';
+import useTranscription from '../hooks/TranscriptionProvider';
 
 export default function DashBoard() {
   //Init Component
@@ -19,19 +18,13 @@ export default function DashBoard() {
   // Check language selected
   const { selectedLanguage } = useLanguage();
 
+  const { isOpenModal } = useTranscription();
+
   // Check opening sideBar default is true
   const [isOpenSideBar, setIsOpenSideBar] = useState<boolean>(false);
 
   // Check opening ModalMenu default is false
   const [isOpenModalMenu, setIsOpenModalMenu] = useState<boolean>(false);
-  // Check opening ModalParameter default is false
-  const [isOpenModalParameter, setIsOpenModalParameter] =
-    useState<ModalParameterAttributes | null>(null);
-
-  // Hook to render ModalParameter according user selection
-  useEffect(() => {
-    renderingModalParameter;
-  }, [setIsOpenModalParameter]);
 
   // Function to switch Open/Close SideBar
   function toggleOpenCloseSideBar() {
@@ -52,34 +45,17 @@ export default function DashBoard() {
 
   // Rendering Modal Parameter according user selection
   function renderingModalParameter() {
-    return (
-      <>
-        {/* Modal Parameter */}
-        {isOpenModalParameter && isOpenModalParameter.isOpen && (
-          <ModalParameter
-            setIsOpenModalParameterItem={setIsOpenModalParameter}
-            isOpenModalParameterItem={isOpenModalParameter}
-          />
-        )}
-      </>
-    );
+    return <>{isOpenModal ? <ModalParameter /> : null}</>;
   }
 
   return (
     <>
-      {/* Display Menu parameters according config */}
-      {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' && (
-        <>
-          {isOpenModalMenu ? (
-            <ModalMenu setIsOpenModalParameter={setIsOpenModalParameter} />
-          ) : null}
-        </>
-      )}
       {/* Dashboard section */}
       <div id="dashboard" onClick={closeModalByClickBackGround}>
         {/* Rendering ModalParameter */}
-        {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' &&
-          renderingModalParameter()}
+        {import.meta.env.VITE_OPT_AUDIO_PARAMETERS === 'true' && isOpenModal
+          ? renderingModalParameter()
+          : null}
 
         {/* Sidebar section */}
         {/* Button toggle Open/Close SideBar */}
@@ -105,7 +81,6 @@ export default function DashBoard() {
         <section id="main" className={isOpenSideBar ? 'main-reduce' : ''}>
           {/* Button toggle Open/Close Modal Parameter */}
           {/* Button toggle Open/Close ModalMenu Parameters */}
-
           {import.meta.env.VITE_OPT_AUT0_ACCOUNT === 'true' ? (
             <>
               {isAuthenticated && selectedLanguage ? (

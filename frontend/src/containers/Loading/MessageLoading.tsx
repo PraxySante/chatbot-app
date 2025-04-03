@@ -1,4 +1,5 @@
 import icons from '../../constants/icons';
+import { useChat } from '../../hooks/ChatProvider';
 
 type MessageLoadingType = {
   className: string;
@@ -9,6 +10,8 @@ export default function MessageLoading({
   className,
   role,
 }: MessageLoadingType) {
+
+  const { messageLoading } = useChat();
   return (
     <>
       <section className={`wrapper ${className}`}>
@@ -18,9 +21,7 @@ export default function MessageLoading({
           className={`loader bg-${role}`}
         >
           {icons.spinner}
-          {role === 'assistant'
-            ? 'Je réfléchis, je vous réponds dans un instant'
-            : "Vous êtes entrain d'ecrire/parler"}
+          {messageLoading}
         </button>
       </section>
     </>

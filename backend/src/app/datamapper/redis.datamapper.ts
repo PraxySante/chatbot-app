@@ -1,4 +1,10 @@
-import { ONE_HOUR } from "../constant/constant";
+import {
+	ERROR_NOT_FOUND,
+	ERROR_NOT_FOUND_MESSAGE,
+	FAILURE_REDIS_MESSAGE,
+	ONE_HOUR,
+	SUCCESS_OK,
+} from "../constant/constant";
 import { client as redisClient } from "../services/Redis/redis.service";
 import { ResponseFailureType } from "../types/chatbot.type";
 import { KeyRedisType, ResponseKeyRedisType } from "../types/redis.type";
@@ -58,21 +64,21 @@ async function getKeyRedis(
 		const isExist = await doKeyRedisExist(keyRedis);
 
 		if (typeof isExist !== "boolean") {
-			return { status: 404, details: "Not found data." };
+			return { status: ERROR_NOT_FOUND, details: ERROR_NOT_FOUND_MESSAGE };
 		}
 
 		const responseRedis: string | null = await redisClient.get(keyRedis);
 
 		if (!responseRedis) {
-			return { status: 404, details: "Not found data." };
+			return { status: ERROR_NOT_FOUND, details: ERROR_NOT_FOUND_MESSAGE };
 		}
 
 		const storedData = JSON.parse(responseRedis);
 
-		const result = { status: 200, details: storedData };
+		const result = { status: SUCCESS_OK, details: storedData };
 		return result;
 	} catch (error: any) {
-		console.log("Failed to connect to Redis", error?.message);
+		console.log(FAILURE_REDIS_MESSAGE, error?.message);
 		return { status: error?.status, details: error.message };
 	}
 }
@@ -99,7 +105,7 @@ async function createKeyRedis(
 		const isExist = await doKeyRedisExist(keyRedis);
 
 		if (typeof isExist !== "boolean") {
-			return { status: 404, details: "Not found data." };
+			return { status: ERROR_NOT_FOUND, details: ERROR_NOT_FOUND_MESSAGE };
 		}
 
 		if (!isExist) {
@@ -108,7 +114,7 @@ async function createKeyRedis(
 		}
 		return;
 	} catch (error: any) {
-		console.log("Failed to connect to Redis", error?.message);
+		console.log(FAILURE_REDIS_MESSAGE, error?.message);
 		return { status: error?.status, details: error.message };
 	}
 }
@@ -130,37 +136,48 @@ async function createKeyRedis(
  */
 async function updateKeyRedis(
 	keyRedis: string,
+	keyValue: string,
 	value: string
 ): Promise<void | ResponseFailureType> {
 	try {
 		const isExist = await doKeyRedisExist(keyRedis);
 
 		if (typeof isExist !== "boolean") {
-			return { status: 404, details: "Not found data." };
+			return { status: ERROR_NOT_FOUND, details: ERROR_NOT_FOUND_MESSAGE };
 		}
 
 		if (!isExist) {
-			return { status: 404, details: "Not found data." };
+			return { status: ERROR_NOT_FOUND, details: ERROR_NOT_FOUND_MESSAGE };
 		}
 
 		const { status, details } = await getKeyRedis(keyRedis);
 
-		if (status !== 200 && typeof details === 'string') {
+		if (status !== SUCCESS_OK && typeof details === "string") {
 			return {
 				status: status,
 				details: details,
 			};
 		}
 
-		const storedData = details as KeyRedisType
-		storedData.uuid = value;
-		
+		const storedData = details as KeyRedisType;
+		switch (keyValue) {
+			case "uuid":
+				storedData.uuid = value;
+				break;
+			case "idDirectus":
+				storedData.idDirectus = value;
+				break;
+
+			default:
+				break;
+		}
+
 		await redisClient.set(keyRedis, JSON.stringify(storedData), {
-			EX: 60 * 60,
+			EX: ONE_HOUR,
 		});
 		return;
 	} catch (error: any) {
-		console.log("Failed to connect to Redis", error?.message);
+		console.log(FAILURE_REDIS_MESSAGE, error?.message);
 		return { status: error.status, details: error.message };
 	}
 }
@@ -186,16 +203,16 @@ async function deleteKeyRedis(
 		const isExist = await doKeyRedisExist(keyRedis);
 
 		if (typeof isExist !== "boolean") {
-			return { status: 404, details: "Not found data." };
+			return { status: ERROR_NOT_FOUND, details: ERROR_NOT_FOUND_MESSAGE };
 		}
 
 		if (!isExist) {
-			return { status: 404, details: "Not found data." };
+			return { status: ERROR_NOT_FOUND, details: ERROR_NOT_FOUND_MESSAGE };
 		}
 
 		await redisClient.del(keyRedis);
 	} catch (error: any) {
-		console.error("Failed to connect to Redis", error?.message);
+		console.error(FAILURE_REDIS_MESSAGE, error?.message);
 		return { status: error.status, details: error.message };
 	}
 }

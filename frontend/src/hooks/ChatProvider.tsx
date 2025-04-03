@@ -1,5 +1,6 @@
 import { useContext } from 'react';
-import { ChatContext, ChatContextAttributes } from '../context/ChatContext';
+import { ChatContext } from '../context/ChatContext';
+import { ChatContextAttributes } from '../types/provider/provider.type';
 
 // Custom Hook to use context
 function useChat(): ChatContextAttributes {

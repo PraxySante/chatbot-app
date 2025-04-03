@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { getKeyRedis } from "../datamapper/redis.datamapper";
+import {
+	ERROR_BAD_REQUEST,
+	ERROR_BAD_REQUEST_MESSSAGE,
+} from "../constant/constant";
 
 /**
  * Request and control project and language
@@ -36,13 +40,11 @@ export default async function verifyOrigin(
 
 	// validate body
 	if (!project || !language) {
-		return res.status(400).json("Bad request, missing project or language.");
+		return res.status(ERROR_BAD_REQUEST).json(ERROR_BAD_REQUEST_MESSSAGE);
 	}
 
 	// check ip exist
 	if (!ip) {
-		return res.status(400).json("Bad request, no ip provided.");
+		return res.status(ERROR_BAD_REQUEST).json(ERROR_BAD_REQUEST_MESSSAGE);
 	}
-
-
 }

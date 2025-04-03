@@ -1,34 +1,76 @@
-import { useEffect, useState } from 'react';
-import { IParameterModal } from '../../types/modal/modal.interface';
+import { Fragment } from 'react';
+import useTranscription from '../../hooks/TranscriptionProvider';
+import ModalParameterHeader from './ModalParameterHeader';
+import Button from '../../components/Buttons/Button';
 
-
-export default function ModalParameter({
-  setIsOpenModalParameterItem,
-  isOpenModalParameterItem,
-}: IParameterModal) {
-
+export default function ModalParameter() {
   // Init component
-  // Hook state check Open/Close Modal Session default is false
-  const [isOpenModalSession, setIsOpenModalSession] = useState<boolean>(false);
-
-  // Hook init state to ModalSession
-  useEffect(() => {
-    setIsOpenModalSession(isOpenModalParameterItem.isOpen);
-    console.log(isOpenModalSession)
-  }, []);
+  const { listMicrophones, stateOpenModal, selectedMicrophone, startTranscription, userMicrophone } = useTranscription();
+  
+  function selectMicrophone(event: React.ChangeEvent<HTMLSelectElement>) {
+    selectedMicrophone(event.target.value);
+  }
 
   // Function Close Modal action
   function closeModal() {
-    setIsOpenModalSession(!isOpenModalParameterItem.isOpen);
-    setIsOpenModalParameterItem({
-      menuItem: isOpenModalParameterItem?.menuItem,
-      isOpen: false,
-    });
+    stateOpenModal();
+  }
+  
+  async function onSubmit(): Promise<void> {
+    if (!userMicrophone && listMicrophones.length > 0) {
+      selectedMicrophone(listMicrophones[1].label);
+    }
+    closeModal();
+    startTranscription()
+  }
+
+  function renderingSelectOptions() {
+    return (
+      <>
+        <label
+          htmlFor="microphones"
+          className="block text-sm font-medium text-black"
+        >
+          Avant de débuter une conversation vocale avec notre bot, veuillez sélectionner votre microphone.
+        </label>
+        <select
+          id="microphones"
+          className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          value={userMicrophone ? userMicrophone.label : ""}
+          onChange={selectMicrophone}
+        >
+        <option value="" disabled>-- Sélectionner un microphone --</option>
+
+          {listMicrophones.map((microphone: any, index: number) => {
+            return (
+              <Fragment key={index}>
+                <option
+                  key={microphone.id}
+                  label={microphone.label}
+                >{microphone.label}</option>
+              </Fragment>
+            );
+          })}
+        </select>
+        <Button
+            type={'button'}
+            content={'Envoyer'}
+            onClick={() => {
+              onSubmit();
+            }}
+          />
+      </>
+    );
   }
 
   return (
-    <div id="modal-parameter-background" onClick={closeModal}>
-      <div className="modal-parameter"></div>
+    <div id="modal-parameter-background">
+      <div className="modal-parameter">
+        <ModalParameterHeader closeModal={closeModal}/>
+        <form className="">
+          {renderingSelectOptions()}
+        </form>
+      </div>
     </div>
   );
 }

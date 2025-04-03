@@ -1,12 +1,20 @@
 import { NextFunction, Request, Response } from "express";
-import { deleteKeyRedis } from "../datamapper/redis.datamapper";
+import { deleteKeyRedis, updateKeyRedis } from "../datamapper/redis.datamapper";
 import { authAndStartChat } from "../services/Keycloak/authAndStartChat.service";
 import { requestChatToApiChatBot } from "../services/ChatBot/continueChat.service";
 import { endChatApiBot } from "../services/ChatBot/endChat.service";
 import { feedbackApiChatBot } from "../services/ChatBot/feedbackChat.service";
 import { reformulationChatToApiChatBot } from "../services/ChatBot/reformulationChat.service";
 import { startChatApiBot } from "../services/ChatBot/startChat.service";
-import { ResponseFailureType, ResponseSuccessType } from "../types/chatbot.type";
+import {
+	ResponseFailureType,
+	ResponseSuccessType,
+} from "../types/chatbot.type";
+import {
+	ERROR_BAD_REQUEST,
+	FAILURE_MESSAGE,
+	FAILURE_MISSING_IP_HEADERS,
+} from "../constant/constant";
 
 export default {
 	/**
@@ -45,9 +53,9 @@ export default {
 		const { ip } = req;
 
 		if (!ip) {
-			return res.status(400).json({
-				message: "Failure",
-				details: "Missing ip in request headers.",
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_IP_HEADERS,
 			});
 		}
 
@@ -91,9 +99,9 @@ export default {
 	): Promise<Response> {
 		const { ip } = req;
 		if (!ip) {
-			return res.status(400).json({
-				message: "Failure",
-				details: "Missing ip in request headers.",
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_IP_HEADERS,
 			});
 		}
 
@@ -145,23 +153,21 @@ export default {
 		const { history, message } = req.body;
 		const { ip } = req;
 		if (!ip) {
-			return res.status(400).json({
-				message: "Failure",
-				details: "Missing ip in request headers.",
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_IP_HEADERS,
 			});
 		}
-		const response : ResponseFailureType | ResponseSuccessType = await requestChatToApiChatBot(
-			ip,
-			history,
-			message
-		);
+		const response: ResponseFailureType | ResponseSuccessType =
+			await requestChatToApiChatBot(ip, history, message);
 
-		if ('sources' in response) {			
-			return res.status(response.status).json({ details: response.details, sources: response.sources });
+		if ("sources" in response) {
+			return res
+				.status(response.status)
+				.json({ details: response.details, sources: response.sources });
 		}
 
 		return res.status(response.status).json(response.details);
-		
 	},
 
 	/**
@@ -222,12 +228,33 @@ export default {
 	): Promise<Response> {
 		const { ip } = req;
 		if (!ip) {
-			return res.status(400).json({
-				message: "Failure",
-				details: "Missing ip in request headers.",
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_IP_HEADERS,
 			});
 		}
 		const { status, details } = await reformulationChatToApiChatBot(ip);
+		return res.status(status).send(details);
+	},
+
+	async restartChat(
+		req: Request,
+		res: Response,
+		_: NextFunction
+	): Promise<Response> {
+		const { ip } = req;
+		if (!ip) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_IP_HEADERS,
+			});
+		}
+
+		await updateKeyRedis(ip, "uuid", "");
+		await updateKeyRedis(ip, "idDirectus", "");
+
+		const { status, details } = await startChatApiBot(ip);
+		console.log(`Conversation is restart`);
 		return res.status(status).send(details);
 	},
 
@@ -271,8 +298,8 @@ export default {
 		const { ip } = req;
 		if (!ip) {
 			return res.status(400).json({
-				message: "Failure",
-				details: "Missing ip in request headers.",
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_IP_HEADERS,
 			});
 		}
 		const { status, details } = await endChatApiBot(ip);
@@ -321,9 +348,9 @@ export default {
 		const { note, comment } = req.body;
 		const { ip } = req;
 		if (!ip) {
-			return res.status(400).json({
-				message: "Failure",
-				details: "Missing ip in request headers.",
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_IP_HEADERS,
 			});
 		}
 		const { status, details } = await feedbackApiChatBot(ip, note, comment);

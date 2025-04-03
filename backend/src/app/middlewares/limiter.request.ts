@@ -1,9 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { client as redisClient } from "../services/Redis/redis.service";
 import {
+	ERROR_TOO_MANY_REQUEST,
+	ERROR_TOO_MANY_REQUEST_MESSAGE,
+	FAILURE_MESSAGE,
 	KEY_EXIST,
 	MAX_REQUEST_PER_MINUTE,
 	ONE_MINUTE,
+	USER,
 } from "../constant/constant";
 
 /**
@@ -33,7 +37,7 @@ export default async function limiterRequestApi(
 	res: Response,
 	_: NextFunction
 ) :Promise<void|Response>{
-	const userId = `user-${req.ip}`;
+	const userId = `${USER}-${req.ip}`;
 
 	const request = await redisClient.incr(userId);
 
@@ -42,9 +46,9 @@ export default async function limiterRequestApi(
 	}
 
 	if (request > MAX_REQUEST_PER_MINUTE) {
-		return res.status(429).json({
-			message: "Failure",
-			details: "Too many requests. Please try again later.",
+		return res.status(ERROR_TOO_MANY_REQUEST).json({
+			message: FAILURE_MESSAGE,
+			details: ERROR_TOO_MANY_REQUEST_MESSAGE,
 			retryAfter: ONE_MINUTE,
 		});
 	}

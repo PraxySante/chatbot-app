@@ -1,3 +1,13 @@
+import {
+	ERROR_BAD_REQUEST,
+	ERROR_BAD_REQUEST_MESSSAGE,
+	ERROR_NOT_AUTHENTIFIED,
+	ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+	FAILURE_MESSAGE,
+	MILLISECONDS,
+	SUCCESS_OK,
+	SUCCESS_OK_MESSAGE,
+} from "../../constant/constant";
 import { createKeyRedis, getKeyRedis } from "../../datamapper/redis.datamapper";
 import { ResponseAuthChatBot } from "../../types/auth.type";
 import {
@@ -42,29 +52,38 @@ export async function authAndStartChat(
 	// Check presence project and language
 	if (!project || !language) {
 		return {
-			status: 400,
-			message: "Failure",
-			details: "Bad request, missing project or language.",
+			status: ERROR_BAD_REQUEST,
+			message: FAILURE_MESSAGE,
+			details: ERROR_BAD_REQUEST_MESSSAGE,
 		};
 	}
 
 	const responseRedis: ResponseKeyRedisType | ResponseFailureType =
-	await getKeyRedis(ip);
-		// Message Error Typed - error message from Redis
-	if (responseRedis.status !== 200 && typeof responseRedis.details === "string") {
-
+		await getKeyRedis(ip);
+	// Message Error Typed - error message from Redis
+	if (
+		responseRedis.status !== SUCCESS_OK &&
+		typeof responseRedis.details === "string"
+	) {
 		const responseApi: ResponseFailureType | ResponseAuthChatBot =
-		await authChatBot();
+			await authChatBot();
 
 		// Message Error Typed
 		const { status, details } = responseApi;
-		if (responseApi.message === "failure" && typeof details === "string") {
+
+		if (
+			responseApi.message === FAILURE_MESSAGE.toLowerCase() &&
+			typeof details === "string"
+		) {
 			return { status: status, details: details };
 		}
 
 		// Message Error Typed
 		if (typeof details !== "object" || !("access_token" in details)) {
-			return { status: 401, details: "Not authorized" };
+			return {
+				status: ERROR_NOT_AUTHENTIFIED,
+				details: ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+			};
 		}
 
 		// Create an user into Redis
@@ -72,18 +91,20 @@ export async function authAndStartChat(
 			ip,
 			JSON.stringify({
 				authToken: details.access_token,
-				token_expires_in: Date.now() + details.expires_in,
-				startTime: Date.now(),
+				token_expires_in:
+					Math.floor(Date.now() / MILLISECONDS) + details?.expires_in,
+				startTime: Math.floor(Date.now() / MILLISECONDS),
 				project: project,
 				language: language,
 				uuid: "",
+				idDirectus: "",
 			})
 		);
 	}
 
 	// Message Success Typed
 	return {
-		status: 200,
-		details: "Success connection",
+		status: SUCCESS_OK,
+		details: SUCCESS_OK_MESSAGE,
 	};
 }

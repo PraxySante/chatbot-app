@@ -1,14 +1,14 @@
 version: "3.9"
 
-# Service Backend
 services:
+  # Service Backend
   backend:
     build:
       context: ./backend
-    ports:
-      - "8000:8000"
     env_file:
       - ./backend/.env
+    ports:
+      - "127.0.0.1:${BACKEND_PORT}:8000"
     depends_on:
       - redis
     networks:
@@ -18,10 +18,10 @@ services:
   frontend:
     build:
       context: ./frontend
-    ports:
-      - "5000:5000"
     env_file:
       - ./frontend/.env
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT}:80"
     depends_on:
       - backend
     networks:

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { ERROR_SERVER, ERROR_SERVER_MESSAGE } from "../constant/constant";
 
 export default function controllerWrapper(controllerMw: any) {
 	return async (req: Request, res: Response, next: NextFunction) => {
@@ -10,7 +11,7 @@ export default function controllerWrapper(controllerMw: any) {
 		} catch (error: any) {
 			console.error(error);
 			if (!res.headersSent) {
-				res.status(500).json({ error: "500 Internal Server Error" });
+				res.status(ERROR_SERVER).json({ error: ERROR_SERVER_MESSAGE});
 			}
 		}
 	};

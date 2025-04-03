@@ -10,40 +10,31 @@ import { sendMessageApiFrontChatBot } from '../services/ChatBot/sendMessageApiFr
 import { reformulateChat } from '../services/ChatBot/reformulateChat.service';
 import { endChat } from '../services/ChatBot/endChat.service';
 import { feedbackApiFrontChatBot } from '../services/ChatBot/feedbackApiFrontChatBot.service';
-
-export type ChatContextAttributes = {
-  isRestart: boolean;
-  selectedRestart: () => void;
-  isStart: boolean;
-  verifyStartChat?: () => void;
-  messages: MessageAttributes[];
-  requestChatConversation: (userContent: string) => void;
-  stockMessageUser: (userContent: string) => void;
-  reformulateChatConversation: () => void;
-  endConversation: () => void;
-  procedures: any;
-  sendFeedback: (comment: string) => void;
-  whoIsWritten: (role: string) => void;
-  isUserWritten: boolean;
-  isBotWritten: boolean;
-  setVoteUser:(vote:number)=>void
-};
+import { ChatContextAttributes } from '../types/provider/provider.type';
+import { restartChat } from '../services/ChatBot/restartChat.service';
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
-function ChatContextProvider({ children, useNotification }: any) {
+function ChatContextProvider({
+  children,
+  useNotification,
+  useTranscription,
+}: any) {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { selectedLanguage } = useLanguage();
   const { getMessageToNotification } = useNotification();
+  const { messagesUser, messagesLLM, messagesError } = useTranscription();
+
   const [isRestart, setIsRestart] = useState<boolean>(false);
   const [isStart, setIsStart] = useState<boolean>(false);
   const [messages, setMessages] = useState<MessageAttributes[]>([]);
   const [historyChat, setHistoryChat] = useState<MessageType[]>([]);
   const [procedures, setProcedures] = useState<any[]>([]);
 
-  const [vote, setVote] = useState<number>(0)
+  const [vote, setVote] = useState<number>(0);
   const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
+  const [messageLoading, setMessageLoading] = useState<string>('');
 
   if (!useNotification) {
     throw new Error(
@@ -58,19 +49,57 @@ function ChatContextProvider({ children, useNotification }: any) {
     start();
   }, []);
 
+  useEffect(() => {
+    if (messagesUser?.message?.transcript?.[0]?.[1]) {
+      stockMessageUserTranscription(
+        messagesUser?.message?.transcript?.[0]?.[1]
+      );
+    }
+  }, [messagesUser]);
+
+  useEffect(() => {
+    if (messagesLLM) {
+      stockMessageAssistantTranscription(messagesLLM);
+    }
+  }, [messagesLLM]);
+
+  useEffect(() => {
+    if (messagesError) {
+      if (messagesError.type === 'failure') {
+        getMessageToNotification(
+          messagesError.data.status,
+          messagesError.data.details
+        );
+        return;
+      }
+    }
+  }, [messagesError]);
+
   function whoIsWritten(role: string): void {
     switch (role) {
       case 'assistant':
         setIsBotWritten(true);
+        setMessageLoading('Je réfléchis, je vous réponds dans un instant ...');
         break;
-      case 'user':
+      case 'assistant-transcribe':
         setIsUserWritten(true);
+        setMessageLoading('Retranscription de votre demande ...');
+        break;
+      case 'user-text':
+        setIsUserWritten(true);
+        setMessageLoading("Vous êtes entrain d'écrire ...");
+        break;
+      case 'user-microphone':
+        setIsUserWritten(true);
+        setMessageLoading('Vous êtes entrain de parler ...');
         break;
       case 'none':
+        setMessageLoading('');
         setIsBotWritten(false);
         setIsUserWritten(false);
         break;
       default:
+        setMessageLoading('');
         setIsBotWritten(false);
         setIsUserWritten(false);
         break;
@@ -84,7 +113,7 @@ function ChatContextProvider({ children, useNotification }: any) {
     setMessages([]);
     setIsRestart(!isRestart);
     getMessageToNotification(200, 'Nouvelle session démarrée');
-    await startConversation();
+    await restartConversation();
   }
 
   async function verifyStartChat(): Promise<void> {
@@ -144,7 +173,37 @@ function ChatContextProvider({ children, useNotification }: any) {
     }
   }
 
-  async function stockMessageUser(userContent: string) {
+  async function restartConversation() {
+
+      const responseRequest: any = await restartChat();
+
+      if (responseRequest.message === 'failure') {
+        getMessageToNotification({
+          status: responseRequest.status,
+          message: responseRequest.details,
+        });
+        return;
+      }
+
+      updateMessages([
+        {
+          id: 0,
+          role: `${responseRequest.role}`,
+          content: `${responseRequest.content}`,
+          date: new Date().toLocaleTimeString(selectedLanguage),
+        },
+      ]);
+
+      updateHistoryChat([
+        {
+          role: `${responseRequest.role}`,
+          content: `${responseRequest.content}`,
+        },
+      ]);
+    
+  }
+
+  async function stockMessageUser(userContent: any) {
     let lengthMessage = messages.length + 1;
 
     const newMessages: MessageAttributes[] = [
@@ -158,6 +217,78 @@ function ChatContextProvider({ children, useNotification }: any) {
     updateMessages(newMessages);
     updateHistoryChat(newMessages);
     await requestChatConversation(userContent);
+  }
+
+  async function stockMessageUserTranscription(userContent: any) {
+    let lengthMessage = messages.length + 1;
+
+    const newMessages: MessageAttributes[] = [
+      {
+        id: lengthMessage,
+        role: 'user',
+        content: userContent,
+        date: new Date().toLocaleTimeString(selectedLanguage),
+      },
+    ];
+    updateMessages(newMessages);
+    updateHistoryChat(newMessages);
+    whoIsWritten('assistant');
+  }
+
+  async function stockMessageAssistantTranscription(
+    responseChatConversation: any
+  ) {
+    let lengthMessage = messages.length + 1;
+
+    if (responseChatConversation.data.message === 'failure') {
+      getMessageToNotification(
+        responseChatConversation.data.status,
+        responseChatConversation.data.details
+      );
+      return;
+    }
+
+    const newMessages: MessageAttributes[] = [
+      {
+        id: lengthMessage + 1,
+        role: responseChatConversation.data.details.role,
+        content: responseChatConversation.data.details.content,
+        date: new Date().toLocaleTimeString(selectedLanguage),
+      },
+    ];
+
+    if (responseChatConversation.data.sources) {
+      responseChatConversation.data.sources.map((source: SourceType) => {
+        lengthMessage++;
+        const sourceProcedures = {
+          id: lengthMessage,
+          role: responseChatConversation.data.details.role,
+          content: source.doc_name,
+          doc_type: source.doc_type,
+          doc_ref: source.doc_ref,
+          date: new Date().toLocaleTimeString(selectedLanguage),
+        };
+        newMessages.push(sourceProcedures);
+        if (messages.length > 0) {
+          setProcedures((prevHistoryChat) => {
+            return [...prevHistoryChat, ...[sourceProcedures]];
+          });
+        } else {
+          setProcedures(() => {
+            return [...messages, ...[sourceProcedures]];
+          });
+        }
+      });
+      updateMessages(newMessages);
+    }
+
+    updateHistoryChat([
+      {
+        role: `${responseChatConversation.data.details.role}`,
+        content: `${responseChatConversation.data.details.content}`,
+      },
+    ]);
+    whoIsWritten('none');
   }
 
   async function requestChatConversation(userContent: string) {
@@ -240,9 +371,10 @@ function ChatContextProvider({ children, useNotification }: any) {
     newMessages.push({
       id: lengthMessage++,
       role: 'assistant',
-      content: "Il semble que j'ai mal interprété votre question. Je vais essayer de reformuler votre question pour mieux répondre à vos attentes. Voici 3 propositions de questions similaires à votre question, cliquez sur celle qui correspond au mieux à ce que vous avez en tête :",
+      content:
+        "Il semble que j'ai mal interprété votre question. Je vais essayer de reformuler votre question pour mieux répondre à vos attentes. Voici 3 propositions de questions similaires à votre question, cliquez sur celle qui correspond au mieux à ce que vous avez en tête :",
       date: new Date().toLocaleTimeString(selectedLanguage),
-    })
+    });
     propositionChatConversation.map((proposition: MessageType) => {
       lengthMessage++;
       newMessages.push({
@@ -256,14 +388,13 @@ function ChatContextProvider({ children, useNotification }: any) {
 
     updateMessages(newMessages);
     whoIsWritten('none');
-
   }
 
   function setVoteUser(vote: number) {
     setVote(vote);
   }
 
-  async function sendFeedback( comment: string) {
+  async function sendFeedback(comment: string) {
     const responseApi: any = await feedbackApiFrontChatBot(vote, comment);
     if (responseApi.message === 'failure') {
       getMessageToNotification(responseApi.status, responseApi.details);
@@ -320,6 +451,8 @@ function ChatContextProvider({ children, useNotification }: any) {
               messages,
               requestChatConversation,
               stockMessageUser,
+              stockMessageUserTranscription,
+              stockMessageAssistantTranscription,
               reformulateChatConversation,
               endConversation,
               procedures,
@@ -327,7 +460,8 @@ function ChatContextProvider({ children, useNotification }: any) {
               whoIsWritten,
               isUserWritten,
               isBotWritten,
-              setVoteUser
+              messageLoading,
+              setVoteUser,
             }}
           >
             {children}
@@ -342,14 +476,17 @@ function ChatContextProvider({ children, useNotification }: any) {
             messages,
             requestChatConversation,
             stockMessageUser,
+            stockMessageUserTranscription,
+            stockMessageAssistantTranscription,
             reformulateChatConversation,
             endConversation,
             procedures,
             sendFeedback,
             whoIsWritten,
             isUserWritten,
-              isBotWritten,
-              setVoteUser
+            isBotWritten,
+            messageLoading,
+            setVoteUser,
           }}
         >
           {children}

@@ -1,18 +1,24 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react(),],
-  server: {
-    allowedHosts:['chatbotfoch.praxysante.fr'],
-    host: true,
-    port: 5000,
-  },
-  preview: {
-    port: 5000,
-  },
-  build: {
-    chunkSizeWarningLimit: 1000, // par exemple, augmenter la limite à 1 Mo
-  }
-});
+export default ({ mode }: any) => {
+  // Need do transform import.meta.env into process.env
+  // import.meta was not supported in this file
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+  return defineConfig({
+    plugins: [react()],
+    server: {
+      allowedHosts: [`${process.env.VITE_HOST}`],
+      host: true,
+      port: Number(process.env.VITE_PORT),
+    },
+    preview: {
+      port: Number(process.env.VITE_PORT),
+    },
+    build: {
+      chunkSizeWarningLimit: 1000,
+    },
+    base: process.env.VITE_BASE,
+  });
+};
