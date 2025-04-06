@@ -1,6 +1,5 @@
-import { createContext, ReactNode, useRef, useState } from 'react';
+import { createContext, useRef, useState } from 'react';
 import { WebSocketFront } from '../services/Transcription/webSocket.class';
-import useRecaptcha from '../hooks/RecaptchaProvider';
 
 type TranscriptionContextProviderAttributes = {
   startTranscription: () => void;

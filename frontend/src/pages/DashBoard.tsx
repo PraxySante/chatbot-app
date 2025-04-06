@@ -10,6 +10,7 @@ import ModalParameter from '../containers/ModalParameter/ModalParameter';
 import SideBar from '../containers/SideBar/SideBar';
 import useTranscription from '../hooks/TranscriptionProvider';
 import Recaptcha from '../components/Recaptcha/Recaptcha';
+import useRecaptcha from '../hooks/RecaptchaProvider';
 
 export default function DashBoard() {
   //Init Component
@@ -18,6 +19,8 @@ export default function DashBoard() {
   const { isAuthenticated } = useAuth0();
   // Check language selected
   const { selectedLanguage } = useLanguage();
+
+  const { isHuman } = useRecaptcha();
 
   const { isOpenModal } = useTranscription();
 
@@ -80,6 +83,11 @@ export default function DashBoard() {
 
         {/* Main section */}
         <section id="main" className={isOpenSideBar ? 'main-reduce' : ''}>
+          {!isHuman ? (
+            <span className="absolute h-full w-full z-20 bg-gray-200/50 flex items-center justify-center">
+              <Recaptcha />
+            </span>
+          ) : null}
           {/* Button toggle Open/Close Modal Parameter */}
           {/* Button toggle Open/Close ModalMenu Parameters */}
           {import.meta.env.VITE_OPT_AUT0_ACCOUNT === 'true' ? (
@@ -99,8 +107,7 @@ export default function DashBoard() {
           ) : (
             <>
               {/* Header */}
-                <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
-                <Recaptcha/>
+              <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
               <hr />
 
               {/* Panel */}

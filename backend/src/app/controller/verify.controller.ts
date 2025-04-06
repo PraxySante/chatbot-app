@@ -38,7 +38,12 @@ export default {
 		__: NextFunction
 	): Promise<Response> {
 		const { captchaValue } = req.body;
-		const responseGoogle = await verifyUserReCaptchaGoogle(captchaValue);
-		return res.status(200).json(responseGoogle);
+		const { status, details } = await verifyUserReCaptchaGoogle(captchaValue);
+		// If error return error message
+		if (status !== SUCCESS_OK) {
+			return res.status(status).json(details);
+		}
+		// Return message success
+		return res.status(status).json(details);
 	},
 };

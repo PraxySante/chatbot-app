@@ -1,38 +1,49 @@
-import axios from 'axios';
 import { useRef } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useNotification } from '../../hooks/NotificationProvider';
+import useRecaptcha from '../../hooks/RecaptchaProvider';
 
 export default function Recaptcha() {
   const recaptcha = useRef<ReCAPTCHA | null>(null);
 
-  const {getMessageToNotification} = useNotification()
+  const { getMessageToNotification } = useNotification();
+  const { verifyHuman } = useRecaptcha();
 
-  async function submitForm(event: any) {
-    event.preventDefault();
-
+  async function submitForm() {
     if (!recaptcha.current) {
-      alert('ReCAPTCHA not loaded yet!');
+      getMessageToNotification(
+        401,
+        "Veuillez confirmer que vous n'etes pas un robot"
+      );
       return;
     }
 
     const captchaValue = recaptcha.current.getValue();
-    console.log('🚀 ~ submitForm ~ captchaValue:', captchaValue);
     if (!captchaValue) {
-      getMessageToNotification(401, "Veuillez confirmer que vous n'etes pas un robot")
-    } else {
-      const data: any = await axios.post(
-        'http://localhost:8000/api/verify-user',
-        { captchaValue: captchaValue }
+      getMessageToNotification(
+        401,
+        "Veuillez confirmer que vous n'etes pas un robot"
       );
-      console.log(data);
+    } else {
+      const responseApi = await verifyHuman(captchaValue);
+      if (responseApi?.status !== 200) {
+        getMessageToNotification(
+          401,
+          "Veuillez confirmer que vous n'etes pas un robot"
+        );
+      }
+      getMessageToNotification(
+        200,
+        "Vous pouvez désormais utiliser le chatbot."
+      );
     }
   }
 
   return (
-    <form onSubmit={submitForm}>
-      <ReCAPTCHA ref={recaptcha} sitekey={import.meta.env.VITE_KEY_SITE} />
-      <button type="submit">Clique</button>
-    </form>
+    <ReCAPTCHA
+      onChange={submitForm}
+      ref={recaptcha}
+      sitekey={import.meta.env.VITE_KEY_SITE}
+    />
   );
 }

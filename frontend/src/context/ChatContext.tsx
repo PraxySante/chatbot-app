@@ -55,12 +55,7 @@ function ChatContextProvider({
     async function start() {
       await startConversation();
     }
-    isHuman
-      ? start()
-      : getMessageToNotification(
-          401,
-          'Veuillez cocher la case "Je ne suis pas un robot"'
-        );
+    isHuman ? start() : null;
   }, [isHuman]);
 
   useEffect(() => {
@@ -79,7 +74,10 @@ function ChatContextProvider({
 
   useEffect(() => {
     if (messagesError) {
-      if (messagesError.type === 'failure') {
+      if (
+        messagesError.type === 'failure' ||
+        messagesError.type === 'Failure'
+      ) {
         getMessageToNotification(
           messagesError.data.status,
           messagesError.data.details
@@ -93,18 +91,22 @@ function ChatContextProvider({
     switch (role) {
       case 'assistant':
         setIsBotWritten(true);
+        setIsUserWritten(false)
         setMessageLoading('Je réfléchis, je vous réponds dans un instant ...');
         break;
       case 'assistant-transcribe':
         setIsUserWritten(true);
+        setIsBotWritten(false);
         setMessageLoading('Retranscription de votre demande ...');
         break;
       case 'user-text':
         setIsUserWritten(true);
+        setIsBotWritten(false);
         setMessageLoading("Vous êtes entrain d'écrire ...");
         break;
       case 'user-microphone':
         setIsUserWritten(true);
+        setIsBotWritten(false);
         setMessageLoading('Vous êtes entrain de parler ...');
         break;
       case 'none':

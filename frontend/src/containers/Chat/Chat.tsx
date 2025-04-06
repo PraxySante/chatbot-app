@@ -120,7 +120,7 @@ export default function Chat({
                 content={userLanguage?.reformulate_button}
                 onClick={() => clickReformulateMessage()}
               />
-              <FeedbackLight setIsOpenModalFeedback={setIsOpenModalFeedback} />
+            <FeedbackLight setIsOpenModalFeedback={setIsOpenModalFeedback} />
             </span>
           )}
       </div>

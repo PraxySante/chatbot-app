@@ -1,16 +1,10 @@
-import axiosAuthSecret from "../axiosConfiguration/axiosAuthSecret.service";
+import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
-export default async function verifyUserRecaptcha(captchaValue:string) {
-  try {    
-    const responseGoogle = await axiosAuthSecret.post('/verify-user',
-      { captchaValue: captchaValue }
-    )
-    const { data, status } = responseGoogle;
-    if (status === 200) {
-      return data as any;
-    } else {
-      return data as any;
-    }
+export default async function verifyUserRecaptcha(captchaValue: string) {
+  try {
+    return await axiosAuthSecret.post('/verify-user', {
+      captchaValue: captchaValue,
+    });
   } catch (error: any) {
     console.error(error.message);
     const data = { message: 'failure', details: error?.message };
