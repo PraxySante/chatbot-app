@@ -17,6 +17,7 @@ const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
 function ChatContextProvider({
   children,
+  useRecaptcha,
   useNotification,
   useTranscription,
 }: any) {
@@ -24,6 +25,8 @@ function ChatContextProvider({
   const { selectedLanguage } = useLanguage();
   const { getMessageToNotification } = useNotification();
   const { messagesUser, messagesLLM, messagesError } = useTranscription();
+
+  const { isHuman } = useRecaptcha();
 
   const [isRestart, setIsRestart] = useState<boolean>(false);
   const [isStart, setIsStart] = useState<boolean>(false);
@@ -36,9 +39,15 @@ function ChatContextProvider({
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
   const [messageLoading, setMessageLoading] = useState<string>('');
 
+  if (!useRecaptcha) {
+    throw new Error(
+      'useRecaptcha was not provided to RecaptchaContextProvider'
+    );
+  }
+
   if (!useNotification) {
     throw new Error(
-      'useNotification was not provided to NotificationContentProvider'
+      'useNotification was not provided to NotificationContextProvider'
     );
   }
 
@@ -46,8 +55,8 @@ function ChatContextProvider({
     async function start() {
       await startConversation();
     }
-    start();
-  }, []);
+    isHuman ? start() : null;
+  }, [isHuman]);
 
   useEffect(() => {
     if (messagesUser?.message?.transcript?.[0]?.[1]) {
@@ -65,7 +74,10 @@ function ChatContextProvider({
 
   useEffect(() => {
     if (messagesError) {
-      if (messagesError.type === 'failure') {
+      if (
+        messagesError.type === 'failure' ||
+        messagesError.type === 'Failure'
+      ) {
         getMessageToNotification(
           messagesError.data.status,
           messagesError.data.details
@@ -79,18 +91,22 @@ function ChatContextProvider({
     switch (role) {
       case 'assistant':
         setIsBotWritten(true);
+        setIsUserWritten(false)
         setMessageLoading('Je réfléchis, je vous réponds dans un instant ...');
         break;
       case 'assistant-transcribe':
         setIsUserWritten(true);
+        setIsBotWritten(false);
         setMessageLoading('Retranscription de votre demande ...');
         break;
       case 'user-text':
         setIsUserWritten(true);
+        setIsBotWritten(false);
         setMessageLoading("Vous êtes entrain d'écrire ...");
         break;
       case 'user-microphone':
         setIsUserWritten(true);
+        setIsBotWritten(false);
         setMessageLoading('Vous êtes entrain de parler ...');
         break;
       case 'none':
@@ -174,33 +190,31 @@ function ChatContextProvider({
   }
 
   async function restartConversation() {
+    const responseRequest: any = await restartChat();
 
-      const responseRequest: any = await restartChat();
+    if (responseRequest.message === 'failure') {
+      getMessageToNotification({
+        status: responseRequest.status,
+        message: responseRequest.details,
+      });
+      return;
+    }
 
-      if (responseRequest.message === 'failure') {
-        getMessageToNotification({
-          status: responseRequest.status,
-          message: responseRequest.details,
-        });
-        return;
-      }
+    updateMessages([
+      {
+        id: 0,
+        role: `${responseRequest.role}`,
+        content: `${responseRequest.content}`,
+        date: new Date().toLocaleTimeString(selectedLanguage),
+      },
+    ]);
 
-      updateMessages([
-        {
-          id: 0,
-          role: `${responseRequest.role}`,
-          content: `${responseRequest.content}`,
-          date: new Date().toLocaleTimeString(selectedLanguage),
-        },
-      ]);
-
-      updateHistoryChat([
-        {
-          role: `${responseRequest.role}`,
-          content: `${responseRequest.content}`,
-        },
-      ]);
-    
+    updateHistoryChat([
+      {
+        role: `${responseRequest.role}`,
+        content: `${responseRequest.content}`,
+      },
+    ]);
   }
 
   async function stockMessageUser(userContent: any) {

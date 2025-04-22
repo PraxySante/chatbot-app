@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useRef, useState } from 'react';
+import { createContext, useRef, useState } from 'react';
 import { WebSocketFront } from '../services/Transcription/webSocket.class';
 
 type TranscriptionContextProviderAttributes = {
@@ -23,7 +23,10 @@ const TranscriptionContext = createContext<
   TranscriptionContextProviderAttributes | undefined
 >(undefined);
 
-function TranscriptionContextProvider({ children }: { children: ReactNode }) {
+function TranscriptionContextProvider({ children, useRecaptcha} :any ) {
+
+  const { isHuman } = useRecaptcha();
+
   const [listMicrophones, setListMicrophones] = useState<any>([]);
   const [userMicrophone, setUserMicrophone] = useState<any>();
   const [messagesUser, setMessagesUser] = useState<any>();
@@ -42,23 +45,31 @@ function TranscriptionContextProvider({ children }: { children: ReactNode }) {
 
   const wsTranscriptionRef = useRef<WebSocketFront | null>(null);
 
-  async function startTranscription() {
-    wsTranscriptionRef.current = new WebSocketFront(
-      `${import.meta.env.VITE_WS_API_CHATBOT}`,
-      userMicrophone.id,
-      (message: any) => {
-        setMessagesUser(message);
-      },
-      (message: any) => {
-        setMessagesLLM(message);
-      },
-      (message: any) => {
-        setMessagesError(message);
-      }
+  if (!useRecaptcha) {
+    throw new Error(
+      'useRecaptcha was not provided to RecaptchaContextProvider'
     );
-    setIsRecord(!isRecord);
-    await wsTranscriptionRef.current.startWebsocketApi();
-    muteTranscription()
+  }
+
+  async function startTranscription() {
+    if (isHuman) {      
+      wsTranscriptionRef.current = new WebSocketFront(
+        `${import.meta.env.VITE_WS_API_CHATBOT}`,
+        userMicrophone.id,
+        (message: any) => {
+          setMessagesUser(message);
+        },
+        (message: any) => {
+          setMessagesLLM(message);
+        },
+        (message: any) => {
+          setMessagesError(message);
+        }
+      );
+      setIsRecord(!isRecord);
+      await wsTranscriptionRef.current.startWebsocketApi();
+      muteTranscription()
+    }
   }
 
   function stopTranscription() {
