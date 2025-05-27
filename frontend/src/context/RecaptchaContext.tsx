@@ -3,6 +3,7 @@ import verifyUserRecaptcha from '../services/ChatBot/verifyUserRecaptcha.service
 
 type RecaptchaContextAttributes = {
   isHuman: boolean;
+  forcingNoRecaptcha: () => void;
   verifyHuman: (
     token: string
   ) => Promise<{ status: number; details: string } | undefined>;
@@ -15,6 +16,10 @@ const RecaptchaContext = createContext<RecaptchaContextAttributes | undefined>(
 function RecaptchaContextProvider({ children }: { children: ReactNode }) {
   const [isHuman, setIsHuman] = useState<boolean>(false);
 
+  function forcingNoRecaptcha() {
+    setIsHuman(true);
+  }
+
   async function verifyHuman(tokenHuman: string) {
     const responseApi = await verifyUserRecaptcha(tokenHuman);
     if (responseApi?.status !== 200) {
@@ -26,7 +31,9 @@ function RecaptchaContextProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <RecaptchaContext.Provider value={{ isHuman, verifyHuman }}>
+    <RecaptchaContext.Provider
+      value={{ isHuman, forcingNoRecaptcha, verifyHuman }}
+    >
       {children}
     </RecaptchaContext.Provider>
   );

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useNotification } from '../../hooks/NotificationProvider';
 import useRecaptcha from '../../hooks/RecaptchaProvider';
@@ -7,7 +7,11 @@ export default function Recaptcha() {
   const recaptcha = useRef<ReCAPTCHA | null>(null);
 
   const { getMessageToNotification } = useNotification();
-  const { verifyHuman } = useRecaptcha();
+  const { verifyHuman, forcingNoRecaptcha } = useRecaptcha();
+
+  useEffect(() => {
+    import.meta.env.VITE_OPT_RECAPTCHA === 'true' ? null : forcingNoRecaptcha();
+  }, []);
 
   async function submitForm() {
     if (!recaptcha.current) {
@@ -34,16 +38,20 @@ export default function Recaptcha() {
       }
       getMessageToNotification(
         200,
-        "Vous pouvez désormais utiliser le chatbot."
+        'Vous pouvez désormais utiliser le chatbot.'
       );
     }
   }
 
   return (
-    <ReCAPTCHA
-      onChange={submitForm}
-      ref={recaptcha}
-      sitekey={import.meta.env.VITE_KEY_SITE}
-    />
+    <>
+      {import.meta.env.VITE_OPT_RECAPTCHA === 'true' ? (
+        <ReCAPTCHA
+          onChange={submitForm}
+          ref={recaptcha}
+          sitekey={import.meta.env.VITE_KEY_SITE}
+        />
+      ) : null}
+    </>
   );
 }
