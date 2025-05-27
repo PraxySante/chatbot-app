@@ -1,11 +1,8 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { useChat } from '../../hooks/ChatProvider';
 import ModalHeader from './ModalHeader';
 import ModalContent from './ModalContent';
-
-type ModalType = {
-  setIsOpenModalFeedback: Dispatch<SetStateAction<boolean>>;
-};
+import { ModalType } from '../../types/modal/modal.type';
 
 export default function Modal({ setIsOpenModalFeedback }: ModalType) {
   const { sendFeedback } = useChat();

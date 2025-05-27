@@ -1,12 +1,8 @@
-import { Dispatch, Fragment, SetStateAction, useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useChat } from '../../hooks/ChatProvider';
 import icons from '../../constants/icons';
 import Link from '../../components/Link/Link';
-
-interface ITabProceduresAttributes {
-  selectedProcedure: number;
-  SetSelectedProcedure: Dispatch<SetStateAction<number>>;
-}
+import { ITabProceduresAttributes } from '../../types/procedures/procedures.interface';
 
 export default function TabProcedures({
   selectedProcedure,

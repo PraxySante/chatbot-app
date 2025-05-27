@@ -1,9 +1,9 @@
-import { Dispatch } from "react";
-import { ModalParameterAttributes } from "./modal.type";
+import { Dispatch, SetStateAction } from 'react';
+import { ModalParameterAttributes } from './modal.type';
 
 export interface IMenu {
   setIsOpenModalParameter: Dispatch<
-    React.SetStateAction<ModalParameterAttributes| null>
+    SetStateAction<ModalParameterAttributes | null>
   >;
 }
 
@@ -13,4 +13,14 @@ export interface IParameterModal {
     isOpen,
   }: ModalParameterAttributes) => void;
   isOpenModalParameterItem: ModalParameterAttributes;
+}
+
+export interface IModalParameterHeader {
+  closeModal: () => void;
+}
+
+export interface IModalContent {
+  getComment: (e: any) => void;
+  onSubmit: () => void;
+  comment: string;
 }

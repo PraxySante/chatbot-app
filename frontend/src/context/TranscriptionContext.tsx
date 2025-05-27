@@ -1,30 +1,13 @@
 import { createContext, useRef, useState } from 'react';
 import { WebSocketFront } from '../services/Transcription/webSocket.class';
-
-type TranscriptionContextProviderAttributes = {
-  startTranscription: () => void;
-  muteTranscription: () => void;
-  stopTranscription: () => void;
-  settingsMicrophone: () => void;
-  selectedMicrophone: (microphone: string) => void;
-  stateOpenModal: () => void;
-  listMicrophones: any[];
-  isOpenModal: boolean;
-  userSelectedMicrophone: boolean;
-  userMicrophone: any;
-  messagesUser: any;
-  messagesLLM: any;
-  messagesError: any;
-  isRecord: boolean;
-  isMuted: boolean;
-};
+import { TranscriptionContextProviderAttributes } from '../types/provider/provider.type';
+import { ERROR_USE_RECAPTCHA } from '../constants/notifications.constants';
 
 const TranscriptionContext = createContext<
   TranscriptionContextProviderAttributes | undefined
 >(undefined);
 
-function TranscriptionContextProvider({ children, useRecaptcha} :any ) {
-
+function TranscriptionContextProvider({ children, useRecaptcha }: any) {
   const { isHuman } = useRecaptcha();
 
   const [listMicrophones, setListMicrophones] = useState<any>([]);
@@ -33,10 +16,8 @@ function TranscriptionContextProvider({ children, useRecaptcha} :any ) {
   const [messagesLLM, setMessagesLLM] = useState<any>();
   const [messagesError, setMessagesError] = useState<any>();
 
-
   const [isRecord, setIsRecord] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
-
 
   const [userSelectedMicrophone, setUserSelectedMicrophone] =
     useState<boolean>(false);
@@ -46,13 +27,11 @@ function TranscriptionContextProvider({ children, useRecaptcha} :any ) {
   const wsTranscriptionRef = useRef<WebSocketFront | null>(null);
 
   if (!useRecaptcha) {
-    throw new Error(
-      'useRecaptcha was not provided to RecaptchaContextProvider'
-    );
+    throw new Error(ERROR_USE_RECAPTCHA);
   }
 
   async function startTranscription() {
-    if (isHuman) {      
+    if (isHuman) {
       wsTranscriptionRef.current = new WebSocketFront(
         `${import.meta.env.VITE_WS_API_CHATBOT}`,
         userMicrophone.id,
@@ -68,7 +47,7 @@ function TranscriptionContextProvider({ children, useRecaptcha} :any ) {
       );
       setIsRecord(!isRecord);
       await wsTranscriptionRef.current.startWebsocketApi();
-      muteTranscription()
+      muteTranscription();
     }
   }
 
@@ -78,7 +57,7 @@ function TranscriptionContextProvider({ children, useRecaptcha} :any ) {
   }
 
   function muteTranscription() {
-    setIsMuted(!isMuted)
+    setIsMuted(!isMuted);
     wsTranscriptionRef.current?.muteWebsocketApi(!isMuted);
   }
 
@@ -87,13 +66,13 @@ function TranscriptionContextProvider({ children, useRecaptcha} :any ) {
       const devices = await navigator.mediaDevices.enumerateDevices();
 
       const devicesAudioInput = devices
-      .filter((device) => device.kind === 'audioinput')
-      .map((device) => {
-        return {
-          id: device.deviceId,
-          label: device.label || `microphone-${device.deviceId}`,
-        };
-      });
+        .filter((device) => device.kind === 'audioinput')
+        .map((device) => {
+          return {
+            id: device.deviceId,
+            label: device.label || `microphone-${device.deviceId}`,
+          };
+        });
       setListMicrophones(devicesAudioInput);
       setUserMicrophone(devicesAudioInput[0]);
     } catch (error) {

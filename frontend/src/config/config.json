@@ -1,4 +1,7 @@
 {
+  "project":{
+    "foch" : "Posez vos questions concernant le fonctionnement de l'Hôpital Foch 🏥"
+  },
   "languages": [
     {
       "id": "fr",

@@ -2,6 +2,12 @@ import { useEffect, useRef } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useNotification } from '../../hooks/NotificationProvider';
 import useRecaptcha from '../../hooks/RecaptchaProvider';
+import {
+  ERROR_MESSAGE_RECAPTCHA,
+  STATUS_ERROR_UNAUTHORIZED,
+  STATUS_SUCCESS,
+  SUCCESS_MESSAGE_RECAPTCHA,
+} from '../../constants/notifications.constants';
 
 export default function Recaptcha() {
   const recaptcha = useRef<ReCAPTCHA | null>(null);
@@ -15,31 +21,19 @@ export default function Recaptcha() {
 
   async function submitForm() {
     if (!recaptcha.current) {
-      getMessageToNotification(
-        401,
-        "Veuillez confirmer que vous n'etes pas un robot"
-      );
+      getMessageToNotification(STATUS_ERROR_UNAUTHORIZED, ERROR_MESSAGE_RECAPTCHA);
       return;
     }
 
     const captchaValue = recaptcha.current.getValue();
     if (!captchaValue) {
-      getMessageToNotification(
-        401,
-        "Veuillez confirmer que vous n'etes pas un robot"
-      );
+      getMessageToNotification(STATUS_ERROR_UNAUTHORIZED, ERROR_MESSAGE_RECAPTCHA);
     } else {
       const responseApi = await verifyHuman(captchaValue);
-      if (responseApi?.status !== 200) {
-        getMessageToNotification(
-          401,
-          "Veuillez confirmer que vous n'etes pas un robot"
-        );
+      if (responseApi?.status !== STATUS_SUCCESS) {
+        getMessageToNotification(STATUS_ERROR_UNAUTHORIZED, ERROR_MESSAGE_RECAPTCHA);
       }
-      getMessageToNotification(
-        200,
-        'Vous pouvez désormais utiliser le chatbot.'
-      );
+      getMessageToNotification(STATUS_SUCCESS, SUCCESS_MESSAGE_RECAPTCHA);
     }
   }
 

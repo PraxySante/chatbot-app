@@ -6,12 +6,9 @@ import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import { useChat } from '../../hooks/ChatProvider';
 import Feedback from '../Feedback/Feedback';
+import { ISideBar } from '../../types/sidebar/sidebar.interface';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
-
-interface ISideBar {
-  toggleOpenCloseSideBar: () => void;
-}
 
 export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
   //Init Component

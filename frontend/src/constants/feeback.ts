@@ -18,3 +18,6 @@ export const iconSmileys = [
     note: 5,
   },
 ];
+
+export const PLACEHOLDER_COMMENTS = 'Ecrire votre commentaire';
+export const PLACEHOLDER_FEEDBACK = 'Feedback';

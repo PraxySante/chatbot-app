@@ -6,10 +6,7 @@ export async function restartChat(): Promise<
   MessageType | ReponseFailureType
 > {
   try {
-    const response: AxiosResponse = await axiosAuthSecret.post('/restart', {
-      project: import.meta.env.VITE_BOT_ORIGIN,
-      language: import.meta.env.VITE_BOT_LANGUAGE,
-    });
+    const response: AxiosResponse = await axiosAuthSecret.post('/restart', {});
     const { data, status } = response;
     if (status === 200) {
       return data as MessageType;

@@ -1,9 +1,6 @@
 import IconButton from '../../components/Buttons/IconButton';
 import Title from '../../components/Text/Title';
-
-interface IModalParameterHeader {
-  closeModal: () => void;
-}
+import { IModalParameterHeader } from '../../types/modal/modal.interface';
 
 export default function ModalParameterHeader({ closeModal }: IModalParameterHeader) {
   return (

@@ -1,11 +1,6 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-
-type MarkDownType = {
-  id: string;
-  content: string;
-  className?: string;
-};
+import { MarkDownType } from '../../../types/messages/messages.type';
 
 export default function TransformMarkDownToMessage({ id, content, className }: MarkDownType) {
   return (

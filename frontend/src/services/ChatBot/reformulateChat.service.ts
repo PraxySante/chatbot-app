@@ -1,15 +1,18 @@
-import { AxiosResponse } from "axios";
-import { MessageType, ReponseFailureType } from "../../types/chatbot/chatbot.type";
-import axiosAuthSecret from "../axiosConfiguration/axiosAuthSecret.service";
+import { AxiosResponse } from 'axios';
+import {
+  MessageType,
+  ReponseFailureType,
+} from '../../types/chatbot/chatbot.type';
+import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
 export async function reformulateChat(): Promise<
   MessageType | ReponseFailureType
 > {
   try {
-    const response: AxiosResponse = await axiosAuthSecret.post(`/reformulate`, {
-      project: import.meta.env.VITE_BOT_ORIGIN,
-      language: import.meta.env.VITE_BOT_LANGUAGE,
-    });
+    const response: AxiosResponse = await axiosAuthSecret.post(
+      `/reformulate`,
+      {}
+    );
     const { data, status } = response;
     if (status === 200) {
       return data as MessageType;
