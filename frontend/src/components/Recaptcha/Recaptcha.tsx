@@ -8,15 +8,17 @@ import {
   STATUS_SUCCESS,
   SUCCESS_MESSAGE_RECAPTCHA,
 } from '../../constants/notifications.constants';
+import { useClient } from '../../hooks/ClientProvider';
 
 export default function Recaptcha() {
   const recaptcha = useRef<ReCAPTCHA | null>(null);
 
   const { getMessageToNotification } = useNotification();
   const { verifyHuman, forcingNoRecaptcha } = useRecaptcha();
+  const { configClient } = useClient();
 
   useEffect(() => {
-    import.meta.env.VITE_OPT_RECAPTCHA === 'true' ? null : forcingNoRecaptcha();
+    configClient.RecaptchaOption === true ? null : forcingNoRecaptcha();
   }, []);
 
   async function submitForm() {
@@ -39,7 +41,7 @@ export default function Recaptcha() {
 
   return (
     <>
-      {import.meta.env.VITE_OPT_RECAPTCHA === 'true' ? (
+      {configClient.RecaptchaOption === true ? (
         <ReCAPTCHA
           onChange={submitForm}
           ref={recaptcha}

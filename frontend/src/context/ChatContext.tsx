@@ -36,6 +36,7 @@ import {
   ROLE_USER_MICROPHONE,
   ROLE_USER_TEXT,
 } from '../constants/chat.constants';
+import { useClient } from '../hooks/ClientProvider';
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
@@ -51,6 +52,8 @@ function ChatContextProvider({
   const { messagesUser, messagesLLM, messagesError } = useTranscription();
 
   const { isHuman } = useRecaptcha();
+  const { configClient } = useClient();
+
 
   const [isRestart, setIsRestart] = useState<boolean>(false);
   const [isStart, setIsStart] = useState<boolean>(false);
@@ -473,7 +476,7 @@ function ChatContextProvider({
 
   return (
     <>
-      {import.meta.env.VITE_OPT_AUT0_ACCOUNT ? (
+      {configClient.authAccountOption ? (
         <>
           <ChatContext.Provider
             value={{

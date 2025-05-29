@@ -105,7 +105,8 @@ export async function requestChatToApiChatBot(
 			| ResponseFailureType = await createConversationDirectus(
 			process.env.COLLECTION_DIRECTUS,
 			data
-		);
+			);
+		
 
 		if ("details" in responseDirectus) {
 			console.error({
@@ -158,6 +159,7 @@ export async function requestChatToApiChatBot(
 		const responseDirectus:
 			| ConversationDirectusAttributes
 			| ResponseFailureType = await updateConversationDirectus(
+			details?.project,
 			idDirectus,
 			process.env.COLLECTION_DIRECTUS,
 			data

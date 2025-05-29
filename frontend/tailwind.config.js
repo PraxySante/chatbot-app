@@ -1,5 +1,4 @@
 import colors from 'tailwindcss/colors';
-import config from './src/config/config.json';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -8,25 +7,24 @@ export default {
     extend: {
       colors: {
         ...colors,
-        text: config.design.text,
-        bot: config.design.bot,
-        user: config.design.user,
-        primary: config.design.primary,
-        secondary: config.design.secondary,
-        third: config.design.third,
-        bg:'rgb(255, 255, 255)',
-
-        sucess: config.design.sucess,
-        warning: config.design.warning,
-        error: config.design.error,
-        information: config.design.information,
+        primary: 'rgb(var(--color-primary))',
+        secondary: 'rgb(var(--color-secondary))',
+        third: 'rgb(var(--color-third))',
+        text: 'rgb(var(--color-text))',
+        bot: 'rgba(var(--color-bot),0.5)',
+        user: 'rgba(var(--color-user), 0.5)',
+        success: 'rgb(var(--color-success))',
+        warning: 'rgba(var(--color-warning), 0.3)',
+        error: 'rgb(var(--color-error))',
+        information: 'rgba(var(--color-information), 0.5)',
+        bg: 'rgb(var(--color-bg))', // Corrigé pour utiliser la variable
       },
       animation: {
         loading: 'loading 0.5s alternate infinite ease',
       },
       keyframes: {
         loading: {
-          'O%': { top: '1rem' },
+          '0%': { top: '1rem' }, // Corrigé : '0%' au lieu de 'O%'
           '40%': { borderRadius: '50%' },
           '100%': { top: '0%' },
         },

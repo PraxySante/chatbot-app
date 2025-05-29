@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { getKeyRedis } from "../datamapper/redis.datamapper";
 import {
 	ERROR_BAD_REQUEST,
 	ERROR_BAD_REQUEST_MESSSAGE,
@@ -47,4 +46,5 @@ export default async function verifyOrigin(
 	if (!ip) {
 		return res.status(ERROR_BAD_REQUEST).json(ERROR_BAD_REQUEST_MESSSAGE);
 	}
+
 }

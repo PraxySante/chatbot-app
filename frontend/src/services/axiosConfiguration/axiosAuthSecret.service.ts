@@ -6,15 +6,19 @@ const hostname = document.location.hostname;
 let project: string = '';
 
 switch (true) {
-  case hostname.includes('localhost'):
+  case hostname.includes(import.meta.env.VITE_HOST_FOCH):
     project = 'Foch';
     break;
-  case hostname.includes('cardio'):
-    project = 'cardio';
+  case hostname.includes(import.meta.env.VITE_HOST_RECO_CARDIO):
+    project = 'ESC';
+    break;
+    case hostname.includes(import.meta.env.VITE_HOST_AHP):
+    project = 'AHP';
     break;
   default:
-    project = 'Foch';
-  }
+    project = 'botdev';
+    break;
+}
 
 const axiosAuthSecret = axios.create({
   // Configuration axios to connect to Auth0

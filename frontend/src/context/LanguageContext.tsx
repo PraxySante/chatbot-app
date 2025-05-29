@@ -1,5 +1,4 @@
-import { createContext, ReactNode, useLayoutEffect, useState } from 'react';
-import config from '../config/config.json';
+import { createContext, useEffect, useState } from 'react';
 import { TranslateAttributes } from '../types/languages/translate.type';
 import { LanguageContextAttributes } from '../types/languages/languages.context.type';
 
@@ -7,19 +6,24 @@ const LanguageContext = createContext<LanguageContextAttributes | undefined>(
   undefined
 );
 
-function LanguageContextProvider({ children }: { children: ReactNode }) {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(
-    config?.languages[0].id
-  );
+function LanguageContextProvider({ children, useClient }: any) {
+  if (!useClient) {
+    throw new Error('ClientContent not found');
+  }
+
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('fr');
 
   const [userLanguage, setUserLanguage] = useState<TranslateAttributes | null>(
     null
   );
   const [isSelectLanguage, setIsSelectLanguage] = useState<boolean>(false);
 
-  useLayoutEffect(() => {
-    loadLanguage();
-  }, [selectedLanguage]);
+  useEffect(() => {
+    async function load() {
+      await loadLanguage();
+    }
+    load();
+  }, []);
 
   async function loadLanguage(): Promise<void> {
     try {

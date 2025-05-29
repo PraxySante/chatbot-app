@@ -36,6 +36,7 @@ export class WebSocketTranscription {
 	protected requestUserMessage!: { role: string; content: string };
 	protected chatConversation!: any;
 	protected idDirectus!: string;
+	protected project!: string;
 
 	constructor(
 		wsAddressApi: string,
@@ -88,6 +89,7 @@ export class WebSocketTranscription {
 				await this.getHistoryChatBot(details);
 
 				if (!this.idDirectus) {
+					this.project = project;
 					const data: CreateConversationDirectusAttributes = {
 						Name: project,
 						Uuid_Transcription: uuidTranscription,
@@ -98,7 +100,7 @@ export class WebSocketTranscription {
 						| ResponseFailureType = await createConversationDirectus(
 						process.env.COLLECTION_DIRECTUS,
 						data
-						);
+					);
 
 					if ("details" in responseDirectus) {
 						console.error({
@@ -122,6 +124,7 @@ export class WebSocketTranscription {
 					const responseDirectus:
 						| ConversationDirectusAttributes
 						| ResponseFailureType = await updateConversationDirectus(
+						this.project,
 						this.idDirectus,
 						process.env.COLLECTION_DIRECTUS,
 						data
@@ -196,6 +199,7 @@ export class WebSocketTranscription {
 			const responseDirectus:
 				| ConversationDirectusAttributes
 				| ResponseFailureType = await readConversationDirectus(
+				details?.project,
 				details?.idDirectus,
 				process.env.COLLECTION_DIRECTUS
 			);
@@ -269,6 +273,7 @@ export class WebSocketTranscription {
 			const responseDirectus:
 				| ConversationDirectusAttributes
 				| ResponseFailureType = await updateConversationDirectus(
+				this.project,
 				this.idDirectus,
 				process.env.COLLECTION_DIRECTUS,
 				data

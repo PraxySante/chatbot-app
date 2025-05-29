@@ -11,6 +11,7 @@ import SideBar from '../containers/SideBar/SideBar';
 import useTranscription from '../hooks/TranscriptionProvider';
 import Recaptcha from '../components/Recaptcha/Recaptcha';
 import useRecaptcha from '../hooks/RecaptchaProvider';
+import { useClient } from '../hooks/ClientProvider';
 
 export default function DashBoard() {
   //Init Component
@@ -19,6 +20,8 @@ export default function DashBoard() {
   const { isAuthenticated } = useAuth0();
   // Check language selected
   const { selectedLanguage } = useLanguage();
+
+  const { configClient } = useClient();
 
   const { isHuman } = useRecaptcha();
 
@@ -57,13 +60,13 @@ export default function DashBoard() {
       {/* Dashboard section */}
       <div id="dashboard" onClick={closeModalByClickBackGround}>
         {/* Rendering ModalParameter */}
-        {import.meta.env.VITE_OPT_AUDIO_PARAMETERS === 'true' && isOpenModal
+        {configClient.audioParameterOption === true && isOpenModal
           ? renderingModalParameter()
           : null}
 
         {/* Sidebar section */}
         {/* Button toggle Open/Close SideBar */}
-        {import.meta.env.VITE_OPT_SIDEBAR === 'true' ? (
+        {configClient.sideBarOption === true ? (
           <>
             {!isOpenSideBar ? (
               <span className="icons-actions left">
@@ -77,7 +80,7 @@ export default function DashBoard() {
         ) : null}
 
         {/*  SideBar */}
-        {import.meta.env.VITE_OPT_SIDEBAR === 'true' && isOpenSideBar ? (
+        {configClient.sideBarOption === true && isOpenSideBar ? (
           <SideBar toggleOpenCloseSideBar={toggleOpenCloseSideBar} />
         ) : null}
 
@@ -90,7 +93,7 @@ export default function DashBoard() {
           ) : null}
           {/* Button toggle Open/Close Modal Parameter */}
           {/* Button toggle Open/Close ModalMenu Parameters */}
-          {import.meta.env.VITE_OPT_AUT0_ACCOUNT === 'true' ? (
+          {configClient.authAccountOption === true ? (
             <>
               {isAuthenticated && selectedLanguage ? (
                 <>
