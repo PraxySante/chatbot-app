@@ -31,7 +31,7 @@ export async function verifyUserReCaptchaGoogle(
 
 		return { status: SUCCESS_OK, details: SUCCESS_MESSAGE };
 	} catch (error: any) {
-	console.log("🚀 ~ error:", error)
+		console.log(error);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

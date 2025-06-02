@@ -4,10 +4,8 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import icons from '../../../constants/icons';
 import IconButton from '../../../components/Buttons/IconButton';
-
-type ReaderDocumentType = {
-  fileDocument: string;
-};
+import { ReaderDocumentType } from '../../../types/panel/panel.type';
+import { NEXT_PAGE, PREVIOUS_PAGE } from '../../../constants/chat.constants';
 
 export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
   const [selectedPages, setSelectedPages] = useState<number>(1);
@@ -51,13 +49,13 @@ export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
           icon={icons?.arrowLeft}
           onClick={changePage}
           className="border border-primary text-primary contained rounded-lg p-2 hover:bg-primary hover:text-white"
-          content={'Précédent'}
+          content={PREVIOUS_PAGE}
         />
         <IconButton
           icon={icons?.arrowRight}
           onClick={changePage}
           className="border border-primary text-primary contained rounded-lg p-2 hover:bg-primary hover:text-white"
-          content={'Suivant'}
+          content={NEXT_PAGE}
         />
       </section>
       <Document

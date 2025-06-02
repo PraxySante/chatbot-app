@@ -7,6 +7,7 @@ import Title from '../../components/Text/Title';
 import { lazy } from 'react';
 import { useChat } from '../../hooks/ChatProvider';
 import useTranscription from '../../hooks/TranscriptionProvider';
+import { useClient } from '../../hooks/ClientProvider';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
@@ -21,6 +22,7 @@ export default function Header({
 
   const { selectedRestart } = useChat();
   const { stopTranscription, isRecord } = useTranscription();
+  const { configClient } = useClient();
 
   function handleClickRestart() {
     selectedRestart();
@@ -34,13 +36,13 @@ export default function Header({
       {/* Icons */}
       <span className="icons-actions gap-2 items-center left-5 sm:left-10">
         <span className="relative">
-          <Image imgSource={'./bot.png'} classname="w-14 h-14" />
+          <Image imgSource={configClient.logo} classname="w-14 h-14" />
           {/* <span className="absolute bottom-0 h-4 w-4 rounded-full bg-green-400"></span> */}
         </span>
 
         <span className="flex flex-col h-fit">
           <Title
-            content={import.meta.env.VITE_CHATBOT_NAME}
+            content={configClient.name}
             tag={'h3'}
             className={'sm:text-sm'}
           />
@@ -52,7 +54,7 @@ export default function Header({
         </span>
       </span>
       <span className="icons-actions right xs:flex xs:flex-col">
-        {import.meta.env.VITE_OPT_MENU_PARAMETERS === 'true' && (
+        {configClient.menuParameterOption === true && (
           <>
             <SelectLanguage />
             <IconButton

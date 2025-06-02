@@ -1,20 +1,17 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
-import { MessageAttributes } from '../../types/messages/messages.type';
+import { useEffect } from 'react';
 import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import Message from './Message/Message';
 import { useChat } from '../../hooks/ChatProvider';
 import Video from '../Procedures/Video/Video';
 import Button from '../../components/Buttons/Button';
+import { ListMessageType } from '../../types/messages/messages.interface';
+import { DOC_TYPE_DOC, DOC_TYPE_REFORMULATE, DOC_TYPE_URL, DOC_TYPE_VIDEO, ROLE_ASSISTANT, ROLE_USER } from '../../constants/chat.constants';
 
-type MessageType = {
-  message: MessageAttributes;
-  setSelectedPanel: Dispatch<SetStateAction<'chat' | 'procedure'>>;
-};
 export default function ListMessage({
   message,
   setSelectedPanel,
-}: MessageType) {
+}: ListMessageType) {
   const { stockMessageUser, whoIsWritten } = useChat();
 
   useEffect(() => {
@@ -23,8 +20,8 @@ export default function ListMessage({
 
   function renderingMessage() {
     switch (message.role) {
-      case 'assistant':
-        if (message.doc_type === 'video') {
+      case ROLE_ASSISTANT:
+        if (message.doc_type === DOC_TYPE_VIDEO) {
           return (
             <span className="flex flex-row justify-start cursor-pointer">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
@@ -32,7 +29,7 @@ export default function ListMessage({
             </span>
           );
         }
-        if (message.doc_type === 'reformulate') {
+        if (message.doc_type === DOC_TYPE_REFORMULATE) {
           return (
             <span className="flex flex-row justify-start cursor-pointer">
               <IconButton className={'icon icon-bot'} icon={icons?.bot} />
@@ -69,7 +66,7 @@ export default function ListMessage({
           </>
         );
 
-      case 'user':
+      case ROLE_USER:
         return (
           <>
             <span className="flex flex-row justify-end">
@@ -88,16 +85,16 @@ export default function ListMessage({
     url: string | undefined
   ) {
     switch (message.doc_type) {
-      case 'url':
+      case DOC_TYPE_URL:
         window.open(url, '_blank', 'noopener,noreferrer');
         break;
 
-      case 'doc':
+      case DOC_TYPE_DOC:
         setSelectedPanel('procedure');
         break;
 
-      case 'reformulate':
-        whoIsWritten('assistant');
+      case DOC_TYPE_REFORMULATE:
+        whoIsWritten(ROLE_ASSISTANT);
         await stockMessageUser(requestReformulation);
         break;
 
@@ -108,13 +105,13 @@ export default function ListMessage({
   return (
     <section
       className={
-        message.role === 'assistant'
+        message.role === ROLE_ASSISTANT
           ? 'message justify-start'
           : 'message justify-end'
       }
     >
       <div
-        className={message.role === 'assitant' ? 'message-bot' : 'message-user'}
+        className={message.role === ROLE_ASSISTANT ? 'message-bot' : 'message-user'}
       >
         {renderingMessage()}
       </div>

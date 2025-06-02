@@ -7,14 +7,43 @@ import { ResponseAuthChatBot } from "../../types/auth.type";
 import { ResponseFailureType } from "../../types/chatbot.type";
 import { axiosKeycloak } from "./axiosKeycloak.service";
 
-export async function authChatBot(): Promise<
-	ResponseAuthChatBot | ResponseFailureType
-> {
+export async function authChatBot(
+	project: string
+): Promise<ResponseAuthChatBot | ResponseFailureType> {
+	let dataProject: { username: string; password: string } = {
+		username: "",
+		password: "",
+	};
+
+	switch (true) {
+		case project.includes("Foch"):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_FOCH),
+				password: String(process.env.KEYCLOAK_PASSWORD_FOCH),
+			};
+			break;
+		case project.includes("ESC"):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_ESC),
+				password: String(process.env.KEYCLOAK_PASSWORD_ESC),
+			};
+			break;
+		case project.includes("AHP"):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_AHP),
+				password: String(process.env.KEYCLOAK_PASSWORD_AHP),
+			};
+			break;
+		default:
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_DEV),
+				password: String(process.env.KEYCLOAK_PASSWORD_DEV),
+			};
+			break;
+	}
+
 	try {
-		const responseApi = await axiosKeycloak.post("/user/token", {
-			username: process.env.KEYCLOAK_USERNAME,
-			password: process.env.KEYCLOAK_PASSWORD,
-		});
+		const responseApi = await axiosKeycloak.post("/user/token", dataProject);
 
 		const { status, data } = responseApi;
 

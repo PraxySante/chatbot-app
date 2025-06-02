@@ -1,12 +1,8 @@
-import { MessageAttributes } from '../../../types/messages/messages.type';
+import { CardMessageType } from '../../../types/messages/messages.type';
 import TransformMarkDownToMessage from './TransformMarkDownToMessage';
 import HeaderMeassage from './HeaderMessage';
 
-type MessageType = {
-  message: MessageAttributes;
-};
-
-export default function Message({ message }: MessageType) {
+export default function Message({ message }: CardMessageType) {
   return (
     <>
       <div

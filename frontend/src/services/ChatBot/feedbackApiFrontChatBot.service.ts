@@ -13,8 +13,6 @@ export async function feedbackApiFrontChatBot(
     const response: AxiosResponse = await axiosAuthSecret.post(`/feedback`, {
       note: vote,
       comment: comment || '',
-      project: import.meta.env.VITE_BOT_ORIGIN,
-      language: import.meta.env.VITE_BOT_LANGUAGE,
     });
     const { data, status } = response;
     if (status === 200) {

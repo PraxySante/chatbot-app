@@ -1,15 +1,11 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../../hooks/UseLanguage';
 import Title from '../../components/Text/Title';
 
 import TabPanel from '../TabPanel/TabPanel';
 import TabProcedures from './TabProcedures';
 import DisplayProcedures from './DisplayProcedure';
-
-interface IProcedureAttributes {
-  selectedPanel: 'chat' | 'procedure';
-  setSelectedPanel: Dispatch<SetStateAction<'chat' | 'procedure'>>;
-}
+import { IProcedureAttributes } from '../../types/procedures/procedures.interface';
 
 export default function Procedures({
   selectedPanel,

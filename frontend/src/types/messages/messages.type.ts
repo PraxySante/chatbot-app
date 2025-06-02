@@ -1,3 +1,12 @@
+export type HeaderMessageType = {
+  role: string;
+  date: string;
+};
+
+export type CardMessageType = {
+  message: MessageAttributes;
+};
+
 export type MessageAttributes = {
   id: number;
   role: string;
@@ -12,4 +21,10 @@ export type SourceAttributes = {
   doc_type?: 'doc' | 'url' |'reformulate';
   doc_ref?: string;
   doc_name?: string;
+};
+
+export type MarkDownType = {
+  id: string;
+  content: string;
+  className?: string;
 };

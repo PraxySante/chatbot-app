@@ -1,4 +1,6 @@
+import { selectedPanelAttributes } from "./panel.type";
+
 export interface IPanel {
-  selectedPanel: 'chat' | 'procedure';
-  setSelectedPanel: (id: 'chat' | 'procedure') => void;
+  selectedPanel: selectedPanelAttributes;
+  setSelectedPanel: (id: selectedPanelAttributes) => void;
 }

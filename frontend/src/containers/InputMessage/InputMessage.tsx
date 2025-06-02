@@ -7,6 +7,15 @@ import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import useTranscription from '../../hooks/TranscriptionProvider';
 import { Visualizer } from 'react-sound-visualizer';
+import {
+  BUTTON_MAINTAIN_MICROPHONE,
+  BUTTON_SEND_QUESTIONS,
+  ROLE_ASSISTANT,
+  ROLE_ASSISTANT_TRANSCRIBE,
+  ROLE_NONE,
+  ROLE_USER_MICROPHONE,
+  ROLE_USER_TEXT,
+} from '../../constants/chat.constants';
 
 export default function InputMessage() {
   // Init component
@@ -50,9 +59,9 @@ export default function InputMessage() {
   function onChange(e: any): void {
     setUserContent(e.target.value);
     if (e.target.value !== '') {
-      whoIsWritten('user-text');
+      whoIsWritten(ROLE_USER_TEXT);
     } else {
-      whoIsWritten('none');
+      whoIsWritten(ROLE_NONE);
     }
   }
 
@@ -62,10 +71,10 @@ export default function InputMessage() {
       e.preventDefault();
       // Record message written by user
       setUserContent('');
-      whoIsWritten('none');
-      whoIsWritten('assistant');
+      whoIsWritten(ROLE_NONE);
+      whoIsWritten(ROLE_ASSISTANT);
       await stockMessageUser(userContent);
-      whoIsWritten('none');
+      whoIsWritten(ROLE_NONE);
     }
   }
 
@@ -75,10 +84,10 @@ export default function InputMessage() {
     // Record message written by user
     if (userContent !== '') {
       setUserContent('');
-      whoIsWritten('none');
-      whoIsWritten('assistant');
+      whoIsWritten(ROLE_NONE);
+      whoIsWritten(ROLE_ASSISTANT);
       await stockMessageUser(userContent);
-      whoIsWritten('none');
+      whoIsWritten(ROLE_NONE);
     }
   }
 
@@ -87,7 +96,7 @@ export default function InputMessage() {
     if (!isRecord) {
       await startTranscription();
     } else if (isMuted) {
-      whoIsWritten('user-microphone');
+      whoIsWritten(ROLE_USER_MICROPHONE);
       muteTranscription();
     }
   }
@@ -96,7 +105,7 @@ export default function InputMessage() {
     isButtonPressedRef.current = false;
     if (isRecord && !isMuted) {
       muteTranscription();
-      whoIsWritten('assistant-transcribe');
+      whoIsWritten(ROLE_ASSISTANT_TRANSCRIBE);
     }
   }
 
@@ -132,8 +141,8 @@ export default function InputMessage() {
               content={userLanguage ? userLanguage?.chat_question_title : ''}
             />
             <IconButton
-              aria-label="Envoyer vos questions"
-              title="Envoyer vos questions"
+              aria-label={BUTTON_SEND_QUESTIONS}
+              title={BUTTON_SEND_QUESTIONS}
               type="submit"
               className="icon-send-message"
               icon={icons?.sendMessage}
@@ -144,8 +153,8 @@ export default function InputMessage() {
       </form>
 
       <IconButton
-        aria-label="Maintenir le bouton pour parler et relâcher le bouton pour envoyer"
-        title="Maintenir pour parler, relâcher pour envoyer"
+        aria-label={BUTTON_MAINTAIN_MICROPHONE}
+        title={BUTTON_MAINTAIN_MICROPHONE}
         type="button"
         className={`icon-microphone ${isButtonPressedRef.current ? 'active-microphone' : ''}`}
         icon={icons?.microphone}

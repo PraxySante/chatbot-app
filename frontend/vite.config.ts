@@ -6,10 +6,11 @@ export default ({ mode }: any) => {
   // Need do transform import.meta.env into process.env
   // import.meta was not supported in this file
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+
   return defineConfig({
     plugins: [react()],
     server: {
-      allowedHosts: [`${process.env.VITE_HOST}`],
+      allowedHosts: ['.praxysante.fr'],
       host: true,
       port: Number(process.env.VITE_PORT),
     },

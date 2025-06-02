@@ -70,6 +70,7 @@ export async function feedbackApiChatBot(
 		}
 
 		const responseApi: any = await updateConversationDirectus(
+			details?.project,
 			details?.idDirectus,
 			process.env.COLLECTION_DIRECTUS,
 			data

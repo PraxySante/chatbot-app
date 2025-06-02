@@ -1,13 +1,16 @@
-import config from '../../config/config.json';
 import SeparateLine from '../../components/SeparateLine/SeparateLine';
 import Link from '../../components/Link/Link';
 import { Fragment } from 'react/jsx-runtime';
 import { IMenu } from '../../types/modal/modal.interface';
 import { useChat } from '../../hooks/ChatProvider';
+import { useClient } from '../../hooks/ClientProvider';
 
 export default function ModalMenu({ setIsOpenModalParameter }: IMenu) {
   //
   const { selectedRestart } = useChat();
+
+  const { configClient } = useClient();;
+
   // Function user selection on modal menu
   function onClick(menuItem: string) {
     if (menuItem === 're-run') {
@@ -23,7 +26,7 @@ export default function ModalMenu({ setIsOpenModalParameter }: IMenu) {
       <ul>
         <li className="list-menu-modal">
           {/* Render list modal menu */}
-          {config?.modalMenu.map((menu: any, index: number) => {
+          {configClient.modalMenu.map((menu: any, index: number) => {
             return (
               <Fragment key={index}>
                 {/* Render link  modal menu */}

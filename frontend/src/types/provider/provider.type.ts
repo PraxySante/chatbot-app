@@ -35,3 +35,21 @@ export type NotifacationContextAttributes = {
   isOpen: boolean;
   changeStatutNotification: (value: boolean) => void;
 };
+
+export type TranscriptionContextProviderAttributes = {
+  startTranscription: () => void;
+  muteTranscription: () => void;
+  stopTranscription: () => void;
+  settingsMicrophone: () => void;
+  selectedMicrophone: (microphone: string) => void;
+  stateOpenModal: () => void;
+  listMicrophones: any[];
+  isOpenModal: boolean;
+  userSelectedMicrophone: boolean;
+  userMicrophone: any;
+  messagesUser: any;
+  messagesLLM: any;
+  messagesError: any;
+  isRecord: boolean;
+  isMuted: boolean;
+};

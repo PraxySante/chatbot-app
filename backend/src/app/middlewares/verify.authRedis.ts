@@ -84,4 +84,16 @@ export default async function verifyAuthRedis(
 				.json(ERROR_NOT_AUTHENTIFIED_MESSSAGE);
 		}
 	}
+
+	if (typeof details === 'object' && "project" in details) {
+		const { project, language } = req.body;
+		const { ip } = req;
+		if (project !== details?.project) {
+			await deleteKeyRedis(`${USER}-${req.ip}`);
+			await deleteKeyRedis(req.ip);
+			await authAndStartChat(ip, project, language);
+			const { status, details } = await startChatApiBot(ip);
+			return res.status(status).send(details);
+		}
+	}
 }

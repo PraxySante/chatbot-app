@@ -6,13 +6,10 @@ import { lazy, useEffect } from 'react';
 import ReaderDocument from './ReaderDocument/ReaderDocument';
 import Title from '../../components/Text/Title';
 import Video from './Video/Video';
-
-type DisplayProcedureType = {
-  selectedProcedure: number;
-};
+import { DisplayProcedureType } from '../../types/panel/panel.type';
+import { DESCRIPTION_DOC, DESCRIPTION_PAGE, DESCRIPTION_VIDEO, DOC_TYPE_DOC, DOC_TYPE_URL, DOC_TYPE_VIDEO } from '../../constants/chat.constants';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
-
 
 export default function DisplayProcedures({
   selectedProcedure,
@@ -27,12 +24,12 @@ export default function DisplayProcedures({
   function renderingProcedure() {
     if (procedures.length > 0) {
       switch (procedures[selectedProcedure].doc_type) {
-        case 'url':
+        case DOC_TYPE_URL:
           return (
             <>
               {userLanguage && (
                 <Description
-                  content={'La source est la page internet suivante (cliquez pour être redirigé) :'}
+                  content={DESCRIPTION_PAGE}
                   tag={'p'}
                   className={'text-black'}
                 />
@@ -46,13 +43,13 @@ export default function DisplayProcedures({
               />
             </>
           );
-        case 'doc':
+        case DOC_TYPE_DOC:
           return (
             <>
               {userLanguage && (
                 <>
                   <Description
-                    content={"La source est un document qui va vous aider dans vos démarches. Une prévisualisation est disponible."}
+                    content={DESCRIPTION_DOC}
                     tag={'p'}
                     className={'text-black'}
                   />
@@ -68,13 +65,13 @@ export default function DisplayProcedures({
               )}
             </>
           );
-          case 'video':
+          case DOC_TYPE_VIDEO:
             return (
               <>
                 {userLanguage && (
                   <>
                     <Description
-                      content={"La source est une vidéo qui vous aidera à mieux comprendre :"}
+                      content={DESCRIPTION_VIDEO}
                       tag={'p'}
                       className={'text-black'}
                     />
