@@ -26,7 +26,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_FOCH,
     name: 'Chat bot Hôpital Foch',
     project: 'Foch',
-    logo: './logo-hopital-foch.svg',
+    logo: './bot-foch.png',
     title:
       "Posez vos questions concernant le fonctionnement de l'Hôpital Foch 🏥",
     languages: [
