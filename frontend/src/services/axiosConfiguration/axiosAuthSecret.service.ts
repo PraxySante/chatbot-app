@@ -16,7 +16,7 @@ switch (true) {
     project = 'AHP';
     break;
   default:
-    project = 'botdev';
+    project = 'Foch';
     break;
 }
 
