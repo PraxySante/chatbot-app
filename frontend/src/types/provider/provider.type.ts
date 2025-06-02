@@ -37,7 +37,7 @@ export type NotifacationContextAttributes = {
 };
 
 export type TranscriptionContextProviderAttributes = {
-  startTranscription: () => void;
+  startTranscription: (hostname:string) => void;
   muteTranscription: () => void;
   stopTranscription: () => void;
   settingsMicrophone: () => void;

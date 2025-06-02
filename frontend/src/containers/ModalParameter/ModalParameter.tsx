@@ -21,7 +21,8 @@ export default function ModalParameter() {
       selectedMicrophone(listMicrophones[1].label);
     }
     closeModal();
-    startTranscription()
+    const hostname = document.location.hostname;
+    await startTranscription(hostname)
   }
 
   function renderingSelectOptions() {

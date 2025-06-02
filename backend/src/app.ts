@@ -10,7 +10,17 @@ const app = express();
 const server = createServer(app);
 new WebSocketServerClass(server);
 
-app.use(cors({ origin: process.env.ORIGIN }));
+const allowedOrigins = process.env.ORIGIN ? process.env.ORIGIN?.split(','): null;
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins && allowedOrigins.includes(origin)) {
+      callback(null, origin);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
