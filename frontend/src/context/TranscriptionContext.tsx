@@ -30,10 +30,26 @@ function TranscriptionContextProvider({ children, useRecaptcha }: any) {
     throw new Error(ERROR_USE_RECAPTCHA);
   }
 
-  async function startTranscription() {
+  async function startTranscription(hostname: string) {
+    let wsUrl: string = '';
+    switch (true) {
+      case hostname.includes(import.meta.env.VITE_HOST_FOCH):
+        wsUrl = import.meta.env.VITE_WS_API_CHATBOT_FOCH;
+        break;
+      case hostname.includes(import.meta.env.VITE_HOST_RECO_CARDIO):
+        wsUrl = import.meta.env.VITE_WS_API_CHATBOT_ESC;
+        break;
+      case hostname.includes(import.meta.env.VITE_HOST_AHP):
+        wsUrl = import.meta.env.VITE_WS_API_CHATBOT_AHP;
+        break;
+      default:
+        wsUrl = import.meta.env.VITE_WS_API_CHATBOT_DEV;
+        break;
+    }
+
     if (isHuman) {
       wsTranscriptionRef.current = new WebSocketFront(
-        `${import.meta.env.VITE_WS_API_CHATBOT}`,
+        wsUrl,
         userMicrophone.id,
         (message: any) => {
           setMessagesUser(message);

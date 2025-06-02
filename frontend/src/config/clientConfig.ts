@@ -132,7 +132,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: 'AHP',
     logo: './bot-test.png',
     title:
-      "Posez vos questions concernant le fonctionnement de reconnaissance cardiologie",
+      "Posez vos questions concernant le fonctionnement de recommandations cardiologiques de l'ESC",
     languages: [
       {
         id: 'fr',
@@ -180,11 +180,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
   },
   "localhost": {
     host: import.meta.env.VITE_HOST_RECO_CARDIO,
-    name: "Chat bot recommandations cardiologiques de l'ESC",
-    project: 'ESC',
+    name: "Chat bot test avec Foch",
+    project: 'Foch',
     logo: './bot-test.png',
     title:
-      "Posez vos questions concernant le fonctionnement de reconnaissance cardiologie",
+      "Posez vos questions concernant le fonctionnement de test avec Foch",
     languages: [
       {
         id: 'fr',

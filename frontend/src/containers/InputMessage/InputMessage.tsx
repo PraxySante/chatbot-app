@@ -94,7 +94,8 @@ export default function InputMessage() {
   async function handleMicrophoneDown(): Promise<void> {
     isButtonPressedRef.current = true;
     if (!isRecord) {
-      await startTranscription();
+      const hostname = document.location.hostname;
+      await startTranscription(hostname);
     } else if (isMuted) {
       whoIsWritten(ROLE_USER_MICROPHONE);
       muteTranscription();
