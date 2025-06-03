@@ -132,7 +132,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: 'AHP',
     logo: './bot-test.png',
     title:
-      "Posez vos questions concernant le fonctionnement de recommandations cardiologiques de l'ESC",
+      "Posez vos questions concernant le fonctionnement de l'Hôpital Américain de Paris",
     languages: [
       {
         id: 'fr',
