@@ -159,7 +159,6 @@ export async function requestChatToApiChatBot(
 		const responseDirectus:
 			| ConversationDirectusAttributes
 			| ResponseFailureType = await updateConversationDirectus(
-			details?.project,
 			idDirectus,
 			process.env.COLLECTION_DIRECTUS,
 			data

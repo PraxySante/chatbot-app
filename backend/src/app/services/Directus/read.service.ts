@@ -2,8 +2,7 @@ import { AxiosResponse } from "axios";
 import { ResponseFailureType } from "../../types/chatbot.type";
 import { ConversationDirectusAttributes } from "../../types/directus.type";
 import { FAILURE_MESSAGE, SUCCESS_OK } from "../../constant/constant";
-import axiosDirectusFoch from "./axiosDirectusFoch.service";
-import axiosDirectusESC from "./axiosDirectusESC.service";
+import axiosDirectus from "./axiosDirectus.service";
 
 /**
 	 * Request axios Directus - read record by id
@@ -44,18 +43,12 @@ import axiosDirectusESC from "./axiosDirectusESC.service";
 	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
 	 */
 export async function readConversationDirectus(
-	project: string,
 	id: string,
 	collection: string
 ): Promise<ConversationDirectusAttributes | ResponseFailureType> {
 	try {
-		let response: AxiosResponse;
+		const response : AxiosResponse= await axiosDirectus.get(`/items/${collection}/${id}`);
 
-		if (project === "Foch") {
-			response = await axiosDirectusFoch.get(`/items/${collection}/${id}`);
-		} else {
-			response = await axiosDirectusESC.get(`/items/${collection}/${id}`);
-		}
 		const { data, status } = response;
 
 		if (status !== SUCCESS_OK) {

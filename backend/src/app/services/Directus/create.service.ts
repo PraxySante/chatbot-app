@@ -5,8 +5,7 @@ import {
 	CreateConversationDirectusAttributes,
 } from "../../types/directus.type";
 import { FAILURE_MESSAGE, SUCCESS_OK } from "../../constant/constant";
-import axiosDirectusFoch from "./axiosDirectusFoch.service";
-import axiosDirectusESC from "./axiosDirectusESC.service";
+import axiosDirectus from "./axiosDirectus.service";
 
 /**
 	 * Request axios Directus - create record 
@@ -54,20 +53,11 @@ export async function createConversationDirectus(
 	preparedData: Partial<CreateConversationDirectusAttributes>
 ): Promise<ConversationDirectusAttributes | ResponseFailureType> {
 	try {
-
-		let response: AxiosResponse
-		if (preparedData?.Name === 'Foch') {			
-			response= await axiosDirectusFoch.post(
+		const response: AxiosResponse = await axiosDirectus.post(
 			`/items/${collection}`,
 			preparedData
 		);
-		} else {
-			response= await axiosDirectusESC.post(
-				`/items/${collection}`,
-				preparedData
-			);
-		}
-		
+
 		const { data, status } = response;
 
 		if (status !== SUCCESS_OK) {

@@ -7,16 +7,19 @@ let project: string = '';
 
 switch (true) {
   case hostname.includes(import.meta.env.VITE_HOST_FOCH):
-    project = 'Foch';
+    project = import.meta.env.VITE_PROJECT_FOCH;
     break;
   case hostname.includes(import.meta.env.VITE_HOST_RECO_CARDIO):
-    project = 'ESC';
+    project = import.meta.env.VITE_PROJECT_ESC;
     break;
-    case hostname.includes(import.meta.env.VITE_HOST_AHP):
-    project = 'AHP';
+  case hostname.includes(import.meta.env.VITE_HOST_AHP):
+    project = import.meta.env.VITE_PROJECT_AHP;
+    break;
+  case hostname.includes(import.meta.env.VITE_HOST_HSPJ):
+    project = import.meta.env.VITE_PROJECT_HSPJ;
     break;
   default:
-    project = 'Foch';
+    project = import.meta.env.VITE_PROJECT_DEV;
     break;
 }
 
