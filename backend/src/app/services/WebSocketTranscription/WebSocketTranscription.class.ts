@@ -124,7 +124,6 @@ export class WebSocketTranscription {
 					const responseDirectus:
 						| ConversationDirectusAttributes
 						| ResponseFailureType = await updateConversationDirectus(
-						this.project,
 						this.idDirectus,
 						process.env.COLLECTION_DIRECTUS,
 						data
@@ -199,7 +198,6 @@ export class WebSocketTranscription {
 			const responseDirectus:
 				| ConversationDirectusAttributes
 				| ResponseFailureType = await readConversationDirectus(
-				details?.project,
 				details?.idDirectus,
 				process.env.COLLECTION_DIRECTUS
 			);
@@ -273,7 +271,6 @@ export class WebSocketTranscription {
 			const responseDirectus:
 				| ConversationDirectusAttributes
 				| ResponseFailureType = await updateConversationDirectus(
-				this.project,
 				this.idDirectus,
 				process.env.COLLECTION_DIRECTUS,
 				data

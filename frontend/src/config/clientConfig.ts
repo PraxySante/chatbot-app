@@ -25,7 +25,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
   "chatbotfoch.praxysante.fr": {
     host: import.meta.env.VITE_HOST_FOCH,
     name: 'Chat bot Hôpital Foch',
-    project: 'Foch',
+    project: import.meta.env.VITE_PROJECT_FOCH,
     logo: './bot-foch.png',
     title:
       "Posez vos questions concernant le fonctionnement de l'Hôpital Foch 🏥",
@@ -77,7 +77,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
   "reco-cardio.praxysante.fr": {
     host: import.meta.env.VITE_HOST_RECO_CARDIO,
     name: "Chat bot recommandations cardiologiques de l'ESC",
-    project: 'ESC',
+    project: import.meta.env.VITE_PROJECT_ESC,
     logo: './bot-test.png',
     title:
       "Posez vos questions concernant le fonctionnement de reconnaissance cardiologie",
@@ -129,7 +129,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
   "ahp.praxysante.fr": {
     host: import.meta.env.VITE_HOST_AHP,
     name: 'Chat bot Hôpital Américain de Paris',
-    project: 'AHP',
+    project: import.meta.env.VITE_PROJECT_AHP,
     logo: './bot-test.png',
     title:
       "Posez vos questions concernant le fonctionnement de l'Hôpital Américain de Paris",
@@ -179,12 +179,12 @@ export const clientsConfig: Record<string, ClientConfig> = {
     RecaptchaOption: false,
   },
   "localhost": {
-    host: import.meta.env.VITE_HOST_RECO_CARDIO,
-    name: "Chat bot test avec Foch",
-    project: 'Foch',
+    host: import.meta.env.VITE_HOST_DEV,
+    name: `Chat bot test sur project ${import.meta.env.VITE_PROJECT_DEV}`,
+    project: import.meta.env.VITE_PROJECT_DEV,
     logo: './bot-test.png',
     title:
-      "Posez vos questions concernant le fonctionnement de test avec Foch",
+      `Posez vos questions concernant le fonctionnement de test avec ${import.meta.env.VITE_PROJECT_DEV}`,
     languages: [
       {
         id: 'fr',
