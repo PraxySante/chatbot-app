@@ -21,6 +21,11 @@ export default function TabPanel({ selectedPanel, setSelectedPanel }: IPanel) {
       name: userLanguage ? userLanguage?.procedure_visualize : '',
       icon: icons?.procedure,
     },
+    {
+      id: 'chat-ext',
+      name:  'chat-ext',
+      icon: icons?.procedure,
+    },
   ];
 
   return (

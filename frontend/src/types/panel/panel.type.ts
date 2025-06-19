@@ -1,4 +1,4 @@
-export type selectedPanelAttributes = 'chat' | 'procedure';
+export type selectedPanelAttributes = 'chat' | 'procedure' | 'chat-ext';
 export type PanelAttributes = {
   selectedPanel: string;
 };

@@ -5,7 +5,51 @@
     <link rel="icon" href="/favicon.icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat bot</title>
-    <script src="https://www.google.com/recaptcha/enterprise.js">
+    <script src="https://www.google.com/recaptcha/enterprise.js"></script>
+    <script>
+      // (optionnel) callback le client-chat est chargé
+      elqComHandler.onElqChatClientEvent('chat-client-ready', function () {
+        // envoi au chat des parametres initiaux
+        var params = {
+          contact_firstname: contact_firstname,
+          contact_lastname: contact_lastname,
+          contact_id: contact_id,
+          shoppingCartValue: shoppingCartValue,
+          campaign: 'testChat',
+        };
+        elqComHandler.sendElqChatEvent('context-parameters', params);
+      });
+      // (optionnel) callback le client-chat nous a envoyé un parametre
+      elqComHandler.onElqChatClientEvent(
+        'context-parameters',
+        function (value) {
+          console.log('client has received message: ' + value);
+          message_received = document.getElementById('message_received');
+          message_received.innerHTML = JSON.stringify(value);
+        }
+      );
+      // (optionnel) j'envoi un parametre au client-chat
+      messageButton = document.getElementById('message_button');
+      messageButton.addEventListener('click', function (e) {
+        inputData = document.getElementById('input_data');
+        elqComHandler.sendElqChatEvent({ inputData: inputData.value });
+      });
+      // (optionnel) callback le client-chat est chargé
+      elqComHandler.onElqChatClientEvent('chat-client-ready', function () {
+        // envoi de la conversation initiale
+        var conversation = [
+          {
+            role: 'CHATBOT',
+            displayName: 'mon agent',
+            message: 'Bonjour, comment je peux vous aider',
+          },
+          {
+            role: 'CLIENT',
+            message: "J'ai un problème avec ma connexion internet",
+          },
+        ];
+        elqComHandler.sendElqChatEvent('conversation', conversation);
+      });
     </script>
   </head>
   <body>

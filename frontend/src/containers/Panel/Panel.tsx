@@ -3,6 +3,7 @@ import Chat from '../Chat/Chat';
 import Procedures from '../Procedures/Procedures';
 import { selectedPanelAttributes } from '../../types/panel/panel.type';
 import { PANEL_CHAT, PANEL_PROCEDURE } from '../../constants/notifications.constants';
+import Frame from '../Frame/Frame';
 
 export default function Panel() {
   const [selectedPanel, setSelectedPanel] = useState<selectedPanelAttributes>(PANEL_CHAT);
@@ -29,6 +30,10 @@ export default function Panel() {
             setSelectedPanel={setSelectedPanel}
           />
         );
+      case 'chat-ext':
+        return (
+          <Frame/>
+        )
       default:
         break;
     }
