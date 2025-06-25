@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const userLanguage = navigator.language.slice(0, 2);
+const userLanguage = "fr"; //navigator.language.slice(0, 2);
 const hostname = document.location.hostname;
 
 let project: string = '';
