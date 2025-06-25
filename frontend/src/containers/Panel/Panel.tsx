@@ -32,7 +32,9 @@ export default function Panel() {
         );
       case 'chat-ext':
         return (
-          <Frame/>
+          <Frame
+          selectedPanel={selectedPanel}
+            setSelectedPanel={setSelectedPanel}/>
         )
       default:
         break;

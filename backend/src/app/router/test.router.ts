@@ -5,3 +5,5 @@ import controllerWrapper from "../middlewares/controller.wraper";
 export const router = Router();
 
 router.get("/test", controllerWrapper(testController.testPing));
+
+router.post("/token", controllerWrapper(testController.createToken))

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { testPingApiChatBot } from "../services/ChatBot/testPing.service";
-import { SUCCESS_OK } from "../constant/constant";
+import { ERROR_NOT_AUTHENTIFIED, ERROR_NOT_AUTHENTIFIED_MESSSAGE, SUCCESS_OK } from "../constant/constant";
+import { getJWE } from "../services/Eloquant/eloquant.service";
 
 export default {
 	/**
@@ -37,4 +38,22 @@ export default {
 		// Return message success
 		return res.status(status).json(details);
 	},
+
+	async createToken(req: Request, res: Response, _: NextFunction): Promise<Response>{
+	
+
+		if (!req.body) {
+			return res.status(ERROR_NOT_AUTHENTIFIED).json(ERROR_NOT_AUTHENTIFIED_MESSSAGE);
+		}
+
+		const responseApi: any = await getJWE(req.body);
+		console.log("🚀 ~ createToken ~ responseApi:", responseApi)
+
+		// // If error return error message
+		// if (status !== SUCCESS_OK) {
+		// 	return res.status(status).json(responseApi);
+		// }
+		// Return message success
+		return res.status(200).json(responseApi);
+	}
 };

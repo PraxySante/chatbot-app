@@ -1,82 +1,166 @@
-/**
-* Interface of iframe communication handler
-*/
-interface IframeCommunicationHandler {
-  /**
-  * sets a listener to messages from elq chat-client
-  * @param type type of event
-  * @param listener listener
-  */
-  onElqChatClientEvent(type: IframeEventType, listener: (data?: IframeEventValue) => void) : void;
-  /**
-  * send a object to elq chat-client
-  * @param type type of event
-  * @param value object to be sent
-  */
-  sendElqChatEvent(type: IframeEventType, value: IframeEventValue) : void;
-  /**
-  * sets a listener to authenticate to elq chat-client
-  * @param listener listener called for jwe authentication. To validate authentication, sendAuthenticate method has to be called.
-  */
-  onElqChatClientAuthenticate(listener: (sendAuthenticate: (jwe:string) => void) => void) : void;
+import { useEffect, useRef, useState } from 'react';
+import { IProcedureAttributes } from '../../types/procedures/procedures.interface';
+import TabPanel from '../TabPanel/TabPanel';
+import { ChatConversation, ContextParametersReserved, ContextParametersReservedRoutage, IframeCommunicationHandler, IframeEventType, IframeEventValue } from './frame.interface';
+
+export default function Frame({
+  selectedPanel,
+  setSelectedPanel,
+}: IProcedureAttributes) {
+  let scriptRef = useRef<HTMLScriptElement>(document.createElement('script'));
+  const [isChatReady, setIsChatReady] = useState(false);
+  const [conversation, setConversation] = useState<ChatConversation[]>([]);
+  
+  useEffect(() => {
+    // Écouter quand le chatbot est prêt
+    elqComHandler.onElqChatClientEvent(
+      'chat-client-ready',
+      () => {
+        console.log('Chat client ready!');
+        setIsChatReady(true);
+        // Envoyer automatiquement les paramètres de contexte
+        sendContextParameters();
+      }
+    );
+
+    // Écouter les messages de conversation
+     elqComHandler.onElqChatClientEvent(
+      'conversation',
+      (data) => {
+        if (Array.isArray(data)) {
+          setConversation(data);
+          console.log('Conversation updated:', data);
+        }
+      }
+    );
+
+    // Configurer l'authentification
+    onElqChatClientAuthenticate();
+
+  }, []);
+
+  useEffect(() => {
+    scriptRef.current.src = 'https://contact.eloquant.cloud/productv3/api/client/chat/trigger/333ff1cefa66557076321f86a667637b'; 
+    scriptRef.current.async = true;
+
+    document.body.appendChild(scriptRef.current);
+    setIsChatReady(true)
+
+    return () => {
+      document.body.removeChild(scriptRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isChatReady) {
+      // Vous pouvez ici envoyer des informations client spécifiques
+      // selon les données disponibles dans votre application
+      const clientInfo: ContextParametersReservedRoutage = {
+        contact_firstname: "Jean",
+        contact_lastname: "Dupont",
+        contact_email: "jean.dupont@example.com",
+        campaign: "support-technique"
+      };
+
+      sendClientInfo(clientInfo);
+    }
+  }, [isChatReady]);
+  
+
+  // Implémentation du handler de communication
+  const elqComHandler: IframeCommunicationHandler = {
+    onElqChatClientEvent: (
+      type: IframeEventType,
+      listener: (data?: IframeEventValue) => void
+    ) => {
+      const handleMessage = (event: MessageEvent) => {
+        // Vérifiez l'origine si nécessaire pour la sécurité
+        // if (event.origin !== 'https://votre-chatbot-domain.com') return;
+
+        if (event.data && event.data.type === type) {
+          listener(event.data.value);
+        }
+      };
+
+      window.addEventListener('message', handleMessage);
+
+      // Retourner une fonction de nettoyage
+      return () => window.removeEventListener('message', handleMessage);
+    },
+
+    sendElqChatEvent: (type: IframeEventType, value: IframeEventValue) => {
+      if (scriptRef.current) {
+      
+      } else {
+        console.warn('Iframe not ready or contentWindow not available');
+      }
+    },
+
+    onElqChatClientAuthenticate: (
+      listener: (sendAuthenticate: (jwe: string) => void) => void
+    ) => {
+      function sendAuthenticate(jwe: string) {
+        elqComHandler.sendElqChatEvent('context-parameters', {
+          authentication: jwe,
+        } as any);
+      }
+      listener(sendAuthenticate);
+    },
+  };
+
+  // Fonction pour envoyer les paramètres de contexte
+  function sendContextParameters() {
+    const contextParams: ContextParametersReserved = {
+      client_url: window.location.href,
+      client_url_timestamp: Date.now(),
+      client_title: document.title,
+      client_navigator_language: navigator.language,
+      client_navigator_useragent: navigator.userAgent,
+      client_navigator_platform: navigator.platform,
+    };
+
+    elqComHandler.sendElqChatEvent('context-parameters', contextParams);
   }
 
-export type IframeEventType = "chat-client-ready" | "context-parameters" | "conversation";
-  
-/** type for value sent with the event */
-export type IframeEventValue = ContextParametersReserved | { [key: string]: string } | ChatConversation[] | undefined;
+  // Fonction pour envoyer les informations client
+  function sendClientInfo(clientInfo: ContextParametersReservedRoutage) {
+    elqComHandler.sendElqChatEvent('context-parameters', clientInfo);
+  };
 
-type ContextParametersReserved = {
-  /** current client's URL */
-  readonly client_url?: string,
-  /** timestamp when client accessed the URL */
-  readonly client_url_timestamp?: number,
-  /** current title of viewed page */
-  readonly client_title?: string,
-  /** locale of browser */
-  readonly client_navigator_language?: string,
-  /** useragent */
-  readonly client_navigator_useragent?: string,
-  /** platform */
-  readonly client_navigator_platform?: string
-}
-  
-type ContextParametersReservedRoutage = {
-  /** Nom du contact. */
-  readonly contact_lastname?: string,
-  /** Identifiant externe. */
-  readonly contact_external_id?: string,
-  /** Prénom du contact. */
-  readonly contact_firstname?: string,
-  /** Mail du contact. */
-  readonly contact_email?: string,
-  /** Téléphone du contact. */
-  readonly contact_phone?: string,
-  /** Campagne. */
-  readonly campaign?: string
-}
+  // Fonction d'authentification personnalisée
+  function onElqChatClientAuthenticate() {
+    elqComHandler.onElqChatClientAuthenticate((sendAuthenticate) => {
+      // Ici, vous pouvez récupérer votre token d'authentification
+      // Par exemple depuis votre contexte d'authentification ou API
+      // const authToken = getAuthenticationToken();
+      // sendAuthenticate(authToken);
 
-interface ChatConversation {
-  /** Rôle de l'emetteur du message */
-  role: "CHATBOT" | "CLIENT";
-  /** valeur affichée pour l'emetteur du message dans le chat
-  * Pour un message client, cette valeur est optionnelle (Par défaut recupérée dans la campagne) */
-  displayName?: string;
-  /** message
-  * ATTENTION - les caractères suivant doivent être encodés
-  * & -> &amp;amp;
-  * < -> &amp;lt;
-  **/
-  message: string;
+      console.log('Authentification demandée par le chatbot');
+      // Pour l'instant, on peut envoyer un token factice
+      // sendAuthenticate('your-jwe-token-here');
+    });
   }
-  
-
-export default function Frame() {
-
 
   return (
     <>
-      <iframe title="chat-ahp" className="w-full h-full border border-2 border-indigo-600"></iframe>
+      <div className="flex relative w-screen h-12 justify-center">
+        <TabPanel
+          selectedPanel={selectedPanel}
+          setSelectedPanel={setSelectedPanel}
+        />
+      </div>
+
+      {/* <div className="w-full h-full relative">
+        <iframe
+          ref={iframeRef}
+          title="chat-ahp"
+          src="https://chatbot.com" // ⚠️ Remplacez par l'URL de votre chatbot
+          className="w-full h-full border border-2 border-indigo-600"
+          onLoad={() => {
+            console.log('Iframe loaded');
+          }}
+        />
+      </div> */}
     </>
   );
 }
