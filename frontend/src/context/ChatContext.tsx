@@ -176,7 +176,7 @@ function ChatContextProvider({
 
       if (responseRequest.message === ERROR_TYPE_FAILURE.toLowerCase()) {
         getMessageToNotification({
-          status: responseApi.status,
+          status: responseRequest.status,
           message: responseRequest.details,
         });
         return;
@@ -187,7 +187,7 @@ function ChatContextProvider({
 
         if (responseStartChat.message === ERROR_TYPE_FAILURE.toLowerCase()) {
           getMessageToNotification({
-            status: responseApi.status,
+            status: responseStartChat.status,
             message: responseStartChat.details,
           });
           return;

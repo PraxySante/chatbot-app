@@ -19,6 +19,7 @@ import FooterChat from './FooterChat';
 import Modal from '../Modal/Modal';
 import { IChatAttributes } from '../../types/chatbot/chatbot.interface';
 import { ROLE_ASSISTANT, ROLE_USER } from '../../constants/chat.constants';
+import Frame from '../Frame/Frame';
 
 
 
@@ -121,6 +122,7 @@ export default function Chat({
             </span>
           )}
       </div>
+      <Frame/>
       <FooterChat />
     </section>
   );
