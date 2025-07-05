@@ -34,10 +34,10 @@ export async function authChatBot(
 				password: String(process.env.KEYCLOAK_PASSWORD_AHP),
 			};
 			break;
-		case project.includes(String(process.env.PROJECT_HSPJ)):
+		case project.includes(String(process.env.PROJECT_HPSJ)):
 			dataProject = {
-				username: String(process.env.KEYCLOAK_USERNAME_HSPJ),
-				password: String(process.env.KEYCLOAK_PASSWORD_HSPJ),
+				username: String(process.env.KEYCLOAK_USERNAME_HPSJ),
+				password: String(process.env.KEYCLOAK_PASSWORD_HPSJ),
 			};
 			break;
 		case project.includes(String(process.env.PROJECT_ENNOV)):
