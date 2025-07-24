@@ -1,0 +1,37 @@
+name: Build and Push Docker Images to Harbor
+
+on:
+  push:
+    branches: [develop, main]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Harbor registry
+        uses: docker/login-action@v2
+        with:
+          registry: io.praxy.ai
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Get the current Git commit SHA
+        id: vars
+        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build and push frontend image
+        run: |
+          docker build ./frontend -t io.praxy.ai/chatbot/app-front:${{ steps.vars.outputs.sha }}
+          docker push io.praxy.ai/chatbot/app-front:${{ steps.vars.outputs.sha }}
+
+      - name: Build and push backend image
+        run: |
+          docker build ./backend -t io.praxy.ai/chatbot/app-back:${{ steps.vars.outputs.sha }}
+          docker push io.praxy.ai/chatbot/app-back:${{ steps.vars.outputs.sha }} 
