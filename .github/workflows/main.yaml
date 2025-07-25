@@ -35,3 +35,25 @@ jobs:
         run: |
           docker build ./backend -t io.praxy.ai/chatbot/app-back:${{ steps.vars.outputs.sha }}
           docker push io.praxy.ai/chatbot/app-back:${{ steps.vars.outputs.sha }} 
+    
+  deploy:
+    name: Deploy to GitOps
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitOps repository
+        uses: actions/checkout@v4
+        with:
+          repository: PraxySante/chatbot-app-gitops
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: Update TAG in .env
+        run: echo "export TAG=${{ github.sha }}" > .env
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "Malak El Bissouri"
+          git config user.email "malak.elbissouri@gmail.com"
+          git add .env
+          git commit -m "Update TAG auto"
+          git push origin main 
