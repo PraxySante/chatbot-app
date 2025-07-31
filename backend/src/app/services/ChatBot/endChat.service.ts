@@ -39,10 +39,11 @@ status: 200,
  * @throws {500} - Internal Server Error - catched by ControllerWrapper
  */
 export async function endChatApiBot(
-	ip: string
+	ip: string,
+	uuidSession:string
 ): Promise<ResponseFailureType | ResponseSuccessType> {
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-		await getKeyRedis(ip);
+		await getKeyRedis(`${ip}-${uuidSession}`);
 
 	// Message Error Typed - error message from Redis
 	if (status !== SUCCESS_OK && typeof details === "string") {

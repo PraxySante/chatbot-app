@@ -18,7 +18,6 @@ import {
   ERROR_USE_RECAPTCHA,
   STATUS_SUCCESS,
   SUCCESS_MESSAGE_CLOSE_CONNECTION,
-  SUCCESS_MESSAGE_CONNECTION,
   SUCCESS_MESSAGE_FEEDBACK,
   SUCCESS_MESSAGE_SESSION,
 } from '../constants/notifications.constants';
@@ -54,7 +53,7 @@ function ChatContextProvider({
   const { isHuman } = useRecaptcha();
   const { configClient } = useClient();
 
-
+  const [uuidSession, setUuidSession] = useState<string>('');
   const [isRestart, setIsRestart] = useState<boolean>(false);
   const [isStart, setIsStart] = useState<boolean>(false);
   const [messages, setMessages] = useState<MessageAttributes[]>([]);
@@ -182,8 +181,11 @@ function ChatContextProvider({
         return;
       }
 
-      if (responseRequest === SUCCESS_MESSAGE_CONNECTION) {
-        const responseStartChat: any = await startApiFrontChatBot();
+      if (responseRequest) {
+        setUuidSession(responseRequest);
+
+        const responseStartChat: any =
+          await startApiFrontChatBot(responseRequest);
 
         if (responseStartChat.message === ERROR_TYPE_FAILURE.toLowerCase()) {
           getMessageToNotification({
@@ -213,7 +215,7 @@ function ChatContextProvider({
   }
 
   async function restartConversation() {
-    const responseRequest: any = await restartChat();
+    const responseRequest: any = await restartChat(uuidSession);
 
     if (responseRequest.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification({
@@ -277,7 +279,9 @@ function ChatContextProvider({
   ) {
     let lengthMessage = messages.length + 1;
 
-    if (responseChatConversation.data.message === ERROR_TYPE_FAILURE.toLowerCase()) {
+    if (
+      responseChatConversation.data.message === ERROR_TYPE_FAILURE.toLowerCase()
+    ) {
       getMessageToNotification(
         responseChatConversation.data.status,
         responseChatConversation.data.details
@@ -336,7 +340,8 @@ function ChatContextProvider({
       {
         role: ROLE_USER,
         content: userContent,
-      }
+      },
+      uuidSession
     );
 
     if (responseChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()) {
@@ -394,9 +399,11 @@ function ChatContextProvider({
 
     whoIsWritten(ROLE_ASSISTANT);
 
-    const propositionChatConversation: any = await reformulateChat();
+    const propositionChatConversation: any = await reformulateChat(uuidSession);
 
-    if (propositionChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()) {
+    if (
+      propositionChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()
+    ) {
       getMessageToNotification(
         propositionChatConversation.status,
         propositionChatConversation.details
@@ -431,7 +438,11 @@ function ChatContextProvider({
   }
 
   async function sendFeedback(comment: string) {
-    const responseApi: any = await feedbackApiFrontChatBot(vote, comment);
+    const responseApi: any = await feedbackApiFrontChatBot(
+      vote,
+      comment,
+      uuidSession
+    );
     if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification(responseApi.status, responseApi.details);
       return;
@@ -441,12 +452,15 @@ function ChatContextProvider({
   }
 
   async function endConversation() {
-    const responseApi: any = await endChat();
+    const responseApi: any = await endChat(uuidSession);
     if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification(responseApi.status, responseApi.details);
       return;
     } else {
-      getMessageToNotification(STATUS_SUCCESS, SUCCESS_MESSAGE_CLOSE_CONNECTION);
+      getMessageToNotification(
+        STATUS_SUCCESS,
+        SUCCESS_MESSAGE_CLOSE_CONNECTION
+      );
     }
   }
 
@@ -498,6 +512,7 @@ function ChatContextProvider({
               isBotWritten,
               messageLoading,
               setVoteUser,
+              uuidSession,
             }}
           >
             {children}
@@ -523,6 +538,7 @@ function ChatContextProvider({
             isBotWritten,
             messageLoading,
             setVoteUser,
+            uuidSession,
           }}
         >
           {children}

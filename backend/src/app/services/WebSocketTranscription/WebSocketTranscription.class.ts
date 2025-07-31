@@ -50,7 +50,12 @@ export class WebSocketTranscription {
 		this.authToken = authToken;
 	}
 
-	startWebsocketApi(ip: any, uuidTranscription: string, project: string) {
+	startWebsocketApi(
+		ip: any,
+		uuidSession: string,
+		uuidTranscription: string,
+		project: string
+	) {
 		console.log("✅ Initialisation WebSocket API Transcription");
 
 		// Instance pour connexion vers API Transcription
@@ -69,7 +74,7 @@ export class WebSocketTranscription {
 			}
 
 			const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-				await getKeyRedis(ip);
+				await getKeyRedis(`${ip}-${uuidSession}`);
 
 			// Message Error Typed - error message from Redis
 			if (status !== SUCCESS_OK && typeof details === "string") {
@@ -112,7 +117,11 @@ export class WebSocketTranscription {
 					}
 
 					if ("id" in responseDirectus) {
-						await updateKeyRedis(ip, "idDirectus", responseDirectus?.id);
+						await updateKeyRedis(
+							`${ip}-${uuidSession}`,
+							"idDirectus",
+							responseDirectus?.id
+						);
 						this.idDirectus = responseDirectus.id;
 					}
 				} else {

@@ -74,58 +74,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
-  "reco-cardio.praxysante.fr": {
-    host: import.meta.env.VITE_HOST_RECO_CARDIO,
-    name: "Chat bot recommandations cardiologiques de l'ESC",
-    project: import.meta.env.VITE_PROJECT_ESC,
-    logo: './bot-test.png',
-    title:
-      "Posez vos questions concernant le fonctionnement de reconnaissance cardiologie",
-    languages: [
-      {
-        id: 'fr',
-        name: 'Français',
-        icon: '🇫🇷',
-      },
-      {
-        id: 'nl',
-        name: 'Nederlands',
-        icon: '🇳🇱',
-      },
-    ],
-    modalMenu: [
-      {
-        id: 're-run',
-        name: 'Rerun',
-      },
-      {
-        id: 'settings',
-        name: 'Settings',
-      },
-      {
-        id: 'print',
-        name: 'Print',
-      },
-      {
-        id: 'record-screencast',
-        name: 'Record ad screencast',
-      },
-      {
-        id: 'about',
-        name: 'About',
-      },
-    ],
-    feedback: [
-      'feedback_exhaustivity',
-      'feedback_accuracy',
-      'feedback_hallucinations',
-    ],
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
-  },
   "ahp.praxysante.fr": {
     host: import.meta.env.VITE_HOST_AHP,
     name: 'Chat bot Hôpital Américain de Paris',

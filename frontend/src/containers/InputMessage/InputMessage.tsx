@@ -32,7 +32,7 @@ export default function InputMessage() {
   const [userContent, setUserContent] = useState<string>('');
   // Check selected language
   const { userLanguage } = useLanguage();
-  const { stockMessageUser, whoIsWritten } = useChat();
+  const { stockMessageUser, whoIsWritten, uuidSession } = useChat();
 
   const [audio, setAudio] = useState<MediaStream | null>(null);
   const [widthUser, setWidthUser] = useState<any>();
@@ -95,7 +95,7 @@ export default function InputMessage() {
     isButtonPressedRef.current = true;
     if (!isRecord) {
       const hostname = document.location.hostname;
-      await startTranscription(hostname);
+      await startTranscription(hostname, uuidSession);
     } else if (isMuted) {
       whoIsWritten(ROLE_USER_MICROPHONE);
       muteTranscription();

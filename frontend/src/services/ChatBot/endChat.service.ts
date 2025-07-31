@@ -5,11 +5,13 @@ import {
 } from '../../types/chatbot/chatbot.type';
 import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
-export async function endChat(): Promise<
-  ResponseStartEndType | ReponseFailureType
-> {
+export async function endChat(
+  uuidSession: string
+): Promise<ResponseStartEndType | ReponseFailureType> {
   try {
-    const response: AxiosResponse = await axiosAuthSecret.post(`/end`, {});
+    const response: AxiosResponse = await axiosAuthSecret.post(`/end`, {
+      uuidSession: uuidSession,
+    });
     const { data, status } = response;
     if (status === 200) {
       return data;

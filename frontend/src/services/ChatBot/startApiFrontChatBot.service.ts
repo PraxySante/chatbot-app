@@ -1,12 +1,17 @@
-import { AxiosResponse } from "axios";
-import { MessageType, ReponseFailureType } from "../../types/chatbot/chatbot.type";
-import axiosAuthSecret from "../axiosConfiguration/axiosAuthSecret.service";
+import { AxiosResponse } from 'axios';
+import {
+  MessageType,
+  ReponseFailureType,
+} from '../../types/chatbot/chatbot.type';
+import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
-export async function startApiFrontChatBot(): Promise<
-  MessageType | ReponseFailureType
-> {
+export async function startApiFrontChatBot(
+  uuiSession: string
+): Promise<MessageType | ReponseFailureType> {
   try {
-    const response: AxiosResponse = await axiosAuthSecret.post('/start', {});
+    const response: AxiosResponse = await axiosAuthSecret.post('/start', {
+      uuidSession: uuiSession,
+    });
     const { data, status } = response;
     if (status === 200) {
       return data as MessageType;
