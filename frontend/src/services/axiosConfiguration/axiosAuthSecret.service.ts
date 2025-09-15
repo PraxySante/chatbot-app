@@ -11,10 +11,6 @@ switch (true) {
     project = import.meta.env.VITE_PROJECT_FOCH;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_FOCH;
     break;
-  case hostname.includes(import.meta.env.VITE_HOST_RECO_CARDIO):
-    project = import.meta.env.VITE_PROJECT_ESC;
-    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_ESC;
-    break;
   case hostname.includes(import.meta.env.VITE_HOST_AHP):
     project = import.meta.env.VITE_PROJECT_AHP;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_AHP;

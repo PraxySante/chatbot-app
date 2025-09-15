@@ -20,6 +20,7 @@ export type ChatContextAttributes = {
   isBotWritten: boolean;
   messageLoading: string;
   setVoteUser: (vote: number) => void;
+  uuidSession: string;
 };
 
 export type LanguageContextAttributes = {
@@ -37,7 +38,7 @@ export type NotifacationContextAttributes = {
 };
 
 export type TranscriptionContextProviderAttributes = {
-  startTranscription: (hostname:string) => void;
+  startTranscription: (hostname:string, uuidSession:string) => void;
   muteTranscription: () => void;
   stopTranscription: () => void;
   settingsMicrophone: () => void;

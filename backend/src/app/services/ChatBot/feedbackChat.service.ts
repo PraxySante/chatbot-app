@@ -41,10 +41,11 @@ import { updateConversationDirectus } from "../Directus/update.service";
 	 */
 export async function feedbackApiChatBot(
 	ip: string,
+	uuidSession: string,
 	note: number,
 	comment: string
 ): Promise<ResponseFailureType | ResponseSuccessType> {
-	const { status, details }: any = await getKeyRedis(ip);
+	const { status, details }: any = await getKeyRedis(`${ip}-${uuidSession}`);
 
 	// Message Error Typed - error message from Redis
 	if (status !== SUCCESS_OK && typeof details === "string") {

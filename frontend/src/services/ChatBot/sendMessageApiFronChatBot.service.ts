@@ -8,12 +8,14 @@ import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
 export async function sendMessageApiFrontChatBot(
   historyMessages: any,
-  requestMessageUser: MessageType
+  requestMessageUser: MessageType,
+  uuidSession:string
 ): Promise<ResponseMessageType | ReponseFailureType> {
   try {
     const response: AxiosResponse = await axiosAuthSecret.post(`/chat`, {
       history: [...historyMessages],
       message: requestMessageUser,
+      uuidSession: uuidSession
     });
     const { data, status } = response;
     if (status === 200) {

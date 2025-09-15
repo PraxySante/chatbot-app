@@ -52,10 +52,11 @@ import { axiosChatBot } from "./axiosChatBot.service";
 	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
 	 */
 export async function reformulationChatToApiChatBot(
-	ip: string
+	ip: string,
+	uuidSession:string
 ): Promise<ResponseSuccessType | ResponseFailureType> {
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-		await getKeyRedis(ip);
+		await getKeyRedis(`${ip}-${uuidSession}`);
 
 	// Message Error Typed - error message from Redis
 	if (status !== SUCCESS_OK && typeof details === "string") {

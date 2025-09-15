@@ -5,14 +5,13 @@ import {
 } from '../../types/chatbot/chatbot.type';
 import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
-export async function reformulateChat(): Promise<
-  MessageType | ReponseFailureType
-> {
+export async function reformulateChat(
+  uuidSession: string
+): Promise<MessageType | ReponseFailureType> {
   try {
-    const response: AxiosResponse = await axiosAuthSecret.post(
-      `/reformulate`,
-      {}
-    );
+    const response: AxiosResponse = await axiosAuthSecret.post(`/reformulate`, {
+      uuidSession: uuidSession,
+    });
     const { data, status } = response;
     if (status === 200) {
       return data as MessageType;
