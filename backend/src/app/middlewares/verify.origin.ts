@@ -12,9 +12,10 @@ import {
  * - **Body** (`req.body`):
  *   - `project`: Company name
  *   - `language`: Language selected
+ *   - `uuidSession` : session uiud
  * @example
  * Requête POST avec un body JSON :
- * { projet: "Praxy IA", language: "fr", ..,
+ * { projet: "Praxy IA", language: "fr", uuidSession: "04344-42340-..." }
  * @param {Response} res - Return response failed or success
  * @param {NextFunction} _ - Next not used
  * @returns {Promise<Response>} - Return response JSON :

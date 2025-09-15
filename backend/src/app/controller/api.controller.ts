@@ -14,6 +14,8 @@ import {
 	ERROR_BAD_REQUEST,
 	FAILURE_MESSAGE,
 	FAILURE_MISSING_IP_HEADERS,
+	FAILURE_MISSING_UUID_SESSION,
+	USER,
 } from "../constant/constant";
 
 export default {
@@ -49,7 +51,7 @@ export default {
 		res: Response,
 		_: NextFunction
 	): Promise<Response> {
-		const { project, language } = req.body;
+		const { project, language, uuidSession } = req.body;
 		const { ip } = req;
 
 		if (!ip) {
@@ -59,7 +61,12 @@ export default {
 			});
 		}
 
-		const { status, details } = await authAndStartChat(ip, project, language);
+		const { status, details } = await authAndStartChat(
+			ip,
+			project,
+			language,
+			uuidSession
+		);
 		return res.status(status).send(details);
 	},
 
@@ -98,6 +105,7 @@ export default {
 		_: NextFunction
 	): Promise<Response> {
 		const { ip } = req;
+		const { uuidSession } = req.body;
 		if (!ip) {
 			return res.status(ERROR_BAD_REQUEST).json({
 				message: FAILURE_MESSAGE,
@@ -105,7 +113,14 @@ export default {
 			});
 		}
 
-		const { status, details } = await startChatApiBot(ip);
+		if (!uuidSession) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_UUID_SESSION,
+			});
+		}
+
+		const { status, details } = await startChatApiBot(ip, uuidSession);
 		return res.status(status).send(details);
 	},
 
@@ -150,7 +165,7 @@ export default {
 		res: Response,
 		_: NextFunction
 	): Promise<Response> {
-		const { history, message } = req.body;
+		const { history, message, uuidSession } = req.body;
 		const { ip } = req;
 		if (!ip) {
 			return res.status(ERROR_BAD_REQUEST).json({
@@ -158,8 +173,16 @@ export default {
 				details: FAILURE_MISSING_IP_HEADERS,
 			});
 		}
+
+		if (!uuidSession) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_UUID_SESSION,
+			});
+		}
+
 		const response: ResponseFailureType | ResponseSuccessType =
-			await requestChatToApiChatBot(ip, history, message);
+			await requestChatToApiChatBot(ip, history, message, uuidSession);
 
 		if ("sources" in response) {
 			return res
@@ -227,13 +250,22 @@ export default {
 		_: NextFunction
 	): Promise<Response> {
 		const { ip } = req;
+		const { uuidSession } = req.body;
 		if (!ip) {
 			return res.status(ERROR_BAD_REQUEST).json({
 				message: FAILURE_MESSAGE,
 				details: FAILURE_MISSING_IP_HEADERS,
 			});
 		}
-		const { status, details } = await reformulationChatToApiChatBot(ip);
+
+		if (!uuidSession) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_UUID_SESSION,
+			});
+		}
+
+		const { status, details } = await reformulationChatToApiChatBot(ip,uuidSession);
 		return res.status(status).send(details);
 	},
 
@@ -243,6 +275,8 @@ export default {
 		_: NextFunction
 	): Promise<Response> {
 		const { ip } = req;
+		const { uuidSession } = req.body;
+
 		if (!ip) {
 			return res.status(ERROR_BAD_REQUEST).json({
 				message: FAILURE_MESSAGE,
@@ -250,10 +284,17 @@ export default {
 			});
 		}
 
-		await updateKeyRedis(ip, "uuid", "");
-		await updateKeyRedis(ip, "idDirectus", "");
+		if (!uuidSession) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_UUID_SESSION,
+			});
+		}
 
-		const { status, details } = await startChatApiBot(ip);
+		await updateKeyRedis(`${ip}-${uuidSession}`, "uuid", "");
+		await updateKeyRedis(`${ip}-${uuidSession}`, "idDirectus", "");
+
+		const { status, details } = await startChatApiBot(ip, uuidSession);
 		console.log(`Conversation is restart`);
 		return res.status(status).send(details);
 	},
@@ -296,15 +337,24 @@ export default {
 		_: NextFunction
 	): Promise<Response> {
 		const { ip } = req;
+		const { uuidSession } = req.body;
 		if (!ip) {
 			return res.status(400).json({
 				message: FAILURE_MESSAGE,
 				details: FAILURE_MISSING_IP_HEADERS,
 			});
 		}
-		const { status, details } = await endChatApiBot(ip);
-		await deleteKeyRedis(ip);
-		await deleteKeyRedis(`user-${ip}`);
+
+		if (!uuidSession) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_UUID_SESSION,
+			});
+		}
+
+		const { status, details } = await endChatApiBot(ip,uuidSession);
+		await deleteKeyRedis(`${ip}-${uuidSession}`);
+		await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
 		console.log(`Conversation is ended`);
 		return res.status(status).send(details);
 	},
@@ -345,7 +395,7 @@ export default {
 		res: Response,
 		_: NextFunction
 	): Promise<Response> {
-		const { note, comment } = req.body;
+		const { note, comment, uuidSession } = req.body;
 		const { ip } = req;
 		if (!ip) {
 			return res.status(ERROR_BAD_REQUEST).json({
@@ -353,7 +403,15 @@ export default {
 				details: FAILURE_MISSING_IP_HEADERS,
 			});
 		}
-		const { status, details } = await feedbackApiChatBot(ip, note, comment);
+
+		if (!uuidSession) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_UUID_SESSION,
+			});
+		}
+
+		const { status, details } = await feedbackApiChatBot(ip, uuidSession, note, comment);
 		return res.status(status).send(details);
 	},
 };
