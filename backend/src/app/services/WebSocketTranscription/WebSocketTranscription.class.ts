@@ -142,7 +142,8 @@ export class WebSocketTranscription {
 				this.wsParent.send(msg.toString());
 				const userMessage = JSON.parse(msg.toString());
 
-				const transcript = userMessage?.message?.transcript?.[0]?.[1];
+				// ambiant mode : const transcript = userMessage?.message?.transcript?.[0]?.[1];
+				const transcript = userMessage?.message?.transcript
 
 				if (transcript) {
 					const preparedUserMessage = {

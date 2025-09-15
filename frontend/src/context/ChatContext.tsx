@@ -54,7 +54,6 @@ function ChatContextProvider({
   const { isHuman } = useRecaptcha();
   const { configClient } = useClient();
 
-
   const [isRestart, setIsRestart] = useState<boolean>(false);
   const [isStart, setIsStart] = useState<boolean>(false);
   const [messages, setMessages] = useState<MessageAttributes[]>([]);
@@ -82,10 +81,9 @@ function ChatContextProvider({
   }, [isHuman]);
 
   useEffect(() => {
-    if (messagesUser?.message?.transcript?.[0]?.[1]) {
-      stockMessageUserTranscription(
-        messagesUser?.message?.transcript?.[0]?.[1]
-      );
+    // ambiant mode : messagesUser?.message?.transcript?.[0]?.[1]
+    if (messagesUser?.message?.transcript) {
+      stockMessageUserTranscription(messagesUser?.message?.transcript);
     }
   }, [messagesUser]);
 
@@ -277,7 +275,9 @@ function ChatContextProvider({
   ) {
     let lengthMessage = messages.length + 1;
 
-    if (responseChatConversation.data.message === ERROR_TYPE_FAILURE.toLowerCase()) {
+    if (
+      responseChatConversation.data.message === ERROR_TYPE_FAILURE.toLowerCase()
+    ) {
       getMessageToNotification(
         responseChatConversation.data.status,
         responseChatConversation.data.details
@@ -396,7 +396,9 @@ function ChatContextProvider({
 
     const propositionChatConversation: any = await reformulateChat();
 
-    if (propositionChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()) {
+    if (
+      propositionChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()
+    ) {
       getMessageToNotification(
         propositionChatConversation.status,
         propositionChatConversation.details
@@ -446,7 +448,10 @@ function ChatContextProvider({
       getMessageToNotification(responseApi.status, responseApi.details);
       return;
     } else {
-      getMessageToNotification(STATUS_SUCCESS, SUCCESS_MESSAGE_CLOSE_CONNECTION);
+      getMessageToNotification(
+        STATUS_SUCCESS,
+        SUCCESS_MESSAGE_CLOSE_CONNECTION
+      );
     }
   }
 

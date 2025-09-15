@@ -84,7 +84,7 @@ export class WebSocketServerClass {
 
 			// Créer une nouvelle connexion WebSocket vers l'API 3
 			const wsTranscription = new WebSocketTranscription(
-				`${process.env.WS_API_TRANSCRIPTION}/${responseTranscription.data.uuid}?token=${authToken}&user_uuid=${userUuid}&language=${userLanguage}&dictation_mode=false`,
+				`${process.env.WS_API_TRANSCRIPTION}/${responseTranscription.data.uuid}?token=${authToken}&user_uuid=${userUuid}&language=${userLanguage}&dictation_mode=true&medical_specialty=General_practitioner`,
 				ws,
 				uuidChat,
 				authToken
