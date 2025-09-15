@@ -52,6 +52,7 @@ export interface IInput {
   onChange?: (e?: any) => void;
   handleKeyDown?: (e: any) => void;
   isReset?: boolean;
+  isDisabled?:boolean
 }
 
 export interface ILink {

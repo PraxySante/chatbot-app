@@ -53,6 +53,7 @@ function ChatContextProvider({
   const { isHuman } = useRecaptcha();
   const { configClient } = useClient();
 
+
   const [uuidSession, setUuidSession] = useState<string>('');
   const [isRestart, setIsRestart] = useState<boolean>(false);
   const [isStart, setIsStart] = useState<boolean>(false);
@@ -81,10 +82,9 @@ function ChatContextProvider({
   }, [isHuman]);
 
   useEffect(() => {
-    if (messagesUser?.message?.transcript?.[0]?.[1]) {
-      stockMessageUserTranscription(
-        messagesUser?.message?.transcript?.[0]?.[1]
-      );
+    // ambiant mode : messagesUser?.message?.transcript?.[0]?.[1]
+    if (messagesUser?.message?.transcript) {
+      stockMessageUserTranscription(messagesUser?.message?.transcript);
     }
   }, [messagesUser]);
 
