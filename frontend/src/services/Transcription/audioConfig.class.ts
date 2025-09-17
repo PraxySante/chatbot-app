@@ -5,7 +5,7 @@ export class AudioConfigClass {
   protected selectAudioInput!: string;
   protected isMuted: boolean = false;
 
-  protected refreshRate: number = 1000;
+  protected refreshRate: number = 20;
   protected refreshCurrentTime: number = 0;
   protected refreshPreviousTime: number = 0;
   protected refreshData: Int16Array = new Int16Array(0);
