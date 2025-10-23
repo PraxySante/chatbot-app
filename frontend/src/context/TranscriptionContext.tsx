@@ -42,6 +42,9 @@ function TranscriptionContextProvider({ children, useRecaptcha }: any) {
       case hostname.includes(import.meta.env.VITE_HOST_HPSJ):
         wsUrl = import.meta.env.VITE_WS_API_CHATBOT_HPSJ;
         break;
+      case hostname.includes(import.meta.env.VITE_HOST_ENNOV):
+        wsUrl = import.meta.env.VITE_WS_API_CHATBOT_ENNOV;
+        break;
       default:
         wsUrl = import.meta.env.VITE_WS_API_CHATBOT_DEV;
         break;
