@@ -23,6 +23,10 @@ switch (true) {
     project = import.meta.env.VITE_PROJECT_ENNOV;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_ENNOV;
     break;
+  case hostname.includes(import.meta.env.VITE_HOST_DRAJES):
+    project = import.meta.env.VITE_PROJECT_DRAJES;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DRAJES;
+    break;
   default:
     project = import.meta.env.VITE_PROJECT_DEV;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DEV;
