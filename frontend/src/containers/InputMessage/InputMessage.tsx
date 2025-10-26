@@ -35,7 +35,6 @@ export default function InputMessage() {
 
   const [audio, setAudio] = useState<MediaStream | null>(null);
   const [widthUser, setWidthUser] = useState<any>();
-  const isButtonPressedRef = useRef<boolean>(false);
   const isTranscribeAudioUser = useRef<boolean>(false);
 
   useEffect(() => {
