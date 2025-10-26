@@ -1,14 +1,21 @@
 import { createContext, useRef, useState } from 'react';
 import { WebSocketFront } from '../services/Transcription/webSocket.class';
 import { TranscriptionContextProviderAttributes } from '../types/provider/provider.type';
-import { ERROR_USE_RECAPTCHA } from '../constants/notifications.constants';
+import { ERROR_USE_RECAPTCHA, STATUS_ERROR_SERVER } from '../constants/notifications.constants';
+import { ReponseFailureType } from '../types/chatbot/chatbot.type';
+import { transcribeAudio } from '../services/Transcription/transcription.service';
 
 const TranscriptionContext = createContext<
   TranscriptionContextProviderAttributes | undefined
 >(undefined);
 
-function TranscriptionContextProvider({ children, useRecaptcha }: any) {
+function TranscriptionContextProvider({
+  children,
+  useNotification,
+  useRecaptcha,
+}: any) {
   const { isHuman } = useRecaptcha();
+  const { getMessageToNotification } = useNotification();
 
   const [listMicrophones, setListMicrophones] = useState<any>([]);
   const [userMicrophone, setUserMicrophone] = useState<any>();
@@ -25,6 +32,8 @@ function TranscriptionContextProvider({ children, useRecaptcha }: any) {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const wsTranscriptionRef = useRef<WebSocketFront | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
   if (!useRecaptcha) {
     throw new Error(ERROR_USE_RECAPTCHA);
@@ -65,19 +74,97 @@ function TranscriptionContextProvider({ children, useRecaptcha }: any) {
         }
       );
       setIsRecord(!isRecord);
-      await wsTranscriptionRef.current.startWebsocketApi();
-      muteTranscription();
+      //await wsTranscriptionRef.current.startWebsocketApi();
+      //muteTranscription();
     }
   }
 
   function stopTranscription() {
     setIsRecord(!isRecord);
-    wsTranscriptionRef.current?.closeWebsocketApi();
+    setMessagesLLM(null);
+    setMessagesError(null);
+    //wsTranscriptionRef.current?.closeWebsocketApi();
   }
 
   function muteTranscription() {
     setIsMuted(!isMuted);
     wsTranscriptionRef.current?.muteWebsocketApi(!isMuted);
+  }
+
+  async function startRecordingAudioToTranscription() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'audio/webm',
+      });
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.start();
+      setIsRecord(true);
+    } catch (err) {
+      console.error('Erreur accès micro :', err);
+    }
+  }
+
+  async function stopRecordingAudioToTranscription(
+    /*isSuperTrainer: boolean,*/
+    uuidSession: string
+  ) {
+    return new Promise<string>((resolve, reject) => {
+      if (!mediaRecorderRef.current) {
+        getMessageToNotification(
+          STATUS_ERROR_SERVER,
+          'Missing audio in-progress'
+        );
+        return reject(new Error('Missing audio in-progress'));
+      }
+
+      mediaRecorderRef.current.onstop = async () => {
+        try {
+          const audioBlob = new Blob(audioChunksRef.current, {
+            type: 'audio/webm',
+          });
+          const arrayBuffer = await audioBlob.arrayBuffer();
+
+          const audioContext = new AudioContext({ sampleRate: 16000 });
+          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+          const audioFloatArray = audioBuffer.getChannelData(0);
+
+          const response: string | ReponseFailureType = await transcribeAudio(
+            audioFloatArray,
+            uuidSession
+          );
+
+          if (typeof response === 'string') {
+            resolve(response);
+          } else {
+            getMessageToNotification(response.status, response.message);
+            return reject(new Error('Missing audio in-progress'));
+          }
+          // Message transcribe send auto to api LLM
+          // if (isSuperTrainer) {
+          //   setMessagesUserTranscriptionTrainer(response);
+          //   return;
+          // }
+          // setMessagesUserTranscriptionChat(response);
+        } catch (error: any) {
+          getMessageToNotification(error.status, error.message);
+          console.error('Erreur lors de la transcription audio :', error);
+          reject(error);
+        }
+      };
+
+      mediaRecorderRef.current.stop();
+      setIsRecord(false);
+    });
   }
 
   async function populateListMicrophone() {
@@ -146,6 +233,8 @@ function TranscriptionContextProvider({ children, useRecaptcha }: any) {
         messagesError,
         isRecord,
         isMuted,
+        startRecordingAudioToTranscription,
+        stopRecordingAudioToTranscription,
       }}
     >
       {children}

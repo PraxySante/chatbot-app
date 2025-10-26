@@ -67,14 +67,14 @@ export default function Chat({
       <>
         {index === messages.length - 1 && role === ROLE_USER && isBotWritten && (
           <span className="flex flex-row justify-start">
-            <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+            <IconButton className={'icon icon-bot'} icon={icons.bot} />
             <MessageLoading className="wrapper-bot" role={'assistant'} />
           </span>
         )}
         {index === messages.length - 1 && isUserWritten && (
           <span className="flex flex-row justify-end">
             <MessageLoading className="wrapper-user" role={ROLE_USER} />
-            <IconButton className={'icon icon-user'} icon={icons?.user} />
+            <IconButton className={'icon icon-user'} icon={icons.user} />
           </span>
         )}
       </>

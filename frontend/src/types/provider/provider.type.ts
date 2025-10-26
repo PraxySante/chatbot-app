@@ -53,4 +53,9 @@ export type TranscriptionContextProviderAttributes = {
   messagesError: any;
   isRecord: boolean;
   isMuted: boolean;
+  startRecordingAudioToTranscription: () => void;
+  stopRecordingAudioToTranscription: (
+    /*isTrainer: boolean,*/
+    uuidSession: string
+  ) => Promise<string>;
 };

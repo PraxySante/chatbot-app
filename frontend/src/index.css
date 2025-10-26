@@ -232,7 +232,7 @@ input[type='number'] {
 }
 
 .message-header {
-  @apply flex text-xs font-medium;
+  @apply flex text-xs font-medium m-1;
 }
 
 .message-assistant {
@@ -288,6 +288,14 @@ input[type='text'] {
   @apply rounded-xl border border-solid border-slate-100 h-fit w-full bg-white pr-9;
 }
 
+.container-message_written {
+  @apply rounded-xl border border-solid border-slate-500 h-fit w-full bg-white pl-2 pr-9 py-2 overflow-y-auto;
+}
+
+.container-message_transcribed{
+  @apply rounded-xl border border-solid border-slate-500 h-24 w-full bg-white pl-2 pr-9 py-2 overflow-y-auto;
+}
+
 .container-icons-actions {
   @apply absolute flex flex-row z-10 top-4 w-52;
 }
@@ -311,7 +319,7 @@ input[type='text'] {
 }
 
 .visualizer-container {
-  @apply relative w-full h-[50px] bg-gray-100 border-2 border-gray-300 rounded-lg flex items-center justify-center;
+  @apply relative w-full h-[50px] mr-28 bg-gray-100 border-2 border-gray-300 rounded-lg flex items-center justify-center;
 }
 
 .visualizer-canvas {
@@ -326,7 +334,7 @@ input[type='text'] {
 }
 
 .icon-microphone {
-  @apply absolute text-secondary border border-0 rounded-lg px-2 sm:rounded-lg sm:top-0 sm:right-14 sm:ring-0 bottom-16 ring-2 ring-blue-500/50 right-1/2 inline-block hover:text-third hover:text-secondary h-full bg-white sm:bg-transparent;
+  @apply absolute text-secondary border border-0 rounded-lg px-2 sm:rounded-lg sm:top-0 sm:right-14 sm:ring-0 bottom-16 ring-2 ring-blue-500/50 right-1/2 inline-block hover:text-third hover:text-secondary h-12 bg-white sm:bg-transparent;
 }
 
 
@@ -357,7 +365,7 @@ input::-webkit-inner-spin-button {
 
 /* Buttons */
 .btn_actions {
-  @apply text-black font-medium cursor-pointer w-fit h-fit rounded-md border p-2;
+  @apply text-black font-medium cursor-pointer w-fit h-fit rounded-md border p-2 hover:bg-secondary hover:text-white;
 }
 
 .contained {
@@ -390,6 +398,10 @@ input::-webkit-inner-spin-button {
 
 .modal-parameter {
   @apply z-30 p-4 w-fit h-fit bg-white rounded-lg;
+}
+
+.modal-close {
+  @apply end-2.5 text-gray-400 bg-transparent hover:bg-primary hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center;
 }
 
 form {

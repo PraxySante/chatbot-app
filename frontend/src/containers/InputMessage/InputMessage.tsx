@@ -23,11 +23,10 @@ export default function InputMessage() {
     settingsMicrophone,
     userSelectedMicrophone,
     isRecord,
-    stopTranscription,
-    startTranscription,
-    muteTranscription,
-    isMuted,
+    startRecordingAudioToTranscription,
+    stopRecordingAudioToTranscription,
   } = useTranscription();
+
   // Hook state to get message written by user and bot
   const [userContent, setUserContent] = useState<string>('');
   // Check selected language
@@ -37,10 +36,12 @@ export default function InputMessage() {
   const [audio, setAudio] = useState<MediaStream | null>(null);
   const [widthUser, setWidthUser] = useState<any>();
   const isButtonPressedRef = useRef<boolean>(false);
+  const isTranscribeAudioUser = useRef<boolean>(false);
 
   useEffect(() => {
     if (!userSelectedMicrophone) {
       settingsMicrophone();
+      isTranscribeAudioUser.current = false;
     }
   }, []);
 
@@ -67,7 +68,7 @@ export default function InputMessage() {
 
   // Function sending message after press enter
   async function handleKeyDown(e: any): Promise<void> {
-    if (e.key === 'Enter' && e.target.value !== '') {
+    if (e.key === 'Enter' && !e.shiftKey && e.target.value !== '') {
       e.preventDefault();
       // Record message written by user
       setUserContent('');
@@ -75,6 +76,7 @@ export default function InputMessage() {
       whoIsWritten(ROLE_ASSISTANT);
       await stockMessageUser(userContent);
       whoIsWritten(ROLE_NONE);
+      //await loadingMessageContext(userContent);
     }
   }
 
@@ -88,36 +90,37 @@ export default function InputMessage() {
       whoIsWritten(ROLE_ASSISTANT);
       await stockMessageUser(userContent);
       whoIsWritten(ROLE_NONE);
+      //await loadingMessageContext(userContent);
     }
   }
 
-  async function handleMicrophoneDown(): Promise<void> {
-    isButtonPressedRef.current = true;
+  // async function loadingMessageContext(userContent: string) {
+  //   await stockMessageUser(userContent);
+  // }
+
+  async function toggleMicrophone() {
+    //const hostname = document.location.hostname;
     if (!isRecord) {
-      const hostname = document.location.hostname;
-      await startTranscription(hostname, uuidSession);
-    } else if (isMuted) {
       whoIsWritten(ROLE_USER_MICROPHONE);
-      muteTranscription();
-    }
-  }
-
-  async function handleMicrophoneUp(): Promise<void> {
-    isButtonPressedRef.current = false;
-    if (isRecord && !isMuted) {
-      muteTranscription();
+      await startRecordingAudioToTranscription();
+    } else {
       whoIsWritten(ROLE_ASSISTANT_TRANSCRIBE);
+      const userTranscribeContent =
+        await stopRecordingAudioToTranscription(uuidSession);
+      if (userTranscribeContent) {
+        whoIsWritten(ROLE_NONE);
+      }
+      await stockMessageUser(userTranscribeContent);
+      //setUserContent(userTranscribeContent);
+      isTranscribeAudioUser.current = true;
+      //whoIsWritten(ROLE_USER_TEXT);
     }
-  }
-
-  async function stopRecording(): Promise<void> {
-    stopTranscription();
   }
 
   return (
     <>
       <form className="container-input">
-        {isRecord && !isMuted ? (
+        {isRecord ? (
           <Visualizer
             audio={audio}
             mode="continuous"
@@ -138,7 +141,12 @@ export default function InputMessage() {
               handleKeyDown={(e) => {
                 handleKeyDown(e);
               }}
-              variant={'text'}
+              className={
+                isTranscribeAudioUser.current
+                  ? 'container-message_transcribed'
+                  : 'container-message_written'
+              }
+              variant={'textarea'}
               content={userLanguage ? userLanguage?.chat_question_title : ''}
             />
             <IconButton
@@ -146,7 +154,7 @@ export default function InputMessage() {
               title={BUTTON_SEND_QUESTIONS}
               type="submit"
               className="icon-send-message"
-              icon={icons?.sendMessage}
+              icon={icons.sendMessage}
               onClick={(e) => sendMessage(e)}
             />
           </>
@@ -158,20 +166,16 @@ export default function InputMessage() {
         title={BUTTON_MAINTAIN_MICROPHONE}
         type="button"
         className={`icon-microphone ${isButtonPressedRef.current ? 'active-microphone' : ''}`}
-        icon={icons?.microphone}
-        onMouseDown={handleMicrophoneDown}
-        onMouseUp={handleMicrophoneUp}
-        onTouchStart={handleMicrophoneDown}
-        onTouchEnd={handleMicrophoneUp}
-        onMouseLeave={handleMicrophoneUp}
+        icon={icons.microphone}
+        onClick={toggleMicrophone}
       />
 
-      {isRecord && !isMuted && (
+      {isRecord && (
         <IconButton
           type="button"
           className="icon-stop"
-          icon={icons?.stop}
-          onClick={stopRecording}
+          icon={icons.stop}
+          onClick={toggleMicrophone}
         />
       )}
     </>

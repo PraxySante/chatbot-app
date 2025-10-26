@@ -10,31 +10,52 @@ export default function Input({
   className,
   isDisabled,
 }: IInput) {
-  return (
-    <>
-      {variant === 'textarea' ? (
-        <textarea
-          value={value ? value?.toString() : ''}
-          className={className ? className : 'input-user'}
-          onChange={onChange || (() => {})}
-          onKeyDown={handleKeyDown}
-          placeholder={content}
-          required
-          disabled={isDisabled ? true : false}
-        />
-      ) : (
-        <input
-          value={value ? value?.toString() : ''}
-          className={className ? className : 'input-user'}
-          type={variant}
-          {...(variant === 'number' && { min: '0', max: '5' })}
-          onChange={onChange || (() => {})}
-          onKeyDown={handleKeyDown}
-          placeholder={content ? content : score?.toString()}
-          required
-          disabled={isDisabled ? true : false}
-        />
-      )}
-    </>
-  );
+  function renderingInput() {
+    switch (variant) {
+      case 'textarea':
+        return (
+          <textarea
+            value={value ? value?.toString() : ''}
+            className={className ? className : 'input-user'}
+            onChange={onChange || (() => {})}
+            onKeyDown={handleKeyDown}
+            placeholder={content}
+            required
+            disabled={isDisabled ? true : false}
+          />
+        );
+      case 'checkbox':
+        return (
+          <section className="flex flex-1 gap-4">
+            <input
+              id="default-checkbox"
+              type={variant}
+              value={''}
+              className={className}
+              onChange={onChange || (() => {})}
+              onKeyDown={handleKeyDown}
+              placeholder={content}
+              disabled={isDisabled ? true : false}
+            />
+            <label htmlFor="default-checkbox">{value}</label>
+          </section>
+        );
+      default:
+        return (
+          <input
+            value={value ? value?.toString() : ''}
+            className={className ? className : 'input-user'}
+            type={variant}
+            {...(variant === 'number' && { min: '0', max: '5' })}
+            onChange={onChange || (() => {})}
+            onKeyDown={handleKeyDown}
+            placeholder={content ? content : score?.toString()}
+            required
+            disabled={isDisabled ? true : false}
+          />
+        );
+    }
+  }
+
+  return renderingInput();
 }

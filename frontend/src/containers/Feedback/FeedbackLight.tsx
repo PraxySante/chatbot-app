@@ -40,7 +40,7 @@ export default function FeedbackLight({
   }
 
   return (
-    <span className="feedback-light">
+    <span className="feedback-light hover:bg-secondary hover:text-white">
       <p className="hidden md:inline">{'Envoyez votre avis'}</p>
       {renderingFeedbackLight()}
     </span>

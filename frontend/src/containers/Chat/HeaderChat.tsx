@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Title from '../../components/Text/Title';
 import Information from '../Information/Information';
 import Notification from '../Notification/Notification';
-import TabPanel from '../TabPanel/TabPanel';
+import TabPanel from '../Panel/TabPanel/TabPanel';
 import { useNotification } from '../../hooks/NotificationProvider';
 import { IChatAttributes } from '../../types/chatbot/chatbot.interface';
 import { useClient } from '../../hooks/ClientProvider';

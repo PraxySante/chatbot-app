@@ -1,5 +1,4 @@
 import IconButton from '../../components/Buttons/IconButton';
-import icons from '../../constants/icons';
 import SelectLanguage from '../SelectLanguage/SelectLanguage';
 
 import Description from '../../components/Text/Description';
@@ -8,6 +7,7 @@ import { lazy } from 'react';
 import { useChat } from '../../hooks/ChatProvider';
 import useTranscription from '../../hooks/TranscriptionProvider';
 import { useClient } from '../../hooks/ClientProvider';
+import icons from '../../constants/icons';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
