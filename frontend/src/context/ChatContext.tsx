@@ -307,6 +307,7 @@ function ChatContextProvider({
           content: source.doc_name,
           doc_type: source.doc_type,
           doc_ref: source.doc_ref,
+          url: source.url,
           date: new Date().toLocaleTimeString(selectedLanguage),
         };
         newMessages.push(sourceProcedures);
@@ -370,6 +371,7 @@ function ChatContextProvider({
           content: source.doc_name,
           doc_type: source.doc_type,
           doc_ref: source.doc_ref,
+          url: source.url,
           date: new Date().toLocaleTimeString(selectedLanguage),
         };
         newMessages.push(sourceProcedures);

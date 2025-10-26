@@ -1,5 +1,3 @@
-import { AudioConfigClass } from './audioConfig.class';
-
 export class WebSocketFront {
   protected wsAddressApi!: string;
   protected microphoneId!: string;
@@ -55,19 +53,19 @@ export class WebSocketFront {
 
   async startWebsocketApi() {
     this.ws = new WebSocket(this.wsAddressApi);
-    this.audioConfig = new AudioConfigClass(this.ws, this.microphoneId);
+    await this.askKeepAwakeScreenPermission();
 
-    if (this.microphoneId) {      
-      this.audioConfig = new AudioConfigClass(this.ws, this.microphoneId);
-      await this.askKeepAwakeScreenPermission()
-  
-      try {
-        await this.audioConfig.startAudioConfig();
-      } catch (error) {
-        console.error("Erreur lors de l'initialisation audio:", error);
-        this.ws.close(1011, 'Internal Error');
-      }
-    }
+    // if (this.microphoneId) {
+    //   this.audioConfig = new AudioConfigClass(this.ws, this.microphoneId);
+    //   await this.askKeepAwakeScreenPermission()
+
+    //   try {
+    //     await this.audioConfig.startAudioConfig();
+    //   } catch (error) {
+    //     console.error("Erreur lors de l'initialisation audio:", error);
+    //     this.ws.close(1011, 'Internal Error');
+    //   }
+    // }
 
     this.ws.onopen = () => {
       console.log('Websocket is opened');
@@ -100,13 +98,21 @@ export class WebSocketFront {
     };
   }
 
+  send(data: any) {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify(data));
+    }
+  }
+
   muteWebsocketApi(isMuted: boolean) {
     this.audioConfig.hasMutedMicrophone(isMuted);
   }
 
   async closeWebsocketApi() {
-    this.audioConfig.stopAudioConfig();
     await this.closeKeepAwakeScreenPermission();
+    if (this.audioConfig) {
+      this.audioConfig.stopAudioConfig();
+    }
     this.ws.onclose = () => {
       console.log('Websocket is closed');
     };

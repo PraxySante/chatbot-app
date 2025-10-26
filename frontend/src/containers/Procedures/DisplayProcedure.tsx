@@ -7,7 +7,15 @@ import ReaderDocument from './ReaderDocument/ReaderDocument';
 import Title from '../../components/Text/Title';
 import Video from './Video/Video';
 import { DisplayProcedureType } from '../../types/panel/panel.type';
-import { DESCRIPTION_DOC, DESCRIPTION_PAGE, DESCRIPTION_VIDEO, DOC_TYPE_DOC, DOC_TYPE_URL, DOC_TYPE_VIDEO } from '../../constants/chat.constants';
+import {
+  DESCRIPTION_DOC,
+  DESCRIPTION_PAGE,
+  DESCRIPTION_VIDEO,
+  DOC_TYPE_DOC,
+  DOC_TYPE_URL,
+  DOC_TYPE_VIDEO,
+} from '../../constants/chat.constants';
+import { getDocumentFromApi } from '../../services/ChatBot/getDocumentFromApi.service';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
@@ -15,15 +23,17 @@ export default function DisplayProcedures({
   selectedProcedure,
 }: DisplayProcedureType) {
   const { userLanguage } = useLanguage();
-  const { procedures } = useChat();
+  const { procedures, uuidSession } = useChat();
+
+  const documents = procedures;
 
   useEffect(() => {
     renderingProcedure();
   }, [selectedProcedure]);
 
   function renderingProcedure() {
-    if (procedures.length > 0) {
-      switch (procedures[selectedProcedure].doc_type) {
+    if (documents.length > 0) {
+      switch (documents[selectedProcedure].doc_type) {
         case DOC_TYPE_URL:
           return (
             <>
@@ -36,9 +46,9 @@ export default function DisplayProcedures({
               )}
               <Button
                 type={'button'}
-                content={procedures[selectedProcedure].content}
+                content={documents[selectedProcedure].content}
                 onClick={() =>
-                  window.open(procedures[selectedProcedure].doc_ref, '_blank')
+                  window.open(documents[selectedProcedure].doc_ref, '_blank')
                 }
               />
             </>
@@ -56,39 +66,40 @@ export default function DisplayProcedures({
                   <Button
                     type={'button'}
                     content={userLanguage?.procedure_download}
-                    onClick={() => console.log('click')}
+                    onClick={downloadFile}
                   />
                   <ReaderDocument
-                    fileDocument={procedures[selectedProcedure].content}
+                    fileDocument={documents[selectedProcedure].url}
                   />
                 </>
               )}
             </>
           );
-          case DOC_TYPE_VIDEO:
-            return (
-              <>
-                {userLanguage && (
-                  <>
-                    <Description
-                      content={DESCRIPTION_VIDEO}
-                      tag={'p'}
-                      className={'text-black'}
-                    />
+        case DOC_TYPE_VIDEO:
+          return (
+            <>
+              {userLanguage && (
+                <>
+                  <Description
+                    content={DESCRIPTION_VIDEO}
+                    tag={'p'}
+                    className={'text-black'}
+                  />
 
-                    <Video
-                      fileDocument={procedures[selectedProcedure].content}
-                    />
-                  </>
-                )}
-              </>
-            );
+                  <Video fileDocument={documents[selectedProcedure].content} />
+                </>
+              )}
+            </>
+          );
         default:
           return (
             <>
               {userLanguage ? (
                 <>
-                  <Image imgSource={'./no-data.jpg'} classname={'max-w-sm'} />
+                  <Image
+                    imgSource={'/images/no-data.jpg'}
+                    classname={'max-w-sm'}
+                  />
                   <Description
                     content={userLanguage?.procedure_not_yet}
                     tag={'p'}
@@ -104,7 +115,10 @@ export default function DisplayProcedures({
         <>
           {userLanguage ? (
             <>
-              <Image imgSource={'./no-data.jpg'} classname={'max-w-sm'} />
+              <Image
+                imgSource={'/images/no-data.jpg'}
+                classname={'max-w-sm'}
+              />
               <Description
                 content={userLanguage?.procedure_not_yet}
                 tag={'p'}
@@ -117,8 +131,26 @@ export default function DisplayProcedures({
     }
   }
 
+  async function downloadFile() {
+    const urlDocument = await getDocumentFromApi(
+      uuidSession,
+      documents[selectedProcedure].url
+    );
+    const blob = new Blob([urlDocument.details], {
+      type: 'application/pdf',
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'document.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
   return (
-    <div className='h-full w-full flex flex-col'>
+    <div className="h-full w-full flex flex-col">
       {userLanguage && (
         <section className="flex flex-col justify-start items-center p-4 gap-4 border border-black outlined text-medium text-white rounded-lg  ">
           <Title

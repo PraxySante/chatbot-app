@@ -42,7 +42,7 @@ export default function SelectLanguage() {
     <>
       <div className="flex right-10 w-fit gap-2 px-2 border border-solid border-slate-200 rounded-lg bg-white">
         <IconButton
-          icon={!isOpenModalLanguage ? icons?.showText : icons?.reduceText}
+          icon={!isOpenModalLanguage ? icons.showText : icons.reduceText}
           onClick={openCloseModalLanguage}
         />
         {renderIconButtonLanguage()}

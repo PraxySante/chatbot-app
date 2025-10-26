@@ -16,10 +16,8 @@ export default function ModalHeader({ closeModal }: IModalHeader) {
       <IconButton
         icon={'X'}
         type="button"
-        onClick={() => {
-          closeModal();
-        }}
-        className="end-2.5 text-gray-400 bg-transparent hover:bg-primary hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+        onClick={closeModal}
+        className="modal-close"
       />
     </div>
   );

@@ -40,12 +40,12 @@ export interface IIconButton {
   onMouseUp?: (e?: any) => void;
   onTouchStart?: (e?: any) => void;
   onTouchEnd?: (e?: any) => void;
-  content?:string
+  content?: string;
 }
 
 export interface IInput {
   value: string;
-  variant: 'text' | 'number' | 'textarea';
+  variant: 'text' | 'number' | 'textarea' |'checkbox';
   score?: number;
   content?: string;
   className?:string,

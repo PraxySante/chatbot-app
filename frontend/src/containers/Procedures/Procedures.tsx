@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLanguage } from '../../hooks/UseLanguage';
 import Title from '../../components/Text/Title';
 
-import TabPanel from '../TabPanel/TabPanel';
+import TabPanel from '../Panel/TabPanel/TabPanel';
 import TabProcedures from './TabProcedures';
 import DisplayProcedures from './DisplayProcedure';
 import { IProcedureAttributes } from '../../types/procedures/procedures.interface';

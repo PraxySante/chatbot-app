@@ -4,6 +4,8 @@ export class AudioConfigClass {
   protected websocket!: WebSocket;
   protected selectAudioInput!: string;
   protected isMuted: boolean = false;
+  protected isLoaded: boolean = false;
+
 
   protected refreshRate: number = 20;
   protected refreshCurrentTime: number = 0;
@@ -70,28 +72,44 @@ export class AudioConfigClass {
   }
 
   async setupRecordingWorkletNode() {
-    await this.context.audioWorklet.addModule('./audio-processor.js');
-    return new AudioWorkletNode(this.context, 'audio-processor');
+
+    if (!this.context.audioWorklet) {
+      throw new Error("audioWorklet not work");
+    }
+  
+    if (!this.isLoaded) {
+      this.isLoaded = true;
+      await this.context.audioWorklet.addModule(`${window.location.origin}/assets/audio-processor.js`);
+    }
+  
+    return new AudioWorkletNode(this.context, "audio-processor");
+
   }
 
-  processAudio(sampleData: any) {
-    const outputSampleRate = 16000;
-    const decreaseResultBuffer = this.decreaseSampleRate(
-      sampleData,
-      this.context.sampleRate,
-      outputSampleRate
-    );
-    const audioData = this.convertFloat32ToInt16(decreaseResultBuffer);
+  async processAudio(sampleData:any) {
+    if(this.context === null){
+      return;
+    }
 
-    // 🔹 Concaténer dans un buffer
+    const outputSampleRate = 16000;
+    const decreaseResultBuffer = this.decreaseSampleRate(sampleData, this.context.sampleRate, outputSampleRate);
+    const bufferInt16 = this.convertFloat32ToInt16(decreaseResultBuffer);
+
+    const audioData = bufferInt16;
+    
+    // Send the data to backend each refreshRate time
+
+    // Concatenate data
     let l = this.refreshData.length + audioData.length;
     const buf = new Int16Array(l);
-    buf.set(this.refreshData, 0);
-    buf.set(audioData, this.refreshData.length);
+    for (let i = 0; i < this.refreshData.length; i++) {
+      buf[i] = this.refreshData[i];
+    }
+    for (let i = 0; i < audioData.length; i++) {
+      buf[this.refreshData.length + i] = audioData[i];
+    }
 
     this.refreshData = buf;
-
-    // 🔹 Vérifier le temps écoulé
     this.refreshCurrentTime = Date.now();
     if (this.refreshCurrentTime - this.refreshPreviousTime > this.refreshRate) {
       if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
@@ -100,6 +118,11 @@ export class AudioConfigClass {
         this.refreshPreviousTime = this.refreshCurrentTime;
       }
     }
+    
+  }
+
+  setSelectAudioInput(selectAudioInput: string) {
+    this.selectAudioInput = selectAudioInput;
   }
 
   decreaseSampleRate(buffer: any, inputSampleRate: any, outputSampleRate: any) {

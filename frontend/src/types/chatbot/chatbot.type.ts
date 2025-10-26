@@ -11,6 +11,7 @@ export type SourceType = {
   doc_type: string;
   doc_ref: string;
   doc_name: string;
+  url?: string;
 };
 
 export type ResponseStartEndType = {

@@ -23,7 +23,10 @@ createRoot(document.getElementById('root')!).render(
         <LanguageContextProvider useClient={useClient}>
           <NotificationHandlerProvider>
             <RecaptchaContextProvider>
-              <TranscriptionContextProvider useRecaptcha={useRecaptcha}>
+              <TranscriptionContextProvider
+                useNotification={useNotification}
+                useRecaptcha={useRecaptcha}
+              >
                 <ChatContextProvider
                   useRecaptcha={useRecaptcha}
                   useTranscription={useTranscription}

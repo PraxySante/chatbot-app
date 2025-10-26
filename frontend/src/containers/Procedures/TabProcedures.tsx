@@ -1,8 +1,8 @@
 import { Fragment, useEffect } from 'react';
 import { useChat } from '../../hooks/ChatProvider';
-import icons from '../../constants/icons';
 import Link from '../../components/Link/Link';
 import { ITabProceduresAttributes } from '../../types/procedures/procedures.interface';
+import icons from '../../constants/icons';
 
 export default function TabProcedures({
   selectedProcedure,
@@ -10,12 +10,14 @@ export default function TabProcedures({
 }: ITabProceduresAttributes) {
   const { procedures } = useChat();
 
+  const displayedProcedure = procedures;
+
   useEffect(() => {
     renderingResultsProcedures();
   }, [procedures]);
 
   function renderingResultsProcedures() {
-    return procedures.map((procedure: any, index: number) => {
+    return displayedProcedure.map((procedure: any, index: number) => {
       return (
         <Fragment key={index}>
           <li className="me-2 w-full">
@@ -30,7 +32,7 @@ export default function TabProcedures({
               onClick={() => SetSelectedProcedure(index)}
             >
               {procedure.content}
-              {icons.chain}
+              {procedure.doc_type === 'url' ? icons.chain : icons.file}
             </Link>
           </li>
         </Fragment>

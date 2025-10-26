@@ -12,11 +12,17 @@ import {
 } from "../types/chatbot.type";
 import {
 	ERROR_BAD_REQUEST,
+	ERROR_SERVER,
+	ERROR_SERVER_MESSAGE,
 	FAILURE_MESSAGE,
 	FAILURE_MISSING_IP_HEADERS,
 	FAILURE_MISSING_UUID_SESSION,
+	SUCCESS_OK,
 	USER,
 } from "../constant/constant";
+import axios from "axios";
+import { transcribeAudioChatBot } from "../services/ChatBot/transcribeAudioChatBot.service";
+import { getDocument } from "../services/ChatBot/getDocument.service";
 
 export default {
 	/**
@@ -267,6 +273,86 @@ export default {
 
 		const { status, details } = await reformulationChatToApiChatBot(ip,uuidSession);
 		return res.status(status).send(details);
+	},
+
+	async getDocumentPdf(req: Request, res: Response, _: NextFunction) {
+		const { ip } = req;
+		const { uuidSession, urlDocument } = req.body;
+
+		if (!ip) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_IP_HEADERS,
+			});
+		}
+
+		if (!uuidSession) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_UUID_SESSION,
+			});
+		}
+
+		const { status, details } = await getDocument(ip, urlDocument, uuidSession);
+		res.setHeader("Content-Type", "application/pdf");
+		return res.status(status).send(details);
+	},
+
+	async requestTranscribeAudio(
+		req: Request,
+		res: Response,
+		_: NextFunction
+	): Promise<Response> {
+		try {
+			const { audioBase64, uuidSession } = req.body;
+			const { ip } = req;
+
+			if (!ip) {
+				return res.status(ERROR_BAD_REQUEST).json({
+					message: FAILURE_MESSAGE,
+					details: FAILURE_MISSING_IP_HEADERS,
+				});
+			}
+
+			if (!audioBase64 || !uuidSession) {
+				return res.status(400).json({
+					status: FAILURE_MESSAGE,
+					message: "Missing data : audio or uuidSession",
+				});
+			}
+
+			const response = await transcribeAudioChatBot(
+				ip,
+				uuidSession,
+				audioBase64
+			);
+
+			if (response.status !== SUCCESS_OK) {
+				return res.status(400).json({
+					status: response.status,
+					message: FAILURE_MESSAGE,
+					details: response.details,
+				});
+			}
+
+			return res.json(response.details);
+		} catch (error: unknown) {
+			console.error("transcribeAudio error:", error);
+
+			if (axios.isAxiosError(error)) {
+				return res.status(error.response?.status || 500).json({
+					status: error.response?.status || ERROR_SERVER,
+					message: FAILURE_MESSAGE,
+					details: error.message,
+				});
+			}
+
+			return res.status(500).json({
+				status: ERROR_SERVER,
+				message: FAILURE_MESSAGE,
+				details: ERROR_SERVER_MESSAGE,
+			});
+		}
 	},
 
 	async restartChat(
