@@ -289,11 +289,11 @@ input[type='text'] {
 }
 
 .container-message_written {
-  @apply rounded-xl border border-solid border-slate-500 h-fit w-full bg-white pl-2 pr-9 py-2 overflow-y-auto;
+  @apply rounded-xl border border-solid border-secondary h-fit w-full bg-white pl-2 pr-9 py-2 overflow-y-auto;
 }
 
 .container-message_transcribed{
-  @apply rounded-xl border border-solid border-slate-500 h-24 w-full bg-white pl-2 pr-9 py-2 overflow-y-auto;
+  @apply rounded-xl border border-solid border-secondary h-24 w-full bg-white pl-2 pr-9 py-2 overflow-y-auto;
 }
 
 .container-icons-actions {
@@ -330,13 +330,12 @@ input[type='text'] {
 }
 
 .icon-send-message {
-  @apply absolute text-secondary right-4 inline-block  hover:text-third hover:text-secondary h-full;
+  @apply absolute text-secondary right-4 inline-block hover:text-primary h-full;
 }
 
 .icon-microphone {
-  @apply absolute text-secondary border border-0 rounded-lg px-2 sm:rounded-lg sm:top-0 sm:right-14 sm:ring-0 bottom-16 ring-2 ring-blue-500/50 right-1/2 inline-block hover:text-third hover:text-secondary h-12 bg-white sm:bg-transparent;
+  @apply absolute text-secondary right-16 inline-block  hover:text-primary h-full;
 }
-
 
 .icon-stop {
   @apply absolute text-secondary right-4 inline-block  hover:text-third hover:text-secondary h-full;

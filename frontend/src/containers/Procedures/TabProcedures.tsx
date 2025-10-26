@@ -32,7 +32,7 @@ export default function TabProcedures({
               onClick={() => SetSelectedProcedure(index)}
             >
               {procedure.content}
-              {icons.chain}
+              {procedure.doc_type === 'url' ? icons.chain : icons.file}
             </Link>
           </li>
         </Fragment>

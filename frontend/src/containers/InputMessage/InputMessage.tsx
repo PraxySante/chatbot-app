@@ -108,12 +108,13 @@ export default function InputMessage() {
       const userTranscribeContent =
         await stopRecordingAudioToTranscription(uuidSession);
       if (userTranscribeContent) {
-        whoIsWritten(ROLE_NONE);
+        whoIsWritten(ROLE_ASSISTANT);
       }
       await stockMessageUser(userTranscribeContent);
       //setUserContent(userTranscribeContent);
       isTranscribeAudioUser.current = true;
       //whoIsWritten(ROLE_USER_TEXT);
+      whoIsWritten(ROLE_NONE);
     }
   }
 
@@ -150,6 +151,15 @@ export default function InputMessage() {
               content={userLanguage ? userLanguage?.chat_question_title : ''}
             />
             <IconButton
+              aria-label={BUTTON_MAINTAIN_MICROPHONE}
+              title={BUTTON_MAINTAIN_MICROPHONE}
+              type="button"
+              className={`icon-microphone`}
+              icon={icons.microphone}
+              onClick={toggleMicrophone}
+            />
+
+            <IconButton
               aria-label={BUTTON_SEND_QUESTIONS}
               title={BUTTON_SEND_QUESTIONS}
               type="submit"
@@ -161,22 +171,23 @@ export default function InputMessage() {
         )}
       </form>
 
-      <IconButton
-        aria-label={BUTTON_MAINTAIN_MICROPHONE}
-        title={BUTTON_MAINTAIN_MICROPHONE}
-        type="button"
-        className={`icon-microphone ${isButtonPressedRef.current ? 'active-microphone' : ''}`}
-        icon={icons.microphone}
-        onClick={toggleMicrophone}
-      />
-
       {isRecord && (
-        <IconButton
-          type="button"
-          className="icon-stop"
-          icon={icons.stop}
-          onClick={toggleMicrophone}
-        />
+        <>
+          <IconButton
+            aria-label={BUTTON_MAINTAIN_MICROPHONE}
+            title={BUTTON_MAINTAIN_MICROPHONE}
+            type="button"
+            className={`icon-microphone`}
+            icon={icons.microphone}
+            onClick={toggleMicrophone}
+          />
+          <IconButton
+            type="button"
+            className="icon-stop"
+            icon={icons.stop}
+            onClick={toggleMicrophone}
+          />
+        </>
       )}
     </>
   );
