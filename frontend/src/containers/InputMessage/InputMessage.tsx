@@ -109,11 +109,11 @@ export default function InputMessage() {
       if (userTranscribeContent) {
         whoIsWritten(ROLE_ASSISTANT);
       }
-      await stockMessageUser(userTranscribeContent);
-      //setUserContent(userTranscribeContent);
+      //await stockMessageUser(userTranscribeContent);
+      setUserContent(userTranscribeContent);
       isTranscribeAudioUser.current = true;
-      //whoIsWritten(ROLE_USER_TEXT);
-      whoIsWritten(ROLE_NONE);
+      whoIsWritten(ROLE_USER_TEXT);
+      //whoIsWritten(ROLE_NONE);
     }
   }
 
