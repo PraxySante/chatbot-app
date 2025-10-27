@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
 import { ResponseFailureType } from "../../types/chatbot.type";
 import { ConversationDirectusAttributes } from "../../types/directus.type";
-import axiosDirectus from "./axiosDirectus.service";
 import { FAILURE_MESSAGE, SUCCESS_OK } from "../../constant/constant";
+import axiosDirectus from "./axiosDirectus.service";
 
 /**
 	 * Request axios Directus - read record by id
@@ -44,13 +44,13 @@ import { FAILURE_MESSAGE, SUCCESS_OK } from "../../constant/constant";
 	 */
 export async function readConversationDirectus(
 	id: string,
-	collection: string,
+	collection: string
 ): Promise<ConversationDirectusAttributes | ResponseFailureType> {
 	try {
-		const response: AxiosResponse = await axiosDirectus.get(
-			`/items/${collection}/${id}`
-		);
+		const response : AxiosResponse= await axiosDirectus.get(`/items/${collection}/${id}`);
+
 		const { data, status } = response;
+
 		if (status !== SUCCESS_OK) {
 			const data = {
 				status: status,

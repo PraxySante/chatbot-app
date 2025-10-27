@@ -34,8 +34,10 @@ export class WebSocketServerClass {
 
 	async startConnection(ws: WebSocket, req: any) {
 		const ip: string | undefined = req.socket.remoteAddress;
+		const url = new URL(req.url, `http://${req.headers.host}`);
+		const uuidSession = url.searchParams.get("uuidSession");
 
-		if (!ip) {
+		if (!ip || !uuidSession) {
 			ws.close(1008, ERROR_NOT_AUTHENTIFIED_MESSSAGE);
 			return;
 		}
@@ -43,7 +45,7 @@ export class WebSocketServerClass {
 		try {
 			// Vérifier l'authentification une seule fois à la connexion
 			const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-				await getKeyRedis(ip);
+				await getKeyRedis(`${ip}-${uuidSession}`);
 
 			// Message Error Typed - error message from Redis
 			if (status !== SUCCESS_OK || typeof details === "string") {
@@ -61,8 +63,8 @@ export class WebSocketServerClass {
 				const currentTime = Math.floor(Date.now() / MILLISECONDS);
 				if (currentTime > details?.token_expires_in) {
 					console.info(`${FAILURE_TOKEN_EXPIRED} ${req.ip}`);
-					await deleteKeyRedis(req.ip);
-					await deleteKeyRedis(`${USER}-${req.ip}`);
+					await deleteKeyRedis(`${ip}-${uuidSession}`);
+					await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
 					ws.close(1008, FAILURE_TOKEN_EXPIRED);
 					return;
 				}
@@ -84,7 +86,7 @@ export class WebSocketServerClass {
 
 			// Créer une nouvelle connexion WebSocket vers l'API 3
 			const wsTranscription = new WebSocketTranscription(
-				`${process.env.WS_API_TRANSCRIPTION}/${responseTranscription.data.uuid}?token=${authToken}&user_uuid=${userUuid}&language=${userLanguage}&dictation_mode=false`,
+				`${process.env.WS_API_TRANSCRIPTION}/${responseTranscription.data.uuid}?token=${authToken}&user_uuid=${userUuid}&language=${userLanguage}&dictation_mode=true&medical_specialty=General_practitioner`,
 				ws,
 				uuidChat,
 				authToken
@@ -93,30 +95,31 @@ export class WebSocketServerClass {
 			// Démarrer la connexion ws à l'API Transcription
 			wsTranscription.startWebsocketApi(
 				ip,
+				uuidSession,
 				responseTranscription.data.uuid,
-				details.project
+				details.project,
 			);
 
 			// Stocker la connexion pour pouvoir fermer plus tard
-			this.wsTranscriptionMap.set(ip, wsTranscription);
+			this.wsTranscriptionMap.set(`${ip}-${uuidSession}`, wsTranscription);
 
 			// Gérer la fermeture
 			ws.on("close", (code, reason) => {
 				console.log(`❌ Client déconnecté (Code: ${code}, Reason: ${reason})`);
-				const transcription = this.wsTranscriptionMap.get(ip);
+				const transcription = this.wsTranscriptionMap.get(`${ip}-${uuidSession}`);
 				if (transcription) {
 					// Fermer proprement la connexion ws à l'API Transcription
 					transcription.closeConnection();
-					this.wsTranscriptionMap.delete(ip);
+					this.wsTranscriptionMap.delete(`${ip}-${uuidSession}`);
 				}
 			});
 
 			ws.on("error", (error) => {
 				console.error("❌ Erreur WebSocket:", error);
-				const transcription = this.wsTranscriptionMap.get(ip);
+				const transcription = this.wsTranscriptionMap.get(`${ip}-${uuidSession}`);
 				if (transcription) {
 					transcription.closeConnection();
-					this.wsTranscriptionMap.delete(ip);
+					this.wsTranscriptionMap.delete(`${ip}-${uuidSession}`);
 				}
 			});
 

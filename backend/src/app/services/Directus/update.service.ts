@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
 import { ResponseFailureType } from "../../types/chatbot.type";
 import { ConversationDirectusAttributes } from "../../types/directus.type";
-import axiosDirectus from "./axiosDirectus.service";
 import { FAILURE_MESSAGE, SUCCESS_OK } from "../../constant/constant";
+import axiosDirectus from "./axiosDirectus.service";
 
 /**
 	 * Request axios Directus - update record 
@@ -70,10 +70,11 @@ export async function updateConversationDirectus(
 	dataDirectus: Partial<ConversationDirectusAttributes>
 ): Promise<ConversationDirectusAttributes | ResponseFailureType> {
 	try {
-		const response: AxiosResponse = await axiosDirectus.patch(
+		const response : AxiosResponse = await axiosDirectus.patch(
 			`/items/${collection}/${id}`,
 			dataDirectus
 		);
+
 		const { data, status } = response;
 		if (status !== SUCCESS_OK) {
 			const data = {

@@ -33,6 +33,21 @@ router.post(
 );
 
 router.post(
+	"/transcribe-audio",
+	controllerWrapper(verifyOrigin),
+	controllerWrapper(limiterRequestApi),
+	controllerWrapper(verifyAuthRedis),
+	controllerWrapper(apiController.requestTranscribeAudio)
+);
+
+router.post(
+	"/document",
+	controllerWrapper(verifyOrigin),
+	controllerWrapper(verifyAuthRedis),
+	controllerWrapper(apiController.getDocumentPdf)
+);
+
+router.post(
 	"/feedback",
 	controllerWrapper(verifyOrigin),
 	controllerWrapper(verifyAuthRedis),

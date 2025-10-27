@@ -6,12 +6,10 @@ import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import { useChat } from '../../hooks/ChatProvider';
 import Feedback from '../Feedback/Feedback';
+import { ISideBar } from '../../types/sidebar/sidebar.interface';
+import { useClient } from '../../hooks/ClientProvider';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
-
-interface ISideBar {
-  toggleOpenCloseSideBar: () => void;
-}
 
 export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
   //Init Component
@@ -19,6 +17,7 @@ export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
   const { selectedRestart } = useChat();
   // Check selected language by user
   const { userLanguage } = useLanguage();
+  const {configClient} = useClient()
 
   // Function restart chat
   function restartChat() {
@@ -34,7 +33,7 @@ export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
         </span>
         {/* Logo */}
         <Suspense fallback={<div>Chargement du logo...</div>}>
-          <Image imgSource={import.meta.env.VITE_CHATBOT_LOGO} classname={''} />
+          <Image imgSource={configClient.logo} classname={''} />
         </Suspense>
 
         {userLanguage && (

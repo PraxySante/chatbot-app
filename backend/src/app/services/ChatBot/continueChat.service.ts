@@ -70,7 +70,8 @@ import { axiosChatBot } from "./axiosChatBot.service";
 export async function requestChatToApiChatBot(
 	ip: string,
 	history: MessageType[],
-	message: MessageType
+	message: MessageType,
+	uuidSession:string
 ): Promise<ResponseFailureType | ResponseSuccessType> {
 	if (process.env.COLLECTION_DIRECTUS === undefined) {
 		console.error(FAILURE_COLLECTION_MESSAGE);
@@ -79,7 +80,7 @@ export async function requestChatToApiChatBot(
 
 	let idDirectus: string = "";
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-		await getKeyRedis(ip);
+		await getKeyRedis(`${ip}-${uuidSession}`);
 
 	// Message Error Typed - error message from Redis
 	if (status !== SUCCESS_OK && typeof details === "string") {
@@ -105,7 +106,8 @@ export async function requestChatToApiChatBot(
 			| ResponseFailureType = await createConversationDirectus(
 			process.env.COLLECTION_DIRECTUS,
 			data
-		);
+			);
+		
 
 		if ("details" in responseDirectus) {
 			console.error({
@@ -115,7 +117,7 @@ export async function requestChatToApiChatBot(
 		}
 
 		if ("id" in responseDirectus) {
-			await updateKeyRedis(ip, "idDirectus", responseDirectus?.id);
+			await updateKeyRedis(`${ip}-${uuidSession}`, "idDirectus", responseDirectus?.id);
 			idDirectus = responseDirectus.id;
 		}
 	} else {

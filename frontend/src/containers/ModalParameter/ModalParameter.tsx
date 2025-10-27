@@ -2,11 +2,19 @@ import { Fragment } from 'react';
 import useTranscription from '../../hooks/TranscriptionProvider';
 import ModalParameterHeader from './ModalParameterHeader';
 import Button from '../../components/Buttons/Button';
+import { useChat } from '../../hooks/ChatProvider';
 
 export default function ModalParameter() {
   // Init component
-  const { listMicrophones, stateOpenModal, selectedMicrophone, startTranscription, userMicrophone } = useTranscription();
-  
+  const {
+    listMicrophones,
+    stateOpenModal,
+    selectedMicrophone,
+    startTranscription,
+    userMicrophone,
+  } = useTranscription();
+  const { uuidSession } = useChat();
+
   function selectMicrophone(event: React.ChangeEvent<HTMLSelectElement>) {
     selectedMicrophone(event.target.value);
   }
@@ -15,13 +23,14 @@ export default function ModalParameter() {
   function closeModal() {
     stateOpenModal();
   }
-  
+
   async function onSubmit(): Promise<void> {
     if (!userMicrophone && listMicrophones.length > 0) {
       selectedMicrophone(listMicrophones[1].label);
     }
     closeModal();
-    startTranscription()
+    const hostname = document.location.hostname;
+    await startTranscription(hostname, uuidSession);
   }
 
   function renderingSelectOptions() {
@@ -31,34 +40,36 @@ export default function ModalParameter() {
           htmlFor="microphones"
           className="block text-sm font-medium text-black"
         >
-          Avant de débuter une conversation vocale avec notre bot, veuillez sélectionner votre microphone.
+          Avant de débuter une conversation vocale avec notre bot, veuillez
+          sélectionner votre microphone.
         </label>
         <select
           id="microphones"
           className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          value={userMicrophone ? userMicrophone.label : ""}
+          value={userMicrophone ? userMicrophone.label : ''}
           onChange={selectMicrophone}
         >
-        <option value="" disabled>-- Sélectionner un microphone --</option>
+          <option value="" disabled>
+            -- Sélectionner un microphone --
+          </option>
 
           {listMicrophones.map((microphone: any, index: number) => {
             return (
               <Fragment key={index}>
-                <option
-                  key={microphone.id}
-                  label={microphone.label}
-                >{microphone.label}</option>
+                <option key={microphone.id} label={microphone.label}>
+                  {microphone.label}
+                </option>
               </Fragment>
             );
           })}
         </select>
         <Button
-            type={'button'}
-            content={'Envoyer'}
-            onClick={() => {
-              onSubmit();
-            }}
-          />
+          type={'button'}
+          content={'Envoyer'}
+          onClick={() => {
+            onSubmit();
+          }}
+        />
       </>
     );
   }
@@ -66,10 +77,8 @@ export default function ModalParameter() {
   return (
     <div id="modal-parameter-background">
       <div className="modal-parameter">
-        <ModalParameterHeader closeModal={closeModal}/>
-        <form className="">
-          {renderingSelectOptions()}
-        </form>
+        <ModalParameterHeader closeModal={closeModal} />
+        <form className="">{renderingSelectOptions()}</form>
       </div>
     </div>
   );

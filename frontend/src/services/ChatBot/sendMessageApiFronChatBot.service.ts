@@ -1,17 +1,21 @@
-import { AxiosResponse } from "axios";
-import { MessageType, ReponseFailureType, ResponseMessageType } from "../../types/chatbot/chatbot.type";
-import axiosAuthSecret from "../axiosConfiguration/axiosAuthSecret.service";
+import { AxiosResponse } from 'axios';
+import {
+  MessageType,
+  ReponseFailureType,
+  ResponseMessageType,
+} from '../../types/chatbot/chatbot.type';
+import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
 export async function sendMessageApiFrontChatBot(
   historyMessages: any,
-  requestMessageUser: MessageType
+  requestMessageUser: MessageType,
+  uuidSession:string
 ): Promise<ResponseMessageType | ReponseFailureType> {
   try {
     const response: AxiosResponse = await axiosAuthSecret.post(`/chat`, {
-      project: import.meta.env.VITE_BOT_ORIGIN,
-      language: import.meta.env.VITE_BOT_LANGUAGE,
       history: [...historyMessages],
       message: requestMessageUser,
+      uuidSession: uuidSession
     });
     const { data, status } = response;
     if (status === 200) {

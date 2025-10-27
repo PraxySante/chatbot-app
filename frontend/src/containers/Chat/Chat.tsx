@@ -2,9 +2,7 @@ import { useLanguage } from '../../hooks/UseLanguage';
 import { MessageAttributes } from '../../types/messages/messages.type';
 import { useChat } from '../../hooks/ChatProvider';
 import {
-  Dispatch,
   Fragment,
-  SetStateAction,
   useEffect,
   useRef,
   useState,
@@ -19,11 +17,10 @@ import icons from '../../constants/icons';
 import HeaderChat from './HeaderChat';
 import FooterChat from './FooterChat';
 import Modal from '../Modal/Modal';
+import { IChatAttributes } from '../../types/chatbot/chatbot.interface';
+import { ROLE_ASSISTANT, ROLE_USER } from '../../constants/chat.constants';
 
-interface IChatAttributes {
-  selectedPanel: 'chat' | 'procedure';
-  setSelectedPanel: Dispatch<SetStateAction<'chat' | 'procedure'>>;
-}
+
 
 export default function Chat({
   selectedPanel,
@@ -68,16 +65,16 @@ export default function Chat({
   function renderLoadingMessage(index: number, role: string) {
     return (
       <>
-        {index === messages.length - 1 && role === 'user' && isBotWritten && (
+        {index === messages.length - 1 && role === ROLE_USER && isBotWritten && (
           <span className="flex flex-row justify-start">
-            <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+            <IconButton className={'icon icon-bot'} icon={icons.bot} />
             <MessageLoading className="wrapper-bot" role={'assistant'} />
           </span>
         )}
         {index === messages.length - 1 && isUserWritten && (
           <span className="flex flex-row justify-end">
-            <MessageLoading className="wrapper-user" role={'user'} />
-            <IconButton className={'icon icon-user'} icon={icons?.user} />
+            <MessageLoading className="wrapper-user" role={ROLE_USER} />
+            <IconButton className={'icon icon-user'} icon={icons.user} />
           </span>
         )}
       </>
@@ -112,7 +109,7 @@ export default function Chat({
       >
         {renderingMessages()}
         {messages.length > 1 &&
-          messages[messages.length - 1].role === 'assistant' &&
+          messages[messages.length - 1].role === ROLE_ASSISTANT &&
           userLanguage && (
             <span className="chat-room-containers_reformulate">
               <Button
@@ -120,7 +117,7 @@ export default function Chat({
                 content={userLanguage?.reformulate_button}
                 onClick={() => clickReformulateMessage()}
               />
-              <FeedbackLight setIsOpenModalFeedback={setIsOpenModalFeedback} />
+            <FeedbackLight setIsOpenModalFeedback={setIsOpenModalFeedback} />
             </span>
           )}
       </div>

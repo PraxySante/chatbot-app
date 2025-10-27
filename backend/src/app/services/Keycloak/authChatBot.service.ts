@@ -7,14 +7,55 @@ import { ResponseAuthChatBot } from "../../types/auth.type";
 import { ResponseFailureType } from "../../types/chatbot.type";
 import { axiosKeycloak } from "./axiosKeycloak.service";
 
-export async function authChatBot(): Promise<
-	ResponseAuthChatBot | ResponseFailureType
-> {
+export async function authChatBot(
+	project: string
+): Promise<ResponseAuthChatBot | ResponseFailureType> {
+	let dataProject: { username: string; password: string } = {
+		username: "",
+		password: "",
+	};
+
+	switch (true) {
+		case project.includes(String(process.env.PROJECT_FOCH)):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_FOCH),
+				password: String(process.env.KEYCLOAK_PASSWORD_FOCH),
+			};
+			break;
+		case project.includes(String(process.env.PROJECT_AHP)):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_AHP),
+				password: String(process.env.KEYCLOAK_PASSWORD_AHP),
+			};
+			break;
+		case project.includes(String(process.env.PROJECT_HPSJ)):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_HPSJ),
+				password: String(process.env.KEYCLOAK_PASSWORD_HPSJ),
+			};
+			break;
+		case project.includes(String(process.env.PROJECT_ENNOV)):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_ENNOV),
+				password: String(process.env.KEYCLOAK_PASSWORD_ENNOV),
+			};
+			break;
+		case project.includes(String(process.env.PROJECT_DRAJES)):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_DRAJES),
+				password: String(process.env.KEYCLOAK_PASSWORD_DRAJES),
+			};
+			break;
+		default:
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_DEV),
+				password: String(process.env.KEYCLOAK_PASSWORD_DEV),
+			};
+			break;
+	}
+
 	try {
-		const responseApi = await axiosKeycloak.post("/user/token", {
-			username: process.env.KEYCLOAK_USERNAME,
-			password: process.env.KEYCLOAK_PASSWORD,
-		});
+		const responseApi = await axiosKeycloak.post("/user/token", dataProject);
 
 		const { status, data } = responseApi;
 

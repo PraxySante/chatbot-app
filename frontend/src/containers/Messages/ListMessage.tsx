@@ -1,20 +1,26 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
-import { MessageAttributes } from '../../types/messages/messages.type';
+import { useEffect } from 'react';
 import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import Message from './Message/Message';
 import { useChat } from '../../hooks/ChatProvider';
 import Video from '../Procedures/Video/Video';
 import Button from '../../components/Buttons/Button';
+import { ListMessageType } from '../../types/messages/messages.interface';
+import {
+  DOC_TYPE_DOC,
+  DOC_TYPE_REFORMULATE,
+  DOC_TYPE_URL,
+  DOC_TYPE_VIDEO,
+  ROLE_ASSISTANT,
+  ROLE_USER,
+} from '../../constants/chat.constants';
+import Title from '../../components/Text/Title';
+import Description from '../../components/Text/Description';
 
-type MessageType = {
-  message: MessageAttributes;
-  setSelectedPanel: Dispatch<SetStateAction<'chat' | 'procedure'>>;
-};
 export default function ListMessage({
   message,
   setSelectedPanel,
-}: MessageType) {
+}: ListMessageType) {
   const { stockMessageUser, whoIsWritten } = useChat();
 
   useEffect(() => {
@@ -23,19 +29,19 @@ export default function ListMessage({
 
   function renderingMessage() {
     switch (message.role) {
-      case 'assistant':
-        if (message.doc_type === 'video') {
+      case ROLE_ASSISTANT:
+        if (message.doc_type === DOC_TYPE_VIDEO) {
           return (
             <span className="flex flex-row justify-start cursor-pointer">
-              <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+              <IconButton className={'icon icon-bot'} icon={icons.bot} />
               {message.doc_ref && <Video fileDocument={message.doc_ref} />}
             </span>
           );
         }
-        if (message.doc_type === 'reformulate') {
+        if (message.doc_type === DOC_TYPE_REFORMULATE) {
           return (
             <span className="flex flex-row justify-start cursor-pointer">
-              <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+              <IconButton className={'icon icon-bot'} icon={icons.bot} />
               <Button
                 type={'button'}
                 content={`${message.content}`}
@@ -46,16 +52,39 @@ export default function ListMessage({
         }
         if (message.doc_type) {
           return (
-            <span className="flex flex-row justify-start cursor-pointer">
-              <IconButton className={'icon icon-bot'} icon={icons?.bot} />
-              <span className="w-full flex flex-row justify-start cursor-pointer">
+            <span
+              className="flex flex-row justify-start cursor-pointer ml-4 w-full ml-8"
+              onClick={() => handleClick(message.content, message.doc_ref)}
+            >
+              <span
+                className="
+                  flex  items-center gap-3
+                  border border-solid border-secondary 
+                  whitespace-pre-line
+                  w-full sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-5/12
+                  min-h-20 px-4 py-2
+                  rounded-md hover:bg-secondary group hover:text-white
+                "
+              >
                 <IconButton
-                  className={'flex align-center btn_actions border border-solid border-secondary whitespace-pre-line'}
-                  type={'button'}
-                  icon={icons.chain}
-                  content={`Voici un lien qui peut vous intéresser :\n${message.content}`}
-                  onClick={() => handleClick(message.content, message.doc_ref)}
+                  className="flex-shrink-0 text-start text-red-400 group-hover:text-white"
+                  type="button"
+                  icon={message.doc_type === 'doc' ? icons.file : icons.chain}
                 />
+                <div className="flex flex-col ml-2">
+                  <Title
+                    content={`Voici un ${message.doc_type === 'doc' ? 'document' : 'lien'} qui peut vous intéresser :\n`}
+                    tag="h2"
+                    className="text-sm text-start leading-snug group-hover:text-white"
+                  />
+                  <Description
+                    content={`${message.content}`}
+                    tag={'p'}
+                    className={
+                      'text-sm text-start leading-snug text-gray-600 group-hover:text-white'
+                    }
+                  />
+                </div>
               </span>
             </span>
           );
@@ -63,18 +92,18 @@ export default function ListMessage({
         return (
           <>
             <span className="flex flex-row justify-start">
-              <IconButton className={'icon icon-bot'} icon={icons?.bot} />
+              <IconButton className={'icon icon-bot'} icon={icons.bot} />
               <Message message={message} />
             </span>
           </>
         );
 
-      case 'user':
+      case ROLE_USER:
         return (
           <>
             <span className="flex flex-row justify-end">
               <Message message={message} />
-              <IconButton className={'icon icon-user'} icon={icons?.user} />
+              <IconButton className={'icon icon-user'} icon={icons.user} />
             </span>
           </>
         );
@@ -88,16 +117,16 @@ export default function ListMessage({
     url: string | undefined
   ) {
     switch (message.doc_type) {
-      case 'url':
+      case DOC_TYPE_URL:
         window.open(url, '_blank', 'noopener,noreferrer');
         break;
 
-      case 'doc':
+      case DOC_TYPE_DOC:
         setSelectedPanel('procedure');
         break;
 
-      case 'reformulate':
-        whoIsWritten('assistant');
+      case DOC_TYPE_REFORMULATE:
+        whoIsWritten(ROLE_ASSISTANT);
         await stockMessageUser(requestReformulation);
         break;
 
@@ -108,13 +137,15 @@ export default function ListMessage({
   return (
     <section
       className={
-        message.role === 'assistant'
+        message.role === ROLE_ASSISTANT
           ? 'message justify-start'
           : 'message justify-end'
       }
     >
       <div
-        className={message.role === 'assitant' ? 'message-bot' : 'message-user'}
+        className={
+          message.role === ROLE_ASSISTANT ? 'message-bot' : 'message-user'
+        }
       >
         {renderingMessage()}
       </div>

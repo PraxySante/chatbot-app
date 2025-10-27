@@ -6,6 +6,7 @@ import Button from '../../components/Buttons/Button';
 import InputEvaluate from '../InputEvaluate/InputEvaluate';
 import TransformMarkDownToMessage from '../Messages/Message/TransformMarkDownToMessage';
 import { useChat } from '../../hooks/ChatProvider';
+import { PLACEHOLDER_COMMENTS, PLACEHOLDER_FEEDBACK } from '../../constants/feeback';
 
 export default function Feedback() {
   //Init Component
@@ -19,33 +20,6 @@ export default function Feedback() {
   // Function to get all data from feedback and including in containerFeedback
   function getDataForm(value: number) {
     setVoteUser(value);
-    // Update useState concerning user selection
-    // setContainerFeedback(
-    //   (containerFeedback: FeedbackAttributes[] | undefined) => {
-    //     // Condition if containerFeedback exists
-    //     if (containerFeedback) {
-    //       // Searching if Feedback already added
-    //       // ! foundIndex = -1 not exists / 0 : exists
-    //       const foundIndex = containerFeedback.findIndex(
-    //         (container: FeedbackAttributes) => {
-    //           // Returning all data
-    //           return container.id === id;
-    //         }
-    //       );
-    //       if (foundIndex !== -1) {
-    //         // Get all data from found Feedback
-    //         const updatedFeedback = [...containerFeedback];
-    //         // Updating Feedback if already added
-    //         updatedFeedback[foundIndex].value = value;
-    //         // Return Feedback updated
-    //         return updatedFeedback;
-    //       } else {
-    //         // Adding new Feedback with all data (id and value)
-    //         return [...containerFeedback, { id, value }];
-    //       }
-    //     }
-    //   }
-    // );
   }
 
   // Function Get all comment from user
@@ -69,7 +43,7 @@ export default function Feedback() {
           <InputEvaluate
             id={'feedback'}
             getDataForm={(value) => getDataForm(value)}
-            content={'Feedback'}
+            content={PLACEHOLDER_FEEDBACK}
           />
 
           <TransformMarkDownToMessage
@@ -81,7 +55,7 @@ export default function Feedback() {
           <Input
             variant="textarea"
             onChange={(e) => getComment(e)}
-            content={'Ecrire votre commentaire'}
+            content={PLACEHOLDER_COMMENTS}
             value={comment}
           />
           {/* Button Feedback Form */}

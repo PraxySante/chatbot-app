@@ -10,9 +10,20 @@ const app = express();
 const server = createServer(app);
 new WebSocketServerClass(server);
 
-app.use(cors({ origin: process.env.ORIGIN }));
+const allowedOrigins = process.env.ORIGIN?.split(',');
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+		if (allowedOrigins && allowedOrigins.includes(origin)) {
+      callback(null, origin);
+		} else {
+			console.log("Not allowed by CORS, origin" , origin)
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 app.use("/api", apiRouter);
 

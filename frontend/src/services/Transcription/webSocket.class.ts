@@ -1,45 +1,76 @@
-import { AudioConfigClass } from './audioConfig.class';
-
 export class WebSocketFront {
   protected wsAddressApi!: string;
   protected microphoneId!: string;
   protected ws!: WebSocket;
   protected messagesTranscription!: any;
   protected messagesLLM!: any;
-  protected messagesError!:any
+  protected messagesError!: any;
   protected audioConfig!: any;
+  protected wakeLockRef!: WakeLockSentinel;
 
   constructor(
     wsAddressApi: string,
     microphoneId: string,
     messagesTranscription?: any,
     messagesLLM?: any,
-    messagesError?:any
+    messagesError?: any
   ) {
     this.wsAddressApi = wsAddressApi;
     this.microphoneId = microphoneId;
     this.messagesTranscription = messagesTranscription;
     this.messagesLLM = messagesLLM;
     this.messagesError = messagesError;
+  }
 
+  async askKeepAwakeScreenPermission() {
+    try {
+      if ('wakeLock' in navigator) {
+        // Demande un wake lock pour l’écran
+        this.wakeLockRef = await (navigator as any).wakeLock.request('screen');
+        console.log('Wake lock activé ✅');
+      } else {
+        console.log('Wake Lock API non supportée ❌');
+      }
+    } catch (err: any) {
+      console.error(`${err.name}, ${err.message}`);
+    }
+  }
+
+  async closeKeepAwakeScreenPermission() {
+    try {
+      if ('wakeLock' in navigator) {
+        // Demande un wake lock pour l’écran
+        this.wakeLockRef = await (navigator as any).wakeLock.request('screen');
+        this.wakeLockRef.release();
+        console.log('Wake lock désactivé ✅');
+      } else {
+        console.log('Wake Lock API non supportée ❌');
+      }
+    } catch (err: any) {
+      console.error(`${err.name}, ${err.message}`);
+    }
   }
 
   async startWebsocketApi() {
     this.ws = new WebSocket(this.wsAddressApi);
-    this.audioConfig = new AudioConfigClass(this.ws, this.microphoneId);
-    
-    try {
-      await this.audioConfig.startAudioConfig();
-    } catch (error) {
-      console.error("Erreur lors de l'initialisation audio:", error);
-      this.ws.close(1011, "Internal Error")
-    }
+    await this.askKeepAwakeScreenPermission();
+
+    // if (this.microphoneId) {
+    //   this.audioConfig = new AudioConfigClass(this.ws, this.microphoneId);
+    //   await this.askKeepAwakeScreenPermission()
+
+    //   try {
+    //     await this.audioConfig.startAudioConfig();
+    //   } catch (error) {
+    //     console.error("Erreur lors de l'initialisation audio:", error);
+    //     this.ws.close(1011, 'Internal Error');
+    //   }
+    // }
 
     this.ws.onopen = () => {
       console.log('Websocket is opened');
     };
     this.ws.onmessage = (e: any) => {
-
       const data = JSON.parse(e.data);
 
       if (data.type === 'llm_response') {
@@ -54,24 +85,34 @@ export class WebSocketFront {
         this.messagesError(JSON.parse(e.data));
       }
     };
-    this.ws.onclose = (event :CloseEvent) => {
+    this.ws.onclose = async (event: CloseEvent) => {
+      await this.closeKeepAwakeScreenPermission();
       console.log('Websocket is closed : ', event);
       this.messagesError(event.reason);
     };
 
-    this.ws.onerror = (e: any) => {
-      console.error("❌ Erreur WebSocket:", e);
-      this.messagesError("Internal Error");
-
+    this.ws.onerror = async (e: any) => {
+      await this.closeKeepAwakeScreenPermission();
+      console.error('❌ Erreur WebSocket:', e);
+      this.messagesError('Internal Error');
     };
+  }
+
+  send(data: any) {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify(data));
+    }
   }
 
   muteWebsocketApi(isMuted: boolean) {
     this.audioConfig.hasMutedMicrophone(isMuted);
   }
 
-  closeWebsocketApi() {
-    this.audioConfig.stopAudioConfig();
+  async closeWebsocketApi() {
+    await this.closeKeepAwakeScreenPermission();
+    if (this.audioConfig) {
+      this.audioConfig.stopAudioConfig();
+    }
     this.ws.onclose = () => {
       console.log('Websocket is closed');
     };

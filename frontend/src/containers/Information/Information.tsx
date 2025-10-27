@@ -24,7 +24,7 @@ export default function Information() {
       <section className="chat-information" onClick={toggleOpenCloseInfomation}>
         <span className="flex gap-1">
           <IconButton
-            icon={!isOpenInformation ? icons?.reduceText : icons?.showText}
+            icon={!isOpenInformation ? icons.reduceText : icons.showText}
             onClick={toggleOpenCloseInfomation}
           />
           ℹ️ {userLanguage?.chat_info}

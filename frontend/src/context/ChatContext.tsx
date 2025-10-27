@@ -12,11 +12,36 @@ import { endChat } from '../services/ChatBot/endChat.service';
 import { feedbackApiFrontChatBot } from '../services/ChatBot/feedbackApiFrontChatBot.service';
 import { ChatContextAttributes } from '../types/provider/provider.type';
 import { restartChat } from '../services/ChatBot/restartChat.service';
+import {
+  ERROR_TYPE_FAILURE,
+  ERROR_USE_NOTIFICATION,
+  ERROR_USE_RECAPTCHA,
+  STATUS_SUCCESS,
+  SUCCESS_MESSAGE_CLOSE_CONNECTION,
+  SUCCESS_MESSAGE_FEEDBACK,
+  SUCCESS_MESSAGE_SESSION,
+} from '../constants/notifications.constants';
+import {
+  DOC_TYPE_REFORMULATE,
+  LOADING_MESSAGE_ASSISTANT,
+  LOADING_RETRANSCRIBE_ASSISTANT,
+  LOADING_SPEAK_USER,
+  LOADING_WRITE_USER,
+  MESSAGE_REFORMULATE,
+  ROLE_ASSISTANT,
+  ROLE_ASSISTANT_TRANSCRIBE,
+  ROLE_NONE,
+  ROLE_USER,
+  ROLE_USER_MICROPHONE,
+  ROLE_USER_TEXT,
+} from '../constants/chat.constants';
+import { useClient } from '../hooks/ClientProvider';
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
 function ChatContextProvider({
   children,
+  useRecaptcha,
   useNotification,
   useTranscription,
 }: any) {
@@ -25,6 +50,11 @@ function ChatContextProvider({
   const { getMessageToNotification } = useNotification();
   const { messagesUser, messagesLLM, messagesError } = useTranscription();
 
+  const { isHuman } = useRecaptcha();
+  const { configClient } = useClient();
+
+
+  const [uuidSession, setUuidSession] = useState<string>('');
   const [isRestart, setIsRestart] = useState<boolean>(false);
   const [isStart, setIsStart] = useState<boolean>(false);
   const [messages, setMessages] = useState<MessageAttributes[]>([]);
@@ -36,24 +66,25 @@ function ChatContextProvider({
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
   const [messageLoading, setMessageLoading] = useState<string>('');
 
+  if (!useRecaptcha) {
+    throw new Error(ERROR_USE_RECAPTCHA);
+  }
+
   if (!useNotification) {
-    throw new Error(
-      'useNotification was not provided to NotificationContentProvider'
-    );
+    throw new Error(ERROR_USE_NOTIFICATION);
   }
 
   useEffect(() => {
     async function start() {
       await startConversation();
     }
-    start();
-  }, []);
+    isHuman ? start() : null;
+  }, [isHuman]);
 
   useEffect(() => {
-    if (messagesUser?.message?.transcript?.[0]?.[1]) {
-      stockMessageUserTranscription(
-        messagesUser?.message?.transcript?.[0]?.[1]
-      );
+    // ambiant mode : messagesUser?.message?.transcript?.[0]?.[1]
+    if (messagesUser?.message?.transcript) {
+      stockMessageUserTranscription(messagesUser?.message?.transcript);
     }
   }, [messagesUser]);
 
@@ -65,7 +96,10 @@ function ChatContextProvider({
 
   useEffect(() => {
     if (messagesError) {
-      if (messagesError.type === 'failure') {
+      if (
+        messagesError.type === ERROR_TYPE_FAILURE.toLowerCase() ||
+        messagesError.type === ERROR_TYPE_FAILURE
+      ) {
         getMessageToNotification(
           messagesError.data.status,
           messagesError.data.details
@@ -77,23 +111,27 @@ function ChatContextProvider({
 
   function whoIsWritten(role: string): void {
     switch (role) {
-      case 'assistant':
+      case ROLE_ASSISTANT:
         setIsBotWritten(true);
-        setMessageLoading('Je réfléchis, je vous réponds dans un instant ...');
+        setIsUserWritten(false);
+        setMessageLoading(LOADING_MESSAGE_ASSISTANT);
         break;
-      case 'assistant-transcribe':
+      case ROLE_ASSISTANT_TRANSCRIBE:
         setIsUserWritten(true);
-        setMessageLoading('Retranscription de votre demande ...');
+        setIsBotWritten(false);
+        setMessageLoading(LOADING_RETRANSCRIBE_ASSISTANT);
         break;
-      case 'user-text':
+      case ROLE_USER_TEXT:
         setIsUserWritten(true);
-        setMessageLoading("Vous êtes entrain d'écrire ...");
+        setIsBotWritten(false);
+        setMessageLoading(LOADING_WRITE_USER);
         break;
-      case 'user-microphone':
+      case ROLE_USER_MICROPHONE:
         setIsUserWritten(true);
-        setMessageLoading('Vous êtes entrain de parler ...');
+        setIsBotWritten(false);
+        setMessageLoading(LOADING_SPEAK_USER);
         break;
-      case 'none':
+      case ROLE_NONE:
         setMessageLoading('');
         setIsBotWritten(false);
         setIsUserWritten(false);
@@ -112,7 +150,7 @@ function ChatContextProvider({
     setProcedures([]);
     setMessages([]);
     setIsRestart(!isRestart);
-    getMessageToNotification(200, 'Nouvelle session démarrée');
+    getMessageToNotification(STATUS_SUCCESS, SUCCESS_MESSAGE_SESSION);
     await restartConversation();
   }
 
@@ -127,7 +165,7 @@ function ChatContextProvider({
   async function startConversation() {
     const responseApi: any = await pingPongChat();
 
-    if (responseApi.message === 'failure') {
+    if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification(responseApi.status, responseApi.details);
       return;
     }
@@ -135,20 +173,23 @@ function ChatContextProvider({
     if (responseApi) {
       const responseRequest: any = await requestApiFrontChatBot();
 
-      if (responseRequest.message === 'failure') {
+      if (responseRequest.message === ERROR_TYPE_FAILURE.toLowerCase()) {
         getMessageToNotification({
-          status: responseApi.status,
+          status: responseRequest.status,
           message: responseRequest.details,
         });
         return;
       }
 
-      if (responseRequest === 'Success connection') {
-        const responseStartChat: any = await startApiFrontChatBot();
+      if (responseRequest) {
+        setUuidSession(responseRequest);
 
-        if (responseStartChat.message === 'failure') {
+        const responseStartChat: any =
+          await startApiFrontChatBot(responseRequest);
+
+        if (responseStartChat.message === ERROR_TYPE_FAILURE.toLowerCase()) {
           getMessageToNotification({
-            status: responseApi.status,
+            status: responseStartChat.status,
             message: responseStartChat.details,
           });
           return;
@@ -174,33 +215,31 @@ function ChatContextProvider({
   }
 
   async function restartConversation() {
+    const responseRequest: any = await restartChat(uuidSession);
 
-      const responseRequest: any = await restartChat();
+    if (responseRequest.message === ERROR_TYPE_FAILURE.toLowerCase()) {
+      getMessageToNotification({
+        status: responseRequest.status,
+        message: responseRequest.details,
+      });
+      return;
+    }
 
-      if (responseRequest.message === 'failure') {
-        getMessageToNotification({
-          status: responseRequest.status,
-          message: responseRequest.details,
-        });
-        return;
-      }
+    updateMessages([
+      {
+        id: 0,
+        role: `${responseRequest.role}`,
+        content: `${responseRequest.content}`,
+        date: new Date().toLocaleTimeString(selectedLanguage),
+      },
+    ]);
 
-      updateMessages([
-        {
-          id: 0,
-          role: `${responseRequest.role}`,
-          content: `${responseRequest.content}`,
-          date: new Date().toLocaleTimeString(selectedLanguage),
-        },
-      ]);
-
-      updateHistoryChat([
-        {
-          role: `${responseRequest.role}`,
-          content: `${responseRequest.content}`,
-        },
-      ]);
-    
+    updateHistoryChat([
+      {
+        role: `${responseRequest.role}`,
+        content: `${responseRequest.content}`,
+      },
+    ]);
   }
 
   async function stockMessageUser(userContent: any) {
@@ -209,7 +248,7 @@ function ChatContextProvider({
     const newMessages: MessageAttributes[] = [
       {
         id: lengthMessage,
-        role: 'user',
+        role: ROLE_USER,
         content: userContent,
         date: new Date().toLocaleTimeString(selectedLanguage),
       },
@@ -225,14 +264,14 @@ function ChatContextProvider({
     const newMessages: MessageAttributes[] = [
       {
         id: lengthMessage,
-        role: 'user',
+        role: ROLE_USER,
         content: userContent,
         date: new Date().toLocaleTimeString(selectedLanguage),
       },
     ];
     updateMessages(newMessages);
     updateHistoryChat(newMessages);
-    whoIsWritten('assistant');
+    whoIsWritten(ROLE_ASSISTANT);
   }
 
   async function stockMessageAssistantTranscription(
@@ -240,7 +279,9 @@ function ChatContextProvider({
   ) {
     let lengthMessage = messages.length + 1;
 
-    if (responseChatConversation.data.message === 'failure') {
+    if (
+      responseChatConversation.data.message === ERROR_TYPE_FAILURE.toLowerCase()
+    ) {
       getMessageToNotification(
         responseChatConversation.data.status,
         responseChatConversation.data.details
@@ -266,6 +307,7 @@ function ChatContextProvider({
           content: source.doc_name,
           doc_type: source.doc_type,
           doc_ref: source.doc_ref,
+          url: source.url,
           date: new Date().toLocaleTimeString(selectedLanguage),
         };
         newMessages.push(sourceProcedures);
@@ -288,7 +330,7 @@ function ChatContextProvider({
         content: `${responseChatConversation.data.details.content}`,
       },
     ]);
-    whoIsWritten('none');
+    whoIsWritten(ROLE_NONE);
   }
 
   async function requestChatConversation(userContent: string) {
@@ -297,12 +339,13 @@ function ChatContextProvider({
     const responseChatConversation: any = await sendMessageApiFrontChatBot(
       historyChat,
       {
-        role: 'user',
+        role: ROLE_USER,
         content: userContent,
-      }
+      },
+      uuidSession
     );
 
-    if (responseChatConversation.message === 'failure') {
+    if (responseChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification(
         responseChatConversation.status,
         responseChatConversation.details
@@ -328,6 +371,7 @@ function ChatContextProvider({
           content: source.doc_name,
           doc_type: source.doc_type,
           doc_ref: source.doc_ref,
+          url: source.url,
           date: new Date().toLocaleTimeString(selectedLanguage),
         };
         newMessages.push(sourceProcedures);
@@ -355,11 +399,13 @@ function ChatContextProvider({
   async function reformulateChatConversation() {
     let lengthMessage = messages.length;
 
-    whoIsWritten('assistant');
+    whoIsWritten(ROLE_ASSISTANT);
 
-    const propositionChatConversation: any = await reformulateChat();
+    const propositionChatConversation: any = await reformulateChat(uuidSession);
 
-    if (propositionChatConversation.message === 'failure') {
+    if (
+      propositionChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()
+    ) {
       getMessageToNotification(
         propositionChatConversation.status,
         propositionChatConversation.details
@@ -370,9 +416,8 @@ function ChatContextProvider({
     const newMessages: MessageAttributes[] = [];
     newMessages.push({
       id: lengthMessage++,
-      role: 'assistant',
-      content:
-        "Il semble que j'ai mal interprété votre question. Je vais essayer de reformuler votre question pour mieux répondre à vos attentes. Voici 3 propositions de questions similaires à votre question, cliquez sur celle qui correspond au mieux à ce que vous avez en tête :",
+      role: ROLE_ASSISTANT,
+      content: MESSAGE_REFORMULATE,
       date: new Date().toLocaleTimeString(selectedLanguage),
     });
     propositionChatConversation.map((proposition: MessageType) => {
@@ -381,13 +426,13 @@ function ChatContextProvider({
         id: lengthMessage,
         role: proposition.role,
         content: proposition.content,
-        doc_type: 'reformulate',
+        doc_type: DOC_TYPE_REFORMULATE,
         date: new Date().toLocaleTimeString(selectedLanguage),
       });
     });
 
     updateMessages(newMessages);
-    whoIsWritten('none');
+    whoIsWritten(ROLE_NONE);
   }
 
   function setVoteUser(vote: number) {
@@ -395,22 +440,29 @@ function ChatContextProvider({
   }
 
   async function sendFeedback(comment: string) {
-    const responseApi: any = await feedbackApiFrontChatBot(vote, comment);
-    if (responseApi.message === 'failure') {
+    const responseApi: any = await feedbackApiFrontChatBot(
+      vote,
+      comment,
+      uuidSession
+    );
+    if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification(responseApi.status, responseApi.details);
       return;
     } else {
-      getMessageToNotification(200, 'Feedback envoyé');
+      getMessageToNotification(STATUS_SUCCESS, SUCCESS_MESSAGE_FEEDBACK);
     }
   }
 
   async function endConversation() {
-    const responseApi: any = await endChat();
-    if (responseApi.message === 'failure') {
+    const responseApi: any = await endChat(uuidSession);
+    if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification(responseApi.status, responseApi.details);
       return;
     } else {
-      getMessageToNotification(200, 'Conversation clôturée');
+      getMessageToNotification(
+        STATUS_SUCCESS,
+        SUCCESS_MESSAGE_CLOSE_CONNECTION
+      );
     }
   }
 
@@ -440,7 +492,7 @@ function ChatContextProvider({
 
   return (
     <>
-      {import.meta.env.VITE_OPT_AUT0_ACCOUNT ? (
+      {configClient.authAccountOption ? (
         <>
           <ChatContext.Provider
             value={{
@@ -462,6 +514,7 @@ function ChatContextProvider({
               isBotWritten,
               messageLoading,
               setVoteUser,
+              uuidSession,
             }}
           >
             {children}
@@ -487,6 +540,7 @@ function ChatContextProvider({
             isBotWritten,
             messageLoading,
             setVoteUser,
+            uuidSession,
           }}
         >
           {children}

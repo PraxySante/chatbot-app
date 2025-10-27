@@ -15,9 +15,14 @@ import {
  *
  * @param {Request} req - Object contains data :
  * - **IP du client** (`req.ip`)
+ * - **IP du client** (`req.ip`)
+ * - **Body** (`req.body`):
+ *   - `project`: Company name
+ *   - `language`: Language selected
+ *   - `uuidSession` : session uiud
  * @example
  * Requête POST avec un body JSON :
- * { projet: "Praxy IA", language: "fr", ..,
+ * { projet: "Praxy IA", language: "fr", uuidSession: "04344-42340-. " }
  * @param {Response} res - Return response failed or success
  * @param {NextFunction} _ - Next not used
  * @returns {Promise<Response>} - Return response JSON :
@@ -36,8 +41,9 @@ export default async function limiterRequestApi(
 	req: Request,
 	res: Response,
 	_: NextFunction
-) :Promise<void|Response>{
-	const userId = `${USER}-${req.ip}`;
+): Promise<void | Response>{
+	const {uuidSession} = req.body
+	const userId = `${USER}-${uuidSession}-${req.ip}`;
 
 	const request = await redisClient.incr(userId);
 

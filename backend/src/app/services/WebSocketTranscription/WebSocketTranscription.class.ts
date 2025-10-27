@@ -36,6 +36,7 @@ export class WebSocketTranscription {
 	protected requestUserMessage!: { role: string; content: string };
 	protected chatConversation!: any;
 	protected idDirectus!: string;
+	protected project!: string;
 
 	constructor(
 		wsAddressApi: string,
@@ -49,7 +50,12 @@ export class WebSocketTranscription {
 		this.authToken = authToken;
 	}
 
-	startWebsocketApi(ip: any, uuidTranscription: string, project: string) {
+	startWebsocketApi(
+		ip: any,
+		uuidSession: string,
+		uuidTranscription: string,
+		project: string
+	) {
 		console.log("✅ Initialisation WebSocket API Transcription");
 
 		// Instance pour connexion vers API Transcription
@@ -68,7 +74,7 @@ export class WebSocketTranscription {
 			}
 
 			const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-				await getKeyRedis(ip);
+				await getKeyRedis(`${ip}-${uuidSession}`);
 
 			// Message Error Typed - error message from Redis
 			if (status !== SUCCESS_OK && typeof details === "string") {
@@ -88,6 +94,7 @@ export class WebSocketTranscription {
 				await this.getHistoryChatBot(details);
 
 				if (!this.idDirectus) {
+					this.project = project;
 					const data: CreateConversationDirectusAttributes = {
 						Name: project,
 						Uuid_Transcription: uuidTranscription,
@@ -98,7 +105,7 @@ export class WebSocketTranscription {
 						| ResponseFailureType = await createConversationDirectus(
 						process.env.COLLECTION_DIRECTUS,
 						data
-						);
+					);
 
 					if ("details" in responseDirectus) {
 						console.error({
@@ -110,7 +117,11 @@ export class WebSocketTranscription {
 					}
 
 					if ("id" in responseDirectus) {
-						await updateKeyRedis(ip, "idDirectus", responseDirectus?.id);
+						await updateKeyRedis(
+							`${ip}-${uuidSession}`,
+							"idDirectus",
+							responseDirectus?.id
+						);
 						this.idDirectus = responseDirectus.id;
 					}
 				} else {
@@ -140,7 +151,8 @@ export class WebSocketTranscription {
 				this.wsParent.send(msg.toString());
 				const userMessage = JSON.parse(msg.toString());
 
-				const transcript = userMessage?.message?.transcript?.[0]?.[1];
+				// ambiant mode : const transcript = userMessage?.message?.transcript?.[0]?.[1];
+				const transcript = userMessage?.message?.transcript
 
 				if (transcript) {
 					const preparedUserMessage = {

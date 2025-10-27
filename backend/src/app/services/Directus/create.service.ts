@@ -1,11 +1,11 @@
 import { AxiosResponse } from "axios";
-import axiosDirectus from "./axiosDirectus.service";
 import { ResponseFailureType } from "../../types/chatbot.type";
 import {
 	ConversationDirectusAttributes,
 	CreateConversationDirectusAttributes,
 } from "../../types/directus.type";
 import { FAILURE_MESSAGE, SUCCESS_OK } from "../../constant/constant";
+import axiosDirectus from "./axiosDirectus.service";
 
 /**
 	 * Request axios Directus - create record 
@@ -57,6 +57,7 @@ export async function createConversationDirectus(
 			`/items/${collection}`,
 			preparedData
 		);
+
 		const { data, status } = response;
 
 		if (status !== SUCCESS_OK) {
@@ -69,7 +70,7 @@ export async function createConversationDirectus(
 		}
 		return data.data as ConversationDirectusAttributes;
 	} catch (error: any) {
-		console.error(error);
+		console.error(error.message);
 		const data = {
 			status: error?.status,
 			message: FAILURE_MESSAGE,

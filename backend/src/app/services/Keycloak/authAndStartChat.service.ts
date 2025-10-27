@@ -15,6 +15,7 @@ import {
 	ResponseFailureType,
 } from "../../types/chatbot.type";
 import { ResponseKeyRedisType } from "../../types/redis.type";
+import { generateUuidSession } from "../ChatBot/generateUuidSession.service";
 import { authChatBot } from "./authChatBot.service";
 
 /**
@@ -47,64 +48,71 @@ import { authChatBot } from "./authChatBot.service";
 export async function authAndStartChat(
 	ip: string,
 	project: string,
-	language: string
+	language: string,
+	uuidSession: string
 ): Promise<ResponseFailureType | ResponseSuccessType> {
-	// Check presence project and language
-	if (!project || !language) {
-		return {
-			status: ERROR_BAD_REQUEST,
-			message: FAILURE_MESSAGE,
-			details: ERROR_BAD_REQUEST_MESSSAGE,
-		};
-	}
-
-	const responseRedis: ResponseKeyRedisType | ResponseFailureType =
-		await getKeyRedis(ip);
-	// Message Error Typed - error message from Redis
-	if (
-		responseRedis.status !== SUCCESS_OK &&
-		typeof responseRedis.details === "string"
-	) {
-		const responseApi: ResponseFailureType | ResponseAuthChatBot =
-			await authChatBot();
-
-		// Message Error Typed
-		const { status, details } = responseApi;
-
-		if (
-			responseApi.message === FAILURE_MESSAGE.toLowerCase() &&
-			typeof details === "string"
-		) {
-			return { status: status, details: details };
-		}
-
-		// Message Error Typed
-		if (typeof details !== "object" || !("access_token" in details)) {
+		// Check presence project and language
+		if (!project || !language) {
 			return {
-				status: ERROR_NOT_AUTHENTIFIED,
-				details: ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+				status: ERROR_BAD_REQUEST,
+				message: FAILURE_MESSAGE,
+				details: ERROR_BAD_REQUEST_MESSSAGE,
 			};
 		}
-
-		// Create an user into Redis
-		await createKeyRedis(
-			ip,
-			JSON.stringify({
-				authToken: details.access_token,
-				token_expires_in:
-					Math.floor(Date.now() / MILLISECONDS) + details?.expires_in,
-				startTime: Math.floor(Date.now() / MILLISECONDS),
-				project: project,
-				language: language,
-				uuid: "",
-				idDirectus: "",
-			})
-		);
-	}
-
-	// Message Success Typed
-	return {
-		status: SUCCESS_OK,
-		details: SUCCESS_OK_MESSAGE,
-	};
+	
+		const responseRedis: ResponseKeyRedisType | ResponseFailureType =
+			await getKeyRedis(`${ip}-${uuidSession}`);
+		// Message Error Typed - error message from Redis
+		if (
+			responseRedis.status !== SUCCESS_OK &&
+			typeof responseRedis.details === "string"
+		) {
+			const responseApi: ResponseFailureType | ResponseAuthChatBot =
+				await authChatBot(project);
+	
+			// Message Error Typed
+			const { status, details } = responseApi;
+	
+			if (
+				responseApi.message === FAILURE_MESSAGE.toLowerCase() &&
+				typeof details === "string"
+			) {
+				return { status: status, details: details };
+			}
+	
+			// Message Error Typed
+			if (typeof details !== "object" || !("access_token" in details)) {
+				return {
+					status: ERROR_NOT_AUTHENTIFIED,
+					details: ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+				};
+			}
+	
+			const uuidSession = generateUuidSession();
+	
+			// Create an user into Redis
+			await createKeyRedis(
+				`${ip}-${uuidSession}`,
+				JSON.stringify({
+					authToken: details.access_token,
+					token_expires_in:
+						Math.floor(Date.now() / MILLISECONDS) + details?.expires_in,
+					startTime: Math.floor(Date.now() / MILLISECONDS),
+					project: project,
+					language: language,
+					uuid: "",
+					idDirectus: "",
+				})
+			);
+			return {
+				status: SUCCESS_OK,
+				details: uuidSession,
+			};
+		}
+	
+		// Message Success Typed
+		return {
+			status: SUCCESS_OK,
+			details: uuidSession,
+		};
 }

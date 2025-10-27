@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { getKeyRedis } from "../datamapper/redis.datamapper";
 import {
 	ERROR_BAD_REQUEST,
 	ERROR_BAD_REQUEST_MESSSAGE,
@@ -13,9 +12,10 @@ import {
  * - **Body** (`req.body`):
  *   - `project`: Company name
  *   - `language`: Language selected
+ *   - `uuidSession` : session uiud
  * @example
  * Requête POST avec un body JSON :
- * { projet: "Praxy IA", language: "fr", ..,
+ * { projet: "Praxy IA", language: "fr", uuidSession: "04344-42340-..." }
  * @param {Response} res - Return response failed or success
  * @param {NextFunction} _ - Next not used
  * @returns {Promise<Response>} - Return response JSON :
@@ -47,4 +47,5 @@ export default async function verifyOrigin(
 	if (!ip) {
 		return res.status(ERROR_BAD_REQUEST).json(ERROR_BAD_REQUEST_MESSSAGE);
 	}
+
 }

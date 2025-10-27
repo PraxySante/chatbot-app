@@ -1,9 +1,23 @@
 import { ReactNode, createContext, useState } from 'react';
 import { NotifacationContextAttributes } from '../types/provider/provider.type';
+import {
+  ERROR_MESSAGE_NOT_ENOUGH_CONTENT,
+  ERROR_MESSAGE_REFRESH,
+  ERROR_MESSAGE_TOO_MANY_REQUEST,
+  ERROR_MESSAGE_UNAUTHORIZED,
+  ERROR_MESSAGE_WRONG_WAY,
+  STATUS_ERROR_BAD_REQUEST,
+  STATUS_ERROR_SERVER,
+  STATUS_ERROR_SERVICE_NOT_AVAILABLE,
+  STATUS_ERROR_TOO_MANY_REQUEST,
+  STATUS_ERROR_UNAUTHORIZED,
+  STATUS_ERROR_WRONG_WAY,
+  SUCCESS_MESSAGE_REQUEST_DONE,
+} from '../constants/notifications.constants';
 
-const NotifacationContext = createContext<NotifacationContextAttributes | undefined>(
-  undefined
-);
+const NotifacationContext = createContext<
+  NotifacationContextAttributes | undefined
+>(undefined);
 
 function NotificationHandlerProvider({ children }: { children: ReactNode }) {
   const [messageNotification, setMessageNotification] = useState<string>('');
@@ -12,56 +26,42 @@ function NotificationHandlerProvider({ children }: { children: ReactNode }) {
   function getMessageToNotification(status: number, value?: string) {
     if (value !== '') {
       switch (status) {
-        case 500:
-          setMessageNotification(
-            `${value}: Redemarrer une nouvelle session ou contacter un administrateur.`
-          );
+        case STATUS_ERROR_SERVER:
+          setMessageNotification(`${value}: ${ERROR_MESSAGE_REFRESH}`);
           setIsOpen(true);
           break;
-        case 503:
-          setMessageNotification(
-            `Pas assez de contenus pour donner votre avis.`
-          );
+        case STATUS_ERROR_SERVICE_NOT_AVAILABLE:
+          setMessageNotification(ERROR_MESSAGE_NOT_ENOUGH_CONTENT);
           setIsOpen(true);
           break;
-        case 429:
-          setMessageNotification(
-            `${value}: Trop de requêtes, attendez 1 minute.`
-          );
+        case STATUS_ERROR_TOO_MANY_REQUEST:
+          setMessageNotification(`${value}: ${ERROR_MESSAGE_TOO_MANY_REQUEST}`);
           setIsOpen(true);
           break;
-        case 404:
-          setMessageNotification(
-            `Mauvaise requête, veuillez transmettre votre question.`
-          );
+        case STATUS_ERROR_WRONG_WAY:
+          setMessageNotification(ERROR_MESSAGE_WRONG_WAY);
           setIsOpen(true);
           break;
-        case 400:
-          setMessageNotification(
-            `Mauvaise requête, veuillez transmettre votre question.`
-          );
+        case STATUS_ERROR_BAD_REQUEST:
+          setMessageNotification(ERROR_MESSAGE_WRONG_WAY);
           setIsOpen(true);
           break;
-        case 401:
-          setMessageNotification(
-            `Session perdue, redemarrer une nouvelle session ou contacter un administrateur.`
-          );
+        case STATUS_ERROR_UNAUTHORIZED:
+          !value
+            ? setMessageNotification(ERROR_MESSAGE_UNAUTHORIZED)
+            : setMessageNotification(value);
           setIsOpen(true);
           break;
         case 200:
           !value
-            ? setMessageNotification(
-                `Session perdue, redemarrer une nouvelle session ou contacter un administrateur.`
-              )
+            ? setMessageNotification(SUCCESS_MESSAGE_REQUEST_DONE)
             : setMessageNotification(value);
 
           setIsOpen(true);
           break;
 
         default:
-          setMessageNotification(
-            `Redemarrer une nouvelle session ou contacter un administrateur.`
-          );
+          setMessageNotification(ERROR_MESSAGE_REFRESH);
           setIsOpen(true);
           break;
       }

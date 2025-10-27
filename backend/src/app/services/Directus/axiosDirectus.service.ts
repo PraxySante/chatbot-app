@@ -11,4 +11,5 @@ const axiosDirectus = axios.create({
   },
 });
 
+
 export default axiosDirectus;

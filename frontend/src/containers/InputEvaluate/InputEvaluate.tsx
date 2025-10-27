@@ -52,7 +52,7 @@ export default function InputEvaluate({
       <div className="flex flex-row w-fit" onClick={showInformation}>
         <IconButton
           className="border border-solid border-slate-200 w-fit h-fit rounded-xl"
-          icon={isShowInformation ? icons?.showText : icons?.reduceText}
+          icon={isShowInformation ? icons.showText : icons.reduceText}
         />
         <Title content={content} tag={'h2'} className={''} />
       </div>
@@ -71,13 +71,13 @@ export default function InputEvaluate({
         <IconButton
           disabled={score > 0 ? false : true}
           className={score > 0 ? 'icons-input' : 'icons-disabled'}
-          icon={icons?.minus}
+          icon={icons.minus}
           onClick={() => upAndDownScore('-', score)}
         />
         {/* Button increase  */}
         <IconButton
           className="icons-input semi-rounded"
-          icon={icons?.add}
+          icon={icons.add}
           onClick={() => upAndDownScore('+', score)}
         />
       </div>

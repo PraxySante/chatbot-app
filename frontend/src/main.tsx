@@ -11,37 +11,34 @@ import { NotificationHandlerProvider } from './context/NotificationContext.tsx';
 import { useNotification } from './hooks/NotificationProvider.tsx';
 import { TranscriptionContextProvider } from './context/TranscriptionContext.tsx';
 import useTranscription from './hooks/TranscriptionProvider.tsx';
+import { RecaptchaContextProvider } from './context/RecaptchaContext.tsx';
+import useRecaptcha from './hooks/RecaptchaProvider.tsx';
+import { ClientContextProvider } from './context/ClientContext.tsx';
+import { useClient } from './hooks/ClientProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
-    <Suspense fallback={<div>Chargement...</div>}>
-      {import.meta.env.VITE_OPT_AUT0_ACCOUNT === true ? (
-        <AuthProvider>
-          <LanguageContextProvider>
-            <NotificationHandlerProvider>
-              <TranscriptionContextProvider>
+  <Suspense fallback={<div>Chargement...</div>}>
+    <ClientContextProvider>
+      <AuthProvider useClient={useClient}>
+        <LanguageContextProvider useClient={useClient}>
+          <NotificationHandlerProvider>
+            <RecaptchaContextProvider>
+              <TranscriptionContextProvider
+                useNotification={useNotification}
+                useRecaptcha={useRecaptcha}
+              >
                 <ChatContextProvider
+                  useRecaptcha={useRecaptcha}
                   useTranscription={useTranscription}
                   useNotification={useNotification}
                 >
                   <RoutesProvider />
                 </ChatContextProvider>
               </TranscriptionContextProvider>
-            </NotificationHandlerProvider>
-          </LanguageContextProvider>
-        </AuthProvider>
-      ) : (
-        <LanguageContextProvider>
-          <NotificationHandlerProvider>
-            <TranscriptionContextProvider>
-              <ChatContextProvider
-                useTranscription={useTranscription}
-                useNotification={useNotification}
-              >
-                <RoutesProvider />
-              </ChatContextProvider>
-            </TranscriptionContextProvider>
+            </RecaptchaContextProvider>
           </NotificationHandlerProvider>
         </LanguageContextProvider>
-      )}
-    </Suspense>
+      </AuthProvider>
+    </ClientContextProvider>
+  </Suspense>
 );

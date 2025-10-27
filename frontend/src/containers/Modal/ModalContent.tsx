@@ -1,11 +1,7 @@
 import Button from '../../components/Buttons/Button';
 import Input from '../../components/Inputs/Input';
-
-interface IModalContent {
-  getComment: (e: any) => void;
-  onSubmit: () => void;
-  comment: string;
-}
+import { PLACEHOLDER_COMMENTS } from '../../constants/feeback';
+import { IModalContent } from '../../types/modal/modal.interface';
 
 export default function ModalContent({getComment, onSubmit,comment}:IModalContent) {
   return (
@@ -18,7 +14,7 @@ export default function ModalContent({getComment, onSubmit,comment}:IModalConten
               'flex w-full h-20 border border-solid border-primary rounded-lg'
             }
             onChange={(e) => getComment(e)}
-            content={'Ecrire votre commentaire'}
+            content={PLACEHOLDER_COMMENTS}
             value={comment}
           />
           <Button

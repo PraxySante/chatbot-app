@@ -39,10 +39,11 @@ import {
  * @throws {500} - Internal Server Error - catched by ControllerWrapper
  */
 export async function startChatApiBot(
-	ip: string
+	ip: string,
+	uuidSession: string
 ): Promise<ResponseFailureType | ResponseSuccessType> {
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-		await getKeyRedis(ip);
+		await getKeyRedis(`${ip}-${uuidSession}`);
 
 	// Message Error Typed - error message from Redis
 	if (status !== SUCCESS_OK && typeof details === "string") {
@@ -77,7 +78,7 @@ export async function startChatApiBot(
 			return { status: status, message: FAILURE_MESSAGE, details: data };
 		}
 
-		await updateKeyRedis(ip, "uuid", data.uuid);
+		await updateKeyRedis(`${ip}-${uuidSession}`, "uuid", data.uuid);
 
 		return { status: status, details: data.message };
 	} catch (error: any) {

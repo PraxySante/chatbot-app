@@ -9,6 +9,7 @@ export default function CheckBox({
   return (
     <div className={className}>
       <input
+        title={groupName}
         type="checkbox"
         name={groupName}
         onClick={selectedItem}

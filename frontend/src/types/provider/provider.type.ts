@@ -20,6 +20,7 @@ export type ChatContextAttributes = {
   isBotWritten: boolean;
   messageLoading: string;
   setVoteUser: (vote: number) => void;
+  uuidSession: string;
 };
 
 export type LanguageContextAttributes = {
@@ -34,4 +35,27 @@ export type NotifacationContextAttributes = {
   getMessageToNotification: (status: number, message: string) => void;
   isOpen: boolean;
   changeStatutNotification: (value: boolean) => void;
+};
+
+export type TranscriptionContextProviderAttributes = {
+  startTranscription: (hostname:string, uuidSession:string) => void;
+  muteTranscription: () => void;
+  stopTranscription: () => void;
+  settingsMicrophone: () => void;
+  selectedMicrophone: (microphone: string) => void;
+  stateOpenModal: () => void;
+  listMicrophones: any[];
+  isOpenModal: boolean;
+  userSelectedMicrophone: boolean;
+  userMicrophone: any;
+  messagesUser: any;
+  messagesLLM: any;
+  messagesError: any;
+  isRecord: boolean;
+  isMuted: boolean;
+  startRecordingAudioToTranscription: () => void;
+  stopRecordingAudioToTranscription: (
+    /*isTrainer: boolean,*/
+    uuidSession: string
+  ) => Promise<string>;
 };

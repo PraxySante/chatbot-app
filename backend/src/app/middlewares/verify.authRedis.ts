@@ -10,6 +10,7 @@ import {
 	ERROR_NOT_AUTHENTIFIED_MESSSAGE,
 	FAILURE_MESSAGE,
 	FAILURE_MISSING_IP_HEADERS,
+	FAILURE_MISSING_UUID_SESSION,
 	FAILURE_STORED_CACHE,
 	FAILURE_TOKEN_EXPIRED,
 	MILLISECONDS,
@@ -22,10 +23,14 @@ import {
  * verify if auth on Redis exist chatbot-user
  *
  * @param {Request} req - Object contains data :
- * - **IP du client** (`req.ip`)
+ * - **IP du client** (`ip`)
+ * - **Body** (`req.body`):
+ *   - `project`: Company name
+ *   - `language`: Language selected
+ *   - `uuidSession` : session uiud
  * @example
  * Requête POST avec un body JSON :
- * { projet: "Praxy IA", language: "fr", ..,
+ * { projet: "Praxy IA", language: "fr", uuidSession: "04344-42340-..." }
  * @param {Response} res - Return response failed or success
  * @param {NextFunction} _ - Next not used
  * @returns {Promise<Response>} - Return response JSON :
@@ -45,43 +50,64 @@ export default async function verifyAuthRedis(
 	res: Response,
 	_: NextFunction
 ): Promise<void | Response> {
-	if (!req.ip) {
+
+	const { project, language, uuidSession } = req.body;
+	const { ip } = req;
+
+	if (!ip) {
 		return res
 			.status(ERROR_BAD_REQUEST)
 			.json({ message: FAILURE_MESSAGE, details: FAILURE_MISSING_IP_HEADERS });
 	}
 
+	if (!uuidSession) {
+		return res.status(ERROR_BAD_REQUEST).json({
+			message: FAILURE_MESSAGE,
+			details: FAILURE_MISSING_UUID_SESSION,
+		});
+	}
+
 	// check good project from Redis
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-		await getKeyRedis(req.ip);
+	await getKeyRedis(`${ip}-${uuidSession}`);
 
 	if (status !== SUCCESS_OK && !req.url.includes(RESTART)) {
-		console.log(`${FAILURE_STORED_CACHE} ${req.ip}`);
-		await deleteKeyRedis(`${USER}-${req.ip}`);
-		await deleteKeyRedis(req.ip);
+		console.log(`${FAILURE_STORED_CACHE} ${ip}-${uuidSession}`);
+		await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
+		await deleteKeyRedis(`${ip}-${uuidSession}`);
 		return res
 			.status(ERROR_NOT_AUTHENTIFIED)
 			.json(ERROR_NOT_AUTHENTIFIED_MESSSAGE);
 	}
 
 	if (status !== SUCCESS_OK && req.url.includes(RESTART)) {
-		const { project, language } = req.body;
-		const { ip } = req;
-		await deleteKeyRedis(`${USER}-${req.ip}`);
-		await authAndStartChat(ip, project, language);
-		const { status, details } = await startChatApiBot(ip);
+		console.log(RESTART)
+
+		await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
+		await authAndStartChat(ip, project, language, uuidSession);
+		const { status, details } = await startChatApiBot(ip, uuidSession);
 		return res.status(status).send(details);
 	}
 
 	if (typeof details === "object" && "token_expires_in" in details) {
 		const currentTime = Math.floor(Date.now() / MILLISECONDS);
 		if (currentTime > details?.token_expires_in) {
-			console.info(`${FAILURE_TOKEN_EXPIRED} ${req.ip}`);
-			await deleteKeyRedis(`${USER}-${req.ip}`);
-			await deleteKeyRedis(req.ip);
+			console.info(`${FAILURE_TOKEN_EXPIRED} ${ip}-${uuidSession}`);
+			await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
+			await deleteKeyRedis(`${ip}-${uuidSession}`);
 			return res
 				.status(ERROR_NOT_AUTHENTIFIED)
 				.json(ERROR_NOT_AUTHENTIFIED_MESSSAGE);
+		}
+	}
+
+	if (typeof details === "object" && "project" in details) {
+		if (project !== details?.project) {
+			await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
+			await deleteKeyRedis(`${ip}-${uuidSession}`);
+			await authAndStartChat(ip, project, language, uuidSession);
+			const { status, details } = await startChatApiBot(ip, uuidSession);
+			return res.status(status).send(details);
 		}
 	}
 }
