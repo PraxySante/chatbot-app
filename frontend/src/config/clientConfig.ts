@@ -282,6 +282,58 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
+  "ccib.praxy.ai": {
+    host: import.meta.env.VITE_HOST_CCIB,
+    name: 'Chat bot CCIB',
+    project: import.meta.env.VITE_PROJECT_CCIB,
+    logo: './bot-test.png',
+    title:
+      "Ask your questions about how CCIB works",
+    languages: [
+      {
+        id: 'fr',
+        name: 'Français',
+        icon: '🇫🇷',
+      },
+      {
+        id: 'nl',
+        name: 'Nederlands',
+        icon: '🇳🇱',
+      },
+    ],
+    modalMenu: [
+      {
+        id: 're-run',
+        name: 'Rerun',
+      },
+      {
+        id: 'settings',
+        name: 'Settings',
+      },
+      {
+        id: 'print',
+        name: 'Print',
+      },
+      {
+        id: 'record-screencast',
+        name: 'Record ad screencast',
+      },
+      {
+        id: 'about',
+        name: 'About',
+      },
+    ],
+    feedback: [
+      'feedback_exhaustivity',
+      'feedback_accuracy',
+      'feedback_hallucinations',
+    ],
+    authAccountOption: false,
+    sideBarOption: false,
+    menuParameterOption: false,
+    audioParameterOption: true,
+    RecaptchaOption: false,
+  },
   "localhost": {
     host: import.meta.env.VITE_HOST_DEV,
     name: `Chat bot test sur project ${import.meta.env.VITE_PROJECT_DEV}`,
