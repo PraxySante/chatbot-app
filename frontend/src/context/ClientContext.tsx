@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, Suspense, useEffect, useState } from 'react';
 import { ClientConfig, clientsConfig } from '../config/clientConfig';
 
 type ClientContextAttributes = {
@@ -10,32 +10,7 @@ const ClientContext = createContext<ClientContextAttributes | undefined>(
 );
 
 function ClientContextProvider({ children }: any) {
-  const [configClient, setConfigClient] = useState<ClientConfig>({
-    host: '',
-    name: '',
-    project: '',
-    logo: '',
-    title: '',
-    languages: [
-      {
-        id: '',
-        name: '',
-        icon: '',
-      },
-    ],
-    modalMenu: [
-      {
-        id: '',
-        name: '',
-      },
-    ],
-    feedback: [],
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: false,
-    RecaptchaOption: false,
-  });
+  const [configClient, setConfigClient] = useState<ClientConfig | null>(null);
 
   useEffect(() => {
     const hostname = document.location.hostname;
@@ -54,10 +29,14 @@ function ClientContextProvider({ children }: any) {
     return;
   }
 
-  return (
+  return configClient ? (
     <ClientContext.Provider value={{ configClient }}>
       {children}
     </ClientContext.Provider>
+  ) : (
+    <Suspense
+      fallback={<div>Client not recognized for this domain.</div>}
+    ></Suspense>
   );
 }
 

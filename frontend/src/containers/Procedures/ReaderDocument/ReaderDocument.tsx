@@ -5,15 +5,16 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import icons from '../../../constants/icons';
 import IconButton from '../../../components/Buttons/IconButton';
 import { ReaderDocumentType } from '../../../types/panel/panel.type';
-import { NEXT_PAGE, PREVIOUS_PAGE } from '../../../constants/chat.constants';
 import { useChat } from '../../../hooks/ChatProvider';
 import { getDocumentFromApi } from '../../../services/ChatBot/getDocumentFromApi.service';
+import { useLanguage } from '../../../hooks/UseLanguage';
 
 export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
   const [selectedPages, setSelectedPages] = useState<number>(1);
   const [numPages, setNumPages] = useState<number>(0);
   const [pdfData, setPdfData] = useState<ArrayBuffer | null>(null);
 
+  const { userLanguage } = useLanguage();
   const { uuidSession } = useChat();
 
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
@@ -76,13 +77,13 @@ export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
           icon={icons.arrowLeft}
           onClick={changePage}
           className="border border-primary text-primary contained rounded-lg p-2 hover:bg-primary hover:text-white"
-          content={PREVIOUS_PAGE}
+          content={userLanguage?.btn_chat_previous}
         />
         <IconButton
           icon={icons.arrowRight}
           onClick={changePage}
           className="border border-primary text-primary contained rounded-lg p-2 hover:bg-primary hover:text-white"
-          content={NEXT_PAGE}
+          content={userLanguage?.btn_chat_next}
         />
       </section>
       {renderingDocument()}

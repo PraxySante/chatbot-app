@@ -17,17 +17,9 @@ import {
   ERROR_USE_NOTIFICATION,
   ERROR_USE_RECAPTCHA,
   STATUS_SUCCESS,
-  SUCCESS_MESSAGE_CLOSE_CONNECTION,
-  SUCCESS_MESSAGE_FEEDBACK,
-  SUCCESS_MESSAGE_SESSION,
 } from '../constants/notifications.constants';
 import {
   DOC_TYPE_REFORMULATE,
-  LOADING_MESSAGE_ASSISTANT,
-  LOADING_RETRANSCRIBE_ASSISTANT,
-  LOADING_SPEAK_USER,
-  LOADING_WRITE_USER,
-  MESSAGE_REFORMULATE,
   ROLE_ASSISTANT,
   ROLE_ASSISTANT_TRANSCRIBE,
   ROLE_NONE,
@@ -46,13 +38,12 @@ function ChatContextProvider({
   useTranscription,
 }: any) {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-  const { selectedLanguage } = useLanguage();
+  const { selectedLanguage, userLanguage } = useLanguage();
   const { getMessageToNotification } = useNotification();
   const { messagesUser, messagesLLM, messagesError } = useTranscription();
 
   const { isHuman } = useRecaptcha();
   const { configClient } = useClient();
-
 
   const [uuidSession, setUuidSession] = useState<string>('');
   const [isRestart, setIsRestart] = useState<boolean>(false);
@@ -114,22 +105,30 @@ function ChatContextProvider({
       case ROLE_ASSISTANT:
         setIsBotWritten(true);
         setIsUserWritten(false);
-        setMessageLoading(LOADING_MESSAGE_ASSISTANT);
+        setMessageLoading(
+          userLanguage ? userLanguage?.chat_loading_msg_assistant : ''
+        );
         break;
       case ROLE_ASSISTANT_TRANSCRIBE:
         setIsUserWritten(true);
         setIsBotWritten(false);
-        setMessageLoading(LOADING_RETRANSCRIBE_ASSISTANT);
+        setMessageLoading(
+          userLanguage ? userLanguage?.chat_loading_retranscribe_assistant : ''
+        );
         break;
       case ROLE_USER_TEXT:
         setIsUserWritten(true);
         setIsBotWritten(false);
-        setMessageLoading(LOADING_WRITE_USER);
+        setMessageLoading(
+          userLanguage ? userLanguage?.chat_loading_write_user : ''
+        );
         break;
       case ROLE_USER_MICROPHONE:
         setIsUserWritten(true);
         setIsBotWritten(false);
-        setMessageLoading(LOADING_SPEAK_USER);
+        setMessageLoading(
+          userLanguage ? userLanguage?.chat_loading_speak_user : ''
+        );
         break;
       case ROLE_NONE:
         setMessageLoading('');
@@ -150,7 +149,7 @@ function ChatContextProvider({
     setProcedures([]);
     setMessages([]);
     setIsRestart(!isRestart);
-    getMessageToNotification(STATUS_SUCCESS, SUCCESS_MESSAGE_SESSION);
+    getMessageToNotification(STATUS_SUCCESS, userLanguage?.success_msg_session);
     await restartConversation();
   }
 
@@ -417,7 +416,7 @@ function ChatContextProvider({
     newMessages.push({
       id: lengthMessage++,
       role: ROLE_ASSISTANT,
-      content: MESSAGE_REFORMULATE,
+      content: userLanguage ? userLanguage?.chat_msg_reformulate : '',
       date: new Date().toLocaleTimeString(selectedLanguage),
     });
     propositionChatConversation.map((proposition: MessageType) => {
@@ -449,7 +448,7 @@ function ChatContextProvider({
       getMessageToNotification(responseApi.status, responseApi.details);
       return;
     } else {
-      getMessageToNotification(STATUS_SUCCESS, SUCCESS_MESSAGE_FEEDBACK);
+      getMessageToNotification(STATUS_SUCCESS, userLanguage?.success_msg_feedback);
     }
   }
 
@@ -461,7 +460,7 @@ function ChatContextProvider({
     } else {
       getMessageToNotification(
         STATUS_SUCCESS,
-        SUCCESS_MESSAGE_CLOSE_CONNECTION
+        userLanguage?.success_msg_close_connection
       );
     }
   }
