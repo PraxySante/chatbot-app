@@ -8,8 +8,6 @@ import icons from '../../constants/icons';
 import useTranscription from '../../hooks/TranscriptionProvider';
 import { Visualizer } from 'react-sound-visualizer';
 import {
-  BUTTON_MAINTAIN_MICROPHONE,
-  BUTTON_SEND_QUESTIONS,
   ROLE_ASSISTANT,
   ROLE_ASSISTANT_TRANSCRIBE,
   ROLE_NONE,
