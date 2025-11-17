@@ -6,7 +6,6 @@ import Button from '../../components/Buttons/Button';
 import InputEvaluate from '../InputEvaluate/InputEvaluate';
 import TransformMarkDownToMessage from '../Messages/Message/TransformMarkDownToMessage';
 import { useChat } from '../../hooks/ChatProvider';
-import { PLACEHOLDER_COMMENTS, PLACEHOLDER_FEEDBACK } from '../../constants/feeback';
 
 export default function Feedback() {
   //Init Component
@@ -43,7 +42,7 @@ export default function Feedback() {
           <InputEvaluate
             id={'feedback'}
             getDataForm={(value) => getDataForm(value)}
-            content={PLACEHOLDER_FEEDBACK}
+            content={userLanguage?.feedback_title}
           />
 
           <TransformMarkDownToMessage
@@ -55,7 +54,7 @@ export default function Feedback() {
           <Input
             variant="textarea"
             onChange={(e) => getComment(e)}
-            content={PLACEHOLDER_COMMENTS}
+            content={userLanguage?.placeholder_feedback_comments}
             value={comment}
           />
           {/* Button Feedback Form */}

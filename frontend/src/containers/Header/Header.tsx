@@ -8,6 +8,7 @@ import { useChat } from '../../hooks/ChatProvider';
 import useTranscription from '../../hooks/TranscriptionProvider';
 import { useClient } from '../../hooks/ClientProvider';
 import icons from '../../constants/icons';
+import { useLanguage } from '../../hooks/UseLanguage';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
@@ -29,6 +30,8 @@ export default function Header({
     isRecord ? stopTranscription() : null;
   }
 
+  const { userLanguage } = useLanguage();
+
   return (
     <div id="header">
       {/* Login/Logout selection */}
@@ -47,7 +50,7 @@ export default function Header({
             className={'sm:text-sm'}
           />
           <Description
-            content={'répond généralement immédiatement...'}
+            content={userLanguage ? userLanguage?.chat_time_response : ''}
             tag={'p'}
             className={'text-xs'}
           />
@@ -73,7 +76,7 @@ export default function Header({
             icon={icons.restart}
           />
           <Description
-            content={'Redémarrer'}
+            content={userLanguage ? userLanguage?.btn_chat_restart : ''}
             tag={'p'}
             className={'text-md hidden md:flex items-center gap-2'}
           />

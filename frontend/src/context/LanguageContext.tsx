@@ -11,7 +11,7 @@ function LanguageContextProvider({ children, useClient }: any) {
     throw new Error('ClientContent not found');
   }
 
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('fr');
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('');
 
   const [userLanguage, setUserLanguage] = useState<TranslateAttributes | null>(
     null
@@ -19,13 +19,38 @@ function LanguageContextProvider({ children, useClient }: any) {
   const [isSelectLanguage, setIsSelectLanguage] = useState<boolean>(false);
 
   useEffect(() => {
+    let selectedLanguage = '';
+
+    switch (true) {
+      case document.location.hostname.includes(import.meta.env.VITE_HOST_DEV):
+        setSelectedLanguage('en');
+        selectedLanguage = 'en';
+        break;
+      case document.location.hostname.includes(import.meta.env.VITE_HOST_CCIB):
+        setSelectedLanguage('en');
+        selectedLanguage = 'en';
+        break;
+
+      default:
+        setSelectedLanguage('fr');
+        selectedLanguage = 'fr';
+        break;
+    }
+
     async function load() {
-      await loadLanguage();
+      await loadLanguage(selectedLanguage);
     }
     load();
   }, []);
 
-  async function loadLanguage(): Promise<void> {
+  useEffect(() => {
+    async function load() {
+      await loadLanguage(selectedLanguage);
+    }
+    if (selectedLanguage) load();
+  }, [selectedLanguage]);
+
+  async function loadLanguage(selectedLanguage: string): Promise<void> {
     try {
       const result = await import(
         `../constants/languages/${selectedLanguage}.json`

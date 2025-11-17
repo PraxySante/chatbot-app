@@ -32,7 +32,7 @@ export default function SideBar({ toggleOpenCloseSideBar }: ISideBar) {
           <IconButton onClick={toggleOpenCloseSideBar} icon={icons.arrowLeft} />
         </span>
         {/* Logo */}
-        <Suspense fallback={<div>Chargement du logo...</div>}>
+        <Suspense fallback={<div>Loading logo...</div>}>
           <Image imgSource={configClient.logo} classname={''} />
         </Suspense>
 

@@ -5,7 +5,7 @@
   "chat_question_title": "Votre question",
   "chat_restart": "Rafra\u00eechir le chat",
   "chat_thinking": "Je r\u00e9flechis...",
-  "chat_title": "A vos c\u00f4t\u00e9s dans votre parcours RH aux Cliniques de L'Europe \ud83d\udcac\u2695",
+  "chat_title": "Posez vos questions concernant le fonctionnement de ",
   "chat_warning": "Une diminution de la qualit\u00e9 des r\u00e9ponses du chatbot peut survenir si vous posez plusieurs questions sur des sujets diff\u00e9rents d'affil\u00e9e. Si vous voulez changer de th\u00e8me de questions, nous vous conseillons de rafra\u00eechir le chat.",
   "connection_connected": "Connect\u00e9",
   "connection_disconnected": "D\u00e9connect\u00e9",
@@ -55,5 +55,56 @@
   "response_query_too_short": "Je suis d\u00e9sol\u00e9, mais votre message est trop court pour que je l'interpr\u00e8te. Pouvez-vous formuler une question plus pr\u00e9cise ?",
   "voc_document": "Document",
   "voc_hello": "Bonjour",
-  "voc_i_am": "Je suis"
+  "voc_i_am": "Je suis",
+
+  "btn_chat_restart": "Redémarrer",
+  "chat_time_response": "répond généralement immédiatement...",
+  "btn_chat_send_question": "Envoyer vos questions",
+
+  "btn_chat_maintain_microphone": "Maintenir le bouton pour parler et relâcher le bouton pour envoyer",
+  "chat_loading_msg_assistant": "Je réfléchis, je vous réponds dans un instant ...",
+  "chat_loading_retranscribe_assistant": "Retranscription de votre demande ...",
+  "chat_loading_write_user": "Vous êtes entrain d'écrire ...",
+  "chat_loading_speak_user": "Vous êtes entrain de parler ...",
+
+  "chat_msg_reformulate": "Il semble que j'ai mal interprété votre question. Je vais essayer de reformuler votre question pour mieux répondre à vos attentes. Voici 3 propositions de questions similaires à votre question, cliquez sur celle qui correspond au mieux à ce que vous avez en tête :",
+
+  "btn_chat_previous": "Précédent",
+  "btn_chat_next": "Suivant",
+
+  "chat_yt_attribut": "Youtube vidéo",
+  "chat_yt_title": "Voici un lien d'une vidéo :",
+
+  "chat_description_page": "La source est la page internet suivante (cliquez pour être redirigé) :",
+  "chat_description_document": "La source est un document qui va vous aider dans vos démarches. Une prévisualisation est disponible.",
+  "chat_description_video": "La source est une vidéo qui vous aidera à mieux comprendre :",
+
+  "feedback_title": "Feedback",
+  "feedback_title_modal": "Je donne mon avis",
+  "btn_feedback_send": "Envoyez votre avis",
+  "placeholder_feedback_comments": "Ecrire votre commentaire",
+
+  "chat_user": "utilisateur",
+  "chat_bot": "bot",
+
+  "chat_link_text": "Voici un",
+  "chat_link_type_doc": "document",
+  "chat_link_type_link": "lien",
+  "chat_link_text_end": "qui peut vous intéresser :\n",
+
+  "btn_chat_send": "Envoyer",
+
+  "success_msg_session": "Nouvelle session démarrée",
+  "success_msg_connection": "Success connection",
+  "success_msg_request_done": "La requete a bien été réalisé.",
+  "success_msg_recaptcha": "Vous pouvez désormais utiliser le chatbot.",
+  "success_msg_feedback": "Feedback envoyé",
+  "success_msg_close_connection": "Conversation clôturée",
+
+  "error_msg_recaptcha": "Veuillez confirmer que vous n'etes pas un robot",
+  "error_msg_refresh": "Redemarrer une nouvelle session ou contacter un administrateur.",
+  "error_msg_not_enough_content": "Pas assez de contenus pour donner votre avis.",
+  "error_msg_too_many_request": "Trop de requêtes, attendez 1 minute.",
+  "error_msg_wrong_way": "Mauvaise requête, veuillez transmettre votre question.",
+  "error_msg_unauthorized": "Session perdue, redemarrer une nouvelle session ou contacter un administrateur."
 }

@@ -6,6 +6,7 @@ import TabPanel from '../Panel/TabPanel/TabPanel';
 import { useNotification } from '../../hooks/NotificationProvider';
 import { IChatAttributes } from '../../types/chatbot/chatbot.interface';
 import { useClient } from '../../hooks/ClientProvider';
+import { useLanguage } from '../../hooks/UseLanguage';
 
 export default function HeaderChat({
   selectedPanel,
@@ -14,6 +15,7 @@ export default function HeaderChat({
   const { messageNotification } = useNotification();
 
   const { configClient } = useClient();
+  const { userLanguage } = useLanguage();
 
   useEffect(() => {
     renderingNotification();
@@ -28,7 +30,11 @@ export default function HeaderChat({
   return (
     <section className="h-fit">
       {/* Data Inofrmation chat */}
-      <Title content={configClient.title} tag={'h1'} className={''}></Title>
+      <Title
+        content={`${userLanguage?.chat_title} ${configClient.title}`}
+        tag={'h1'}
+        className={''}
+      ></Title>
       <Information />
       <div className="chat-room-containers_tab-panel">
         <TabPanel

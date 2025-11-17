@@ -8,8 +8,6 @@ import icons from '../../constants/icons';
 import useTranscription from '../../hooks/TranscriptionProvider';
 import { Visualizer } from 'react-sound-visualizer';
 import {
-  BUTTON_MAINTAIN_MICROPHONE,
-  BUTTON_SEND_QUESTIONS,
   ROLE_ASSISTANT,
   ROLE_ASSISTANT_TRANSCRIBE,
   ROLE_NONE,
@@ -150,8 +148,8 @@ export default function InputMessage() {
               content={userLanguage ? userLanguage?.chat_question_title : ''}
             />
             <IconButton
-              aria-label={BUTTON_MAINTAIN_MICROPHONE}
-              title={BUTTON_MAINTAIN_MICROPHONE}
+              aria-label={userLanguage?.btn_chat_maintain_microphone}
+              title={userLanguage?.btn_chat_maintain_microphone}
               type="button"
               className={`icon-microphone`}
               icon={icons.microphone}
@@ -159,8 +157,8 @@ export default function InputMessage() {
             />
 
             <IconButton
-              aria-label={BUTTON_SEND_QUESTIONS}
-              title={BUTTON_SEND_QUESTIONS}
+              aria-label={userLanguage?.btn_chat_send_question}
+              title={userLanguage?.btn_chat_send_question}
               type="submit"
               className="icon-send-message"
               icon={icons.sendMessage}
@@ -173,8 +171,8 @@ export default function InputMessage() {
       {isRecord && (
         <>
           <IconButton
-            aria-label={BUTTON_MAINTAIN_MICROPHONE}
-            title={BUTTON_MAINTAIN_MICROPHONE}
+            aria-label={userLanguage?.btn_chat_maintain_microphone}
+            title={userLanguage?.btn_chat_maintain_microphone}
             type="button"
             className={`icon-microphone`}
             icon={icons.microphone}
