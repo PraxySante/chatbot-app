@@ -291,7 +291,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       },
       {
         id: 'ar',
-        name: 'Libanese',
+        name: 'Lebanese',
         icon: '🇱🇧',
       },
     ],
@@ -342,7 +342,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       },
       {
         id: 'ar',
-        name: 'Libanese',
+        name: 'Lebanese',
         icon: '🇱🇧',
       },
     ],
