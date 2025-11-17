@@ -10,8 +10,8 @@ export type ClientConfig = {
     icon: string;
   }[];
   modalMenu: {
-    id: string,
-    name: string,
+    id: string;
+    name: string;
   }[];
   feedback: string[];
   authAccountOption: boolean;
@@ -22,13 +22,12 @@ export type ClientConfig = {
 };
 
 export const clientsConfig: Record<string, ClientConfig> = {
-  "chatbotfoch.praxysante.fr": {
+  'chatbotfoch.praxysante.fr': {
     host: import.meta.env.VITE_HOST_FOCH,
     name: 'Chat bot Hôpital Foch',
     project: import.meta.env.VITE_PROJECT_FOCH,
     logo: './bot-foch.png',
-    title:
-      "Posez vos questions concernant le fonctionnement de l'Hôpital Foch 🏥",
+    title: "l'Hôpital Foch 🏥",
     languages: [
       {
         id: 'fr',
@@ -74,13 +73,12 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
-  "ahp.praxysante.fr": {
+  'ahp.praxysante.fr': {
     host: import.meta.env.VITE_HOST_AHP,
     name: 'Chat bot Hôpital Américain de Paris',
     project: import.meta.env.VITE_PROJECT_AHP,
     logo: './bot-test.png',
-    title:
-      "Posez vos questions concernant le fonctionnement de l'Hôpital Américain de Paris",
+    title: "l'Hôpital Américain de Paris",
     languages: [
       {
         id: 'fr',
@@ -126,13 +124,12 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
-  "hpsj.praxysante.fr": {
+  'hpsj.praxysante.fr': {
     host: import.meta.env.VITE_HOST_HPSJ,
     name: 'Chat bot Hôpital Paris Saint-Joseph',
     project: import.meta.env.VITE_PROJECT_HPSJ,
     logo: './bot-test.png',
-    title:
-      "Posez vos questions concernant le fonctionnement de l'Hôpital Paris Saint-Joseph",
+    title: "l'Hôpital Paris Saint-Joseph",
     languages: [
       {
         id: 'fr',
@@ -178,13 +175,12 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
-  "ennov.praxysante.fr": {
+  'ennov.praxysante.fr': {
     host: import.meta.env.VITE_HOST_ENNOV,
     name: 'Chat bot Ennov',
     project: import.meta.env.VITE_PROJECT_ENNOV,
     logo: './bot-test.png',
-    title:
-      "Posez vos questions concernant le fonctionnement de Ennov",
+    title: 'Ennov',
     languages: [
       {
         id: 'fr',
@@ -230,13 +226,12 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
-  "aideausport.praxysante.fr": {
+  'aideausport.praxysante.fr': {
     host: import.meta.env.VITE_HOST_DRAJES,
     name: 'Chat bot DRAJES',
     project: import.meta.env.VITE_PROJECT_DRAJES,
     logo: './bot-test.png',
-    title:
-      "Posez vos questions concernant le fonctionnement de DRAJES",
+    title: 'DRAJES',
     languages: [
       {
         id: 'fr',
@@ -282,23 +277,22 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
-  "ccib.praxy.ai": {
+  'ccib.praxy.ai': {
     host: import.meta.env.VITE_HOST_CCIB,
     name: 'Chat bot CCIB',
     project: import.meta.env.VITE_PROJECT_CCIB,
     logo: './bot-test.png',
-    title:
-      "Ask your questions about how CCIB works",
+    title: 'CCIB',
     languages: [
       {
-        id: 'fr',
-        name: 'Français',
-        icon: '🇫🇷',
+        id: 'en',
+        name: 'English',
+        icon: '🇬🇧',
       },
       {
-        id: 'nl',
-        name: 'Nederlands',
-        icon: '🇳🇱',
+        id: 'ar',
+        name: 'Libanese',
+        icon: '🇱🇧',
       },
     ],
     modalMenu: [
@@ -334,23 +328,22 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
-  "localhost": {
+  localhost: {
     host: import.meta.env.VITE_HOST_DEV,
     name: `Chat bot test sur project ${import.meta.env.VITE_PROJECT_DEV}`,
     project: import.meta.env.VITE_PROJECT_DEV,
     logo: './bot-test.png',
-    title:
-      `Posez vos questions concernant le fonctionnement de test avec ${import.meta.env.VITE_PROJECT_DEV}`,
+    title: `${import.meta.env.VITE_PROJECT_DEV}`,
     languages: [
       {
-        id: 'fr',
-        name: 'Français',
-        icon: '🇫🇷',
+        id: 'en',
+        name: 'English',
+        icon: '🇬🇧',
       },
       {
-        id: 'nl',
-        name: 'Nederlands',
-        icon: '🇳🇱',
+        id: 'ar',
+        name: 'Libanese',
+        icon: '🇱🇧',
       },
     ],
     modalMenu: [
@@ -382,7 +375,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
     ],
     authAccountOption: false,
     sideBarOption: false,
-    menuParameterOption: false,
+    menuParameterOption: true,
     audioParameterOption: true,
     RecaptchaOption: false,
   },

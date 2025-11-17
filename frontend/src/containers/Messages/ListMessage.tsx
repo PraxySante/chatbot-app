@@ -16,12 +16,14 @@ import {
 } from '../../constants/chat.constants';
 import Title from '../../components/Text/Title';
 import Description from '../../components/Text/Description';
+import { useLanguage } from '../../hooks/UseLanguage';
 
 export default function ListMessage({
   message,
   setSelectedPanel,
 }: ListMessageType) {
   const { stockMessageUser, whoIsWritten } = useChat();
+  const { userLanguage } = useLanguage();
 
   useEffect(() => {
     renderingMessage();
@@ -73,7 +75,7 @@ export default function ListMessage({
                 />
                 <div className="flex flex-col ml-2">
                   <Title
-                    content={`Voici un ${message.doc_type === 'doc' ? 'document' : 'lien'} qui peut vous intéresser :\n`}
+                    content={`${userLanguage?.chat_link_text} ${message.doc_type === 'doc' ? userLanguage?.chat_link_type_doc : userLanguage?.chat_link_type_link} ${userLanguage?.chat_link_text_end}`}
                     tag="h2"
                     className="text-sm text-start leading-snug group-hover:text-white"
                   />

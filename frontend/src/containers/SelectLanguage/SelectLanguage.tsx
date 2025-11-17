@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { useLanguage } from '../../hooks/UseLanguage';
 import { LanguageAttributes } from '../../types/languages/languages.config.type';
 import IconButton from '../../components/Buttons/IconButton';
@@ -6,13 +5,14 @@ import icons from '../../constants/icons';
 import { useEffect, useState } from 'react';
 import Description from '../../components/Text/Description';
 import { useClient } from '../../hooks/ClientProvider';
+import { useNotification } from '../../hooks/NotificationProvider';
 
 export default function SelectLanguage() {
   // useLanguage from LanguageContext to introduce function and get user choice
   const { selectLanguage, selectedLanguage } = useLanguage();
+  const { getMessageToNotification } = useNotification();
   const [isOpenModalLanguage, setIsOpenModalLanguage] =
     useState<boolean>(false);
-  const { isAuthenticated, logout } = useAuth0();
 
   const { configClient } = useClient();
 
@@ -26,16 +26,18 @@ export default function SelectLanguage() {
 
   // function to select which language has been chosen
   function selectedItem(selectedUserLanguage: string) {
-    selectLanguage(selectedUserLanguage);
-    if (isAuthenticated && selectedLanguage !== selectedUserLanguage) {
-      logout({
-        logoutParams: { returnTo: import.meta.env.VITE_AUTH0_DOMAIN_CALLBACK },
-      });
+    if (selectedUserLanguage === 'ar') {
+      getMessageToNotification(
+        401,
+        'This language will be integated into next version. Please select english version.'
+      );
+      return;
     }
+    selectLanguage(selectedUserLanguage);
   }
 
   function renderIconButtonLanguage() {
-    return <IconButton icon={icons[(selectedLanguage as 'fr') || 'nl']} />;
+    return <IconButton icon={icons[(selectedLanguage as 'en') || 'ar']} />;
   }
 
   return (
@@ -59,7 +61,7 @@ export default function SelectLanguage() {
                 >
                   <IconButton
                     onClick={() => selectedItem(language.id)}
-                    icon={icons[(language?.id as 'fr') || 'nl']}
+                    icon={icons[(language?.id as 'en') || 'ar']}
                   />
                   <Description
                     content={language ? language?.name : ''}

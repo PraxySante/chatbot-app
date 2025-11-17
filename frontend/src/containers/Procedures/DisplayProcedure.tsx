@@ -8,9 +8,6 @@ import Title from '../../components/Text/Title';
 import Video from './Video/Video';
 import { DisplayProcedureType } from '../../types/panel/panel.type';
 import {
-  DESCRIPTION_DOC,
-  DESCRIPTION_PAGE,
-  DESCRIPTION_VIDEO,
   DOC_TYPE_DOC,
   DOC_TYPE_URL,
   DOC_TYPE_VIDEO,
@@ -39,7 +36,7 @@ export default function DisplayProcedures({
             <>
               {userLanguage && (
                 <Description
-                  content={DESCRIPTION_PAGE}
+                  content={userLanguage?.chat_description_page}
                   tag={'p'}
                   className={'text-black'}
                 />
@@ -59,7 +56,7 @@ export default function DisplayProcedures({
               {userLanguage && (
                 <>
                   <Description
-                    content={DESCRIPTION_DOC}
+                    content={userLanguage?.chat_description_document}
                     tag={'p'}
                     className={'text-black'}
                   />
@@ -81,7 +78,7 @@ export default function DisplayProcedures({
               {userLanguage && (
                 <>
                   <Description
-                    content={DESCRIPTION_VIDEO}
+                    content={userLanguage?.chat_description_video}
                     tag={'p'}
                     className={'text-black'}
                   />
@@ -115,10 +112,7 @@ export default function DisplayProcedures({
         <>
           {userLanguage ? (
             <>
-              <Image
-                imgSource={'/images/no-data.jpg'}
-                classname={'max-w-sm'}
-              />
+              <Image imgSource={'/images/no-data.jpg'} classname={'max-w-sm'} />
               <Description
                 content={userLanguage?.procedure_not_yet}
                 tag={'p'}

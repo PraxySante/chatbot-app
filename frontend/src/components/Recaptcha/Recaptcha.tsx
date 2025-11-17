@@ -3,12 +3,11 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useNotification } from '../../hooks/NotificationProvider';
 import useRecaptcha from '../../hooks/RecaptchaProvider';
 import {
-  ERROR_MESSAGE_RECAPTCHA,
   STATUS_ERROR_UNAUTHORIZED,
   STATUS_SUCCESS,
-  SUCCESS_MESSAGE_RECAPTCHA,
 } from '../../constants/notifications.constants';
 import { useClient } from '../../hooks/ClientProvider';
+import { useLanguage } from '../../hooks/UseLanguage';
 
 export default function Recaptcha() {
   const recaptcha = useRef<ReCAPTCHA | null>(null);
@@ -16,6 +15,7 @@ export default function Recaptcha() {
   const { getMessageToNotification } = useNotification();
   const { verifyHuman, forcingNoRecaptcha } = useRecaptcha();
   const { configClient } = useClient();
+  const { userLanguage } = useLanguage();
 
   useEffect(() => {
     configClient.RecaptchaOption === true ? null : forcingNoRecaptcha();
@@ -23,19 +23,31 @@ export default function Recaptcha() {
 
   async function submitForm() {
     if (!recaptcha.current) {
-      getMessageToNotification(STATUS_ERROR_UNAUTHORIZED, ERROR_MESSAGE_RECAPTCHA);
+      getMessageToNotification(
+        STATUS_ERROR_UNAUTHORIZED,
+        userLanguage ? userLanguage?.error_msg_recaptcha : ''
+      );
       return;
     }
 
     const captchaValue = recaptcha.current.getValue();
     if (!captchaValue) {
-      getMessageToNotification(STATUS_ERROR_UNAUTHORIZED, ERROR_MESSAGE_RECAPTCHA);
+      getMessageToNotification(
+        STATUS_ERROR_UNAUTHORIZED,
+        userLanguage ? userLanguage?.error_msg_recaptcha : ''
+      );
     } else {
       const responseApi = await verifyHuman(captchaValue);
       if (responseApi?.status !== STATUS_SUCCESS) {
-        getMessageToNotification(STATUS_ERROR_UNAUTHORIZED, ERROR_MESSAGE_RECAPTCHA);
+        getMessageToNotification(
+          STATUS_ERROR_UNAUTHORIZED,
+          userLanguage ? userLanguage?.error_msg_recaptcha : ''
+        );
       }
-      getMessageToNotification(STATUS_SUCCESS, SUCCESS_MESSAGE_RECAPTCHA);
+      getMessageToNotification(
+        STATUS_SUCCESS,
+        userLanguage ? userLanguage?.success_msg_recaptcha : ''
+      );
     }
   }
 

@@ -43,7 +43,7 @@ export default function Feedback() {
           <InputEvaluate
             id={'feedback'}
             getDataForm={(value) => getDataForm(value)}
-            content={PLACEHOLDER_FEEDBACK}
+            content={userLanguage?.feedback_title}
           />
 
           <TransformMarkDownToMessage
@@ -55,7 +55,7 @@ export default function Feedback() {
           <Input
             variant="textarea"
             onChange={(e) => getComment(e)}
-            content={PLACEHOLDER_COMMENTS}
+            content={userLanguage?.placeholder_feedback_comments}
             value={comment}
           />
           {/* Button Feedback Form */}

@@ -1,19 +1,14 @@
 import { ReactNode, createContext, useState } from 'react';
 import { NotifacationContextAttributes } from '../types/provider/provider.type';
 import {
-  ERROR_MESSAGE_NOT_ENOUGH_CONTENT,
-  ERROR_MESSAGE_REFRESH,
-  ERROR_MESSAGE_TOO_MANY_REQUEST,
-  ERROR_MESSAGE_UNAUTHORIZED,
-  ERROR_MESSAGE_WRONG_WAY,
   STATUS_ERROR_BAD_REQUEST,
   STATUS_ERROR_SERVER,
   STATUS_ERROR_SERVICE_NOT_AVAILABLE,
   STATUS_ERROR_TOO_MANY_REQUEST,
   STATUS_ERROR_UNAUTHORIZED,
   STATUS_ERROR_WRONG_WAY,
-  SUCCESS_MESSAGE_REQUEST_DONE,
 } from '../constants/notifications.constants';
+import { useLanguage } from '../hooks/UseLanguage';
 
 const NotifacationContext = createContext<
   NotifacationContextAttributes | undefined
@@ -22,46 +17,55 @@ const NotifacationContext = createContext<
 function NotificationHandlerProvider({ children }: { children: ReactNode }) {
   const [messageNotification, setMessageNotification] = useState<string>('');
   const [isOpen, setIsOpen] = useState(false);
+  const { userLanguage } = useLanguage();
 
   function getMessageToNotification(status: number, value?: string) {
     if (value !== '') {
       switch (status) {
         case STATUS_ERROR_SERVER:
-          setMessageNotification(`${value}: ${ERROR_MESSAGE_REFRESH}`);
+          setMessageNotification(
+            `${value}: ${userLanguage?.error_msg_refresh}`
+          );
           setIsOpen(true);
           break;
         case STATUS_ERROR_SERVICE_NOT_AVAILABLE:
-          setMessageNotification(ERROR_MESSAGE_NOT_ENOUGH_CONTENT);
+          setMessageNotification(
+            `${userLanguage?.error_msg_not_enough_content}`
+          );
           setIsOpen(true);
           break;
         case STATUS_ERROR_TOO_MANY_REQUEST:
-          setMessageNotification(`${value}: ${ERROR_MESSAGE_TOO_MANY_REQUEST}`);
+          setMessageNotification(
+            `${value}: ${userLanguage?.error_msg_too_many_request}`
+          );
           setIsOpen(true);
           break;
         case STATUS_ERROR_WRONG_WAY:
-          setMessageNotification(ERROR_MESSAGE_WRONG_WAY);
+          setMessageNotification(`${userLanguage?.error_msg_wrong_way}`);
           setIsOpen(true);
           break;
         case STATUS_ERROR_BAD_REQUEST:
-          setMessageNotification(ERROR_MESSAGE_WRONG_WAY);
+          setMessageNotification(`${userLanguage?.error_msg_wrong_way}`);
           setIsOpen(true);
           break;
         case STATUS_ERROR_UNAUTHORIZED:
           !value
-            ? setMessageNotification(ERROR_MESSAGE_UNAUTHORIZED)
+            ? setMessageNotification(`${userLanguage?.error_msg_unauthorized}`)
             : setMessageNotification(value);
           setIsOpen(true);
           break;
         case 200:
           !value
-            ? setMessageNotification(SUCCESS_MESSAGE_REQUEST_DONE)
+            ? setMessageNotification(
+                `${userLanguage?.success_msg_request_done}`
+              )
             : setMessageNotification(value);
 
           setIsOpen(true);
           break;
 
         default:
-          setMessageNotification(ERROR_MESSAGE_REFRESH);
+          setMessageNotification(`${userLanguage?.error_msg_refresh}`);
           setIsOpen(true);
           break;
       }
