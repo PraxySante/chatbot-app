@@ -6,7 +6,6 @@ import Button from '../../components/Buttons/Button';
 import InputEvaluate from '../InputEvaluate/InputEvaluate';
 import TransformMarkDownToMessage from '../Messages/Message/TransformMarkDownToMessage';
 import { useChat } from '../../hooks/ChatProvider';
-import { PLACEHOLDER_COMMENTS, PLACEHOLDER_FEEDBACK } from '../../constants/feeback';
 
 export default function Feedback() {
   //Init Component

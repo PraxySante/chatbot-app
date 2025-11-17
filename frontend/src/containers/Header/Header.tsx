@@ -60,10 +60,10 @@ export default function Header({
         {configClient.menuParameterOption === true && (
           <>
             <SelectLanguage />
-            {/* <IconButton
+            <IconButton
               onClick={toggleOpenCloseModalMenu}
               icon={icons.menuBar}
-            /> */}
+            />
           </>
         )}
         <div
