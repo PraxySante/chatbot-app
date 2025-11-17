@@ -324,8 +324,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     ],
     authAccountOption: false,
     sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
+    menuParameterOption: true,
+    audioParameterOption: false,
     RecaptchaOption: false,
   },
   localhost: {
@@ -376,7 +376,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: true,
-    audioParameterOption: true,
+    audioParameterOption: false,
     RecaptchaOption: false,
   },
 };
