@@ -54,6 +54,12 @@ function NotificationHandlerProvider({ children }: { children: ReactNode }) {
             : setMessageNotification(value);
           setIsOpen(true);
           break;
+        case 422:
+          !value
+            ? setMessageNotification(`${userLanguage?.error_msg_refresh}`)
+            : setMessageNotification(value);
+          setIsOpen(true);
+          break;
         case 200:
           !value
             ? setMessageNotification(
