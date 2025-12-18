@@ -328,6 +328,57 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: false,
     RecaptchaOption: false,
   },
+  'deuxiemeavis.praxysante.fr': {
+    host: import.meta.env.VITE_HOST_DA,
+    name: 'Chat bot DA',
+    project: import.meta.env.VITE_PROJECT_DA,
+    logo: './bot-test.png',
+    title: 'DA',
+    languages: [
+      {
+        id: 'fr',
+        name: 'Français',
+        icon: '🇫🇷',
+      },
+      {
+        id: 'nl',
+        name: 'Nederlands',
+        icon: '🇳🇱',
+      },
+    ],
+    modalMenu: [
+      {
+        id: 're-run',
+        name: 'Rerun',
+      },
+      {
+        id: 'settings',
+        name: 'Settings',
+      },
+      {
+        id: 'print',
+        name: 'Print',
+      },
+      {
+        id: 'record-screencast',
+        name: 'Record ad screencast',
+      },
+      {
+        id: 'about',
+        name: 'About',
+      },
+    ],
+    feedback: [
+      'feedback_exhaustivity',
+      'feedback_accuracy',
+      'feedback_hallucinations',
+    ],
+    authAccountOption: false,
+    sideBarOption: false,
+    menuParameterOption: false,
+    audioParameterOption: true,
+    RecaptchaOption: false,
+  },
   localhost: {
     host: import.meta.env.VITE_HOST_DEV,
     name: `Chat bot test sur project ${import.meta.env.VITE_PROJECT_DEV}`,

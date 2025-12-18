@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { LanguageContextProvider } from './context/LanguageContext.tsx';
 import { ChatContextProvider } from './context/ChatContext.tsx';
 import RoutesProvider from './hooks/RoutesProvider.tsx';
-import AuthProvider from './hooks/AuthProvider.tsx';
 
 import './reset.css';
 import './index.css';
@@ -19,7 +18,6 @@ import { useClient } from './hooks/ClientProvider.tsx';
 createRoot(document.getElementById('root')!).render(
   <Suspense fallback={<div>Chargement...</div>}>
     <ClientContextProvider>
-      <AuthProvider useClient={useClient}>
         <LanguageContextProvider useClient={useClient}>
           <NotificationHandlerProvider>
             <RecaptchaContextProvider>
@@ -38,7 +36,6 @@ createRoot(document.getElementById('root')!).render(
             </RecaptchaContextProvider>
           </NotificationHandlerProvider>
         </LanguageContextProvider>
-      </AuthProvider>
     </ClientContextProvider>
   </Suspense>
 );
