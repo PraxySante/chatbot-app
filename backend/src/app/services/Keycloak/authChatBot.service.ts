@@ -46,12 +46,18 @@ export async function authChatBot(
 				password: String(process.env.KEYCLOAK_PASSWORD_DRAJES),
 			};
 			break;
-			case project.includes(String(process.env.PROJECT_CCIB)):
-				dataProject = {
-					username: String(process.env.KEYCLOAK_USERNAME_CCIB),
-					password: String(process.env.KEYCLOAK_PASSWORD_CCIB),
-				};
-				break;
+		case project.includes(String(process.env.PROJECT_CCIB)):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_CCIB),
+				password: String(process.env.KEYCLOAK_PASSWORD_CCIB),
+			};
+			break;
+		case project.includes(String(process.env.PROJECT_DA)):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_DA),
+				password: String(process.env.KEYCLOAK_PASSWORD_DA),
+			};
+			break;
 		default:
 			dataProject = {
 				username: String(process.env.KEYCLOAK_USERNAME_DEV),
