@@ -330,10 +330,10 @@ export const clientsConfig: Record<string, ClientConfig> = {
   },
   'deuxiemeavis.praxysante.fr': {
     host: import.meta.env.VITE_HOST_DA,
-    name: 'Chat bot DA',
+    name: 'Chat bot Deuxième avis',
     project: import.meta.env.VITE_PROJECT_DA,
     logo: './bot-test.png',
-    title: 'DA',
+    title: 'Deuxième avis',
     languages: [
       {
         id: 'fr',
