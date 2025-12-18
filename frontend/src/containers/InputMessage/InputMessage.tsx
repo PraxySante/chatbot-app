@@ -151,19 +151,19 @@ export default function InputMessage() {
               aria-label={userLanguage?.btn_chat_maintain_microphone}
               title={userLanguage?.btn_chat_maintain_microphone}
               type="button"
-              className={`icon-microphone`}
+              className={`icon-send-message`}
               icon={icons.microphone}
               onClick={toggleMicrophone}
             />
 
-            <IconButton
+            {/* <IconButton
               aria-label={userLanguage?.btn_chat_send_question}
               title={userLanguage?.btn_chat_send_question}
               type="submit"
               className="icon-send-message"
               icon={icons.sendMessage}
               onClick={(e) => sendMessage(e)}
-            />
+            /> */}
           </>
         )}
       </form>
