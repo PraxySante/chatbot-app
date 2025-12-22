@@ -32,6 +32,10 @@ switch (true) {
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_CCIB;
     userLanguage = 'en';
     break;
+  case hostname.includes(import.meta.env.VITE_HOST_DA):
+    project = import.meta.env.VITE_PROJECT_DA;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DA;
+    break;
   default:
     project = import.meta.env.VITE_PROJECT_DEV;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DEV;

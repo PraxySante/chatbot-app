@@ -56,14 +56,14 @@ export default function Header({
           />
         </span>
       </span>
-      <span className="icons-actions right xs:flex xs:flex-col">
+      <span className="icons-actions right">
         {configClient.menuParameterOption === true && (
           <>
             <SelectLanguage />
-            <IconButton
+            {/* <IconButton
               onClick={toggleOpenCloseModalMenu}
               icon={icons.menuBar}
-            />
+            /> */}
           </>
         )}
         <div
