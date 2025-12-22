@@ -78,18 +78,18 @@ export default function InputMessage() {
   }
 
   // Function preparing message to ChatBot
-  async function sendMessage(e: any): Promise<void> {
-    e.preventDefault();
-    // Record message written by user
-    if (userContent !== '') {
-      setUserContent('');
-      whoIsWritten(ROLE_NONE);
-      whoIsWritten(ROLE_ASSISTANT);
-      await stockMessageUser(userContent);
-      whoIsWritten(ROLE_NONE);
-      //await loadingMessageContext(userContent);
-    }
-  }
+   async function sendMessage(e: any): Promise<void> {
+     e.preventDefault();
+     // Record message written by user
+     if (userContent !== '') {
+       setUserContent('');
+       whoIsWritten(ROLE_NONE);
+       whoIsWritten(ROLE_ASSISTANT);
+       await stockMessageUser(userContent);
+       whoIsWritten(ROLE_NONE);
+       //await loadingMessageContext(userContent);
+     }
+   }
 
   // async function loadingMessageContext(userContent: string) {
   //   await stockMessageUser(userContent);
@@ -151,7 +151,7 @@ export default function InputMessage() {
               aria-label={userLanguage?.btn_chat_maintain_microphone}
               title={userLanguage?.btn_chat_maintain_microphone}
               type="button"
-              className={`icon-microphone`}
+              className={`icon-send-message`}
               icon={icons.microphone}
               onClick={toggleMicrophone}
             />
@@ -160,7 +160,7 @@ export default function InputMessage() {
               aria-label={userLanguage?.btn_chat_send_question}
               title={userLanguage?.btn_chat_send_question}
               type="submit"
-              className="icon-send-message"
+              className="icon-microphone"
               icon={icons.sendMessage}
               onClick={(e) => sendMessage(e)}
             />

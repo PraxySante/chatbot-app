@@ -13,7 +13,7 @@ import { useLanguage } from '../../hooks/UseLanguage';
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
 interface IHeaderAttributes {
-  toggleOpenCloseModalMenu: () => void;
+  toggleOpenCloseModalMenu?: () => void;
 }
 
 export default function Header({
@@ -56,14 +56,14 @@ export default function Header({
           />
         </span>
       </span>
-      <span className="icons-actions right xs:flex xs:flex-col">
+      <span className="icons-actions right">
         {configClient.menuParameterOption === true && (
           <>
             <SelectLanguage />
-            <IconButton
+            {configClient.audioParameterOption &&<IconButton
               onClick={toggleOpenCloseModalMenu}
               icon={icons.menuBar}
-            />
+            />}
           </>
         )}
         <div
