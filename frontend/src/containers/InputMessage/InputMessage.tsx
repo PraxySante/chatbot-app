@@ -78,18 +78,18 @@ export default function InputMessage() {
   }
 
   // Function preparing message to ChatBot
-  async function sendMessage(e: any): Promise<void> {
-    e.preventDefault();
-    // Record message written by user
-    if (userContent !== '') {
-      setUserContent('');
-      whoIsWritten(ROLE_NONE);
-      whoIsWritten(ROLE_ASSISTANT);
-      await stockMessageUser(userContent);
-      whoIsWritten(ROLE_NONE);
-      //await loadingMessageContext(userContent);
-    }
-  }
+  // async function sendMessage(e: any): Promise<void> {
+  //   e.preventDefault();
+  //   // Record message written by user
+  //   if (userContent !== '') {
+  //     setUserContent('');
+  //     whoIsWritten(ROLE_NONE);
+  //     whoIsWritten(ROLE_ASSISTANT);
+  //     await stockMessageUser(userContent);
+  //     whoIsWritten(ROLE_NONE);
+  //     //await loadingMessageContext(userContent);
+  //   }
+  // }
 
   // async function loadingMessageContext(userContent: string) {
   //   await stockMessageUser(userContent);
