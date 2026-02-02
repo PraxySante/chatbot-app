@@ -4,15 +4,19 @@ import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
 export async function getDocumentFromApi(
   uuidSession: string,
-  urlDocument: string
+  urlDocument: string,
+  userLanguage: string
 ): Promise<any | ReponseFailureType> {
+  const payload: {} = {
+    uuidSession: uuidSession,
+    urlDocument: urlDocument,
+    language: userLanguage,
+  };
+
   try {
     const response: AxiosResponse = await axiosAuthSecret.post(
       '/document',
-      {
-        uuidSession: uuidSession,
-        urlDocument: urlDocument,
-      },
+      payload,
       {
         responseType: 'blob',
       }

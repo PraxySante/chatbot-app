@@ -14,6 +14,8 @@ See below all chabots app deployed. Chatbot app is a multi-domain application.
 | **RECO-CARDIO** | [RECO-CARDIO](https://reco-cardio.praxysante.fr/dev) | [RECO-CARDIO](https://reco-cardio.praxysante.fr/) |
 | **CCIB**        | [CCIB](https://ccib.praxy.ai/dev)                    | [CCIB](https://ccib.praxy.ai/)                    |
 | **DA** | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/dev) | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/) |
+| **MCJR** | [MCJR](http://www.montecarlojointrepair.praxysante.fr/dev) | [MCJR](http://www.montecarlojointrepair.praxysante.fr/) |
+
 
 
 ## Plateforme chatbot – Praxysanté

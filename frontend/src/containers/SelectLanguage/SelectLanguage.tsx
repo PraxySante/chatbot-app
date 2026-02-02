@@ -7,9 +7,11 @@ import Description from '../../components/Text/Description';
 import { useClient } from '../../hooks/ClientProvider';
 import { useNotification } from '../../hooks/NotificationProvider';
 
+type Language = 'en' | 'ar' | 'fr';
+
 export default function SelectLanguage() {
   // useLanguage from LanguageContext to introduce function and get user choice
-  const { selectLanguage, selectedLanguage } = useLanguage();
+  const { setSelectLanguage, selectedLanguage } = useLanguage();
   const { getMessageToNotification } = useNotification();
   const [isOpenModalLanguage, setIsOpenModalLanguage] =
     useState<boolean>(false);
@@ -33,11 +35,11 @@ export default function SelectLanguage() {
       );
       return;
     }
-    selectLanguage(selectedUserLanguage);
+    setSelectLanguage(selectedUserLanguage);
   }
 
   function renderIconButtonLanguage() {
-    return <IconButton icon={icons[(selectedLanguage as 'en') || 'ar']} />;
+    return <IconButton icon={icons[selectedLanguage as Language]} />;
   }
 
   return (
