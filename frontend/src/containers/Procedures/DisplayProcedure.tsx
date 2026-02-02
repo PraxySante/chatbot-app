@@ -19,7 +19,7 @@ const Image = lazy(() => import('../../components/Logo/Logo'));
 export default function DisplayProcedures({
   selectedProcedure,
 }: DisplayProcedureType) {
-  const { userLanguage } = useLanguage();
+  const { userLanguage, selectedLanguage } = useLanguage();
   const { procedures, uuidSession } = useChat();
 
   const documents = procedures;
@@ -128,7 +128,8 @@ export default function DisplayProcedures({
   async function downloadFile() {
     const urlDocument = await getDocumentFromApi(
       uuidSession,
-      documents[selectedProcedure].url
+      documents[selectedProcedure].url,
+      selectedLanguage
     );
     const blob = new Blob([urlDocument.details], {
       type: 'application/pdf',
