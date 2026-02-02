@@ -3,3 +3,5 @@ export type LanguageAttributes = {
 	name: string;
 	icon: string;
 };
+
+export type AppLanguage = 'en' | 'ar' | 'fr';
