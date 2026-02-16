@@ -6,15 +6,17 @@ See below all chabots app deployed. Chatbot app is a multi-domain application.
 
 | 🧩 PROJECT      | ⚙️ DEV                                               | 🚀 PROD                                           |
 | --------------- | ---------------------------------------------------- | ------------------------------------------------- |
-| **FOCH**        | [FOCH](https://chatbotfoch.praxysante.fr/dev)        | [FOCH](https://chatbotfoch.praxysante.fr/)        |
-| **HPSJ**        | [HPSJ](https://hpsj.praxysante.fr/dev)               | [HPSJ](https://hpsj.praxysante.fr/)               |
-| **ENNOV**       | [ENNOV](https://ennov.praxysante.fr/dev)             | [ENNOV](https://ennov.praxysante.fr/)             |
-| **DRAJES**      | [DRAJES](https://aideausport.praxysante.fr/dev)      | [DRAJES](https://aideausport.praxysante.fr/)      |
 | **AHP**         | [AHP](https://ahp.praxysante.fr/dev)                 | [AHP](https://ahp.praxysante.fr/)                 |
-| **RECO-CARDIO** | [RECO-CARDIO](https://reco-cardio.praxysante.fr/dev) | [RECO-CARDIO](https://reco-cardio.praxysante.fr/) |
 | **CCIB**        | [CCIB](https://ccib.praxy.ai/dev)                    | [CCIB](https://ccib.praxy.ai/)                    |
+| **CQFD**      | [DRAJES](https://cqfd.praxysante.fr/dev)      | [DRAJES](https://cqfd.praxysante.fr/)      |
 | **DA** | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/dev) | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/) |
+| **ENNOV**       | [ENNOV](https://ennov.praxysante.fr/dev)             | [ENNOV](https://ennov.praxysante.fr/)             |
+| **FOCH**        | [FOCH](https://chatbotfoch.praxysante.fr/dev)        | [FOCH](https://chatbotfoch.praxysante.fr/)        |
+| **HFAR**      | [DRAJES](https://hfar.praxysante.fr/dev)      | [DRAJES](https://hfar.praxysante.fr/)      |
+| **HPSJ**        | [HPSJ](https://hpsj.praxysante.fr/dev)               | [HPSJ](https://hpsj.praxysante.fr/)               |
 | **MCJR** | [MCJR](http://www.montecarlojointrepair.praxysante.fr/dev) | [MCJR](http://www.montecarlojointrepair.praxysante.fr/) |
+
+
 
 
 
