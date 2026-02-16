@@ -383,7 +383,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_HFAR,
     name: 'Chat bot Hôpital Fondation Rothschild',
     project: import.meta.env.VITE_PROJECT_HFAR,
-    logo: './bot-foch.png',
+    logo: './bot-test.png',
     title: "l'Hôpital Fondation Rothschild",
     languages: [
       {
@@ -429,7 +429,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_CQFD,
     name: 'Chat bot CQFD',
     project: import.meta.env.VITE_PROJECT_CQFD,
-    logo: './bot-foch.png',
+    logo: './bot-test.png',
     title: "CQFD",
     languages: [
       {
