@@ -84,7 +84,7 @@ npm run dev
 
 Open [http://localhost:5000](http://localhost:5000) with your browser to see the result.
 
-### ⚒️ New project
+### ⚒️ New project - FRONTEND
 
 Ajouter des variables d'environnement pour le front : `frontend > .env `
 
@@ -105,6 +105,24 @@ Ajouter un clientConfig selon le fichier `clientConfig`
 }
 ```
 
+Ajouter le css styles dans `index.css`
+
+```css
+.theme-foch {
+  --color-primary: 150,190,50;
+  --color-secondary: 0,125,190;
+  --color-text: 100,100,0;
+  --color-bot: 255, 188, 73;
+  --color-user: 255, 107, 108;
+  --color-bg: 255, 255, 255;
+  --color-success: 153, 204, 51;
+  --color-warning: 255, 204, 0;
+  --color-error: 255, 153, 102;
+  --color-information: 200, 231, 255;
+}
+```
+
+
 Ajouter le nouveau projet dans : `axiosAuthSecret`
 
 ```js
@@ -113,6 +131,8 @@ Ajouter le nouveau projet dans : `axiosAuthSecret`
       baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_XXX;
       break;
 ```
+
+### ⚒️ New project - BACKEND
 
 Ajouter des variables d'environnement pour le back : `backend > .env `
 
