@@ -1,7 +1,10 @@
 import { createContext, useRef, useState } from 'react';
 import { WebSocketFront } from '../services/Transcription/webSocket.class';
 import { TranscriptionContextProviderAttributes } from '../types/provider/provider.type';
-import { ERROR_USE_RECAPTCHA, STATUS_ERROR_SERVER } from '../constants/notifications.constants';
+import {
+  ERROR_USE_RECAPTCHA,
+  STATUS_ERROR_SERVER,
+} from '../constants/notifications.constants';
 import { ReponseFailureType } from '../types/chatbot/chatbot.type';
 import { transcribeAudio } from '../services/Transcription/transcription.service';
 
@@ -115,7 +118,8 @@ function TranscriptionContextProvider({
 
   async function stopRecordingAudioToTranscription(
     /*isSuperTrainer: boolean,*/
-    uuidSession: string
+    uuidSession: string,
+    userLanguage: string
   ) {
     return new Promise<string>((resolve, reject) => {
       if (!mediaRecorderRef.current) {
@@ -140,7 +144,8 @@ function TranscriptionContextProvider({
 
           const response: string | ReponseFailureType = await transcribeAudio(
             audioFloatArray,
-            uuidSession
+            uuidSession,
+            userLanguage
           );
 
           if (typeof response === 'string') {

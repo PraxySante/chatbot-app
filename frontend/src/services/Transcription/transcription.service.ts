@@ -1,8 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
-import {
-  ReponseFailureType,
-} from '../../types/chatbot/chatbot.type';
+import { ReponseFailureType } from '../../types/chatbot/chatbot.type';
 
 export async function startTranscription(authToken: string): Promise<any> {
   try {
@@ -19,28 +17,39 @@ export async function startTranscription(authToken: string): Promise<any> {
 
 export async function transcribeAudio(
   audioFloatArray: Float32Array,
-  uuidSession: string
+  uuidSession: string,
+  language: string
 ): Promise<string | ReponseFailureType> {
   // Convertir Float32Array en Blob WAV
   const wavBlob = createWavBlob(audioFloatArray);
-  
+
   // Convertir le Blob en Base64
   const audioBase64 = await blobToBase64(wavBlob);
 
   try {
-    const response: AxiosResponse = await axiosAuthSecret.post('/transcribe-audio', {
-      audioBase64: audioBase64,
-      uuidSession: uuidSession,
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
+    const response: AxiosResponse = await axiosAuthSecret.post(
+      '/transcribe-audio',
+      {
+        audioBase64: audioBase64,
+        uuidSession: uuidSession,
+        language: language,
       },
-    });
-    
-    return response.status === 200 ? response.data : (response.data as ReponseFailureType);
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    return response.status === 200
+      ? response.data
+      : (response.data as ReponseFailureType);
   } catch (error: any) {
     console.error('transcribeAudio error:', error?.message || error);
-    return { message: 'failure', details: error?.message } as ReponseFailureType;
+    return {
+      message: 'failure',
+      details: error?.message,
+    } as ReponseFailureType;
   }
 }
 
