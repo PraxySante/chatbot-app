@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import Description from '../../components/Text/Description';
 import { useClient } from '../../hooks/ClientProvider';
 import { useNotification } from '../../hooks/NotificationProvider';
+import { useChat } from '../../hooks/ChatProvider';
 
 type Language = 'en' | 'ar' | 'fr';
 
@@ -17,6 +18,7 @@ export default function SelectLanguage() {
     useState<boolean>(false);
 
   const { configClient } = useClient();
+  const { selectedRestart } = useChat();
 
   useEffect(() => {
     renderIconButtonLanguage;
@@ -36,6 +38,7 @@ export default function SelectLanguage() {
       return;
     }
     setSelectLanguage(selectedUserLanguage);
+    selectedRestart(selectedUserLanguage);
   }
 
   function renderIconButtonLanguage() {
