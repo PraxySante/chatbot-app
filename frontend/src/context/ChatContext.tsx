@@ -143,14 +143,14 @@ function ChatContextProvider({
     }
   }
 
-  async function selectedRestart(): Promise<void> {
+  async function selectedRestart(selectedLanguage?: string): Promise<void> {
     setIsStart(!isStart);
     setHistoryChat([]);
     setProcedures([]);
     setMessages([]);
     setIsRestart(!isRestart);
     getMessageToNotification(STATUS_SUCCESS, userLanguage?.success_msg_session);
-    await restartConversation();
+    await restartConversation(selectedLanguage);
   }
 
   async function verifyStartChat(): Promise<void> {
@@ -170,7 +170,8 @@ function ChatContextProvider({
     }
 
     if (responseApi) {
-      const responseRequest: any = await requestApiFrontChatBot(selectedLanguage);
+      const responseRequest: any =
+        await requestApiFrontChatBot(selectedLanguage);
 
       if (responseRequest.message === ERROR_TYPE_FAILURE.toLowerCase()) {
         getMessageToNotification({
@@ -215,10 +216,10 @@ function ChatContextProvider({
     }
   }
 
-  async function restartConversation() {
+  async function restartConversation(userSelectedLanguage?: string) {
     const responseRequest: any = await restartChat(
       uuidSession,
-      selectedLanguage
+      userSelectedLanguage ? userSelectedLanguage : selectedLanguage
     );
 
     if (responseRequest.message === ERROR_TYPE_FAILURE.toLowerCase()) {

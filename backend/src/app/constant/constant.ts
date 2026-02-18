@@ -15,6 +15,7 @@ export const FAILURE_MESSAGE = "Failure";
 export const FAILURE_MISSING_IP_HEADERS = "Missing ip in request headers.";
 export const FAILURE_MISSING_UUID_SESSION = "Missing uuid session in request headers.";
 export const FAILURE_MISSING_URL_DOCUMENT = "Missing url document in request headers.";
+export const FAILURE_MISSING_LANGUAGE = "Missing language in request headers.";
 
 
 export const FAILURE_STORED_CACHE = "Stored cache not found for ip";

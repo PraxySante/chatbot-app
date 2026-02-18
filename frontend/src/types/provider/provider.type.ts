@@ -3,7 +3,7 @@ import { MessageAttributes } from '../messages/messages.type';
 
 export type ChatContextAttributes = {
   isRestart: boolean;
-  selectedRestart: () => void;
+  selectedRestart: (selectedLanguage?: string) => void;
   isStart: boolean;
   verifyStartChat?: () => void;
   messages: MessageAttributes[];
