@@ -28,7 +28,7 @@ export default function InputMessage() {
   // Hook state to get message written by user and bot
   const [userContent, setUserContent] = useState<string>('');
   // Check selected language
-  const { userLanguage } = useLanguage();
+  const { userLanguage, selectedLanguage } = useLanguage();
   const { stockMessageUser, whoIsWritten, uuidSession } = useChat();
 
   const [audio, setAudio] = useState<MediaStream | null>(null);
@@ -78,18 +78,18 @@ export default function InputMessage() {
   }
 
   // Function preparing message to ChatBot
-   async function sendMessage(e: any): Promise<void> {
-     e.preventDefault();
-     // Record message written by user
-     if (userContent !== '') {
-       setUserContent('');
-       whoIsWritten(ROLE_NONE);
-       whoIsWritten(ROLE_ASSISTANT);
-       await stockMessageUser(userContent);
-       whoIsWritten(ROLE_NONE);
-       //await loadingMessageContext(userContent);
-     }
-   }
+  async function sendMessage(e: any): Promise<void> {
+    e.preventDefault();
+    // Record message written by user
+    if (userContent !== '') {
+      setUserContent('');
+      whoIsWritten(ROLE_NONE);
+      whoIsWritten(ROLE_ASSISTANT);
+      await stockMessageUser(userContent);
+      whoIsWritten(ROLE_NONE);
+      //await loadingMessageContext(userContent);
+    }
+  }
 
   // async function loadingMessageContext(userContent: string) {
   //   await stockMessageUser(userContent);
@@ -102,8 +102,10 @@ export default function InputMessage() {
       await startRecordingAudioToTranscription();
     } else {
       whoIsWritten(ROLE_ASSISTANT_TRANSCRIBE);
-      const userTranscribeContent =
-        await stopRecordingAudioToTranscription(uuidSession);
+      const userTranscribeContent = await stopRecordingAudioToTranscription(
+        uuidSession,
+        selectedLanguage
+      );
       if (userTranscribeContent) {
         whoIsWritten(ROLE_ASSISTANT);
       }
