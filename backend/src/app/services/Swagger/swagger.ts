@@ -11,7 +11,7 @@ const options = {
 	filesPattern: "src/**/*.router.ts",
 	swaggerUIPath: "/api-docs",
 	exposeApiDocs: true,
-	apiDocsPath: "/api/docs",
+	apiDocsPath: "/api-map",
 };
 
 /**

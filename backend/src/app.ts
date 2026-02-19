@@ -4,14 +4,13 @@ import cors from "cors";
 import { router as apiRouter } from "./app/router/index";
 import { connectRedis } from "./app/services/Redis/redis.service";
 import { createServer } from "http";
-import { WebSocketServerClass } from "./app/services/WebSocketServer/webSocketServer.class";
 
 import jsDoc from "./app/services/Swagger/swagger";
 import swaggerAuth from "./app/middlewares/authSwagger";
 
 const app = express();
 const server = createServer(app);
-new WebSocketServerClass(server);
+//new WebSocketServerClass(server);
 
 const allowedOrigins = process.env.ORIGIN?.split(",");
 app.use(
@@ -30,6 +29,7 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: "50mb" }));
 app.use("/api-docs", swaggerAuth);
+app.use("/api-map", swaggerAuth);
 jsDoc(app);
 app.use("/api", apiRouter);
 

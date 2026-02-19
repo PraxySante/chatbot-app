@@ -156,7 +156,7 @@ router.post(
 
 /**
  *  POST /api/chat
- * @summary Keep chating between chatbot and api LLM under same uuidSession
+ * @summary Keep chating between chatbot and api LLM
  * @tags Chatbot
  * @param {ContinueChat} request.body.required
  * @example request - application/json
@@ -219,7 +219,7 @@ router.post(
 
 /**
  *  POST /api/reformulate
- * @summary Reformulate question by api LLM under same uuidSession
+ * @summary Reformulate question by api LLM
  * @tags Chatbot
  * @param {ContinueChat} request.body.required
  * @example request - application/json
@@ -268,7 +268,7 @@ router.post(
 
 /**
  *  POST /api/transcribe-audio
- * @summary Transcription speech to text by api Transcription under same uuidSession
+ * @summary Transcription speech to text by api Transcription
  * @tags Chatbot
  * @param {TranscribeAudio} request.body.required
  * @example request - application/json
