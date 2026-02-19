@@ -9,9 +9,9 @@ const options = {
 	},
 	baseDir: path.resolve(process.cwd()),
 	filesPattern: "src/**/*.router.ts",
-	swaggerUIPath: "/api-docs",
+	swaggerUIPath: "/api/api-docs",
 	exposeApiDocs: true,
-	apiDocsPath: "/api-map",
+	apiDocsPath: "/api/api-map",
 };
 
 /**
