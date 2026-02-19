@@ -16,7 +16,6 @@ import {
 	ERROR_SERVER_MESSAGE,
 	FAILURE_MESSAGE,
 	FAILURE_MISSING_IP_HEADERS,
-	FAILURE_MISSING_LANGUAGE,
 	FAILURE_MISSING_UUID_SESSION,
 	SUCCESS_OK,
 	USER,
@@ -24,6 +23,7 @@ import {
 import axios from "axios";
 import { transcribeAudioChatBot } from "../services/ChatBot/transcribeAudioChatBot.service";
 import { getDocument } from "../services/ChatBot/getDocument.service";
+import { saveConversaionCallBotToDirectus } from "../services/CallBot/saveConversation.service";
 
 export default {
 	/**
@@ -57,7 +57,7 @@ export default {
 		req: Request,
 		res: Response,
 		_: NextFunction,
-	): Promise<Response> {
+	): Promise<Response | void> {
 		const { project, language, uuidSession } = req.body;
 		const { ip } = req;
 
@@ -68,13 +68,20 @@ export default {
 			});
 		}
 
-		const { status, details } = await authAndStartChat(
+		const { status, details }: any = await authAndStartChat(
 			ip,
 			project,
 			language,
 			uuidSession,
 		);
-		return res.status(status).send(details);
+		if (!req.url.includes("save-call")) {
+			return res.status(status).send(details);
+		}
+
+		req.body = {
+			...req.body,
+			uuidSession: details,
+		};
 	},
 
 	/**
@@ -132,41 +139,41 @@ export default {
 	},
 
 	/**
-	 * Continue conversation chatbot-user
-	 *
-	 * @param {Request} req - Object contains data :
-	 * - **IP du client** (`req.ip`)
-	 * - **Body** (`req.body`):
-	 *   - `project`: Company name
-	 *   - `language`: Language selected
-	 *   - `history`: all messages from conversation chatbot-user
-	 *   - `message`: recent request from user
-	 * @example
-	 * Requête POST avec un body JSON :
-	 * { projet: "Praxy IA", language: "fr", history:[{
+   * Continue conversation chatbot-user
+   *
+   * @param {Request} req - Object contains data :
+   * - **IP du client** (`req.ip`)
+   * - **Body** (`req.body`):
+   *   - `project`: Company name
+   *   - `language`: Language selected
+   *   - `history`: all messages from conversation chatbot-user
+   *   - `message`: recent request from user
+   * @example
+   * Requête POST avec un body JSON :
+   * { projet: "Praxy IA", language: "fr", history:[{
     "role": "assistant",
     "content": "Bonjour. Je suis un assistant pouvant répondre à des questions d'ordre générale sur l'Hopital Foch. Comment puis-je vous aider ?"
-		}],
-		messsage='prendre un rdv ?' }
-	 * @param {Response} res - Return response failed or success
-	 * @param {NextFunction} _ - Next not used
-	 * @returns {Promise<Response>} - Return response JSON :
-	 * - **details**
-	 * - **status**
-	 * @exemple
-	 * Response 200 - Success 
-	 * {
-	 * role: "assistant",
-	 * content: "Bonjour. Je suis un assistant pouvant répondre à des questions d'ordre générale sur l'Hopital Foch. Comment puis-je vous aider ?"
-	 *}
-	 * @throws {400} - Missing ip in request headers
-	 * @example
-	 * {
-	 * message: "Failure",
-	 * details: "Missing ip in request headers.",
-	 * }
-	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
-	 */
+    }],
+    messsage='prendre un rdv ?' }
+   * @param {Response} res - Return response failed or success
+   * @param {NextFunction} _ - Next not used
+   * @returns {Promise<Response>} - Return response JSON :
+   * - **details**
+   * - **status**
+   * @exemple
+   * Response 200 - Success 
+   * {
+   * role: "assistant",
+   * content: "Bonjour. Je suis un assistant pouvant répondre à des questions d'ordre générale sur l'Hopital Foch. Comment puis-je vous aider ?"
+   *}
+   * @throws {400} - Missing ip in request headers
+   * @example
+   * {
+   * message: "Failure",
+   * details: "Missing ip in request headers.",
+   * }
+   * @throws {500} - Internal Server Error - catched by ControllerWrapper
+   */
 	async continueChat(
 		req: Request,
 		res: Response,
@@ -199,37 +206,37 @@ export default {
 
 		return res.status(response.status).json(response.details);
 	},
-	
+
 	/**
-	 * Reformulate request from conversation chatbot-user
-	 * 
-	 * @param {Request} req - Object contains data :
-	 * - **IP du client** (`req.ip`)
-	 * - **Body** (`req.body`):
-	 *   - `project`: Company name
-	 *   - `language`: Language selected
-	 *   - `history`: all messages from conversation chatbot-user
-	 *   - `message`: recent request from user
-	 * @example
-	 * Requête POST avec un body JSON :
-	 * { projet: "Praxy IA", language: "fr", history:[{
+   * Reformulate request from conversation chatbot-user
+   * 
+   * @param {Request} req - Object contains data :
+   * - **IP du client** (`req.ip`)
+   * - **Body** (`req.body`):
+   *   - `project`: Company name
+   *   - `language`: Language selected
+   *   - `history`: all messages from conversation chatbot-user
+   *   - `message`: recent request from user
+   * @example
+   * Requête POST avec un body JSON :
+   * { projet: "Praxy IA", language: "fr", history:[{
     "role": "assistant",
     "content": "Bonjour. Je suis un assistant pouvant répondre à des questions d'ordre générale sur l'Hopital Foch. Comment puis-je vous aider ?"
-		}],
-		messsage='prendre un rdv ?' }
-	 * @param {Response} res - Return response failed or success
-	 * @param {NextFunction} _ - Next not used
-	 * @returns {Promise<Response>} - Return response JSON :
-	 * - **details**
-	 * - **status**
-	 * @exemple
-	 * Response 200 - Success 
-	 * {
-	 * role: "assistant",
-	 * content: "Bonjour. Je suis un assistant pouvant répondre à des questions d'ordre générale sur l'Hopital Foch. Comment puis-je vous aider ?"
-	 *}
-	 * 
-	 * [
+    }],
+    messsage='prendre un rdv ?' }
+   * @param {Response} res - Return response failed or success
+   * @param {NextFunction} _ - Next not used
+   * @returns {Promise<Response>} - Return response JSON :
+   * - **details**
+   * - **status**
+   * @exemple
+   * Response 200 - Success 
+   * {
+   * role: "assistant",
+   * content: "Bonjour. Je suis un assistant pouvant répondre à des questions d'ordre générale sur l'Hopital Foch. Comment puis-je vous aider ?"
+   *}
+   * 
+   * [
     {
         "role": "assistant",
         "content": ". Quelles sont les étapes précises pour prendre un rendez-vous à l'Hôpital Foch ?"
@@ -243,14 +250,14 @@ export default {
         "content": ". Quels moyens sont disponibles pour fixer un rendez-vous à l'Hôpital Foch ?"
     }
 ]
-	 * @throws {400} - Missing ip in request headers
-	 * @example
-	 * {
-	 * message: "Failure",
-	 * details: "Missing ip in request headers.",
-	 * }
-	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
-	 */
+   * @throws {400} - Missing ip in request headers
+   * @example
+   * {
+   * message: "Failure",
+   * details: "Missing ip in request headers.",
+   * }
+   * @throws {500} - Internal Server Error - catched by ControllerWrapper
+   */
 	async reformulationChat(
 		req: Request,
 		res: Response,
@@ -365,7 +372,7 @@ export default {
 		_: NextFunction,
 	): Promise<Response> {
 		const { ip } = req;
-		const { uuidSession, language } = req.body;
+		const { uuidSession } = req.body;
 
 		if (!ip) {
 			return res.status(ERROR_BAD_REQUEST).json({
@@ -381,54 +388,90 @@ export default {
 			});
 		}
 
-		if (!language) {
-			return res.status(ERROR_BAD_REQUEST).json({
-				message: FAILURE_MESSAGE,
-				details: FAILURE_MISSING_LANGUAGE,
-			});
-		}
-
 		await updateKeyRedis(`${ip}-${uuidSession}`, "uuid", "");
 		await updateKeyRedis(`${ip}-${uuidSession}`, "idDirectus", "");
-		await updateKeyRedis(`${ip}-${uuidSession}`, "language", language);
 
 		const { status, details } = await startChatApiBot(ip, uuidSession);
 		console.log(`Conversation is restart`);
 		return res.status(status).send(details);
 	},
 
-	/**
-	 * Ending conversation chatbot-user
-	 *
-	 * @param {Request} req - Object contains data :
-	 * - **IP du client** (`req.ip`)
-	 * - **Body** (`req.body`):
-	 *   - `project`: Company name
-	 *   - `language`: Language selected
-	 * @example
-	 * Requête POST avec un body JSON :
-	 * { projet: "Praxy IA", language: "fr"}
-	 * 
-	 * @param {Response} res - Return response failed or success
-	 * @param {NextFunction} _ - Next not used
-	 * @returns {Promise<Response>} - Return response JSON :
-	 * - **details**
-	 * - **status**
-	 * @example {200} - Success
-	 * Response 200 - Success 
-	 * {
-	 * role: "assistant",
-    content: "Au revoir. N'hésitez pas à revenir en cas de nouvelles questions."
+	async saveCallBotConversation(req: Request, res: Response, _: NextFunction) {
+		const {
+			history,
+			uuidSession,
+			statut,
+			firstNameDoctor,
+			lastNameDoctor,
+			callingNumber,
+			dateOfBirth,
+			lastNamePatient,
+			firstNamePatient,
+		} = req.body;
+
+		const { ip } = req;
+		if (!ip) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_IP_HEADERS,
+			});
 		}
-	 * @throws {400} - Missing ip in request headers
-	 * @example
-	 * {
-	 * message: "Failure",
-	 * details: "Missing ip in request headers.",
-	 * }
-	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
-	 *
-	*/
+
+		const response: ResponseFailureType | ResponseSuccessType =
+			await saveConversaionCallBotToDirectus(
+				ip,
+				history,
+				uuidSession,
+				statut,
+				firstNameDoctor,
+				lastNameDoctor,
+				callingNumber,
+				dateOfBirth,
+				lastNamePatient,
+				firstNamePatient,
+			);
+
+		if ("sources" in response) {
+			return res
+				.status(response.status)
+				.json({ details: response.details, sources: response.sources });
+		}
+
+		return res.status(response.status).json(response.details);
+	},
+
+	/**
+   * Ending conversation chatbot-user
+   *
+   * @param {Request} req - Object contains data :
+   * - **IP du client** (`req.ip`)
+   * - **Body** (`req.body`):
+   *   - `project`: Company name
+   *   - `language`: Language selected
+   * @example
+   * Requête POST avec un body JSON :
+   * { projet: "Praxy IA", language: "fr"}
+   * 
+   * @param {Response} res - Return response failed or success
+   * @param {NextFunction} _ - Next not used
+   * @returns {Promise<Response>} - Return response JSON :
+   * - **details**
+   * - **status**
+   * @example {200} - Success
+   * Response 200 - Success 
+   * {
+   * role: "assistant",
+    content: "Au revoir. N'hésitez pas à revenir en cas de nouvelles questions."
+    }
+   * @throws {400} - Missing ip in request headers
+   * @example
+   * {
+   * message: "Failure",
+   * details: "Missing ip in request headers.",
+   * }
+   * @throws {500} - Internal Server Error - catched by ControllerWrapper
+   *
+  */
 	async endChat(
 		req: Request,
 		res: Response,

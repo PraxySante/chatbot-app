@@ -95,9 +95,9 @@ export const router = Router();
  * @param {Auth} request.body.required
  * @example request - application/json
  * {
-	"project": "Foch",
-	"language": "fr"
-	}
+    "project": "Foch",
+    "language": "fr"
+    }
  * @return {object} 200 - OK - application/json
 * @example response - 200 - application/json
 * {
@@ -124,8 +124,8 @@ router.post("/auth", controllerWrapper(apiController.requestAuthToken));
  * @param {Auth} request.body.required
  * @example request - application/json
  * {
-	"project": "Foch",
-	"language": "fr"
+    "project": "Foch",
+    "language": "fr"
 }
  * @return {object} 200 - Sucess response - application/json
  * @example response - 200 - example response
@@ -138,8 +138,8 @@ router.post("/auth", controllerWrapper(apiController.requestAuthToken));
  * @return {BadRequest} 400 - Bad request response - application/json
  * @example response - 400 - example error response
  * {
- * 		"message": "Failure",
- * 		"details": "Missing ip in request headers."
+ *      "message": "Failure",
+ *      "details": "Missing ip in request headers."
  * }
  * @return {ErrorResponse} 500 - Internal Server Error - application/json
  * @example response - 500 - example error response
@@ -156,12 +156,12 @@ router.post(
 
 /**
  *  POST /api/chat
- * @summary Keep chating between chatbot and api LLM
+ * @summary Keep chating between chatbot and api LLM under same uuidSession
  * @tags Chatbot
  * @param {ContinueChat} request.body.required
  * @example request - application/json
  * {
- * 	"project": "Foch",
+ *  "project": "Foch",
  * "language": "fr",
  * "uuidSession": "303c1810a40f427a9c7eedc87be5de22",
  *   "history": [
@@ -189,13 +189,13 @@ router.post(
             "doc_name": "arteriographie diagnostique EN RADIOLOGIE.",
             "url": "/document/303c1810a40f427a9c7eedc87be5de22?doc_id=ZG9jX2ZvbGRlcnMvZm9jaF9kYXRhL0ZpY2hlX2luZm9fcGF0aWVudF9hcnRlcmlvZ3JhcGhpZV9tYWotbm92LTIxLnBkZg=="
         },
-				{
+                {
             "doc_type": "doc",
             "doc_ref": "doc_folders/foch_data/Livret_de_loperej0_stc_2024.pdf",
             "doc_name": "Livret_De_L'OpéréJ0_STC_2024",
-						"url": "/document/303c1810a40f427a9c7eedc87be5de22?doc_id=ZG9jX2ZvbGRlcnMvZm9jaF9kYXRhL0xpdnJldF9kZV9sb3BlcmVqMF9zdGNfMjAyNC5wZGY="
-						}
-						]
+                        "url": "/document/303c1810a40f427a9c7eedc87be5de22?doc_id=ZG9jX2ZvbGRlcnMvZm9jaF9kYXRhL0xpdnJldF9kZV9sb3BlcmVqMF9zdGNfMjAyNC5wZGY="
+                        }
+                        ]
  * }
  * @return {BadRequest} 400 - Bad request response - application/json
  * @example response - 400 - example error response
@@ -219,13 +219,13 @@ router.post(
 
 /**
  *  POST /api/reformulate
- * @summary Reformulate question by api LLM
+ * @summary Reformulate question by api LLM under same uuidSession
  * @tags Chatbot
  * @param {ContinueChat} request.body.required
  * @example request - application/json
  * {
  *  "project": "Foch",
- * 	"language": "fr",
+ *  "language": "fr",
  *  "uuidSession": "303c1810a40f427a9c7eedc87be5de22"
  * }
  * @return {object} 200 - Sucess response - application/json
@@ -268,13 +268,13 @@ router.post(
 
 /**
  *  POST /api/transcribe-audio
- * @summary Transcription speech to text by api Transcription
+ * @summary Transcription speech to text by api Transcription under same uuidSession
  * @tags Chatbot
  * @param {TranscribeAudio} request.body.required
  * @example request - application/json
  * {
  *  "project": "Foch",
- * 	"language": "fr",
+ *  "language": "fr",
  *  "uuidSession": "303c1810a40f427a9c7eedc87be5de22",
  *  "audioBase64" : ["base64string"]
  * }
@@ -311,7 +311,7 @@ router.post(
  * @example request - application/json
  * {
  *  "project": "Foch",
- * 	"language": "fr",
+ *  "language": "fr",
  *  "uuidSession": "303c1810a40f427a9c7eedc87be5de22",
  *   "urlDocument": "/document/303c1810a40f427a9c7eedc87be5de22doc_id=ZG9jX2ZvbGRlcnMvZm9jaF9kYXRhL0ZpY2hlX2luZm9fcGF0aWVudF9hcnRlcmlvZ3JhcGhpZV9tYWotbm92LTIxLnBkZg=="
  * }
@@ -340,6 +340,63 @@ router.post(
 );
 
 /**
+ *  POST /api/save-call
+ * @summary Save chating during callbot
+ * @tags Callbot
+ * @param {SaveCallBot} request.body.required
+ * @example request - application/json
+ * {
+ * "project": "Foch",
+ * "language": "fr",
+ * "statut": "Processed",
+ * "dateAppointment": '20/03/2026',
+ * "history": [
+            {
+                "role": "assistant",
+                "content": "Bonjour. Je suis un assistant pouvant répondre à des questions d'ordre générale sur l'Hopital Foch. Comment puis-je vous aider ?"
+            },
+						 {
+                "role": "user",
+                "content": "Prendre rendez-vous ?"
+            },
+						{
+                "role": "assistant",
+                "content": "Très bine le 20 mars 2026 à 17h."
+            },
+       ],
+	"firstNameDoctor": "Robert",
+	"lastNameDoctor": "Charles",
+	"callingNumber": "0102030405",
+	"dateOfBirth": "19/02/1956",
+	"lastNamePatient": "Michel",
+	"firstNamePatient": "Martin"
+}
+ * @return {object} 200 - Sucess response - application/json
+ * @example response - 200 - example response
+ * {
+    "status": "200",
+    "details": "Conversation Callbot is created"
+ * }
+ * @return {BadRequest} 400 - Bad request response - application/json
+ * @example response - 400 - example error response
+ * {
+ * "message": "Failure",
+ * "details": "Missing ip in request headers."
+ * }
+ * @return {ErrorResponse} 500 - Internal Server Error - application/json
+ * @example response - 500 - example error response
+ * {
+ *   "error": "Internal Server Error"
+ * }
+ */
+router.post(
+	"/save-call",
+	controllerWrapper(verifyOrigin),
+	controllerWrapper(apiController.requestAuthToken),
+	controllerWrapper(apiController.saveCallBotConversation),
+);
+
+/**
  * POST /api/feedback
  * @summary Record feedback
  * @tags Chatbot
@@ -347,10 +404,10 @@ router.post(
  * @example request - application/json
  * {
  *  "project": "Foch",
- * 	"language": "fr",
+ *  "language": "fr",
  *  "uuidSession": "303c1810a40f427a9c7eedc87be5de22",
  *  "note": "5",
- * 	"comment": "C'est top"
+ *  "comment": "C'est top"
  * }
  * @return {string} 200 - Sucess response - application/json
  * @example response - 200 - example response
@@ -385,7 +442,7 @@ router.post(
  * @example request
  * {
  *  "project": "Foch",
- * 	"language": "fr",
+ *  "language": "fr",
  *  "uuidSession": "303c1810a40f427a9c7eedc87be5de22"
  * }
  * @return {string} 200 - Sucess response - application/json
@@ -421,7 +478,7 @@ router.post(
  * @example request
  * {
  *  "project": "Foch",
- * 	"language": "fr",
+ *  "language": "fr",
  *  "uuidSession": "303c1810a40f427a9c7eedc87be5de22"
  * }
  * @return {object} 200 - Sucess response - application/json
