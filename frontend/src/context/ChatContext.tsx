@@ -143,14 +143,14 @@ function ChatContextProvider({
     }
   }
 
-  async function selectedRestart(): Promise<void> {
+  async function selectedRestart(selectedLanguage?: string): Promise<void> {
     setIsStart(!isStart);
     setHistoryChat([]);
     setProcedures([]);
     setMessages([]);
     setIsRestart(!isRestart);
     getMessageToNotification(STATUS_SUCCESS, userLanguage?.success_msg_session);
-    await restartConversation();
+    await restartConversation(selectedLanguage);
   }
 
   async function verifyStartChat(): Promise<void> {
@@ -170,7 +170,8 @@ function ChatContextProvider({
     }
 
     if (responseApi) {
-      const responseRequest: any = await requestApiFrontChatBot();
+      const responseRequest: any =
+        await requestApiFrontChatBot(selectedLanguage);
 
       if (responseRequest.message === ERROR_TYPE_FAILURE.toLowerCase()) {
         getMessageToNotification({
@@ -183,8 +184,10 @@ function ChatContextProvider({
       if (responseRequest) {
         setUuidSession(responseRequest);
 
-        const responseStartChat: any =
-          await startApiFrontChatBot(responseRequest);
+        const responseStartChat: any = await startApiFrontChatBot(
+          responseRequest,
+          selectedLanguage
+        );
 
         if (responseStartChat.message === ERROR_TYPE_FAILURE.toLowerCase()) {
           getMessageToNotification({
@@ -213,8 +216,11 @@ function ChatContextProvider({
     }
   }
 
-  async function restartConversation() {
-    const responseRequest: any = await restartChat(uuidSession);
+  async function restartConversation(userSelectedLanguage?: string) {
+    const responseRequest: any = await restartChat(
+      uuidSession,
+      userSelectedLanguage ? userSelectedLanguage : selectedLanguage
+    );
 
     if (responseRequest.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification({
@@ -341,7 +347,8 @@ function ChatContextProvider({
         role: ROLE_USER,
         content: userContent,
       },
-      uuidSession
+      uuidSession,
+      selectedLanguage
     );
 
     if (responseChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()) {
@@ -400,7 +407,10 @@ function ChatContextProvider({
 
     whoIsWritten(ROLE_ASSISTANT);
 
-    const propositionChatConversation: any = await reformulateChat(uuidSession);
+    const propositionChatConversation: any = await reformulateChat(
+      uuidSession,
+      selectedLanguage
+    );
 
     if (
       propositionChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()
@@ -442,18 +452,22 @@ function ChatContextProvider({
     const responseApi: any = await feedbackApiFrontChatBot(
       vote,
       comment,
-      uuidSession
+      uuidSession,
+      selectedLanguage
     );
     if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification(responseApi.status, responseApi.details);
       return;
     } else {
-      getMessageToNotification(STATUS_SUCCESS, userLanguage?.success_msg_feedback);
+      getMessageToNotification(
+        STATUS_SUCCESS,
+        userLanguage?.success_msg_feedback
+      );
     }
   }
 
   async function endConversation() {
-    const responseApi: any = await endChat(uuidSession);
+    const responseApi: any = await endChat(uuidSession, selectedLanguage);
     if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification(responseApi.status, responseApi.details);
       return;

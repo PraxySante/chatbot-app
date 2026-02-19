@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-let userLanguage = 'fr'; //navigator.language.slice(0, 2);
 const hostname = document.location.hostname;
 
 let project: string = '';
@@ -23,23 +22,29 @@ switch (true) {
     project = import.meta.env.VITE_PROJECT_ENNOV;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_ENNOV;
     break;
-  case hostname.includes(import.meta.env.VITE_HOST_DRAJES):
-    project = import.meta.env.VITE_PROJECT_DRAJES;
-    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DRAJES;
-    break;
   case hostname.includes(import.meta.env.VITE_HOST_CCIB):
     project = import.meta.env.VITE_PROJECT_CCIB;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_CCIB;
-    userLanguage = 'en';
+    break;
+  case hostname.includes(import.meta.env.VITE_HOST_MCJR):
+    project = import.meta.env.VITE_PROJECT_MCJR;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_MCJR;
     break;
   case hostname.includes(import.meta.env.VITE_HOST_DA):
     project = import.meta.env.VITE_PROJECT_DA;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DA;
     break;
+  case hostname.includes(import.meta.env.VITE_HOST_HFAR):
+    project = import.meta.env.VITE_PROJECT_HFAR;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_HFAR;
+    break;
+  case hostname.includes(import.meta.env.VITE_HOST_CQFD):
+    project = import.meta.env.VITE_PROJECT_CQFD;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_CQFD;
+    break;
   default:
     project = import.meta.env.VITE_PROJECT_DEV;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DEV;
-    userLanguage = 'en';
     break;
 }
 
@@ -53,7 +58,6 @@ axiosAuthSecret.interceptors.request.use((config) => {
   config.data = {
     ...(config.data || {}),
     project: project,
-    language: userLanguage,
   };
   return config;
 });

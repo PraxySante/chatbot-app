@@ -6,12 +6,19 @@ import {
 import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
 export async function restartChat(
-  uuidSession: string
+  uuidSession: string,
+  userLanguage: string
 ): Promise<MessageType | ReponseFailureType> {
+  const payload: {} = {
+    uuidSession: uuidSession,
+    language: userLanguage,
+  };
+
   try {
-    const response: AxiosResponse = await axiosAuthSecret.post('/restart', {
-      uuidSession: uuidSession,
-    });
+    const response: AxiosResponse = await axiosAuthSecret.post(
+      '/restart',
+      payload
+    );
     const { data, status } = response;
     if (status === 200) {
       return data as MessageType;

@@ -6,12 +6,19 @@ import {
 import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
 export async function startApiFrontChatBot(
-  uuiSession: string
+  uuiSession: string,
+  userLanguage: string
 ): Promise<MessageType | ReponseFailureType> {
+  const payload: {} = {
+    uuidSession: uuiSession,
+    language: userLanguage,
+  };
+
   try {
-    const response: AxiosResponse = await axiosAuthSecret.post('/start', {
-      uuidSession: uuiSession,
-    });
+    const response: AxiosResponse = await axiosAuthSecret.post(
+      '/start',
+      payload
+    );
     const { data, status } = response;
     if (status === 200) {
       return data as MessageType;

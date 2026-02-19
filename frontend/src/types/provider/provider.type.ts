@@ -3,7 +3,7 @@ import { MessageAttributes } from '../messages/messages.type';
 
 export type ChatContextAttributes = {
   isRestart: boolean;
-  selectedRestart: () => void;
+  selectedRestart: (selectedLanguage?: string) => void;
   isStart: boolean;
   verifyStartChat?: () => void;
   messages: MessageAttributes[];
@@ -38,7 +38,7 @@ export type NotifacationContextAttributes = {
 };
 
 export type TranscriptionContextProviderAttributes = {
-  startTranscription: (hostname:string, uuidSession:string) => void;
+  startTranscription: (hostname: string, uuidSession: string) => void;
   muteTranscription: () => void;
   stopTranscription: () => void;
   settingsMicrophone: () => void;
@@ -56,6 +56,7 @@ export type TranscriptionContextProviderAttributes = {
   startRecordingAudioToTranscription: () => void;
   stopRecordingAudioToTranscription: (
     /*isTrainer: boolean,*/
-    uuidSession: string
+    uuidSession: string,
+    userLanguage: string
   ) => Promise<string>;
 };

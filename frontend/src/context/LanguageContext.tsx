@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import { TranslateAttributes } from '../types/languages/translate.type';
 import { LanguageContextAttributes } from '../types/languages/languages.context.type';
+import { AppLanguage } from '../types/languages/languages.config.type';
 
 const LanguageContext = createContext<LanguageContextAttributes | undefined>(
   undefined
@@ -11,37 +12,18 @@ function LanguageContextProvider({ children, useClient }: any) {
     throw new Error('ClientContent not found');
   }
 
+  const { configClient } = useClient();
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
-
   const [userLanguage, setUserLanguage] = useState<TranslateAttributes | null>(
     null
   );
   const [isSelectLanguage, setIsSelectLanguage] = useState<boolean>(false);
 
   useEffect(() => {
-    let selectedLanguage = '';
-
-    switch (true) {
-      case document.location.hostname.includes(import.meta.env.VITE_HOST_DEV):
-        setSelectedLanguage('en');
-        selectedLanguage = 'en';
-        break;
-      case document.location.hostname.includes(import.meta.env.VITE_HOST_CCIB):
-        setSelectedLanguage('en');
-        selectedLanguage = 'en';
-        break;
-
-      default:
-        setSelectedLanguage('fr');
-        selectedLanguage = 'fr';
-        break;
+    if (configClient) {
+      setSelectedLanguage(configClient.languages[0].id as AppLanguage)
     }
-
-    async function load() {
-      await loadLanguage(selectedLanguage);
-    }
-    load();
-  }, []);
+  }, [configClient]);
 
   useEffect(() => {
     async function load() {
@@ -61,7 +43,7 @@ function LanguageContextProvider({ children, useClient }: any) {
     }
   }
 
-  function selectLanguage(value: string): void {
+  function setSelectLanguage(value: string): void {
     setSelectedLanguage(value);
     setIsSelectLanguage(true);
   }
@@ -72,7 +54,7 @@ function LanguageContextProvider({ children, useClient }: any) {
         isSelectLanguage,
         userLanguage,
         selectedLanguage,
-        selectLanguage,
+        setSelectLanguage,
       }}
     >
       {children}

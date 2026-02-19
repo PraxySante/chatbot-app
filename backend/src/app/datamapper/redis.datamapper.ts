@@ -22,7 +22,7 @@ import { KeyRedisType, ResponseKeyRedisType } from "../types/redis.type";
  * @throws {500} - Error message
  */
 async function doKeyRedisExist(
-	keyRedis: string
+	keyRedis: string,
 ): Promise<boolean | ResponseFailureType> {
 	try {
 		const value: string | null = await redisClient.get(keyRedis);
@@ -58,7 +58,7 @@ async function doKeyRedisExist(
  * @throws {500} - Error message
  */
 async function getKeyRedis(
-	keyRedis: string
+	keyRedis: string,
 ): Promise<ResponseKeyRedisType | ResponseFailureType> {
 	try {
 		const isExist = await doKeyRedisExist(keyRedis);
@@ -99,7 +99,7 @@ async function getKeyRedis(
  */
 async function createKeyRedis(
 	keyRedis: string,
-	value: string
+	value: string,
 ): Promise<void | ResponseFailureType> {
 	try {
 		const isExist = await doKeyRedisExist(keyRedis);
@@ -137,7 +137,7 @@ async function createKeyRedis(
 async function updateKeyRedis(
 	keyRedis: string,
 	keyValue: string,
-	value: string
+	value: string,
 ): Promise<void | ResponseFailureType> {
 	try {
 		const isExist = await doKeyRedisExist(keyRedis);
@@ -166,6 +166,9 @@ async function updateKeyRedis(
 				break;
 			case "idDirectus":
 				storedData.idDirectus = value;
+				break;
+			case "language":
+				storedData.language = value;
 				break;
 
 			default:
@@ -197,7 +200,7 @@ async function updateKeyRedis(
  * @throws {500} - Error message
  */
 async function deleteKeyRedis(
-	keyRedis: string
+	keyRedis: string,
 ): Promise<void | ResponseFailureType> {
 	try {
 		const isExist = await doKeyRedisExist(keyRedis);

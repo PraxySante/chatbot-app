@@ -14,7 +14,7 @@ export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
   const [numPages, setNumPages] = useState<number>(0);
   const [pdfData, setPdfData] = useState<ArrayBuffer | null>(null);
 
-  const { userLanguage } = useLanguage();
+  const { userLanguage, selectedLanguage } = useLanguage();
   const { uuidSession } = useChat();
 
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
@@ -29,7 +29,11 @@ export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
 
   useEffect(() => {
     async function launchBlobDocument() {
-      const urlDocument = await getDocumentFromApi(uuidSession, fileDocument);
+      const urlDocument = await getDocumentFromApi(
+        uuidSession,
+        fileDocument,
+        selectedLanguage
+      );
       setPdfData(urlDocument.details);
     }
     launchBlobDocument();

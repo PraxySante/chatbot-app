@@ -226,57 +226,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
-  'aideausport.praxysante.fr': {
-    host: import.meta.env.VITE_HOST_DRAJES,
-    name: 'Chat bot DRAJES',
-    project: import.meta.env.VITE_PROJECT_DRAJES,
-    logo: './bot-test.png',
-    title: 'DRAJES',
-    languages: [
-      {
-        id: 'fr',
-        name: 'Français',
-        icon: '🇫🇷',
-      },
-      {
-        id: 'nl',
-        name: 'Nederlands',
-        icon: '🇳🇱',
-      },
-    ],
-    modalMenu: [
-      {
-        id: 're-run',
-        name: 'Rerun',
-      },
-      {
-        id: 'settings',
-        name: 'Settings',
-      },
-      {
-        id: 'print',
-        name: 'Print',
-      },
-      {
-        id: 'record-screencast',
-        name: 'Record ad screencast',
-      },
-      {
-        id: 'about',
-        name: 'About',
-      },
-    ],
-    feedback: [
-      'feedback_exhaustivity',
-      'feedback_accuracy',
-      'feedback_hallucinations',
-    ],
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
-  },
   'ccib.praxy.ai': {
     host: import.meta.env.VITE_HOST_CCIB,
     name: 'Chat bot CCIB',
@@ -379,6 +328,149 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
+  'montecarlojointrepair.praxysante.fr': {
+    host: import.meta.env.VITE_HOST_MCJR,
+    name: 'Chat bot Monte-Carlo Joint Repair',
+    project: import.meta.env.VITE_PROJECT_MCJR,
+    logo: './bot-test.png',
+    title: 'MCJR',
+    languages: [
+      {
+        id: 'fr',
+        name: 'Français',
+        icon: '🇫🇷',
+      },
+      {
+        id: 'en',
+        name: 'English',
+        icon: '🇬🇧',
+      },
+    ],
+    modalMenu: [
+      {
+        id: 're-run',
+        name: 'Rerun',
+      },
+      {
+        id: 'settings',
+        name: 'Settings',
+      },
+      {
+        id: 'print',
+        name: 'Print',
+      },
+      {
+        id: 'record-screencast',
+        name: 'Record ad screencast',
+      },
+      {
+        id: 'about',
+        name: 'About',
+      },
+    ],
+    feedback: [
+      'feedback_exhaustivity',
+      'feedback_accuracy',
+      'feedback_hallucinations',
+    ],
+    authAccountOption: false,
+    sideBarOption: false,
+    menuParameterOption: true,
+    audioParameterOption: false,
+    RecaptchaOption: false,
+  },
+  'hfar.praxysante.fr': {
+    host: import.meta.env.VITE_HOST_HFAR,
+    name: 'Chat bot Hôpital Fondation Rothschild',
+    project: import.meta.env.VITE_PROJECT_HFAR,
+    logo: './bot-test.png',
+    title: "l'Hôpital Fondation Rothschild",
+    languages: [
+      {
+        id: 'fr',
+        name: 'Français',
+        icon: '🇫🇷',
+      },
+    ],
+    modalMenu: [
+      {
+        id: 're-run',
+        name: 'Rerun',
+      },
+      {
+        id: 'settings',
+        name: 'Settings',
+      },
+      {
+        id: 'print',
+        name: 'Print',
+      },
+      {
+        id: 'record-screencast',
+        name: 'Record ad screencast',
+      },
+      {
+        id: 'about',
+        name: 'About',
+      },
+    ],
+    feedback: [
+      'feedback_exhaustivity',
+      'feedback_accuracy',
+      'feedback_hallucinations',
+    ],
+    authAccountOption: false,
+    sideBarOption: false,
+    menuParameterOption: false,
+    audioParameterOption: true,
+    RecaptchaOption: false,
+  },
+  'cqfd.praxysante.fr': {
+    host: import.meta.env.VITE_HOST_CQFD,
+    name: 'Chat bot CQFD',
+    project: import.meta.env.VITE_PROJECT_CQFD,
+    logo: './bot-test.png',
+    title: "CQFD",
+    languages: [
+      {
+        id: 'fr',
+        name: 'Français',
+        icon: '🇫🇷',
+      },
+    ],
+    modalMenu: [
+      {
+        id: 're-run',
+        name: 'Rerun',
+      },
+      {
+        id: 'settings',
+        name: 'Settings',
+      },
+      {
+        id: 'print',
+        name: 'Print',
+      },
+      {
+        id: 'record-screencast',
+        name: 'Record ad screencast',
+      },
+      {
+        id: 'about',
+        name: 'About',
+      },
+    ],
+    feedback: [
+      'feedback_exhaustivity',
+      'feedback_accuracy',
+      'feedback_hallucinations',
+    ],
+    authAccountOption: false,
+    sideBarOption: false,
+    menuParameterOption: false,
+    audioParameterOption: true,
+    RecaptchaOption: false,
+  },
   localhost: {
     host: import.meta.env.VITE_HOST_DEV,
     name: `Chat bot test sur project ${import.meta.env.VITE_PROJECT_DEV}`,
@@ -387,14 +479,14 @@ export const clientsConfig: Record<string, ClientConfig> = {
     title: `${import.meta.env.VITE_PROJECT_DEV}`,
     languages: [
       {
+        id: 'fr',
+        name: 'Français',
+        icon: '🇫🇷',
+      },
+      {
         id: 'en',
         name: 'English',
         icon: '🇬🇧',
-      },
-      {
-        id: 'ar',
-        name: 'Lebanese',
-        icon: '🇱🇧',
       },
     ],
     modalMenu: [

@@ -7,9 +7,9 @@ Provide all colors into project
 */
 
 .theme-foch {
-  --color-primary: 150,190,50;
-  --color-secondary: 0,125,190;
-  --color-text: 100,100,0;
+  --color-primary: 150, 190, 50;
+  --color-secondary: 0, 125, 190;
+  --color-text: 100, 100, 0;
   --color-bot: 255, 188, 73;
   --color-user: 255, 107, 108;
   --color-bg: 255, 255, 255;
@@ -20,9 +20,9 @@ Provide all colors into project
 }
 
 .theme-ahp {
-  --color-primary: 150,190,50;
-  --color-secondary: 0,125,190;
-  --color-text: 100,100,0;
+  --color-primary: 150, 190, 50;
+  --color-secondary: 0, 125, 190;
+  --color-text: 100, 100, 0;
   --color-bot: 255, 188, 73;
   --color-user: 255, 107, 108;
   --color-bg: 255, 255, 255;
@@ -33,9 +33,9 @@ Provide all colors into project
 }
 
 .theme-hpsj {
-  --color-primary: 150,190,50;
-  --color-secondary: 0,125,190;
-  --color-text: 100,100,0;
+  --color-primary: 150, 190, 50;
+  --color-secondary: 0, 125, 190;
+  --color-text: 100, 100, 0;
   --color-bot: 255, 188, 73;
   --color-user: 255, 107, 108;
   --color-bg: 255, 255, 255;
@@ -46,22 +46,9 @@ Provide all colors into project
 }
 
 .theme-ennov {
-  --color-primary: 150,190,50;
-  --color-secondary: 0,125,190;
-  --color-text: 100,100,0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
-  --color-bg: 255, 255, 255;
-  --color-success: 153, 204, 51;
-  --color-warning: 255, 204, 0;
-  --color-error: 255, 153, 102;
-  --color-information: 200, 231, 255;
-}
-
-.theme-drajes {
-  --color-primary: 150,190,50;
-  --color-secondary: 0,125,190;
-  --color-text: 100,100,0;
+  --color-primary: 150, 190, 50;
+  --color-secondary: 0, 125, 190;
+  --color-text: 100, 100, 0;
   --color-bot: 255, 188, 73;
   --color-user: 255, 107, 108;
   --color-bg: 255, 255, 255;
@@ -72,9 +59,9 @@ Provide all colors into project
 }
 
 .theme-ccib {
-  --color-primary: 150,190,50;
-  --color-secondary: 0,125,190;
-  --color-text: 100,100,0;
+  --color-primary: 150, 190, 50;
+  --color-secondary: 0, 125, 190;
+  --color-text: 100, 100, 0;
   --color-bot: 255, 188, 73;
   --color-user: 255, 107, 108;
   --color-bg: 255, 255, 255;
@@ -85,9 +72,9 @@ Provide all colors into project
 }
 
 .theme-da {
-  --color-primary: 150,190,50;
-  --color-secondary: 0,125,190;
-  --color-text: 100,100,0;
+  --color-primary: 150, 190, 50;
+  --color-secondary: 0, 125, 190;
+  --color-text: 100, 100, 0;
   --color-bot: 255, 188, 73;
   --color-user: 255, 107, 108;
   --color-bg: 255, 255, 255;
@@ -97,10 +84,46 @@ Provide all colors into project
   --color-information: 200, 231, 255;
 }
 
+.theme-mcjr {
+  --color-primary: 150, 190, 50;
+  --color-secondary: 0, 125, 190;
+  --color-text: 100, 100, 0;
+  --color-bot: 255, 188, 73;
+  --color-user: 255, 107, 108;
+  --color-bg: 255, 255, 255;
+  --color-success: 153, 204, 51;
+  --color-warning: 255, 204, 0;
+  --color-error: 255, 153, 102;
+  --color-information: 200, 231, 255;
+}
 
+.theme-hfar {
+  --color-primary: 150, 190, 50;
+  --color-secondary: 0, 125, 190;
+  --color-text: 100, 100, 0;
+  --color-bot: 255, 188, 73;
+  --color-user: 255, 107, 108;
+  --color-bg: 255, 255, 255;
+  --color-success: 153, 204, 51;
+  --color-warning: 255, 204, 0;
+  --color-error: 255, 153, 102;
+  --color-information: 200, 231, 255;
+}
 
-ul
-li,
+.theme-cqfd {
+  --color-primary: 150, 190, 50;
+  --color-secondary: 0, 125, 190;
+  --color-text: 100, 100, 0;
+  --color-bot: 255, 188, 73;
+  --color-user: 255, 107, 108;
+  --color-bg: 255, 255, 255;
+  --color-success: 153, 204, 51;
+  --color-warning: 255, 204, 0;
+  --color-error: 255, 153, 102;
+  --color-information: 200, 231, 255;
+}
+
+ul li,
 ol {
   @apply text-black;
 }
@@ -265,8 +288,9 @@ input[type='number'] {
 .message-assistant {
   @apply flex flex-col text-black text-justify text-sm rounded-tr-lg rounded-b-lg justify-start gap-2 text-wrap;
 }
-.message-assistant, p{
-  @apply flex flex-col py-1
+.message-assistant,
+p {
+  @apply flex flex-col py-1;
 }
 
 .message-user {
@@ -319,7 +343,7 @@ input[type='text'] {
   @apply rounded-xl border border-solid border-secondary h-fit w-full bg-white pl-2 pr-9 py-2 overflow-y-auto;
 }
 
-.container-message_transcribed{
+.container-message_transcribed {
   @apply rounded-xl border border-solid border-secondary h-24 w-full bg-white pl-2 pr-9 py-2 overflow-y-auto;
 }
 
@@ -455,5 +479,5 @@ form {
 /* Feedback */
 
 .feedback-light {
-  @apply text-sm font-normal flex flex-row w-fit gap-2 items-center border rounded-lg border border-solid border-secondary ml-1 py-1 px-2
+  @apply text-sm font-normal flex flex-row w-fit gap-2 items-center border rounded-lg border border-solid border-secondary ml-1 py-1 px-2;
 }
