@@ -21,6 +21,20 @@ import verifyOrigin from "../middlewares/verify.origin";
  */
 
 /**
+ * @typedef {object} SaveCallBot
+ * @property {string} project.required - CallBot project
+ * @property {string} language.required - CallBot language
+ * @property {string} firstNameDoctor.required - CallBot First name doctor
+ * @property {string} lastNameDoctor.required - CallBot Last name doctor
+ * @property {string} callingNumber.required - CallBot calling number patient
+ * @property {string} dateOfBirth.required - CallBot day or birth patient
+ * @property {string} First_name_patient.required - CallBot First name patient
+ * @property {string} lastNamePatient.required - CallBot Last name patient
+ * @property {string} firstNamePatient.required - CallBot First name patient
+ * @property {string[]} history.required - CallBot history
+ */
+
+/**
  * @typedef {object} Feedback
  * @property {string} project.required - Document project
  * @property {string} language.required - Document language
@@ -106,7 +120,7 @@ router.post("/auth", controllerWrapper(apiController.requestAuthToken));
 /**
  *  POST /api/start
  * @summary Start conversation between chatbot and api LLM
- * @tags Conversation
+ * @tags Chatbot
  * @param {Auth} request.body.required
  * @example request - application/json
  * {
@@ -143,7 +157,7 @@ router.post(
 /**
  *  POST /api/chat
  * @summary Keep chating between chatbot and api LLM under same uuidSession
- * @tags Conversation
+ * @tags Chatbot
  * @param {ContinueChat} request.body.required
  * @example request - application/json
  * {
@@ -206,7 +220,7 @@ router.post(
 /**
  *  POST /api/reformulate
  * @summary Reformulate question by api LLM under same uuidSession
- * @tags Conversation
+ * @tags Chatbot
  * @param {ContinueChat} request.body.required
  * @example request - application/json
  * {
@@ -255,7 +269,7 @@ router.post(
 /**
  *  POST /api/transcribe-audio
  * @summary Transcription speech to text by api Transcription under same uuidSession
- * @tags Transcription
+ * @tags Chatbot
  * @param {TranscribeAudio} request.body.required
  * @example request - application/json
  * {
@@ -292,7 +306,7 @@ router.post(
 /**
  * POST /api/document
  * @summary Display document
- * @tags Document
+ * @tags Chatbot
  * @param {Document} request.body.required
  * @example request - application/json
  * {
@@ -325,17 +339,10 @@ router.post(
 	controllerWrapper(apiController.getDocumentPdf),
 );
 
-router.post(
-	"/save",
-	controllerWrapper(verifyOrigin),
-	controllerWrapper(verifyAuthRedis),
-	controllerWrapper(apiController.startChat),
-);
-
 /**
  * POST /api/feedback
  * @summary Record feedback
- * @tags Feedback
+ * @tags Chatbot
  * @param {Feedback} request.body.required
  * @example request - application/json
  * {
@@ -373,7 +380,7 @@ router.post(
 /**
  * POST /api/restart
  * @summary Restart a new conversation
- * @tags Conversation
+ * @tags Chatbot
  * @param {RestartConversation} request.body.required
  * @example request
  * {
@@ -409,7 +416,7 @@ router.post(
 /**
  * POST /api/end
  * @summary Ending conversation
- * @tags Conversation
+ * @tags Chatbot
  * @param {EndingConversation} request.body.required
  * @example request
  * {
