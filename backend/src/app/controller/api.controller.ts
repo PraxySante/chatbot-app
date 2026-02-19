@@ -198,10 +198,10 @@ export default {
 
 		return res.status(response.status).json(response.details);
 	},
-
+	
 	/**
 	 * Reformulate request from conversation chatbot-user
-	 *
+	 * 
 	 * @param {Request} req - Object contains data :
 	 * - **IP du client** (`req.ip`)
 	 * - **Body** (`req.body`):
