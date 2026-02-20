@@ -13,6 +13,7 @@ export async function testPingApiChatBot(): Promise<
 		const { status, data } = responseApi;
 		return { status: status, details: data };
 	} catch (error: any) {
+		console.error("testPing", error);
 		return { status: error.status, details: error.message };
 	}
 }
