@@ -127,7 +127,6 @@ export default function DisplayProcedures({
 
   async function downloadFile() {
     const urlDocument = await getDocumentFromApi(
-      uuidSession,
       documents[selectedProcedure].url,
       selectedLanguage
     );

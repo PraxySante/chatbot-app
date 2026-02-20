@@ -8,20 +8,24 @@ import { createServer } from "http";
 import jsDoc from "./app/services/Swagger/swagger";
 import swaggerAuth from "./app/middlewares/authSwagger";
 import cookieParser from "cookie-parser";
-import {bodySanitizer} from "./app/middlewares/sanitizeHtml.middleware"
+import { bodySanitizer } from "./app/middlewares/sanitizeHtml.middleware";
 const app = express();
 const server = createServer(app);
 //new WebSocketServerClass(server);
 
 const allowedOrigins = process.env.ORIGIN?.split(",");
-
 app.use(
 	cors({
 		origin: function (origin, callback) {
 			if (!origin) {
-				return callback(new Error("No origin allowed"));
+				console.log("Not allowed by origin : ", origin);
+				if (String(process.env.NODE_ENV) === "dev") {
+					return callback(null, true);
+				} else {
+					return callback(new Error("Not allowed by origin"));
+				}
 			}
-			if (allowedOrigins && allowedOrigins.includes(origin)) {
+			if (origin && allowedOrigins && allowedOrigins.includes(origin)) {
 				callback(null, origin);
 			} else {
 				console.log("Not allowed by CORS, origin", origin);
@@ -33,7 +37,6 @@ app.use(
 );
 
 app.use(cookieParser(String(process.env.COOKIE_SECRET)));
-console.log("🚀 ~ process.env.COOKIE_SECRET:", process.env.COOKIE_SECRET)
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: "50mb" }));

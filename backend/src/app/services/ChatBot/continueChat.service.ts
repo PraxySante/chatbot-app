@@ -97,6 +97,7 @@ export async function requestChatToApiChatBot(
 
 	if (details?.idDirectus === "") {
 		const data: CreateConversationDirectusAttributes = {
+			Type: "Chatbot_web",
 			Name: details?.project,
 			Uuid_LLM: details.uuid,
 		};

@@ -5,7 +5,6 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import icons from '../../../constants/icons';
 import IconButton from '../../../components/Buttons/IconButton';
 import { ReaderDocumentType } from '../../../types/panel/panel.type';
-import { useChat } from '../../../hooks/ChatProvider';
 import { getDocumentFromApi } from '../../../services/ChatBot/getDocumentFromApi.service';
 import { useLanguage } from '../../../hooks/UseLanguage';
 
@@ -15,7 +14,6 @@ export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
   const [pdfData, setPdfData] = useState<ArrayBuffer | null>(null);
 
   const { userLanguage, selectedLanguage } = useLanguage();
-  const { uuidSession } = useChat();
 
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 
@@ -30,7 +28,6 @@ export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
   useEffect(() => {
     async function launchBlobDocument() {
       const urlDocument = await getDocumentFromApi(
-        uuidSession,
         fileDocument,
         selectedLanguage
       );

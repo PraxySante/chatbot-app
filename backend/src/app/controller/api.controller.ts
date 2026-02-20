@@ -18,12 +18,14 @@ import {
 	FAILURE_MISSING_IP_HEADERS,
 	FAILURE_MISSING_LANGUAGE,
 	FAILURE_MISSING_UUID_SESSION,
+	SESSION_TTL_SECONDS,
 	SUCCESS_OK,
 	USER,
 } from "../constant/constant";
 import axios from "axios";
 import { transcribeAudioChatBot } from "../services/ChatBot/transcribeAudioChatBot.service";
 import { getDocument } from "../services/ChatBot/getDocument.service";
+import { saveConversaionCallBotToDirectus } from "../services/CallBot/saveConversation.service";
 
 export default {
 	/**
@@ -74,15 +76,16 @@ export default {
 			language,
 			uuidSession,
 		);
+		console.log("🚀 ~ status:", status);
 
 		console.log("🚀 ~ process.env.NODE_ENV :", process.env.NODE_ENV);
 		return res
 			.cookie("sessionId", details, {
 				httpOnly: true,
-				secure: true, // toujours true, même en dev (avec HTTPS local)
+				secure: true,
 				sameSite: "none",
 				signed: true,
-				maxAge: 1000 * 60 * 60 * 24,
+				maxAge: SESSION_TTL_SECONDS * 1000,
 			})
 			.status(200)
 			.json({
@@ -367,6 +370,50 @@ export default {
 				details: ERROR_SERVER_MESSAGE,
 			});
 		}
+	},
+
+	async saveCallBotConversation(req: Request, res: Response, _: NextFunction) {
+		const {
+			history,
+			uuidSession,
+			statut,
+			firstNameDoctor,
+			lastNameDoctor,
+			callingNumber,
+			dateOfBirth,
+			lastNamePatient,
+			firstNamePatient,
+		} = req.body;
+
+		const { ip } = req;
+		if (!ip) {
+			return res.status(ERROR_BAD_REQUEST).json({
+				message: FAILURE_MESSAGE,
+				details: FAILURE_MISSING_IP_HEADERS,
+			});
+		}
+
+		const response: ResponseFailureType | ResponseSuccessType =
+			await saveConversaionCallBotToDirectus(
+				ip,
+				history,
+				uuidSession,
+				statut,
+				firstNameDoctor,
+				lastNameDoctor,
+				callingNumber,
+				dateOfBirth,
+				lastNamePatient,
+				firstNamePatient,
+			);
+
+		if ("sources" in response) {
+			return res
+				.status(response.status)
+				.json({ details: response.details, sources: response.sources });
+		}
+
+		return res.status(response.status).json(response.details);
 	},
 
 	async restartChat(

@@ -15,6 +15,7 @@ import {
 	FAILURE_TOKEN_EXPIRED,
 	MILLISECONDS,
 	RESTART,
+	SESSION_TTL_SECONDS,
 	SUCCESS_OK,
 	USER,
 } from "../constant/constant";
@@ -60,17 +61,6 @@ export default async function verifyAuthRedis(
 			.json({ message: FAILURE_MESSAGE, details: FAILURE_MISSING_IP_HEADERS });
 	}
 
-	if (!uuidSession) {
-		return res.status(ERROR_BAD_REQUEST).json({
-			message: FAILURE_MESSAGE,
-			details: FAILURE_MISSING_UUID_SESSION,
-		});
-	}
-
-	console.log(
-		"🚀 ~ verifyAuthRedis ~ `${ip}-${uuidSession}`:",
-		`${ip}-${uuidSession}`,
-	);
 	// check good project from Redis
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
 		await getKeyRedis(`${ip}-${uuidSession}`);
@@ -86,11 +76,42 @@ export default async function verifyAuthRedis(
 
 	if (status !== SUCCESS_OK && req.url.includes(RESTART)) {
 		console.log(RESTART);
+		const uuidSession = req.signedCookies.sessionId;
 
-		await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
-		await authAndStartChat(ip, project, language, uuidSession);
-		const { status, details } = await startChatApiBot(ip, uuidSession);
-		return res.status(status).send(details);
+
+		if (uuidSession) {
+			await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
+			await deleteKeyRedis(`${ip}-${uuidSession}`);
+		}
+		const { status, details } = await authAndStartChat(
+			ip,
+			project,
+			language,
+			uuidSession,
+		);
+		console.log("🚀 ~ verifyAuthRedis ~ details:", typeof details);
+
+		if (status !== SUCCESS_OK) {
+			return res.status(status).json(details);
+		}
+
+		const cookieUuidSession = details as string;
+		console.log("🚀 ~ verifyAuthRedis ~ cookieUuidSession:", cookieUuidSession);
+
+		if (cookieUuidSession) {
+			const { status, details } = await startChatApiBot(ip, cookieUuidSession);
+			console.log("🚀 ~ verifyAuthRedis ~ details:", details);
+			return res
+				.cookie("sessionId", cookieUuidSession, {
+					httpOnly: true,
+					secure: true,
+					sameSite: "none",
+					signed: true,
+					maxAge: SESSION_TTL_SECONDS * 1000,
+				})
+				.status(status)
+				.send(details);
+		}
 	}
 
 	if (typeof details === "object" && "token_expires_in" in details) {

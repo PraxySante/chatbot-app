@@ -3,12 +3,10 @@ import { ReponseFailureType } from '../../types/chatbot/chatbot.type';
 import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 
 export async function getDocumentFromApi(
-  uuidSession: string,
   urlDocument: string,
   userLanguage: string
 ): Promise<any | ReponseFailureType> {
   const payload: {} = {
-    uuidSession: uuidSession,
     urlDocument: urlDocument,
     language: userLanguage,
   };
@@ -18,6 +16,7 @@ export async function getDocumentFromApi(
       '/document',
       payload,
       {
+        withCredentials: true,
         responseType: 'blob',
       }
     );

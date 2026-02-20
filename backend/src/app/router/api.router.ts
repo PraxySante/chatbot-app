@@ -92,6 +92,7 @@ export const router = Router();
 /**
  *  POST /api/auth
  * @summary Auth M2M Auth Keycloack
+ * @security cookieAuth
  * @tags Auth
  * @param {Auth} request.body.required
  * @example request - application/json
@@ -116,11 +117,14 @@ export const router = Router();
  *   "error": "Internal Server Error"
  * }
  */
-router.post("/auth", controllerWrapper(apiController.requestAuthToken));
+router.post("/auth",
+	controllerWrapper(verifyOrigin),
+	controllerWrapper(apiController.requestAuthToken));
 
 /**
  *  POST /api/start
  * @summary Start conversation between chatbot and api LLM
+ * @security cookieAuth
  * @tags Chatbot
  * @param {Auth} request.body.required
  * @example request - application/json
@@ -159,6 +163,7 @@ router.post(
 /**
  *  POST /api/chat
  * @summary Keep chating between chatbot and api LLM
+ * @security cookieAuth
  * @tags Chatbot
  * @param {ContinueChat} request.body.required
  * @example request - application/json
@@ -223,6 +228,7 @@ router.post(
 /**
  *  POST /api/reformulate
  * @summary Reformulate question by api LLM
+ * @security cookieAuth
  * @tags Chatbot
  * @param {ContinueChat} request.body.required
  * @example request - application/json
@@ -273,6 +279,7 @@ router.post(
 /**
  *  POST /api/transcribe-audio
  * @summary Transcription speech to text by api Transcription
+ * @security cookieAuth
  * @tags Chatbot
  * @param {TranscribeAudio} request.body.required
  * @example request - application/json
@@ -311,6 +318,7 @@ router.post(
 /**
  * POST /api/document
  * @summary Display document
+ * @security cookieAuth
  * @tags Chatbot
  * @param {Document} request.body.required
  * @example request - application/json
@@ -346,8 +354,66 @@ router.post(
 );
 
 /**
+ *  POST /api/save-call
+ * @summary Save chating during callbot
+ * @tags Callbot
+ * @param {SaveCallBot} request.body.required
+ * @example request - application/json
+ * {
+ * "project": "Foch",
+ * "language": "fr",
+ * "statut": "Processed",
+ * "dateAppointment": '20/03/2026',
+ * "history": [
+            {
+                "role": "assistant",
+                "content": "Bonjour. Je suis un assistant pouvant répondre à des questions d'ordre générale sur l'Hopital Foch. Comment puis-je vous aider ?"
+            },
+						 {
+                "role": "user",
+                "content": "Prendre rendez-vous ?"
+            },
+						{
+                "role": "assistant",
+                "content": "Très bine le 20 mars 2026 à 17h."
+            },
+       ],
+	"firstNameDoctor": "Robert",
+	"lastNameDoctor": "Charles",
+	"callingNumber": "0102030405",
+	"dateOfBirth": "19/02/1956",
+	"lastNamePatient": "Michel",
+	"firstNamePatient": "Martin"
+}
+ * @return {object} 200 - Sucess response - application/json
+ * @example response - 200 - example response
+ * {
+    "status": "200",
+    "details": "Conversation Callbot is created"
+ * }
+ * @return {BadRequest} 400 - Bad request response - application/json
+ * @example response - 400 - example error response
+ * {
+ * "message": "Failure",
+ * "details": "Missing ip in request headers."
+ * }
+ * @return {ErrorResponse} 500 - Internal Server Error - application/json
+ * @example response - 500 - example error response
+ * {
+ *   "error": "Internal Server Error"
+ * }
+ */
+router.post(
+	"/save-call",
+	controllerWrapper(verifyOrigin),
+	controllerWrapper(apiController.requestAuthToken),
+	controllerWrapper(apiController.saveCallBotConversation),
+);
+
+/**
  * POST /api/feedback
  * @summary Record feedback
+ * @security cookieAuth
  * @tags Chatbot
  * @param {Feedback} request.body.required
  * @example request - application/json
@@ -387,6 +453,7 @@ router.post(
 /**
  * POST /api/restart
  * @summary Restart a new conversation
+ * @security cookieAuth
  * @tags Chatbot
  * @param {RestartConversation} request.body.required
  * @example request
@@ -416,7 +483,6 @@ router.post(
 router.post(
 	"/restart",
 	controllerWrapper(verifyOrigin),
-	controllerWrapper(verifySession),
 	controllerWrapper(verifyAuthRedis),
 	controllerWrapper(apiController.restartChat),
 );
@@ -424,6 +490,7 @@ router.post(
 /**
  * POST /api/end
  * @summary Ending conversation
+ * @security cookieAuth
  * @tags Chatbot
  * @param {EndingConversation} request.body.required
  * @example request
