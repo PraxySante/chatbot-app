@@ -27,10 +27,10 @@ import {
  * - **Body** (`req.body`):
  *   - `project`: Company name
  *   - `language`: Language selected
- *   - `uuidSession` : session uiud
+ *   - `sessionId` : session uiud
  * @example
  * Requête POST avec un body JSON :
- * { projet: "Praxy IA", language: "fr", uuidSession: "04344-42340-..." }
+ * { projet: "Praxy IA", language: "fr", sessionId: "04344-42340-..." }
  * @param {Response} res - Return response failed or success
  * @param {NextFunction} _ - Next not used
  * @returns {Promise<Response>} - Return response JSON :
@@ -48,10 +48,10 @@ import {
 export default async function verifyAuthRedis(
 	req: Request,
 	res: Response,
-	_: NextFunction
+	next: NextFunction,
 ): Promise<void | Response> {
-
 	const { project, language, uuidSession } = req.body;
+	console.log("🚀 ~ verifyAuthRedis ~ uuidSession:", uuidSession);
 	const { ip } = req;
 
 	if (!ip) {
@@ -67,9 +67,13 @@ export default async function verifyAuthRedis(
 		});
 	}
 
+	console.log(
+		"🚀 ~ verifyAuthRedis ~ `${ip}-${uuidSession}`:",
+		`${ip}-${uuidSession}`,
+	);
 	// check good project from Redis
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-	await getKeyRedis(`${ip}-${uuidSession}`);
+		await getKeyRedis(`${ip}-${uuidSession}`);
 
 	if (status !== SUCCESS_OK && !req.url.includes(RESTART)) {
 		console.log(`${FAILURE_STORED_CACHE} ${ip}-${uuidSession}`);
@@ -81,7 +85,7 @@ export default async function verifyAuthRedis(
 	}
 
 	if (status !== SUCCESS_OK && req.url.includes(RESTART)) {
-		console.log(RESTART)
+		console.log(RESTART);
 
 		await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
 		await authAndStartChat(ip, project, language, uuidSession);
@@ -110,4 +114,5 @@ export default async function verifyAuthRedis(
 			return res.status(status).send(details);
 		}
 	}
+	next();
 }

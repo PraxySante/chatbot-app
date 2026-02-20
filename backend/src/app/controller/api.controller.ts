@@ -74,7 +74,21 @@ export default {
 			language,
 			uuidSession,
 		);
-		return res.status(status).send(details);
+
+		console.log("🚀 ~ process.env.NODE_ENV :", process.env.NODE_ENV);
+		return res
+			.cookie("sessionId", details, {
+				httpOnly: true,
+				secure: true, // toujours true, même en dev (avec HTTPS local)
+				sameSite: "none",
+				signed: true,
+				maxAge: 1000 * 60 * 60 * 24,
+			})
+			.status(200)
+			.json({
+				message: "Session started",
+			});
+		//return res.status(status).send(details);
 	},
 
 	/**
@@ -106,11 +120,7 @@ export default {
 	 * }
 	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
 	 */
-	async startChat(
-		req: Request,
-		res: Response,
-		_: NextFunction,
-	): Promise<Response> {
+	async startChat(req: any, res: Response, _: NextFunction): Promise<Response> {
 		const { ip } = req;
 		const { uuidSession } = req.body;
 		if (!ip) {
@@ -199,7 +209,7 @@ export default {
 
 		return res.status(response.status).json(response.details);
 	},
-	
+
 	/**
 	 * Reformulate request from conversation chatbot-user
 	 * 

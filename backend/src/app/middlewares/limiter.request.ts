@@ -40,7 +40,7 @@ import {
 export default async function limiterRequestApi(
 	req: Request,
 	res: Response,
-	_: NextFunction
+	next: NextFunction
 ): Promise<void | Response>{
 	const {uuidSession} = req.body
 	const userId = `${USER}-${uuidSession}-${req.ip}`;
@@ -58,4 +58,5 @@ export default async function limiterRequestApi(
 			retryAfter: ONE_MINUTE,
 		});
 	}
+	next()
 }

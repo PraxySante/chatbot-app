@@ -185,7 +185,6 @@ function ChatContextProvider({
         setUuidSession(responseRequest);
 
         const responseStartChat: any = await startApiFrontChatBot(
-          responseRequest,
           selectedLanguage
         );
 

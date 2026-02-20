@@ -71,7 +71,7 @@ export async function requestChatToApiChatBot(
 	ip: string,
 	history: MessageType[],
 	message: MessageType,
-	uuidSession:string
+	uuidSession: string,
 ): Promise<ResponseFailureType | ResponseSuccessType> {
 	if (process.env.COLLECTION_DIRECTUS === undefined) {
 		console.error(FAILURE_COLLECTION_MESSAGE);
@@ -105,9 +105,8 @@ export async function requestChatToApiChatBot(
 			| ConversationDirectusAttributes
 			| ResponseFailureType = await createConversationDirectus(
 			process.env.COLLECTION_DIRECTUS,
-			data
-			);
-		
+			data,
+		);
 
 		if ("details" in responseDirectus) {
 			console.error({
@@ -117,7 +116,11 @@ export async function requestChatToApiChatBot(
 		}
 
 		if ("id" in responseDirectus) {
-			await updateKeyRedis(`${ip}-${uuidSession}`, "idDirectus", responseDirectus?.id);
+			await updateKeyRedis(
+				`${ip}-${uuidSession}`,
+				"idDirectus",
+				responseDirectus?.id,
+			);
 			idDirectus = responseDirectus.id;
 		}
 	} else {
@@ -135,7 +138,7 @@ export async function requestChatToApiChatBot(
 				headers: {
 					Authorization: `${BEARER} ${details?.authToken}`,
 				},
-			}
+			},
 		);
 
 		if (
@@ -162,7 +165,7 @@ export async function requestChatToApiChatBot(
 			| ResponseFailureType = await updateConversationDirectus(
 			idDirectus,
 			process.env.COLLECTION_DIRECTUS,
-			data
+			data,
 		);
 
 		if ("details" in responseDirectus) {
@@ -178,7 +181,7 @@ export async function requestChatToApiChatBot(
 			sources: [...responseApi.data.sources],
 		};
 	} catch (error: any) {
-		console.error(error.message);
+		console.error("requestChatToApiChatBot", error);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

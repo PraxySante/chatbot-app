@@ -40,7 +40,7 @@ status: 200,
  */
 export async function endChatApiBot(
 	ip: string,
-	uuidSession:string
+	uuidSession: string,
 ): Promise<ResponseFailureType | ResponseSuccessType> {
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
 		await getKeyRedis(`${ip}-${uuidSession}`);
@@ -73,7 +73,7 @@ export async function endChatApiBot(
 		}
 		return { status: status, details: data.message };
 	} catch (error: any) {
-		console.error(error);
+		console.error("endChat", error);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

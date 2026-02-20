@@ -4,6 +4,7 @@ import apiController from "../controller/api.controller";
 import limiterRequestApi from "../middlewares/limiter.request";
 import verifyAuthRedis from "../middlewares/verify.authRedis";
 import verifyOrigin from "../middlewares/verify.origin";
+import verifySession from "../middlewares/verifySession";
 
 /**
  * @typedef {object} Auth
@@ -150,6 +151,7 @@ router.post("/auth", controllerWrapper(apiController.requestAuthToken));
 router.post(
 	"/start",
 	controllerWrapper(verifyOrigin),
+	controllerWrapper(verifySession),
 	controllerWrapper(verifyAuthRedis),
 	controllerWrapper(apiController.startChat),
 );
@@ -212,6 +214,7 @@ router.post(
 router.post(
 	"/chat",
 	controllerWrapper(verifyOrigin),
+	controllerWrapper(verifySession),
 	controllerWrapper(limiterRequestApi),
 	controllerWrapper(verifyAuthRedis),
 	controllerWrapper(apiController.continueChat),
@@ -261,6 +264,7 @@ router.post(
 router.post(
 	"/reformulate",
 	controllerWrapper(verifyOrigin),
+	controllerWrapper(verifySession),
 	controllerWrapper(limiterRequestApi),
 	controllerWrapper(verifyAuthRedis),
 	controllerWrapper(apiController.reformulationChat),
@@ -298,6 +302,7 @@ router.post(
 router.post(
 	"/transcribe-audio",
 	controllerWrapper(verifyOrigin),
+	controllerWrapper(verifySession),
 	controllerWrapper(limiterRequestApi),
 	controllerWrapper(verifyAuthRedis),
 	controllerWrapper(apiController.requestTranscribeAudio),
@@ -335,6 +340,7 @@ router.post(
 router.post(
 	"/document",
 	controllerWrapper(verifyOrigin),
+	controllerWrapper(verifySession),
 	controllerWrapper(verifyAuthRedis),
 	controllerWrapper(apiController.getDocumentPdf),
 );
@@ -373,6 +379,7 @@ router.post(
 router.post(
 	"/feedback",
 	controllerWrapper(verifyOrigin),
+	controllerWrapper(verifySession),
 	controllerWrapper(verifyAuthRedis),
 	controllerWrapper(apiController.feedbackChat),
 );
@@ -409,6 +416,7 @@ router.post(
 router.post(
 	"/restart",
 	controllerWrapper(verifyOrigin),
+	controllerWrapper(verifySession),
 	controllerWrapper(verifyAuthRedis),
 	controllerWrapper(apiController.restartChat),
 );
@@ -445,6 +453,7 @@ router.post(
 router.post(
 	"/end",
 	controllerWrapper(verifyOrigin),
+	controllerWrapper(verifySession),
 	controllerWrapper(verifyAuthRedis),
 	controllerWrapper(apiController.endChat),
 );
