@@ -48,7 +48,7 @@ import {
 export default async function verifyAuthRedis(
 	req: Request,
 	res: Response,
-	_: NextFunction
+	next: NextFunction
 ): Promise<void | Response> {
 
 	const { project, language, uuidSession } = req.body;
@@ -110,4 +110,5 @@ export default async function verifyAuthRedis(
 			return res.status(status).send(details);
 		}
 	}
+	next()
 }

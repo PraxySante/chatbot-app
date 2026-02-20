@@ -33,7 +33,7 @@ import {
 export default async function verifyOrigin(
 	req: Request,
 	res: Response,
-	_: NextFunction
+	next: NextFunction
 ): Promise<void | Response> {
 	const { project, language } = req.body;
 	const { ip } = req;
@@ -47,5 +47,5 @@ export default async function verifyOrigin(
 	if (!ip) {
 		return res.status(ERROR_BAD_REQUEST).json(ERROR_BAD_REQUEST_MESSSAGE);
 	}
-
+	next()
 }

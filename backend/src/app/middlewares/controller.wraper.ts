@@ -5,9 +5,6 @@ export default function controllerWrapper(controllerMw: any) {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			await controllerMw(req, res, next);
-			if (!res.headersSent) {
-				next();
-			}
 		} catch (error: any) {
 			console.error("controllerWrapper", error);
 			if (!res.headersSent) {
