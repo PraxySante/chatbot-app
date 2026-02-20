@@ -44,10 +44,12 @@ import axiosDirectus from "./axiosDirectus.service";
 	 */
 export async function readConversationDirectus(
 	id: string,
-	collection: string
+	collection: string,
 ): Promise<ConversationDirectusAttributes | ResponseFailureType> {
 	try {
-		const response : AxiosResponse= await axiosDirectus.get(`/items/${collection}/${id}`);
+		const response: AxiosResponse = await axiosDirectus.get(
+			`/items/${collection}/${id}`,
+		);
 
 		const { data, status } = response;
 
@@ -61,7 +63,7 @@ export async function readConversationDirectus(
 		}
 		return data.data as ConversationDirectusAttributes;
 	} catch (error: any) {
-		console.error(error);
+		console.error("readDirectus", error);
 		const data = {
 			status: error?.status,
 			message: FAILURE_MESSAGE,

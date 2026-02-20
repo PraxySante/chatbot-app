@@ -8,7 +8,7 @@ import { ResponseFailureType } from "../../types/chatbot.type";
 import { axiosKeycloak } from "./axiosKeycloak.service";
 
 export async function authChatBot(
-	project: string
+	project: string,
 ): Promise<ResponseAuthChatBot | ResponseFailureType> {
 	let dataProject: { username: string; password: string } = {
 		username: "",
@@ -99,7 +99,7 @@ export async function authChatBot(
 			details: data,
 		};
 	} catch (error: any) {
-		console.error(error);
+		console.error("authChatBot", error);
 		// return Message Error Typed
 		return {
 			status: error.status,

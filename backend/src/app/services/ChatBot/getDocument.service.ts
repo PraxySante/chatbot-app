@@ -15,16 +15,15 @@ import { axiosChatBot } from "./axiosChatBot.service";
 export async function getDocument(
 	ip: string,
 	urlDocument: string,
-	uuidSession: string
+	uuidSession: string,
 ) {
-
 	if (!urlDocument) {
 		console.error(FAILURE_MISSING_URL_DOCUMENT);
 		return { status: ERROR_SERVER, details: FAILURE_MISSING_URL_DOCUMENT };
 	}
 
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-	await getKeyRedis(`${ip}-${uuidSession}`);
+		await getKeyRedis(`${ip}-${uuidSession}`);
 
 	if (status !== SUCCESS_OK && typeof details === "string") {
 		return { status: status, details: details };
@@ -45,14 +44,13 @@ export async function getDocument(
 			},
 			responseType: "arraybuffer",
 		});
-		
-    return {
+
+		return {
 			status: pdfResponse.status,
 			details: pdfResponse.data,
 		};
-    
 	} catch (error: any) {
-		console.error(error.message);
+		console.error("getDocument", error);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,
