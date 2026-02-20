@@ -17,14 +17,14 @@ app.use(
 	cors({
 		origin: function (origin, callback) {
 			if (!origin) {
-				return callback(new Error("Not allowed Origin unknown"));
+				return callback(null, true);
 			}
-
-			if (allowedOrigins && allowedOrigins?.includes(origin)) {
-				return callback(null, origin);
+			if (allowedOrigins && allowedOrigins.includes(origin)) {
+				callback(null, origin);
+			} else {
+				console.log("Not allowed by CORS, origin", origin);
+				callback(new Error("Not allowed by CORS"));
 			}
-
-			return callback(new Error("Not allowed by CORS"));
 		},
 	}),
 );
