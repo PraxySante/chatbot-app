@@ -43,7 +43,7 @@ export async function feedbackApiChatBot(
 	ip: string,
 	uuidSession: string,
 	note: number,
-	comment: string
+	comment: string,
 ): Promise<ResponseFailureType | ResponseSuccessType> {
 	const { status, details }: any = await getKeyRedis(`${ip}-${uuidSession}`);
 
@@ -73,7 +73,7 @@ export async function feedbackApiChatBot(
 		const responseApi: any = await updateConversationDirectus(
 			details?.idDirectus,
 			process.env.COLLECTION_DIRECTUS,
-			data
+			data,
 		);
 
 		if ("details" in responseApi) {
@@ -82,7 +82,7 @@ export async function feedbackApiChatBot(
 
 		return { status: status, details: responseApi.data.message };
 	} catch (error: any) {
-		console.error(error);
+		console.error("feedBack", error);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

@@ -50,12 +50,12 @@ import axiosDirectus from "./axiosDirectus.service";
 	 */
 export async function createConversationDirectus(
 	collection: string,
-	preparedData: Partial<CreateConversationDirectusAttributes>
+	preparedData: Partial<CreateConversationDirectusAttributes>,
 ): Promise<ConversationDirectusAttributes | ResponseFailureType> {
 	try {
 		const response: AxiosResponse = await axiosDirectus.post(
 			`/items/${collection}`,
-			preparedData
+			preparedData,
 		);
 
 		const { data, status } = response;
@@ -70,7 +70,7 @@ export async function createConversationDirectus(
 		}
 		return data.data as ConversationDirectusAttributes;
 	} catch (error: any) {
-		console.error(error.message);
+		console.error("createDirectus", error);
 		const data = {
 			status: error?.status,
 			message: FAILURE_MESSAGE,

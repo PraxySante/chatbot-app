@@ -7,13 +7,16 @@ import {
 } from "../../constant/constant";
 import { getKeyRedis } from "../../datamapper/redis.datamapper";
 import { axiosTranscription } from "../ApiTranscription/axiosTranscription.service";
-import { ResponseFailureType, ResponseSuccessType } from "../../types/chatbot.type";
+import {
+	ResponseFailureType,
+	ResponseSuccessType,
+} from "../../types/chatbot.type";
 
 export async function transcribeAudioChatBot(
 	ip: string,
 	uuidSession: string,
-	audioBase64: any
-) : Promise<ResponseFailureType | ResponseSuccessType> {
+	audioBase64: any,
+): Promise<ResponseFailureType | ResponseSuccessType> {
 	// Convertir Base64 en Buffer
 	const audioBuffer = Buffer.from(audioBase64, "base64");
 
@@ -46,14 +49,14 @@ export async function transcribeAudioChatBot(
 					Authorization: `${BEARER} ${details.authToken}`,
 					"Content-Type": "multipart/form-data",
 				},
-			}
+			},
 		);
 		return {
 			status: responseApi.status,
 			details: responseApi.data,
 		};
 	} catch (error: any) {
-		console.error(error.message);
+		console.error("transcribeAudio", error);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

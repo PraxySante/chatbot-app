@@ -67,12 +67,12 @@ import axiosDirectus from "./axiosDirectus.service";
 export async function updateConversationDirectus(
 	id: string,
 	collection: string,
-	dataDirectus: Partial<ConversationDirectusAttributes>
+	dataDirectus: Partial<ConversationDirectusAttributes>,
 ): Promise<ConversationDirectusAttributes | ResponseFailureType> {
 	try {
-		const response : AxiosResponse = await axiosDirectus.patch(
+		const response: AxiosResponse = await axiosDirectus.patch(
 			`/items/${collection}/${id}`,
-			dataDirectus
+			dataDirectus,
 		);
 
 		const { data, status } = response;
@@ -86,7 +86,7 @@ export async function updateConversationDirectus(
 		}
 		return data as ConversationDirectusAttributes;
 	} catch (error: any) {
-		console.error(error);
+		console.error("updateDirectus", error);
 		const data = {
 			status: error?.status,
 			message: FAILURE_MESSAGE,

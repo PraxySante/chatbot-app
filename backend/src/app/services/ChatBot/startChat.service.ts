@@ -40,7 +40,7 @@ import {
  */
 export async function startChatApiBot(
 	ip: string,
-	uuidSession: string
+	uuidSession: string,
 ): Promise<ResponseFailureType | ResponseSuccessType> {
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
 		await getKeyRedis(`${ip}-${uuidSession}`);
@@ -69,7 +69,7 @@ export async function startChatApiBot(
 					project: details?.project,
 					language: details?.language,
 				},
-			}
+			},
 		);
 
 		const { data, status } = response;
@@ -82,7 +82,7 @@ export async function startChatApiBot(
 
 		return { status: status, details: data.message };
 	} catch (error: any) {
-		console.error(error.message);
+		console.error("startChat", error);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

@@ -53,7 +53,7 @@ import { axiosChatBot } from "./axiosChatBot.service";
 	 */
 export async function reformulationChatToApiChatBot(
 	ip: string,
-	uuidSession:string
+	uuidSession: string,
 ): Promise<ResponseSuccessType | ResponseFailureType> {
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
 		await getKeyRedis(`${ip}-${uuidSession}`);
@@ -81,7 +81,7 @@ export async function reformulationChatToApiChatBot(
 					headers: {
 						Authorization: `${BEARER} ${details?.authToken}`,
 					},
-				}
+				},
 			);
 
 		if ("details" in responseApi) {
@@ -93,7 +93,7 @@ export async function reformulationChatToApiChatBot(
 			details: [...responseApi.data.reformulations],
 		};
 	} catch (error: any) {
-		console.error(error.message);
+		console.error("reformulationChat", error);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,
