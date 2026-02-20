@@ -16,13 +16,15 @@ const allowedOrigins = process.env.ORIGIN?.split(",");
 app.use(
 	cors({
 		origin: function (origin, callback) {
-			if (!origin) return callback(null, true);
-			if (allowedOrigins && allowedOrigins.includes(origin)) {
-				callback(null, origin);
-			} else {
-				console.log("Not allowed by CORS, origin", origin);
-				callback(new Error("Not allowed by CORS"));
+			if (!origin) {
+				return callback(new Error("Not allowed Origin unknown"));
 			}
+
+			if (allowedOrigins && allowedOrigins?.includes(origin)) {
+				return callback(null, origin);
+			}
+
+			return callback(new Error("Not allowed by CORS"));
 		},
 	}),
 );
