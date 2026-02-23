@@ -68,7 +68,7 @@ export async function authAndStartChat(
 		typeof responseRedis.details === "string"
 	) {
 		const responseApi: ResponseFailureType | ResponseAuthChatBot =
-			await authChatBot(process.env.NODE_ENV === "dev" ? "dev" : project);
+			await authChatBot(String(process.env.NODE_ENV) === "dev" ? "dev" : project);
 
 		// Message Error Typed
 		const { status, details } = responseApi;
