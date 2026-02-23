@@ -95,7 +95,6 @@ export async function reformulationChatToApiChatBot(
 		};
 	} catch (error: any) {
 		console.error("reformulationChat", error);
-<<<<<<< feat/issue-122/chatbot-security
 		await saveError(
 			error,
 			details,
@@ -103,8 +102,6 @@ export async function reformulationChatToApiChatBot(
 			"Chatbot_conversation",
 			"reformulationChat",
 		);
-=======
->>>>>>> develop
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

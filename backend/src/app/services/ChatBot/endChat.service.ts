@@ -75,7 +75,6 @@ export async function endChatApiBot(
 		return { status: status, details: data.message };
 	} catch (error: any) {
 		console.error("endChat", error);
-<<<<<<< feat/issue-122/chatbot-security
 		await saveError(
 			error,
 			details,
@@ -83,8 +82,6 @@ export async function endChatApiBot(
 			"Chatbot_conversation",
 			"endChat",
 		);
-=======
->>>>>>> develop
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

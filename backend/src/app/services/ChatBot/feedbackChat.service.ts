@@ -84,7 +84,6 @@ export async function feedbackApiChatBot(
 		return { status: status, details: responseApi.data.message };
 	} catch (error: any) {
 		console.error("feedBack", error);
-<<<<<<< feat/issue-122/chatbot-security
 		await saveError(
 			error,
 			details,
@@ -92,8 +91,6 @@ export async function feedbackApiChatBot(
 			"Chatbot_conversation",
 			"feedBack",
 		);
-=======
->>>>>>> develop
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

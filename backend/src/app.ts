@@ -18,7 +18,6 @@ app.use(
 	cors({
 		origin: function (origin, callback) {
 			if (!origin) {
-<<<<<<< feat/issue-122/chatbot-security
 				console.log("Not allowed by origin : ", origin);
 				if (String(process.env.NODE_ENV) === "dev") {
 					return callback(null, true);
@@ -27,15 +26,10 @@ app.use(
 				}
 			}
 			if (origin && allowedOrigins && allowedOrigins.includes(origin)) {
-=======
-				return callback(null, true);
-			}
-			if (allowedOrigins && allowedOrigins?.includes(origin)) {
->>>>>>> develop
-				callback(null, origin);
+				return callback(null, origin);
 			} else {
 				console.log("Not allowed by CORS, origin", origin);
-				callback(new Error("Not allowed by CORS"));
+				return callback(new Error("Not allowed by CORS"));
 			}
 		},
 		credentials: true,

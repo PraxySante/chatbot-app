@@ -51,13 +51,9 @@ import axiosDirectus from "./axiosDirectus.service";
 	 */
 export async function createConversationDirectus(
 	collection: string,
-<<<<<<< feat/issue-122/chatbot-security
 	preparedData: Partial<
 		CreateConversationDirectusAttributes | ErrorDirectusAttributes
 	>,
-=======
-	preparedData: Partial<CreateConversationDirectusAttributes>,
->>>>>>> develop
 ): Promise<ConversationDirectusAttributes | ResponseFailureType> {
 	try {
 		const response: AxiosResponse = await axiosDirectus.post(
@@ -66,7 +62,7 @@ export async function createConversationDirectus(
 		);
 
 		const { data, status } = response;
-		
+
 		if (status !== SUCCESS_OK) {
 			const data = {
 				status: status,
