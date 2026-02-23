@@ -62,6 +62,11 @@ import verifySession from "../middlewares/verifySession";
  */
 
 /**
+ * @typedef {object} CookieSession
+ * @property {string} sessionId - Chatbot sessionId
+ */
+
+/**
  * @typedef {object} BadRequest
  * @property {string} message - message bad request
  * @property {string} details - details bad request
@@ -103,9 +108,11 @@ export const router = Router();
  *   "error": "Internal Server Error"
  * }
  */
-router.post("/auth",
+router.post(
+	"/auth",
 	controllerWrapper(verifyOrigin),
-	controllerWrapper(apiController.requestAuthToken));
+	controllerWrapper(apiController.requestAuthToken),
+);
 
 /**
  *  POST /api/start
@@ -113,6 +120,7 @@ router.post("/auth",
  * @security cookieAuth
  * @tags Chatbot
  * @param {Auth} request.body.required
+ * @param {CookieSession} request.signedCookies.sessionId
  * @example request - application/json
  * {
 	"project": "Foch",
@@ -151,6 +159,7 @@ router.post(
  * @summary Keep chating between chatbot and api LLM
  * @security cookieAuth
  * @tags Chatbot
+ * @param {CookieSession} request.signedCookies.sessionId
  * @param {ContinueChat} request.body.required
  * @example request - application/json
  * {
@@ -216,6 +225,7 @@ router.post(
  * @summary Reformulate question by api LLM
  * @security cookieAuth
  * @tags Chatbot
+ * @param {CookieSession} request.signedCookies.sessionId
  * @param {ContinueChat} request.body.required
  * @example request - application/json
  * {
@@ -267,6 +277,7 @@ router.post(
  * @summary Transcription speech to text by api Transcription
  * @security cookieAuth
  * @tags Chatbot
+ * @param {CookieSession} request.signedCookies.sessionId
  * @param {TranscribeAudio} request.body.required
  * @example request - application/json
  * {
@@ -306,6 +317,7 @@ router.post(
  * @summary Display document
  * @security cookieAuth
  * @tags Chatbot
+ * @param {CookieSession} request.signedCookies.sessionId
  * @param {Document} request.body.required
  * @example request - application/json
  * {
@@ -344,6 +356,7 @@ router.post(
  * @summary Record feedback
  * @security cookieAuth
  * @tags Chatbot
+ * @param {CookieSession} request.signedCookies.sessionId
  * @param {Feedback} request.body.required
  * @example request - application/json
  * {
@@ -421,6 +434,7 @@ router.post(
  * @summary Ending conversation
  * @security cookieAuth
  * @tags Chatbot
+ * @param {CookieSession} request.signedCookies.sessionId
  * @param {EndingConversation} request.body.required
  * @example request
  * {
