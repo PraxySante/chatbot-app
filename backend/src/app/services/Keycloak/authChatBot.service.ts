@@ -99,7 +99,7 @@ export async function authChatBot(
 			details: data,
 		};
 	} catch (error: any) {
-		console.error("authChatBot", error);
+		console.error("authChatbot", error);
 		// return Message Error Typed
 		return {
 			status: error.status,

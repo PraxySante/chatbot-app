@@ -52,6 +52,7 @@ const axiosAuthSecret = axios.create({
   // Configuration axios to connect to Auth0
   baseURL: baseUrl,
   headers: { 'content-type': 'application/json' },
+  withCredentials: true,
 });
 
 axiosAuthSecret.interceptors.request.use((config) => {

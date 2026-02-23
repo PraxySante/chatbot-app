@@ -8,20 +8,20 @@ import axiosAuthSecret from '../axiosConfiguration/axiosAuthSecret.service';
 export async function feedbackApiFrontChatBot(
   vote: number,
   comment: string,
-  uuidSession: string,
   userLanguage: string
 ): Promise<MessageType | ReponseFailureType> {
   const payload: {} = {
     note: vote,
     comment: comment || '',
-    uuidSession: uuidSession,
     language: userLanguage,
   };
 
   try {
     const response: AxiosResponse = await axiosAuthSecret.post(
       `/feedback`,
-      payload
+      payload,
+            { withCredentials: true }
+
     );
     const { data, status } = response;
     if (status === 200) {

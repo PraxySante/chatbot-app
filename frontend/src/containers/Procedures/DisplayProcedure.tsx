@@ -20,7 +20,7 @@ export default function DisplayProcedures({
   selectedProcedure,
 }: DisplayProcedureType) {
   const { userLanguage, selectedLanguage } = useLanguage();
-  const { procedures, uuidSession } = useChat();
+  const { procedures } = useChat();
 
   const documents = procedures;
 
@@ -127,7 +127,6 @@ export default function DisplayProcedures({
 
   async function downloadFile() {
     const urlDocument = await getDocumentFromApi(
-      uuidSession,
       documents[selectedProcedure].url,
       selectedLanguage
     );

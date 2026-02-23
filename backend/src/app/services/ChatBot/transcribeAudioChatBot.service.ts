@@ -11,6 +11,7 @@ import {
 	ResponseFailureType,
 	ResponseSuccessType,
 } from "../../types/chatbot.type";
+import saveError from "./saveError.service";
 
 export async function transcribeAudioChatBot(
 	ip: string,
@@ -57,6 +58,13 @@ export async function transcribeAudioChatBot(
 		};
 	} catch (error: any) {
 		console.error("transcribeAudio", error);
+		await saveError(
+			error,
+			details,
+			"Chatbot_web",
+			"Chatbot_conversation",
+			"transcribeAudio",
+		);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

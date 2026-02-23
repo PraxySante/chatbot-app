@@ -12,6 +12,7 @@ import {
 	ResponseSuccessType,
 } from "../../types/chatbot.type";
 import { updateConversationDirectus } from "../Directus/update.service";
+import saveError from "./saveError.service";
 
 /**
 	 * Request axios feedback conversation API-chatbot
@@ -83,6 +84,13 @@ export async function feedbackApiChatBot(
 		return { status: status, details: responseApi.data.message };
 	} catch (error: any) {
 		console.error("feedBack", error);
+		await saveError(
+			error,
+			details,
+			"Chatbot_web",
+			"Chatbot_conversation",
+			"feedBack",
+		);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

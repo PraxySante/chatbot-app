@@ -184,10 +184,8 @@ function ChatContextProvider({
       if (responseRequest) {
         setUuidSession(responseRequest);
 
-        const responseStartChat: any = await startApiFrontChatBot(
-          responseRequest,
-          selectedLanguage
-        );
+        const responseStartChat: any =
+          await startApiFrontChatBot(selectedLanguage);
 
         if (responseStartChat.message === ERROR_TYPE_FAILURE.toLowerCase()) {
           getMessageToNotification({
@@ -218,7 +216,6 @@ function ChatContextProvider({
 
   async function restartConversation(userSelectedLanguage?: string) {
     const responseRequest: any = await restartChat(
-      uuidSession,
       userSelectedLanguage ? userSelectedLanguage : selectedLanguage
     );
 
@@ -347,7 +344,6 @@ function ChatContextProvider({
         role: ROLE_USER,
         content: userContent,
       },
-      uuidSession,
       selectedLanguage
     );
 
@@ -407,10 +403,8 @@ function ChatContextProvider({
 
     whoIsWritten(ROLE_ASSISTANT);
 
-    const propositionChatConversation: any = await reformulateChat(
-      uuidSession,
-      selectedLanguage
-    );
+    const propositionChatConversation: any =
+      await reformulateChat(selectedLanguage);
 
     if (
       propositionChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()
@@ -452,7 +446,6 @@ function ChatContextProvider({
     const responseApi: any = await feedbackApiFrontChatBot(
       vote,
       comment,
-      uuidSession,
       selectedLanguage
     );
     if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
@@ -467,7 +460,7 @@ function ChatContextProvider({
   }
 
   async function endConversation() {
-    const responseApi: any = await endChat(uuidSession, selectedLanguage);
+    const responseApi: any = await endChat(selectedLanguage);
     if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification(responseApi.status, responseApi.details);
       return;

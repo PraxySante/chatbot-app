@@ -18,12 +18,14 @@ import {
 	FAILURE_MISSING_IP_HEADERS,
 	FAILURE_MISSING_LANGUAGE,
 	FAILURE_MISSING_UUID_SESSION,
+	SESSION_TTL_SECONDS,
 	SUCCESS_OK,
 	USER,
 } from "../constant/constant";
 import axios from "axios";
 import { transcribeAudioChatBot } from "../services/ChatBot/transcribeAudioChatBot.service";
 import { getDocument } from "../services/ChatBot/getDocument.service";
+import { saveConversaionCallBotToDirectus } from "../services/CallBot/saveConversation.service";
 
 export default {
 	/**
@@ -74,7 +76,20 @@ export default {
 			language,
 			uuidSession,
 		);
-		return res.status(status).send(details);
+
+		return res
+			.cookie("sessionId", details, {
+				httpOnly: true,
+				secure: true,
+				sameSite: "none",
+				signed: true,
+				maxAge: SESSION_TTL_SECONDS * 1000,
+			})
+			.status(200)
+			.json({
+				message: "Session started",
+			});
+		//return res.status(status).send(details);
 	},
 
 	/**
@@ -106,11 +121,7 @@ export default {
 	 * }
 	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
 	 */
-	async startChat(
-		req: Request,
-		res: Response,
-		_: NextFunction,
-	): Promise<Response> {
+	async startChat(req: any, res: Response, _: NextFunction): Promise<Response> {
 		const { ip } = req;
 		const { uuidSession } = req.body;
 		if (!ip) {
@@ -199,7 +210,7 @@ export default {
 
 		return res.status(response.status).json(response.details);
 	},
-	
+
 	/**
 	 * Reformulate request from conversation chatbot-user
 	 * 
@@ -279,6 +290,37 @@ export default {
 		return res.status(status).send(details);
 	},
 
+	/**
+	 * Get document from conversation chatbot-user
+	 * 
+	 * @param {Request} req - Object contains data :
+	 * - **IP du client** (`req.ip`)
+	 * - **Body** (`req.body`):
+	 *   - `project`: Company name
+	 *   - `language`: Language selected
+	 *   - `uuidSession`: sessionId from cookie
+	 *   - `urlDocument`: url document api LLM
+	 * @example
+	 * Requête POST avec un body JSON :
+	 * { projet: "Praxy IA", language: "fr", uuidSession:'erzr-erzr-zer" }
+	 * @param {Response} res - Return response failed or success
+	 * @param {NextFunction} _ - Next not used
+	 * @returns {Promise<Response>} - Return response JSON :
+	 * - **details**
+	 * - **status**
+	 * @exemple
+	 * Response 200 - Success 
+	 * {
+	 * 
+	 * }
+	 * @throws {400} - Missing ip in request headers
+	 * @example
+	 * {
+	 * message: "Failure",
+	 * details: "Missing ip in request headers.",
+	 * }
+	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
+	 */
 	async getDocumentPdf(req: Request, res: Response, _: NextFunction) {
 		const { ip } = req;
 		const { uuidSession, urlDocument } = req.body;
@@ -302,6 +344,37 @@ export default {
 		return res.status(status).send(details);
 	},
 
+		/**
+	 * Get document from conversation chatbot-user
+	 * 
+	 * @param {Request} req - Object contains data :
+	 * - **IP du client** (`req.ip`)
+	 * - **Body** (`req.body`):
+	 *   - `project`: Company name
+	 *   - `language`: Language selected
+	 *   - `uuidSession`: sessionId from cookie
+	 *   - `urlDocument`: url document api LLM
+	 * @example
+	 * Requête POST avec un body JSON :
+	 * { projet: "Praxy IA", language: "fr", uuidSession:'erzr-erzr-zer" }
+	 * @param {Response} res - Return response failed or success
+	 * @param {NextFunction} _ - Next not used
+	 * @returns {Promise<Response>} - Return response JSON :
+	 * - **details**
+	 * - **status**
+	 * @exemple
+	 * Response 200 - Success 
+	 * {
+	 * 
+	 * }
+	 * @throws {400} - Missing ip in request headers
+	 * @example
+	 * {
+	 * message: "Failure",
+	 * details: "Missing ip in request headers.",
+	 * }
+	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
+	 */
 	async requestTranscribeAudio(
 		req: Request,
 		res: Response,

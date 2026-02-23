@@ -11,6 +11,7 @@ import { getKeyRedis } from "../../datamapper/redis.datamapper";
 import { ResponseFailureType } from "../../types/chatbot.type";
 import { ResponseKeyRedisType } from "../../types/redis.type";
 import { axiosChatBot } from "./axiosChatBot.service";
+import saveError from "./saveError.service";
 
 export async function getDocument(
 	ip: string,
@@ -51,6 +52,13 @@ export async function getDocument(
 		};
 	} catch (error: any) {
 		console.error("getDocument", error);
+		await saveError(
+			error,
+			details,
+			"Chatbot_web",
+			"Chatbot_conversation",
+			"getDocument",
+		);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

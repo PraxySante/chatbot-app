@@ -4,6 +4,7 @@ import {
 	ResponseFailureType,
 	ResponsePingType,
 } from "../../types/chatbot.type";
+import saveError from "./saveError.service";
 
 export async function testPingApiChatBot(): Promise<
 	PingType | ResponseFailureType
