@@ -47,6 +47,5 @@ export default async function verifyOrigin(
 	if (!ip) {
 		return res.status(ERROR_BAD_REQUEST).json(ERROR_BAD_REQUEST_MESSSAGE);
 	}
-
 	next()
 }

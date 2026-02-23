@@ -10,7 +10,7 @@ import {
 import { axiosGoogle } from "./axiosGoogle.service";
 
 export async function verifyUserReCaptchaGoogle(
-	token: string
+	token: string,
 ): Promise<ResponseFailureType | ResponseSuccessType> {
 	try {
 		const { data } = await axiosGoogle.post("", {
@@ -31,7 +31,7 @@ export async function verifyUserReCaptchaGoogle(
 
 		return { status: SUCCESS_OK, details: SUCCESS_MESSAGE };
 	} catch (error: any) {
-		console.log(error);
+		console.log("recaptcha", error);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

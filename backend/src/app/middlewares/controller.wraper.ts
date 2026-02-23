@@ -6,9 +6,9 @@ export default function controllerWrapper(controllerMw: any) {
 		try {
 			await controllerMw(req, res, next);
 		} catch (error: any) {
-			console.error(error);
+			console.error("controllerWrapper", error);
 			if (!res.headersSent) {
-				res.status(ERROR_SERVER).json({ error: ERROR_SERVER_MESSAGE});
+				res.status(ERROR_SERVER).json({ error: ERROR_SERVER_MESSAGE });
 			}
 		}
 	};

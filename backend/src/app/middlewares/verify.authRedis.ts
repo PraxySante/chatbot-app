@@ -49,7 +49,11 @@ import {
 export default async function verifyAuthRedis(
 	req: Request,
 	res: Response,
+<<<<<<< feat/issue-122/chatbot-security
 	next: NextFunction,
+=======
+	next: NextFunction
+>>>>>>> develop
 ): Promise<void | Response> {
 	const { project, language, uuidSession } = req.body;
 	const { ip } = req;
@@ -168,5 +172,9 @@ export default async function verifyAuthRedis(
 			}
 		}
 	}
+<<<<<<< feat/issue-122/chatbot-security
 	next();
+=======
+	next()
+>>>>>>> develop
 }

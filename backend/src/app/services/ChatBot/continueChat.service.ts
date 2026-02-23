@@ -183,13 +183,13 @@ export async function requestChatToApiChatBot(
 			sources: [...responseApi.data.sources],
 		};
 	} catch (error: any) {
-		console.error("requestChatToApiChatBot", error);
+		console.error("continueChat", error);
 		await saveError(
 			error,
 			details,
 			"Chatbot_web",
 			"Chatbot_conversation",
-			"requestChatToApiChatBot",
+			"continueChat",
 		);
 		return {
 			status: error.status,

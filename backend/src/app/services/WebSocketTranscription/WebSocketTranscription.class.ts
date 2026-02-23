@@ -42,7 +42,7 @@ export class WebSocketTranscription {
 		wsAddressApi: string,
 		wsParent: WebSocket,
 		uuidChat: string,
-		authToken: string
+		authToken: string,
 	) {
 		this.wsAddressApi = wsAddressApi;
 		this.wsParent = wsParent;
@@ -54,7 +54,7 @@ export class WebSocketTranscription {
 		ip: any,
 		uuidSession: string,
 		uuidTranscription: string,
-		project: string
+		project: string,
 	) {
 		console.log("✅ Initialisation WebSocket API Transcription");
 
@@ -105,7 +105,7 @@ export class WebSocketTranscription {
 						| ConversationDirectusAttributes
 						| ResponseFailureType = await createConversationDirectus(
 						process.env.COLLECTION_DIRECTUS,
-						data
+						data,
 					);
 
 					if ("details" in responseDirectus) {
@@ -121,7 +121,7 @@ export class WebSocketTranscription {
 						await updateKeyRedis(
 							`${ip}-${uuidSession}`,
 							"idDirectus",
-							responseDirectus?.id
+							responseDirectus?.id,
 						);
 						this.idDirectus = responseDirectus.id;
 					}
@@ -137,7 +137,7 @@ export class WebSocketTranscription {
 						| ResponseFailureType = await updateConversationDirectus(
 						this.idDirectus,
 						process.env.COLLECTION_DIRECTUS,
-						data
+						data,
 					);
 
 					if ("details" in responseDirectus) {
@@ -154,7 +154,7 @@ export class WebSocketTranscription {
 				const userMessage = JSON.parse(msg.toString());
 
 				// ambiant mode : const transcript = userMessage?.message?.transcript?.[0]?.[1];
-				const transcript = userMessage?.message?.transcript
+				const transcript = userMessage?.message?.transcript;
 
 				if (transcript) {
 					const preparedUserMessage = {
@@ -169,7 +169,7 @@ export class WebSocketTranscription {
 
 		this.wsTranscription.on("close", (code, reason) => {
 			console.log(
-				`❌ Déconnecté de API Transcription (Code: ${code}, Reason: ${reason})`
+				`❌ Déconnecté de API Transcription (Code: ${code}, Reason: ${reason})`,
 			);
 
 			this.isConnected = false;
@@ -211,7 +211,7 @@ export class WebSocketTranscription {
 				| ConversationDirectusAttributes
 				| ResponseFailureType = await readConversationDirectus(
 				details?.idDirectus,
-				process.env.COLLECTION_DIRECTUS
+				process.env.COLLECTION_DIRECTUS,
 			);
 
 			if ("details" in responseDirectus) {
@@ -262,7 +262,7 @@ export class WebSocketTranscription {
 					headers: {
 						Authorization: `${BEARER} ${this.authToken}`,
 					},
-				}
+				},
 			);
 
 			const preparedAssistantMessage = {
@@ -285,7 +285,7 @@ export class WebSocketTranscription {
 				| ResponseFailureType = await updateConversationDirectus(
 				this.idDirectus,
 				process.env.COLLECTION_DIRECTUS,
-				data
+				data,
 			);
 
 			if ("details" in responseDirectus) {
@@ -306,11 +306,11 @@ export class WebSocketTranscription {
 							details: responseApi.data.message,
 							sources: [...responseApi.data.sources],
 						},
-					})
+					}),
 				);
 			}
 		} catch (error: any) {
-			console.error(error.message);
+			console.error("Websocket", error);
 			this.wsParent.close(1011, ERROR_SERVER_MESSAGE);
 			return;
 		}
