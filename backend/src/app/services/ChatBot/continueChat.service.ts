@@ -131,7 +131,7 @@ export async function requestChatToApiChatBot(
 
 	try {
 		const responseApi: ResponseMessageType = await axiosChatBot.post(
-			`/chatd/${details?.uuid}`,
+			`/chat/${details?.uuid}`,
 			{
 				history: [...history],
 				message: message,
