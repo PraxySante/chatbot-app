@@ -52,7 +52,6 @@ export default async function verifyAuthRedis(
 	next: NextFunction,
 ): Promise<void | Response> {
 	const { project, language, uuidSession } = req.body;
-	console.log("🚀 ~ verifyAuthRedis ~ uuidSession:", uuidSession);
 	const { ip } = req;
 
 	if (!ip) {
@@ -89,18 +88,15 @@ export default async function verifyAuthRedis(
 			language,
 			uuidSession,
 		);
-		console.log("🚀 ~ verifyAuthRedis ~ details:", typeof details);
 
 		if (status !== SUCCESS_OK) {
 			return res.status(status).json(details);
 		}
 
 		const cookieUuidSession = details as string;
-		console.log("🚀 ~ verifyAuthRedis ~ cookieUuidSession:", cookieUuidSession);
 
 		if (cookieUuidSession) {
 			const { status, details } = await startChatApiBot(ip, cookieUuidSession);
-			console.log("🚀 ~ verifyAuthRedis ~ details:", details);
 			return res
 				.cookie("sessionId", cookieUuidSession, {
 					httpOnly: true,

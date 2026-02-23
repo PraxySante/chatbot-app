@@ -7,17 +7,18 @@ import {
 	FAILURE_MESSAGE,
 	SUCCESS_OK,
 } from "../../constant/constant";
-import {
-	getKeyRedis,
-	updateKeyRedis,
-} from "../../datamapper/redis.datamapper";
+import { getKeyRedis, updateKeyRedis } from "../../datamapper/redis.datamapper";
 import {
 	MessageType,
 	ResponseFailureType,
 	ResponseSuccessType,
 } from "../../types/chatbot.type";
-import { CallBotDirectusAttributes, ConversationDirectusAttributes } from "../../types/directus.type";
+import {
+	CallBotDirectusAttributes,
+	ConversationDirectusAttributes,
+} from "../../types/directus.type";
 import { ResponseKeyRedisType } from "../../types/redis.type";
+import saveError from "../ChatBot/saveError.service";
 import { createConversationDirectus } from "../Directus/create.service";
 
 /**
@@ -121,6 +122,11 @@ export async function saveConversaionCallBotToDirectus(
 				status: responseDirectus.status,
 				details: responseDirectus.details,
 			});
+			return {
+				status: ERROR_SERVER,
+				message: FAILURE_MESSAGE,
+				details: ERROR_DATABASE_MESSAGE,
+			};
 		}
 
 		if ("id" in responseDirectus) {
@@ -131,19 +137,19 @@ export async function saveConversaionCallBotToDirectus(
 			);
 		}
 
-		if ("details" in responseDirectus) {
-			console.error({
-				status: responseDirectus.status,
-				details: responseDirectus.details,
-			});
-		}
-
 		return {
 			status: SUCCESS_OK,
 			details: "Conversation Callbot is created",
 		};
 	} catch (error: any) {
 		console.error("saveConversation", error);
+		await saveError(
+			error,
+			details,
+			"Callbot",
+			"Callbot_conversation",
+			"saveConversation",
+		);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

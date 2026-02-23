@@ -63,7 +63,6 @@ export async function authAndStartChat(
 	const responseRedis: ResponseKeyRedisType | ResponseFailureType =
 		await getKeyRedis(`${ip}-${uuidSession}`);
 	// Message Error Typed - error message from Redis
-		console.log("🚀 ~ authAndStartChat ~ responseRedis:", responseRedis)
 	if (
 		responseRedis.status !== SUCCESS_OK &&
 		typeof responseRedis.details === "string"
@@ -74,7 +73,6 @@ export async function authAndStartChat(
 
 		// Message Error Typed
 		const { status, details } = responseApi;
-		console.log("🚀 ~ authAndStartChat ~ details:", details);
 
 		if (
 			responseApi.message === FAILURE_MESSAGE.toLowerCase() &&

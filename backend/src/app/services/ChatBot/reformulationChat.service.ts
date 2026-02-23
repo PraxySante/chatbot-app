@@ -14,6 +14,7 @@ import {
 } from "../../types/chatbot.type";
 import { ResponseKeyRedisType } from "../../types/redis.type";
 import { axiosChatBot } from "./axiosChatBot.service";
+import saveError from "./saveError.service";
 
 /** 
 	 * Request axios reformulate conversation API-chatbot
@@ -94,6 +95,13 @@ export async function reformulationChatToApiChatBot(
 		};
 	} catch (error: any) {
 		console.error("reformulationChat", error);
+		await saveError(
+			error,
+			details,
+			"Chatbot_web",
+			"Chatbot_conversation",
+			"reformulationChat",
+		);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

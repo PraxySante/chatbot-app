@@ -1,4 +1,5 @@
 import { MessageType } from "./chatbot.type";
+import { KeyRedisType } from "./redis.type";
 
 export type CreateConversationDirectusAttributes = {
 	Name: string;
@@ -33,4 +34,25 @@ export type CallBotDirectusAttributes = {
 	Last_name_patient: string;
 	Date_of_birth: string;
 	Historic: MessageType[];
+};
+
+export type ResponseErrorAttributes = {
+	status: string;
+	statusText: string;
+};
+
+export type MessageErrorAttributes = {
+	baseURL: string;
+	url: string;
+	method: string;
+	data: string;
+	response: ResponseErrorAttributes;
+	user: KeyRedisType;
+};
+
+export type ErrorDirectusAttributes = {
+	From_app: string;
+	From_section: string;
+	Message_error: MessageErrorAttributes;
+	Action: string;
 };

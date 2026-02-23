@@ -1,11 +1,16 @@
 import { RequestHandler } from "express";
+import {
+	ERROR_NOT_AUTHENTIFIED,
+	ERROR_NOT_AUTHENTIFIED_MESSSAGE,
+	FAILURE_INVALID_CREDENTIALS,
+} from "../constant/constant";
 
 const swaggerAuth: RequestHandler = (req, res, next) => {
 	const auth = req.headers.authorization;
 
 	if (!auth || !auth.startsWith("Basic ")) {
 		res.setHeader("WWW-Authenticate", 'Basic realm="Swagger"');
-		res.status(401).send("Authentication required.");
+		res.status(ERROR_NOT_AUTHENTIFIED).send(ERROR_NOT_AUTHENTIFIED_MESSSAGE);
 		return;
 	}
 
@@ -24,7 +29,7 @@ const swaggerAuth: RequestHandler = (req, res, next) => {
 	}
 
 	res.setHeader("WWW-Authenticate", 'Basic realm="Swagger"');
-	res.status(401).send("Invalid credentials.");
+	res.status(ERROR_NOT_AUTHENTIFIED).send(FAILURE_INVALID_CREDENTIALS);
 };
 
 export default swaggerAuth;

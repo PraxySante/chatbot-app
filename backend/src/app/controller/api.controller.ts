@@ -76,9 +76,7 @@ export default {
 			language,
 			uuidSession,
 		);
-		console.log("🚀 ~ status:", status);
 
-		console.log("🚀 ~ process.env.NODE_ENV :", process.env.NODE_ENV);
 		return res
 			.cookie("sessionId", details, {
 				httpOnly: true,
@@ -292,6 +290,37 @@ export default {
 		return res.status(status).send(details);
 	},
 
+	/**
+	 * Get document from conversation chatbot-user
+	 * 
+	 * @param {Request} req - Object contains data :
+	 * - **IP du client** (`req.ip`)
+	 * - **Body** (`req.body`):
+	 *   - `project`: Company name
+	 *   - `language`: Language selected
+	 *   - `uuidSession`: sessionId from cookie
+	 *   - `urlDocument`: url document api LLM
+	 * @example
+	 * Requête POST avec un body JSON :
+	 * { projet: "Praxy IA", language: "fr", uuidSession:'erzr-erzr-zer" }
+	 * @param {Response} res - Return response failed or success
+	 * @param {NextFunction} _ - Next not used
+	 * @returns {Promise<Response>} - Return response JSON :
+	 * - **details**
+	 * - **status**
+	 * @exemple
+	 * Response 200 - Success 
+	 * {
+	 * 
+	 * }
+	 * @throws {400} - Missing ip in request headers
+	 * @example
+	 * {
+	 * message: "Failure",
+	 * details: "Missing ip in request headers.",
+	 * }
+	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
+	 */
 	async getDocumentPdf(req: Request, res: Response, _: NextFunction) {
 		const { ip } = req;
 		const { uuidSession, urlDocument } = req.body;
@@ -315,6 +344,37 @@ export default {
 		return res.status(status).send(details);
 	},
 
+		/**
+	 * Get document from conversation chatbot-user
+	 * 
+	 * @param {Request} req - Object contains data :
+	 * - **IP du client** (`req.ip`)
+	 * - **Body** (`req.body`):
+	 *   - `project`: Company name
+	 *   - `language`: Language selected
+	 *   - `uuidSession`: sessionId from cookie
+	 *   - `urlDocument`: url document api LLM
+	 * @example
+	 * Requête POST avec un body JSON :
+	 * { projet: "Praxy IA", language: "fr", uuidSession:'erzr-erzr-zer" }
+	 * @param {Response} res - Return response failed or success
+	 * @param {NextFunction} _ - Next not used
+	 * @returns {Promise<Response>} - Return response JSON :
+	 * - **details**
+	 * - **status**
+	 * @exemple
+	 * Response 200 - Success 
+	 * {
+	 * 
+	 * }
+	 * @throws {400} - Missing ip in request headers
+	 * @example
+	 * {
+	 * message: "Failure",
+	 * details: "Missing ip in request headers.",
+	 * }
+	 * @throws {500} - Internal Server Error - catched by ControllerWrapper
+	 */
 	async requestTranscribeAudio(
 		req: Request,
 		res: Response,
@@ -370,50 +430,6 @@ export default {
 				details: ERROR_SERVER_MESSAGE,
 			});
 		}
-	},
-
-	async saveCallBotConversation(req: Request, res: Response, _: NextFunction) {
-		const {
-			history,
-			uuidSession,
-			statut,
-			firstNameDoctor,
-			lastNameDoctor,
-			callingNumber,
-			dateOfBirth,
-			lastNamePatient,
-			firstNamePatient,
-		} = req.body;
-
-		const { ip } = req;
-		if (!ip) {
-			return res.status(ERROR_BAD_REQUEST).json({
-				message: FAILURE_MESSAGE,
-				details: FAILURE_MISSING_IP_HEADERS,
-			});
-		}
-
-		const response: ResponseFailureType | ResponseSuccessType =
-			await saveConversaionCallBotToDirectus(
-				ip,
-				history,
-				uuidSession,
-				statut,
-				firstNameDoctor,
-				lastNameDoctor,
-				callingNumber,
-				dateOfBirth,
-				lastNamePatient,
-				firstNamePatient,
-			);
-
-		if ("sources" in response) {
-			return res
-				.status(response.status)
-				.json({ details: response.details, sources: response.sources });
-		}
-
-		return res.status(response.status).json(response.details);
 	},
 
 	async restartChat(

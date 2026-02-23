@@ -18,6 +18,10 @@ export const FAILURE_MISSING_UUID_SESSION =
 export const FAILURE_MISSING_URL_DOCUMENT =
 	"Missing url document in request headers.";
 export const FAILURE_MISSING_LANGUAGE = "Missing language in request headers.";
+export const FAILURE_MISSING_CLIENDID = "Missing credentials"
+export const FAILURE_MISSING_APIKEY = "Invalid credentials"
+export const FAILURE_INVALID_CREDENTIALS = "Invalid credentials"
+
 
 export const FAILURE_STORED_CACHE = "Stored cache not found for ip";
 export const FAILURE_TOKEN_EXPIRED = "Token expired";

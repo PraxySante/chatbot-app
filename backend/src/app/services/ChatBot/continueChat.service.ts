@@ -23,6 +23,7 @@ import { ResponseKeyRedisType } from "../../types/redis.type";
 import { createConversationDirectus } from "../Directus/create.service";
 import { updateConversationDirectus } from "../Directus/update.service";
 import { axiosChatBot } from "./axiosChatBot.service";
+import saveError from "./saveError.service";
 
 /**
 	 * Request axios continue conversation API-chatbot
@@ -130,7 +131,7 @@ export async function requestChatToApiChatBot(
 
 	try {
 		const responseApi: ResponseMessageType = await axiosChatBot.post(
-			`/chat/${details?.uuid}`,
+			`/chatd/${details?.uuid}`,
 			{
 				history: [...history],
 				message: message,
@@ -183,6 +184,13 @@ export async function requestChatToApiChatBot(
 		};
 	} catch (error: any) {
 		console.error("requestChatToApiChatBot", error);
+		await saveError(
+			error,
+			details,
+			"Chatbot_web",
+			"Chatbot_conversation",
+			"requestChatToApiChatBot",
+		);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

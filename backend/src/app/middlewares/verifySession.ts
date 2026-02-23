@@ -13,7 +13,6 @@ export default async function verifySession(
 ): Promise<void | Response> {
 	try {
 		const uuidSession = req.signedCookies.sessionId;
-		console.log("🚀 ~ verifySession ~ uuidSession:", uuidSession);
 
 		if (!uuidSession) {
 			return res.status(ERROR_NOT_AUTHENTIFIED).json({
@@ -23,7 +22,6 @@ export default async function verifySession(
 		}
 
 		const session = await getKeyRedis(`${req.ip}-${uuidSession}`);
-		console.log("🚀 ~ verifySession ~ session:", session);
 
 		if (session.status !== 200) {
 			return res.status(ERROR_NOT_AUTHENTIFIED).json({

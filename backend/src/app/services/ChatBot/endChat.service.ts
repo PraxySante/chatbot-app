@@ -13,6 +13,7 @@ import {
 } from "../../types/chatbot.type";
 import { ResponseKeyRedisType } from "../../types/redis.type";
 import { axiosChatBot } from "./axiosChatBot.service";
+import saveError from "./saveError.service";
 
 /**
  * Request axios Ending conversation Api-Chatbot
@@ -74,6 +75,13 @@ export async function endChatApiBot(
 		return { status: status, details: data.message };
 	} catch (error: any) {
 		console.error("endChat", error);
+		await saveError(
+			error,
+			details,
+			"Chatbot_web",
+			"Chatbot_conversation",
+			"endChat",
+		);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,
