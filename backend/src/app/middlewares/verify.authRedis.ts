@@ -77,7 +77,6 @@ export default async function verifyAuthRedis(
 		console.log(RESTART);
 		const uuidSession = req.signedCookies.sessionId;
 
-
 		if (uuidSession) {
 			await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
 			await deleteKeyRedis(`${ip}-${uuidSession}`);
@@ -117,6 +116,11 @@ export default async function verifyAuthRedis(
 			await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
 			await deleteKeyRedis(`${ip}-${uuidSession}`);
 			return res
+				.clearCookie("sessionId", {
+					httpOnly: true,
+					secure: true,
+					sameSite: "none",
+				})
 				.status(ERROR_NOT_AUTHENTIFIED)
 				.json(ERROR_NOT_AUTHENTIFIED_MESSSAGE);
 		}
@@ -126,9 +130,42 @@ export default async function verifyAuthRedis(
 		if (project !== details?.project) {
 			await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
 			await deleteKeyRedis(`${ip}-${uuidSession}`);
-			await authAndStartChat(ip, project, language, uuidSession);
-			const { status, details } = await startChatApiBot(ip, uuidSession);
-			return res.status(status).send(details);
+			const { status, details } = await authAndStartChat(
+				ip,
+				project,
+				language,
+				uuidSession,
+			);
+
+			if (status !== SUCCESS_OK) {
+				return res
+					.clearCookie("sessionId", {
+						httpOnly: true,
+						secure: true,
+						sameSite: "none",
+					})
+					.status(status)
+					.json(details);
+			}
+
+			const cookieUuidSession = details as string;
+
+			if (cookieUuidSession) {
+				const { status, details } = await startChatApiBot(
+					ip,
+					cookieUuidSession,
+				);
+				return res
+					.cookie("sessionId", cookieUuidSession, {
+						httpOnly: true,
+						secure: true,
+						sameSite: "none",
+						signed: true,
+						maxAge: SESSION_TTL_SECONDS * 1000,
+					})
+					.status(status)
+					.send(details);
+			}
 		}
 	}
 	next();
