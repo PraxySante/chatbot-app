@@ -18,14 +18,9 @@ app.use(
 	cors({
 		origin: function (origin, callback) {
 			if (!origin) {
-				console.log("Not allowed by origin : ", origin);
-				if (String(process.env.NODE_ENV) === "dev") {
-					return callback(null, true);
-				} else {
-					return callback(new Error("Not allowed by origin"));
-				}
+				return callback(null, true);
 			}
-			if (origin && allowedOrigins && allowedOrigins.includes(origin)) {
+			if (allowedOrigins && allowedOrigins.includes(origin)) {
 				return callback(null, origin);
 			} else {
 				console.log("Not allowed by CORS, origin", origin);
