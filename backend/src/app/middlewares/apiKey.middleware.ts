@@ -13,15 +13,15 @@ const clients: any = {
 	},
 	HFAR_PROD: {
 		project: "HFAR",
-		apiKey: String(process.env.CLIENT_A_KEY),
+		apiKey: String(process.env.API_KEY_PROD_HFAR),
 	},
 	IRIDIS_DEV: {
 		project: "IRIDIS",
-		apiKey: String(process.env.API_KEY_DEV_HFAR),
+		apiKey: String(process.env.API_KEY_DEV_IRIDIS),
 	},
 	IRIDIS_PROD: {
 		project: "IRIDIS",
-		apiKey: String(process.env.CLIENT_A_KEY),
+		apiKey: String(process.env.API_KEY_PROD_IRIDIS),
 	},
 };
 
