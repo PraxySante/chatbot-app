@@ -1,6 +1,6 @@
 export const SESSION_TTL_SECONDS = 60 * 60 * 2;
 export const KEY_EXIST = 1;
-export const MAX_REQUEST_PER_MINUTE = 8;
+export const MAX_REQUEST_PER_MINUTE = 12;
 export const ONE_MINUTE = 60;
 
 export const MILLISECONDS = 1000;
