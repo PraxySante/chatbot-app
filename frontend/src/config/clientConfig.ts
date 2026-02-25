@@ -427,7 +427,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
   },
   'cms.praxysante.fr': {
     host: import.meta.env.VITE_HOST_CMS,
-    name: 'Chat bot CMS',
+    name: 'Chat bot de la clinique CMS',
     project: import.meta.env.VITE_PROJECT_CMS,
     logo: './bot-test.png',
     title: 'CMS',
