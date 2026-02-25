@@ -8,17 +8,14 @@ See below all chabots app deployed. Chatbot app is a multi-domain application.
 | --------------- | ---------------------------------------------------- | ------------------------------------------------- |
 | **AHP**         | [AHP](https://ahp.praxysante.fr/dev)                 | [AHP](https://ahp.praxysante.fr/)                 |
 | **CCIB**        | [CCIB](https://ccib.praxy.ai/dev)                    | [CCIB](https://ccib.praxy.ai/)                    |
-| **CQFD**      | [DRAJES](https://cqfd.praxysante.fr/dev)      | [DRAJES](https://cqfd.praxysante.fr/)      |
+| **CMS**      | [CMS](https://cms.praxysante.fr/dev)      | [CMS](https://cms.praxysante.fr/)      |
 | **DA** | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/dev) | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/) |
 | **ENNOV**       | [ENNOV](https://ennov.praxysante.fr/dev)             | [ENNOV](https://ennov.praxysante.fr/)             |
 | **FOCH**        | [FOCH](https://chatbotfoch.praxysante.fr/dev)        | [FOCH](https://chatbotfoch.praxysante.fr/)        |
-| **HFAR**      | [DRAJES](https://hfar.praxysante.fr/dev)      | [DRAJES](https://hfar.praxysante.fr/)      |
+| **HFAR**      | [HFAR](https://hfar.praxysante.fr/dev)      | [HFAR](https://hfar.praxysante.fr/)      |
 | **HPSJ**        | [HPSJ](https://hpsj.praxysante.fr/dev)               | [HPSJ](https://hpsj.praxysante.fr/)               |
+| **CENTRE-IRIDIS**      | [IRIDIS](https://centre-iridis.praxysante.fr/dev)      | [IRIDIS](https://centre-iridis.praxysante.fr/)      |
 | **MCJR** | [MCJR](http://www.montecarlojointrepair.praxysante.fr/dev) | [MCJR](http://www.montecarlojointrepair.praxysante.fr/) |
-
-
-
-
 
 ## Plateforme chatbot – Praxysanté
 
