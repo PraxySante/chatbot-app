@@ -25,7 +25,6 @@ import {
 import axios from "axios";
 import { transcribeAudioChatBot } from "../services/ChatBot/transcribeAudioChatBot.service";
 import { getDocument } from "../services/ChatBot/getDocument.service";
-import { saveConversaionCallBotToDirectus } from "../services/CallBot/saveConversation.service";
 
 export default {
 	/**

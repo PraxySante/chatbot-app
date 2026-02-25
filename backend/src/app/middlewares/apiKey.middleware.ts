@@ -8,9 +8,19 @@ import {
 
 const clients: any = {
 	HFAR_DEV: {
+		project: "HFAR",
 		apiKey: String(process.env.API_KEY_DEV_HFAR),
 	},
 	HFAR_PROD: {
+		project: "HFAR",
+		apiKey: String(process.env.CLIENT_A_KEY),
+	},
+	IRIDIS_DEV: {
+		project: "IRIDIS",
+		apiKey: String(process.env.API_KEY_DEV_HFAR),
+	},
+	IRIDIS_PROD: {
+		project: "IRIDIS",
 		apiKey: String(process.env.CLIENT_A_KEY),
 	},
 };
@@ -20,6 +30,7 @@ export default function apiKeyMiddleware(
 	res: Response,
 	next: NextFunction,
 ) {
+	const { project } = req.body;
 	const clientId = String(req.headers["x-client-id"]);
 	const apiKey = String(req.headers["x-api-key"]);
 
@@ -32,7 +43,7 @@ export default function apiKeyMiddleware(
 
 	const client: any = clients[clientId];
 
-	if (!client || client.apiKey !== apiKey) {
+	if (!client || client.apiKey !== apiKey || client?.project !== project) {
 		return res.status(ERROR_NOT_AUTHENTIFIED).json({
 			message: FAILURE_MESSAGE,
 			details: FAILURE_INVALID_CREDENTIALS,

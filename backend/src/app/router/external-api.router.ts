@@ -84,3 +84,46 @@ router.post(
 	controllerWrapper(externalApiController.requestAuthTokenExternalApi),
 	controllerWrapper(externalApiController.saveCallBotConversation),
 );
+
+/**
+ *  POST /api/save-call
+ * @summary Save chating during callbot
+ * @security ApiKeyAuth
+ * @tags Callbot
+ * @param {SaveCallBot} request.body.required
+ * @param {CallBot} request.headers.required
+ * @example request - application/json
+ * {
+ * "project": "Foch",
+ * "language": "fr",
+ * "question": "Pourriez-vous me donner les informations sur l'hopital ?"
+}
+ * @return {object} 200 - Sucess response - application/json
+ * @example response - 200 - example response
+ * {
+    "status": "200",
+    "details": {
+    "role": "assistant",
+    "content": "Je peux vous orienter vers la page \"Accès à l'hôpital\" sur le site web de l'Hôpital Foch, qui fournit des informations sur les modes de transport recommandés, l'accessibilité pour les personnes à mobilité réduite, les services de transport en commun et un outil d'orientation pour localiser les services au sein de l'hôpital. Vous pouvez consulter cette page : https://www.hopital-foch.com/patient-ou-visiteur/accès-à-l'hôpital/"
+}
+ * }
+ * @return {BadRequest} 400 - Bad request response - application/json
+ * @example response - 400 - example error response
+ * {
+ * "message": "Failure",
+ * "details": "Missing ip in request headers."
+ * }
+ * @return {ErrorResponse} 500 - Internal Server Error - application/json
+ * @example response - 500 - example error response
+ * {
+ *   "error": "Internal Server Error"
+ * }
+ */
+router.post(
+	"/question",
+	controllerWrapper(verifyOrigin),
+	controllerWrapper(apiKeyMiddleware),
+	controllerWrapper(externalApiController.requestAuthTokenExternalApi),
+	controllerWrapper(externalApiController.startChat),
+	controllerWrapper(externalApiController.requestQuestionFromCustomer),
+);
