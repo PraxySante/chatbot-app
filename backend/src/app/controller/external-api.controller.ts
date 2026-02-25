@@ -19,7 +19,7 @@ import { startChatApiBot } from "../services/ChatBot/startChat.service";
 export default {
 	/**
 	 * Request authentification to Auth0 Machine to Machine
-	 *
+	 * Specific auth for callbot logic
 	 * @param {Request} req - Object contains data :
 	 * - **IP du client** (`req.ip`)
 	 * - **Body** (`req.body`):

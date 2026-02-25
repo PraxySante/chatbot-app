@@ -21,6 +21,13 @@ export const router = Router();
  */
 
 /**
+ * @typedef {object} QuestionBot
+ * @property {string} project.required - CallBot project
+ * @property {string} language.required - CallBot language
+ * @property {string} question.required - CallBot question
+ */
+
+/**
  * @typedef {object} CallBot
  * @property {string} clientId.required - CallBot clientId
  * @property {string} apiKeay.required - CallBot apiKey
@@ -58,7 +65,7 @@ export const router = Router();
   "dateOfBirth": "19/02/1956",
   "lastNamePatient": "Michel",
   "firstNamePatient": "Martin"
-}
+ * }
  * @return {object} 200 - Sucess response - application/json
  * @example response - 200 - example response
  * {
@@ -86,11 +93,11 @@ router.post(
 );
 
 /**
- *  POST /api/save-call
+ *  POST /api/question
  * @summary Save chating during callbot
  * @security ApiKeyAuth
  * @tags Callbot
- * @param {SaveCallBot} request.body.required
+ * @param {QuestionBot} request.body.required
  * @param {CallBot} request.headers.required
  * @example request - application/json
  * {
