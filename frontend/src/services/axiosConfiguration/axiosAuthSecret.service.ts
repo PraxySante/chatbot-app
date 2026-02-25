@@ -38,9 +38,13 @@ switch (true) {
     project = import.meta.env.VITE_PROJECT_HFAR;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_HFAR;
     break;
-  case hostname.includes(import.meta.env.VITE_HOST_CQFD):
-    project = import.meta.env.VITE_PROJECT_CQFD;
-    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_CQFD;
+  case hostname.includes(import.meta.env.VITE_HOST_CMS):
+    project = import.meta.env.VITE_PROJECT_CMS;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_CMS;
+    break;
+  case hostname.includes(import.meta.env.VITE_HOST_IRIDIS):
+    project = import.meta.env.VITE_PROJECT_IRIDIS;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_IRIDIS;
     break;
   default:
     project = import.meta.env.VITE_PROJECT_DEV;

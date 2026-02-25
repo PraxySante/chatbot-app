@@ -425,12 +425,58 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
-  'cqfd.praxysante.fr': {
-    host: import.meta.env.VITE_HOST_CQFD,
-    name: 'Chat bot CQFD',
-    project: import.meta.env.VITE_PROJECT_CQFD,
+  'cms.praxysante.fr': {
+    host: import.meta.env.VITE_HOST_CMS,
+    name: 'Chat bot de la clinique CMS',
+    project: import.meta.env.VITE_PROJECT_CMS,
     logo: './bot-test.png',
-    title: "CQFD",
+    title: 'CMS',
+    languages: [
+      {
+        id: 'fr',
+        name: 'Français',
+        icon: '🇫🇷',
+      },
+    ],
+    modalMenu: [
+      {
+        id: 're-run',
+        name: 'Rerun',
+      },
+      {
+        id: 'settings',
+        name: 'Settings',
+      },
+      {
+        id: 'print',
+        name: 'Print',
+      },
+      {
+        id: 'record-screencast',
+        name: 'Record ad screencast',
+      },
+      {
+        id: 'about',
+        name: 'About',
+      },
+    ],
+    feedback: [
+      'feedback_exhaustivity',
+      'feedback_accuracy',
+      'feedback_hallucinations',
+    ],
+    authAccountOption: false,
+    sideBarOption: false,
+    menuParameterOption: false,
+    audioParameterOption: true,
+    RecaptchaOption: false,
+  },
+  'centre-iridis.praxysante.fr': {
+    host: import.meta.env.VITE_HOST_IRIDIS,
+    name: 'Chat bot du centre IRIDIS',
+    project: import.meta.env.VITE_PROJECT_IRIDIS,
+    logo: './bot-test.png',
+    title: 'IRIDIS',
     languages: [
       {
         id: 'fr',
