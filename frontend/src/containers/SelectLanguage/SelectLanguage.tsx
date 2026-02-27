@@ -39,6 +39,7 @@ export default function SelectLanguage() {
     }
     setSelectLanguage(selectedUserLanguage);
     selectedRestart(selectedUserLanguage);
+    setIsOpenModalLanguage(!isOpenModalLanguage);
   }
 
   function renderIconButtonLanguage() {
@@ -47,10 +48,12 @@ export default function SelectLanguage() {
 
   return (
     <>
-      <div className="flex right-10 w-fit gap-2 px-2 border border-solid border-slate-200 rounded-lg bg-white">
+      <div
+        className="flex right-10 w-fit gap-2 px-2 border border-solid border-slate-200 rounded-lg bg-white"
+        onClick={openCloseModalLanguage}
+      >
         <IconButton
           icon={!isOpenModalLanguage ? icons.showText : icons.reduceText}
-          onClick={openCloseModalLanguage}
         />
         {renderIconButtonLanguage()}
       </div>
@@ -61,11 +64,10 @@ export default function SelectLanguage() {
               return (
                 <div
                   key={index}
-                  className="flex flex-row items-center gap-2"
-                  onClick={openCloseModalLanguage}
+                  className="flex flex-row items-center gap-2 cursor-pointer"
+                  onClick={() => selectedItem(language.id)}
                 >
                   <IconButton
-                    onClick={() => selectedItem(language.id)}
                     icon={icons[(language?.id as 'en') || 'ar']}
                   />
                   <Description

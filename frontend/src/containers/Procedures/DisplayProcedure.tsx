@@ -13,6 +13,7 @@ import {
   DOC_TYPE_VIDEO,
 } from '../../constants/chat.constants';
 import { getDocumentFromApi } from '../../services/ChatBot/getDocumentFromApi.service';
+import { useClient } from '../../hooks/ClientProvider';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
@@ -21,6 +22,7 @@ export default function DisplayProcedures({
 }: DisplayProcedureType) {
   const { userLanguage, selectedLanguage } = useLanguage();
   const { procedures } = useChat();
+  const { configClient } = useClient();
 
   const documents = procedures;
 
@@ -51,6 +53,7 @@ export default function DisplayProcedures({
             </>
           );
         case DOC_TYPE_DOC:
+          if (!configClient?.displayDocument) return null;
           return (
             <>
               {userLanguage && (
