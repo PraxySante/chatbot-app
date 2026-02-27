@@ -3,13 +3,14 @@ import { useChat } from '../../hooks/ChatProvider';
 import Link from '../../components/Link/Link';
 import { ITabProceduresAttributes } from '../../types/procedures/procedures.interface';
 import icons from '../../constants/icons';
+import { useClient } from '../../hooks/ClientProvider';
 
 export default function TabProcedures({
   selectedProcedure,
   SetSelectedProcedure,
 }: ITabProceduresAttributes) {
   const { procedures } = useChat();
-
+  const { configClient } = useClient();
   const displayedProcedure = procedures;
 
   useEffect(() => {
@@ -18,25 +19,29 @@ export default function TabProcedures({
 
   function renderingResultsProcedures() {
     return displayedProcedure.map((procedure: any, index: number) => {
-      return (
-        <Fragment key={index}>
-          <li className="me-2 w-full">
-            <Link
-              className={
-                selectedProcedure === index
-                  ? 'tab-procedure_selected'
-                  : 'tab-procedure'
-              }
-              id={`tap-procedure-${index}`}
-              name={''}
-              onClick={() => SetSelectedProcedure(index)}
-            >
-              {procedure.content}
-              {procedure.doc_type === 'url' ? icons.chain : icons.file}
-            </Link>
-          </li>
-        </Fragment>
-      );
+      if (procedure?.doc_type === 'doc' && !configClient?.displayDocument)
+        return null;
+      {
+        return (
+          <Fragment key={index}>
+            <li className="me-2 w-full">
+              <Link
+                className={
+                  selectedProcedure === index
+                    ? 'tab-procedure_selected'
+                    : 'tab-procedure'
+                }
+                id={`tap-procedure-${index}`}
+                name={''}
+                onClick={() => SetSelectedProcedure(index)}
+              >
+                {procedure.content}
+                {procedure.doc_type === 'url' ? icons.chain : icons.file}
+              </Link>
+            </li>
+          </Fragment>
+        );
+      }
     });
   }
 

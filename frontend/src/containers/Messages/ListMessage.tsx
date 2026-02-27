@@ -17,6 +17,7 @@ import {
 import Title from '../../components/Text/Title';
 import Description from '../../components/Text/Description';
 import { useLanguage } from '../../hooks/UseLanguage';
+import { useClient } from '../../hooks/ClientProvider';
 
 export default function ListMessage({
   message,
@@ -24,6 +25,7 @@ export default function ListMessage({
 }: ListMessageType) {
   const { stockMessageUser, whoIsWritten } = useChat();
   const { userLanguage } = useLanguage();
+  const { configClient } = useClient();
 
   useEffect(() => {
     renderingMessage();
@@ -51,6 +53,12 @@ export default function ListMessage({
               ></Button>
             </span>
           );
+        }
+        if (
+          message.doc_type === DOC_TYPE_DOC &&
+          !configClient?.displayDocument
+        ) {
+          return;
         }
         if (message.doc_type) {
           return (

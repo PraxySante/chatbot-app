@@ -14,6 +14,7 @@ export type ClientConfig = {
     name: string;
   }[];
   feedback: string[];
+  displayDocument: boolean;
   authAccountOption: boolean;
   sideBarOption: boolean;
   menuParameterOption: boolean;
@@ -67,6 +68,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: true,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: false,
@@ -118,6 +120,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: true,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: false,
@@ -169,6 +172,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: true,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: false,
@@ -220,6 +224,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: true,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: false,
@@ -271,6 +276,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: true,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: true,
@@ -322,6 +328,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: true,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: false,
@@ -336,14 +343,14 @@ export const clientsConfig: Record<string, ClientConfig> = {
     title: 'MCJR',
     languages: [
       {
-        id: 'fr',
-        name: 'Français',
-        icon: '🇫🇷',
-      },
-      {
         id: 'en',
         name: 'English',
         icon: '🇬🇧',
+      },
+      {
+        id: 'fr',
+        name: 'Français',
+        icon: '🇫🇷',
       },
     ],
     modalMenu: [
@@ -373,6 +380,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: false,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: true,
@@ -419,6 +427,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: true,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: false,
@@ -465,6 +474,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: true,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: false,
@@ -511,6 +521,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: true,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: false,
@@ -562,6 +573,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
+    displayDocument: true,
     authAccountOption: false,
     sideBarOption: false,
     menuParameterOption: true,
