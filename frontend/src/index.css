@@ -357,7 +357,7 @@ input[type='text'] {
 }
 
 .container-message_transcribed {
-  @apply rounded-xl border border-solid border-secondary h-24 w-full bg-white pl-2 pr-9 md:pr-24 py-2 overflow-y-auto;
+  @apply rounded-xl border border-solid border-secondary h-24 w-full bg-white pl-2 pr-9 py-2 overflow-y-auto;
 }
 
 .container-icons-actions {
