@@ -4,18 +4,19 @@
 See below all chabots app deployed. Chatbot app is a multi-domain application.
 ```
 
-| 🧩 PROJECT      | ⚙️ DEV                                               | 🚀 PROD                                           |
-| --------------- | ---------------------------------------------------- | ------------------------------------------------- |
-| **AHP**         | [AHP](https://ahp.praxysante.fr/dev)                 | [AHP](https://ahp.praxysante.fr/)                 |
-| **CCIB**        | [CCIB](https://ccib.praxy.ai/dev)                    | [CCIB](https://ccib.praxy.ai/)                    |
-| **CMS**      | [CMS](https://cms.praxysante.fr/dev)      | [CMS](https://cms.praxysante.fr/)      |
-| **DA** | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/dev) | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/) |
-| **ENNOV**       | [ENNOV](https://ennov.praxysante.fr/dev)             | [ENNOV](https://ennov.praxysante.fr/)             |
-| **FOCH**        | [FOCH](https://chatbotfoch.praxysante.fr/dev)        | [FOCH](https://chatbotfoch.praxysante.fr/)        |
-| **HFAR**      | [HFAR](https://hfar.praxysante.fr/dev)      | [HFAR](https://hfar.praxysante.fr/)      |
-| **HPSJ**        | [HPSJ](https://hpsj.praxysante.fr/dev)               | [HPSJ](https://hpsj.praxysante.fr/)               |
-| **CENTRE-IRIDIS**      | [IRIDIS](https://centre-iridis.praxysante.fr/dev)      | [IRIDIS](https://centre-iridis.praxysante.fr/)      |
-| **MCJR** | [MCJR](http://www.montecarlojointrepair.praxysante.fr/dev) | [MCJR](http://www.montecarlojointrepair.praxysante.fr/) |
+| 🧩 PROJECT             | ⚙️ DEV                                                             | 🚀 PROD                                                         |
+| ---------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------- |
+| **AHP**                | [AHP](https://ahp.praxysante.fr/dev)                               | [AHP](https://ahp.praxysante.fr/)                               |
+| **CCIB**               | [CCIB](https://ccib.praxy.ai/dev)                                  | [CCIB](https://ccib.praxy.ai/)                                  |
+| **CENTRE-IRIDIS**      | [IRIDIS](https://centre-iridis.praxysante.fr/dev)                  | [IRIDIS](https://centre-iridis.praxysante.fr/)                  |
+| **CMS**                | [CMS](https://cms.praxysante.fr/dev)                               | [CMS](https://cms.praxysante.fr/)                               |
+| **DA**                 | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/dev)             | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/)             |
+| **DERMOMEDICALCENTER** | [DERMOMEDICALCENTER](https://dermomedicalcenter.praxysante.fr/dev) | [DERMOMEDICALCENTER](https://dermomedicalcenter.praxysante.fr/) |
+| **ENNOV**              | [ENNOV](https://ennov.praxysante.fr/dev)                           | [ENNOV](https://ennov.praxysante.fr/)                           |
+| **FOCH**               | [FOCH](https://chatbotfoch.praxysante.fr/dev)                      | [FOCH](https://chatbotfoch.praxysante.fr/)                      |
+| **HFAR**               | [HFAR](https://hfar.praxysante.fr/dev)                             | [HFAR](https://hfar.praxysante.fr/)                             |
+| **HPSJ**               | [HPSJ](https://hpsj.praxysante.fr/dev)                             | [HPSJ](https://hpsj.praxysante.fr/)                             |
+| **MCJR**               | [MCJR](http://www.montecarlojointrepair.praxysante.fr/dev)         | [MCJR](http://www.montecarlojointrepair.praxysante.fr/)         |
 
 ## Plateforme chatbot – Praxysanté
 
@@ -104,21 +105,22 @@ Ajouter un clientConfig selon le fichier `clientConfig`
 
 Ajouter le css styles dans `index.css`
 
+le .theme-xxx corresponds à VITE_PROJECT_XXX en minuscule. Voici un exemple :
+
 ```css
 .theme-foch {
-  --color-primary: 150,190,50;
-  --color-secondary: 0,125,190;
-  --color-text: 100,100,0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
-  --color-bg: 255, 255, 255;
-  --color-success: 153, 204, 51;
-  --color-warning: 255, 204, 0;
-  --color-error: 255, 153, 102;
-  --color-information: 200, 231, 255;
+	--color-primary: 150, 190, 50;
+	--color-secondary: 0, 125, 190;
+	--color-text: 100, 100, 0;
+	--color-bot: 255, 188, 73;
+	--color-user: 255, 107, 108;
+	--color-bg: 255, 255, 255;
+	--color-success: 153, 204, 51;
+	--color-warning: 255, 204, 0;
+	--color-error: 255, 153, 102;
+	--color-information: 200, 231, 255;
 }
 ```
-
 
 Ajouter le nouveau projet dans : `axiosAuthSecret`
 

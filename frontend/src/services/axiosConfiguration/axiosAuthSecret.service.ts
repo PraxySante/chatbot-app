@@ -46,6 +46,10 @@ switch (true) {
     project = import.meta.env.VITE_PROJECT_IRIDIS;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_IRIDIS;
     break;
+  case hostname.includes(import.meta.env.VITE_HOST_DERMO):
+    project = import.meta.env.VITE_PROJECT_DERMO;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DERMO;
+    break;
   default:
     project = import.meta.env.VITE_PROJECT_DEV;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DEV;
