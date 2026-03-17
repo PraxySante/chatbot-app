@@ -533,7 +533,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
     name: 'Chat bot du centre DermoMedicalCenter',
     project: import.meta.env.VITE_PROJECT_DERMO,
     logo: './bot-test.png',
-    title: 'DermoMedicalCenrer',
+    title: 'DermoMedicalCenter',
     languages: [
       {
         id: 'fr',
