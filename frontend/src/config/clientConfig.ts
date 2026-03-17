@@ -528,6 +528,53 @@ export const clientsConfig: Record<string, ClientConfig> = {
     audioParameterOption: true,
     RecaptchaOption: false,
   },
+  'dermomedicalcenter.praxysante.fr': {
+    host: import.meta.env.VITE_HOST_DERMO,
+    name: 'Chat bot du centre DermoMedicalCenter',
+    project: import.meta.env.VITE_PROJECT_DERMO,
+    logo: './bot-test.png',
+    title: 'DermoMedicalCenrer',
+    languages: [
+      {
+        id: 'fr',
+        name: 'Français',
+        icon: '🇫🇷',
+      },
+    ],
+    modalMenu: [
+      {
+        id: 're-run',
+        name: 'Rerun',
+      },
+      {
+        id: 'settings',
+        name: 'Settings',
+      },
+      {
+        id: 'print',
+        name: 'Print',
+      },
+      {
+        id: 'record-screencast',
+        name: 'Record ad screencast',
+      },
+      {
+        id: 'about',
+        name: 'About',
+      },
+    ],
+    feedback: [
+      'feedback_exhaustivity',
+      'feedback_accuracy',
+      'feedback_hallucinations',
+    ],
+    displayDocument: true,
+    authAccountOption: false,
+    sideBarOption: false,
+    menuParameterOption: false,
+    audioParameterOption: true,
+    RecaptchaOption: false,
+  },
   localhost: {
     host: import.meta.env.VITE_HOST_DEV,
     name: `Chat bot test sur project ${import.meta.env.VITE_PROJECT_DEV}`,
