@@ -1,12 +1,7 @@
 import { useLanguage } from '../../hooks/UseLanguage';
 import { MessageAttributes } from '../../types/messages/messages.type';
 import { useChat } from '../../hooks/ChatProvider';
-import {
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import MessageLoading from '../Loading/MessageLoading';
 import Button from '../../components/Buttons/Button';
 import ListMessage from '../Messages/ListMessage';
@@ -17,15 +12,10 @@ import icons from '../../constants/icons';
 import HeaderChat from './HeaderChat';
 import FooterChat from './FooterChat';
 import Modal from '../Modal/Modal';
-import { IChatAttributes } from '../../types/chatbot/chatbot.interface';
 import { ROLE_ASSISTANT, ROLE_USER } from '../../constants/chat.constants';
+import './Chat.css';
 
-
-
-export default function Chat({
-  selectedPanel,
-  setSelectedPanel,
-}: IChatAttributes) {
+export default function Chat() {
   //Init Component
   //
   const { messages, reformulateChatConversation, isUserWritten, isBotWritten } =
@@ -56,7 +46,7 @@ export default function Chat({
   function renderingMessages() {
     return messages.map((message: MessageAttributes, index: number) => (
       <Fragment key={index}>
-        <ListMessage message={message} setSelectedPanel={setSelectedPanel} />
+        <ListMessage message={message} />
         {renderLoadingMessage(index, message.role)}
       </Fragment>
     ));
@@ -65,14 +55,16 @@ export default function Chat({
   function renderLoadingMessage(index: number, role: string) {
     return (
       <>
-        {index === messages.length - 1 && role === ROLE_USER && isBotWritten && (
-          <span className="flex flex-row justify-start">
-            <IconButton className={'icon icon-bot'} icon={icons.bot} />
-            <MessageLoading className="wrapper-bot" role={'assistant'} />
-          </span>
-        )}
+        {index === messages.length - 1 &&
+          role === ROLE_USER &&
+          isBotWritten && (
+            <span className="chat-room-containers_loading-bot">
+              <IconButton className={'icon icon-bot'} icon={icons.bot} />
+              <MessageLoading className="wrapper-bot" role={'assistant'} />
+            </span>
+          )}
         {index === messages.length - 1 && isUserWritten && (
-          <span className="flex flex-row justify-end">
+          <span className="chat-room-containers_loading-user">
             <MessageLoading className="wrapper-user" role={ROLE_USER} />
             <IconButton className={'icon icon-user'} icon={icons.user} />
           </span>
@@ -83,23 +75,26 @@ export default function Chat({
 
   function renderingModalFeedback() {
     const className = isOpenModalFeedback
-      ? 'flex flex-row overflow-y-auto overflow-x-hidden absolute z-50 justify-center items-center w-full h-3/4'
+      ? 'chatbot-room_containers-feedback'
       : 'hidden';
     return (
       <>
-        <div id="authentication-modal" aria-hidden="true" className={className}>
-          <Modal setIsOpenModalFeedback={setIsOpenModalFeedback} />
-        </div>
+        {isOpenModalFeedback ? (
+          <div
+            id="authentication-modal"
+            aria-label="modal feedback"
+            className={className}
+          >
+            <Modal setIsOpenModalFeedback={setIsOpenModalFeedback} />
+          </div>
+        ) : null}
       </>
     );
   }
 
   return (
     <section id="chat-room">
-      <HeaderChat
-        selectedPanel={selectedPanel}
-        setSelectedPanel={setSelectedPanel}
-      />
+      <HeaderChat />
       {/* List messages chat */}
       {renderingModalFeedback()}
 
@@ -117,7 +112,7 @@ export default function Chat({
                 content={userLanguage?.reformulate_button}
                 onClick={() => clickReformulateMessage()}
               />
-            <FeedbackLight setIsOpenModalFeedback={setIsOpenModalFeedback} />
+              <FeedbackLight setIsOpenModalFeedback={setIsOpenModalFeedback} />
             </span>
           )}
       </div>

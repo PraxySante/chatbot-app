@@ -1,0 +1,11 @@
+#menu-modal {
+  @apply absolute flex flex-col z-10 right-0 mt-10 rounded-lg shadow-xl bg-third p-2 w-52;
+}
+
+.list-menu-modal {
+  @apply flex flex-col w-full indent-2 mb-0;
+}
+
+.menu-modal-item {
+  @apply w-full list-none cursor-pointer hover:bg-user hover:w-full;
+}

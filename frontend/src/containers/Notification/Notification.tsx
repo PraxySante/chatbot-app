@@ -1,82 +1,73 @@
 import { useEffect } from 'react';
 import { useNotification } from '../../hooks/NotificationProvider';
+import IconButton from '../../components/Buttons/IconButton';
+import icons from '../../constants/icons';
 
 export default function Notification() {
-  const toast = {
-    id: 'toast-success',
-    icon: (
-      <svg
-        className="w-5 h-5"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-      >
-        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
-      </svg>
-    ),
-    iconClose: (
-      <svg
-        className="w-3 h-3"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 14 14"
-      >
-        <path
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-        />
-      </svg>
-    ),
+  const { messageNotification, isOpen, changeStatutNotification } =
+    useNotification();
+  console.log('🚀 ~ Notification ~ messageNotification:', messageNotification);
+
+  const notificationStyles = {
+    success: 'text-success bg-success',
+    error: 'text-error bg-error',
+    warning: 'text-warning bg-warning',
   };
 
-  const { messageNotification, isOpen, changeStatutNotification } =
-  useNotification();
+  useEffect(() => {
+    if (isOpen && messageNotification?.message) {
+      renderingNotification();
+      setTimeout(() => {
+        handleClose();
+      }, 2000);
+    }
+  }, [messageNotification?.message]);
 
-useEffect(() => {
-  if (isOpen) {
-    renderingNotification();
-    setTimeout(() => {
-      handleClose();
-    }, 2000);
+  function handleClose() {
+    changeStatutNotification(false);
   }
-}, [messageNotification]);
 
-function handleClose() {
-  changeStatutNotification(false);
-}
-
-function renderingNotification() {
-  return (
-    <>
-      <div
-        id={toast.id}
-        className="absolute mt-2 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-sm dark:text-gray-400 dark:bg-gray-800"
-        role="alert"
-      >
-        <div className="inline-flex items-center justify-center shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
-          {toast.icon}
-          <span className="sr-only">Check icon</span>
-        </div>
-        <div className="ms-3 text-sm font-normal">{messageNotification}</div>
-        <button
-          onClick={() => handleClose()}
-          type="button"
-          className="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
-          data-dismiss-target="#toast-success"
-          aria-label="Close"
+  function renderingNotification() {
+    return (
+      <>
+        <div
+          id={`toast-${messageNotification?.type}`}
+          className={`absolute mt-2 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-bg rounded-lg shadow-sm`}
+          role="alert"
         >
-          <span className="sr-only">Close</span>
-          {toast.iconClose}
-        </button>
-      </div>
-    </>
-  );
-}
+          <div
+            className={`inline-flex items-center justify-center shrink-0 w-8 h-8 ${notificationStyles[messageNotification?.type]} rounded-lg`}
+          >
+            <IconButton
+              type="button"
+              onClick={() => {}}
+              icon={icons[`${messageNotification?.type}`]}
+              title={`icon ${messageNotification?.type}`}
+            />
+            <span className="sr-only">Check icon</span>
+          </div>
+          <div className="ms-3 text-sm font-normal">
+            {messageNotification?.message}
+          </div>
+          <button
+            onClick={handleClose}
+            type="button"
+            className="ms-auto -mx-1.5 -my-1.5 bg-bg text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-primary hover:text-textHover inline-flex items-center justify-center h-8 w-8"
+            data-dismiss-target="#toast-success"
+            aria-label="Close"
+          >
+            <span className="sr-only">Close</span>
+            <IconButton
+              type="button"
+              onClick={handleClose}
+              icon={icons.iconClose}
+              title={'icon close'}
+            />
+          </button>
+        </div>
+      </>
+    );
+  }
 
-return <>{renderingNotification()}</>;
+  return <>{renderingNotification()}</>;
 }

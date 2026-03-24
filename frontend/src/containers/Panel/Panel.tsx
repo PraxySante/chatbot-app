@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Chat from '../Chat/Chat';
 import Procedures from '../Procedures/Procedures';
-import { selectedPanelAttributes } from '../../types/panel/panel.type';
-import { PANEL_CHAT, PANEL_PROCEDURE } from '../../constants/notifications.constants';
+import {
+  PANEL_CHAT,
+  PANEL_PROCEDURE,
+} from '../../constants/notifications.constants';
+import { useChat } from '../../hooks/ChatProvider';
 
 export default function Panel() {
-  const [selectedPanel, setSelectedPanel] = useState<selectedPanelAttributes>(PANEL_CHAT);
+  const { selectedPanel } = useChat();
 
   // Hook to render Panel according user selection
   useEffect(() => {
@@ -16,19 +19,9 @@ export default function Panel() {
   function renderPanel() {
     switch (selectedPanel) {
       case PANEL_CHAT:
-        return (
-          <Chat
-            selectedPanel={selectedPanel}
-            setSelectedPanel={setSelectedPanel}
-          />
-        );
+        return <Chat />;
       case PANEL_PROCEDURE:
-        return (
-          <Procedures
-            selectedPanel={selectedPanel}
-            setSelectedPanel={setSelectedPanel}
-          />
-        );
+        return <Procedures />;
       default:
         break;
     }

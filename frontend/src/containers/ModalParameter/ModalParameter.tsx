@@ -3,6 +3,7 @@ import useTranscription from '../../hooks/TranscriptionProvider';
 import ModalParameterHeader from './ModalParameterHeader';
 import Button from '../../components/Buttons/Button';
 import { useChat } from '../../hooks/ChatProvider';
+import './ModalParameter.css';
 
 export default function ModalParameter() {
   // Init component
@@ -14,6 +15,9 @@ export default function ModalParameter() {
     userMicrophone,
   } = useTranscription();
   const { uuidSession } = useChat();
+
+  const INIT_MICROPHONE =
+    'Avant de débuter une conversation vocale avec notre bot, veuillez sélectionner votre microphone.';
 
   function selectMicrophone(event: React.ChangeEvent<HTMLSelectElement>) {
     selectedMicrophone(event.target.value);
@@ -36,16 +40,12 @@ export default function ModalParameter() {
   function renderingSelectOptions() {
     return (
       <>
-        <label
-          htmlFor="microphones"
-          className="block text-sm font-medium text-black"
-        >
-          Avant de débuter une conversation vocale avec notre bot, veuillez
-          sélectionner votre microphone.
+        <label htmlFor="microphones" className="modal-parameter_label">
+          {INIT_MICROPHONE}
         </label>
         <select
           id="microphones"
-          className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          className="modal-parameter_select-micro"
           value={userMicrophone ? userMicrophone.label : ''}
           onChange={selectMicrophone}
         >

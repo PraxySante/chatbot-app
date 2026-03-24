@@ -40,7 +40,7 @@ export default function DisplayProcedures({
                 <Description
                   content={userLanguage?.chat_description_page}
                   tag={'p'}
-                  className={'text-black'}
+                  className={'text-text'}
                 />
               )}
               <Button
@@ -61,7 +61,7 @@ export default function DisplayProcedures({
                   <Description
                     content={userLanguage?.chat_description_document}
                     tag={'p'}
-                    className={'text-black'}
+                    className={'text-text'}
                   />
                   <Button
                     type={'button'}
@@ -83,7 +83,7 @@ export default function DisplayProcedures({
                   <Description
                     content={userLanguage?.chat_description_video}
                     tag={'p'}
-                    className={'text-black'}
+                    className={'text-text'}
                   />
 
                   <Video fileDocument={documents[selectedProcedure].content} />
@@ -103,7 +103,7 @@ export default function DisplayProcedures({
                   <Description
                     content={userLanguage?.procedure_not_yet}
                     tag={'p'}
-                    className={'text-black'}
+                    className={'text-text'}
                   />
                 </>
               ) : null}
@@ -117,9 +117,9 @@ export default function DisplayProcedures({
             <>
               <Image imgSource={'/images/no-data.jpg'} classname={'max-w-sm'} />
               <Description
-                content={userLanguage?.procedure_not_yet}
+                content={userLanguage && userLanguage?.procedure_not_yet}
                 tag={'p'}
-                className={'text-black'}
+                className={'text-text'}
               />
             </>
           ) : null}
@@ -149,11 +149,11 @@ export default function DisplayProcedures({
   return (
     <div className="h-full w-full flex flex-col">
       {userLanguage && (
-        <section className="flex flex-col justify-start items-center p-4 gap-4 border border-black outlined text-medium text-white rounded-lg  ">
+        <section className="flex flex-col justify-start items-center p-4 gap-4 rounded-xl">
           <Title
             content={userLanguage?.procedure_title}
             tag={'h3'}
-            className={'text-black'}
+            className={'text-text'}
           />
           {renderingProcedure()}
         </section>

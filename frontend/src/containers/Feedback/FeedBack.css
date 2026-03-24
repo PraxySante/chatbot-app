@@ -1,0 +1,3 @@
+.feedback-light {
+  @apply text-sm font-normal flex flex-row w-fit gap-2 items-center rounded-lg border border-solid border-secondary ml-1 py-1 px-2;
+}

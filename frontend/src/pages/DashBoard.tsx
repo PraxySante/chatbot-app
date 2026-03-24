@@ -12,6 +12,7 @@ import useTranscription from '../hooks/TranscriptionProvider';
 import Recaptcha from '../components/Recaptcha/Recaptcha';
 import useRecaptcha from '../hooks/RecaptchaProvider';
 import { useClient } from '../hooks/ClientProvider';
+import './Dashboard.css';
 
 export default function DashBoard() {
   //Init Component
@@ -87,7 +88,7 @@ export default function DashBoard() {
         {/* Main section */}
         <section id="main" className={isOpenSideBar ? 'main-reduce' : ''}>
           {!isHuman ? (
-            <span className="absolute h-full w-full z-20 bg-gray-200/50 flex items-center justify-center">
+            <span className="main-recaptcha">
               <Recaptcha />
             </span>
           ) : null}
@@ -96,24 +97,15 @@ export default function DashBoard() {
           {configClient.authAccountOption === true ? (
             <>
               {isAuthenticated && selectedLanguage ? (
-                <>
-                  {/* Panel */}
-                  <Panel />
-                </>
+                <Panel />
               ) : (
-                <>
-                  {/* Header */}
-                  <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
-                </>
+                <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
               )}
             </>
           ) : (
             <>
-              {/* Header */}
               <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
               <hr />
-
-              {/* Panel */}
               <Panel />
             </>
           )}

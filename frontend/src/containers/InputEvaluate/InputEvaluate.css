@@ -1,0 +1,11 @@
+.icons-disabled {
+  @apply right-8 absolute inline-block border-secondary h-full p-1 opacity-40;
+}
+
+.icons-input {
+  @apply right-8 absolute inline-block border-secondary hover:text-third hover:bg-secondary h-full p-1;
+}
+
+.semi-rounded {
+  @apply right-0 rounded-r-lg;
+}

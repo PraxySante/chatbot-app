@@ -3,6 +3,7 @@ import IconButton from '../../components/Buttons/IconButton';
 import icons from '../../constants/icons';
 import { useLanguage } from '../../hooks/UseLanguage';
 import Description from '../../components/Text/Description';
+import './Information.css';
 
 export default function Information() {
   //Init Component
@@ -22,7 +23,7 @@ export default function Information() {
       {/* <h1>{userLanguage?.chat_title}</h1> */}
       {/* Button Open/Close data information */}
       <section className="chat-information" onClick={toggleOpenCloseInfomation}>
-        <span className="flex gap-1">
+        <span className="chat-area_info">
           <IconButton
             icon={!isOpenInformation ? icons.reduceText : icons.showText}
             onClick={toggleOpenCloseInfomation}

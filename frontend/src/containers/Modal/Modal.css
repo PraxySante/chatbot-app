@@ -1,0 +1,27 @@
+.modal_containers {
+  @apply relative p-4 w-full max-w-md max-h-full;
+}
+
+.modal_containers_structural {
+  @apply relative bg-bg border border-solid border-primary rounded-lg shadow-sm;
+}
+
+.modal_content-containers {
+  @apply p-4 md:p-5;
+}
+
+.modal_content-input {
+  @apply flex w-full h-20 border border-solid border-primary rounded-lg;
+}
+
+.modal_header-containers {
+  @apply flex w-full items-center justify-between p-4 md:p-5 border-b rounded-t;
+}
+
+.modal_header-title {
+  @apply text-xl font-semibold text-text;
+}
+
+.modal-close {
+  @apply end-2.5 text-gray-400 bg-transparent hover:bg-primary hover:text-textHover rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center;
+}

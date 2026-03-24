@@ -1,5 +1,6 @@
 import { TranslateAttributes } from '../languages/translate.type';
 import { MessageAttributes } from '../messages/messages.type';
+import { selectedPanelAttributes } from '../panel/panel.type';
 
 export type ChatContextAttributes = {
   isRestart: boolean;
@@ -21,6 +22,8 @@ export type ChatContextAttributes = {
   messageLoading: string;
   setVoteUser: (vote: number) => void;
   uuidSession: string;
+  updateSelectPanel: (selectedPanel: selectedPanelAttributes) => void;
+  selectedPanel: selectedPanelAttributes;
 };
 
 export type LanguageContextAttributes = {
@@ -31,7 +34,10 @@ export type LanguageContextAttributes = {
 };
 
 export type NotifacationContextAttributes = {
-  messageNotification: string;
+  messageNotification: {
+    message: string;
+    type: 'error' | 'warning' | 'success';
+  };
   getMessageToNotification: (status: number, message: string) => void;
   isOpen: boolean;
   changeStatutNotification: (value: boolean) => void;

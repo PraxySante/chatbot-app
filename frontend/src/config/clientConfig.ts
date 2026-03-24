@@ -1,18 +1,28 @@
+type LogoClientConfig = {
+  urlImg: string;
+  width: string;
+  height: string;
+};
+
+type LanguagesClientConfig = {
+  id: string;
+  name: string;
+  icon: string;
+};
+
+type ModalMenuClientConfig = {
+  id: string;
+  name: string;
+};
+
 export type ClientConfig = {
   host: string;
   name: string;
   project: string;
-  logo: string;
+  logo: LogoClientConfig;
   title: string;
-  languages: {
-    id: string;
-    name: string;
-    icon: string;
-  }[];
-  modalMenu: {
-    id: string;
-    name: string;
-  }[];
+  languages: LanguagesClientConfig[];
+  modalMenu: ModalMenuClientConfig[];
   feedback: string[];
   displayDocument: boolean;
   authAccountOption: boolean;
@@ -27,7 +37,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_FOCH,
     name: 'Chat bot Hôpital Foch',
     project: import.meta.env.VITE_PROJECT_FOCH,
-    logo: './bot-foch.png',
+    logo: {
+      urlImg: './bot-foch.png',
+      width: '14',
+      height: '14',
+    },
     title: "l'Hôpital Foch 🏥",
     languages: [
       {
@@ -79,7 +93,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_AHP,
     name: 'Chat bot Hôpital Américain de Paris',
     project: import.meta.env.VITE_PROJECT_AHP,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './bot-test.png',
+      width: '14',
+      height: '14',
+    },
     title: "l'Hôpital Américain de Paris",
     languages: [
       {
@@ -131,7 +149,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_HPSJ,
     name: 'Chat bot Hôpital Paris Saint-Joseph',
     project: import.meta.env.VITE_PROJECT_HPSJ,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './bot-test.png',
+      width: '14',
+      height: '14',
+    },
     title: "l'Hôpital Paris Saint-Joseph",
     languages: [
       {
@@ -183,7 +205,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_ENNOV,
     name: 'Chat bot Ennov',
     project: import.meta.env.VITE_PROJECT_ENNOV,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './bot-test.png',
+      width: '14',
+      height: '14',
+    },
     title: 'Ennov',
     languages: [
       {
@@ -235,7 +261,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_CCIB,
     name: 'Chat bot CCIB',
     project: import.meta.env.VITE_PROJECT_CCIB,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './bot-test.png',
+      width: '14',
+      height: '14',
+    },
     title: 'CCIB',
     languages: [
       {
@@ -287,18 +317,17 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_DA,
     name: 'Chat bot Deuxième avis',
     project: import.meta.env.VITE_PROJECT_DA,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './LOGO-DAFR-2023-COLOR-DARK.png',
+      width: '32',
+      height: '14',
+    },
     title: 'Deuxième avis',
     languages: [
       {
         id: 'fr',
         name: 'Français',
         icon: '🇫🇷',
-      },
-      {
-        id: 'nl',
-        name: 'Nederlands',
-        icon: '🇳🇱',
       },
     ],
     modalMenu: [
@@ -339,7 +368,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_MCJR,
     name: 'Chat bot Monte-Carlo Joint Repair',
     project: import.meta.env.VITE_PROJECT_MCJR,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './bot-test.png',
+      width: '14',
+      height: '14',
+    },
     title: 'MCJR',
     languages: [
       {
@@ -391,7 +424,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_HFAR,
     name: 'Chat bot Hôpital Fondation Rothschild',
     project: import.meta.env.VITE_PROJECT_HFAR,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './bot-test.png',
+      width: '14',
+      height: '14',
+    },
     title: "l'Hôpital Fondation Rothschild",
     languages: [
       {
@@ -438,7 +475,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_CMS,
     name: 'Chat bot de la clinique CMS',
     project: import.meta.env.VITE_PROJECT_CMS,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './bot-test.png',
+      width: '14',
+      height: '14',
+    },
     title: 'CMS',
     languages: [
       {
@@ -485,7 +526,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_IRIDIS,
     name: 'Chat bot du centre IRIDIS',
     project: import.meta.env.VITE_PROJECT_IRIDIS,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './bot-test.png',
+      width: '14',
+      height: '14',
+    },
     title: 'IRIDIS',
     languages: [
       {
@@ -532,7 +577,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_DERMO,
     name: 'Chat bot du centre DermoMedicalCenter',
     project: import.meta.env.VITE_PROJECT_DERMO,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './bot-test.png',
+      width: '14',
+      height: '14',
+    },
     title: 'DermoMedicalCenter',
     languages: [
       {
@@ -579,7 +628,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
     host: import.meta.env.VITE_HOST_DEV,
     name: `Chat bot test sur project ${import.meta.env.VITE_PROJECT_DEV}`,
     project: import.meta.env.VITE_PROJECT_DEV,
-    logo: './bot-test.png',
+    logo: {
+      urlImg: './LOGO-DAFR-2023-COLOR-DARK.png',
+      width: '10',
+      height: '12',
+    },
     title: `${import.meta.env.VITE_PROJECT_DEV}`,
     languages: [
       {
@@ -587,11 +640,11 @@ export const clientsConfig: Record<string, ClientConfig> = {
         name: 'Français',
         icon: '🇫🇷',
       },
-      {
-        id: 'en',
-        name: 'English',
-        icon: '🇬🇧',
-      },
+      // {
+      //   id: 'en',
+      //   name: 'English',
+      //   icon: '🇬🇧',
+      // },
     ],
     modalMenu: [
       {

@@ -62,7 +62,7 @@ export interface ILink {
     | 'menu-modal-item'
     | 'tab-selected'
     | 'tab'
-    | 'tab-procedure'
+    | 'tab-procedure outlined'
     | 'tab-procedure_selected';
   name?: string;
   onClick: (menuItem: string) => void;
