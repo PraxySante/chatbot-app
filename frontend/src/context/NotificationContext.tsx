@@ -40,10 +40,13 @@ function NotificationHandlerProvider({ children }: { children: ReactNode }) {
           setIsOpen(true);
           break;
         case STATUS_ERROR_TOO_MANY_REQUEST:
-          setMessageNotification({
-            message: `${value}: ${userLanguage?.error_msg_too_many_request}`,
-            type: 'warning',
-          });
+          !value
+            ? setMessageNotification({
+                message: `${userLanguage?.error_msg_too_many_request}`,
+                type: 'warning',
+              })
+            : setMessageNotification({ message: value, type: 'warning' });
+
           setIsOpen(true);
           break;
         case STATUS_ERROR_WRONG_WAY:

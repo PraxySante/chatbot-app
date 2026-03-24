@@ -106,5 +106,6 @@
   "error_msg_not_enough_content": "Pas assez de contenus pour donner votre avis.",
   "error_msg_too_many_request": "Trop de requêtes, attendez 1 minute.",
   "error_msg_wrong_way": "Mauvaise requête, veuillez transmettre votre question.",
-  "error_msg_unauthorized": "Session perdue, redemarrer une nouvelle session ou contacter un administrateur."
+  "error_msg_unauthorized": "Session perdue, redemarrer une nouvelle session ou contacter un administrateur.",
+  "error_msg_wait_bot":"Le chatbot est entrain d'effectuer une tâche, veuillez patienter."
 }

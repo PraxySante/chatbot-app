@@ -35,7 +35,7 @@ export default function Procedures() {
           />
         </section>
       ) : (
-        <section className="md:flex mt-2 h-screen overflow-y-auto overflow-x-hidden">
+        <section className="md:flex mt-2 h-screen">
           <>
             <TabProcedures
               selectedProcedure={selectedProcedure}

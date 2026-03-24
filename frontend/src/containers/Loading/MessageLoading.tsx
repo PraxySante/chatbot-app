@@ -15,10 +15,10 @@ export default function MessageLoading({
   return (
     <>
       <section className={`wrapper ${className}`}>
-        <button disabled type="button" className={`loader`}>
+        <div className={`loader`}>
           {icons.spinner}
           {messageLoading}
-        </button>
+        </div>
       </section>
     </>
   );

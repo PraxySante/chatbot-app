@@ -11,7 +11,7 @@
 }
 
 .reader-document {
-  @apply w-full max-w-5xl mx-auto;
+  @apply w-full max-w-5xl lg:pl-40;
 }
 
 .reader-document_main {

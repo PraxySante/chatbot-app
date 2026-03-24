@@ -12,6 +12,7 @@ import {
   DOC_TYPE_URL,
   DOC_TYPE_VIDEO,
   ROLE_ASSISTANT,
+  ROLE_NONE,
   ROLE_USER,
 } from '../../constants/chat.constants';
 import Title from '../../components/Text/Title';
@@ -19,11 +20,20 @@ import Description from '../../components/Text/Description';
 import { useLanguage } from '../../hooks/UseLanguage';
 import { useClient } from '../../hooks/ClientProvider';
 import './Message.css';
+import { useNotification } from '../../hooks/NotificationProvider';
+import { STATUS_ERROR_TOO_MANY_REQUEST } from '../../constants/notifications.constants';
 
 export default function ListMessage({ message }: ListMessageType) {
-  const { stockMessageUser, whoIsWritten, updateSelectPanel } = useChat();
+  const {
+    stockMessageUser,
+    whoIsWritten,
+    updateSelectPanel,
+    isBotWritten,
+    reformulateChatConversation,
+  } = useChat();
   const { userLanguage } = useLanguage();
   const { configClient } = useClient();
+  const { getMessageToNotification } = useNotification();
 
   useEffect(() => {
     renderingMessage();
@@ -112,6 +122,13 @@ export default function ListMessage({ message }: ListMessageType) {
     requestReformulation: string,
     url: string | undefined
   ) {
+    if (isBotWritten) {
+      getMessageToNotification(
+        STATUS_ERROR_TOO_MANY_REQUEST,
+        userLanguage ? userLanguage?.error_msg_wait_bot : ''
+      );
+      return;
+    }
     switch (message.doc_type) {
       case DOC_TYPE_URL:
         window.open(url, '_blank', 'noopener,noreferrer');
@@ -124,6 +141,8 @@ export default function ListMessage({ message }: ListMessageType) {
       case DOC_TYPE_REFORMULATE:
         whoIsWritten(ROLE_ASSISTANT);
         await stockMessageUser(requestReformulation);
+        whoIsWritten(ROLE_NONE);
+
         break;
 
       default:

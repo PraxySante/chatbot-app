@@ -155,6 +155,7 @@ function ChatContextProvider({
     setIsRestart(!isRestart);
     getMessageToNotification(STATUS_SUCCESS, userLanguage?.success_msg_session);
     await restartConversation(selectedLanguage);
+    whoIsWritten(ROLE_NONE);
   }
 
   async function verifyStartChat(): Promise<void> {
@@ -410,6 +411,7 @@ function ChatContextProvider({
     const propositionChatConversation: any =
       await reformulateChat(selectedLanguage);
 
+      whoIsWritten(ROLE_NONE);
     if (
       propositionChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()
     ) {
@@ -530,7 +532,7 @@ function ChatContextProvider({
               setVoteUser,
               uuidSession,
               updateSelectPanel,
-              selectedPanel
+              selectedPanel,
             }}
           >
             {children}
@@ -557,8 +559,8 @@ function ChatContextProvider({
             messageLoading,
             setVoteUser,
             uuidSession,
-              updateSelectPanel,
-            selectedPanel
+            updateSelectPanel,
+            selectedPanel,
           }}
         >
           {children}

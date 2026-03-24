@@ -149,7 +149,7 @@ export default function DisplayProcedures({
   return (
     <div className="h-full w-full flex flex-col">
       {userLanguage && (
-        <section className="flex flex-col justify-start items-center p-4 gap-4 rounded-xl">
+        <section className="flex flex-col justify-start items-center p-4 gap-4 rounded-xl overflow-y-auto">
           <Title
             content={userLanguage?.procedure_title}
             tag={'h3'}

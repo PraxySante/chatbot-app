@@ -6,7 +6,6 @@ import icons from '../../constants/icons';
 export default function Notification() {
   const { messageNotification, isOpen, changeStatutNotification } =
     useNotification();
-  console.log('🚀 ~ Notification ~ messageNotification:', messageNotification);
 
   const notificationStyles = {
     success: 'text-success bg-success',

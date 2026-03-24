@@ -105,4 +105,5 @@ export type TranslateAttributes = {
   error_msg_too_many_request: string;
   error_msg_wrong_way: string;
   error_msg_unauthorized: string;
+  error_msg_wait_bot: string;
 };

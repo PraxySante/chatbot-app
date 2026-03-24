@@ -47,8 +47,8 @@ export default function TabProcedures({
   }
 
   return (
-    <div className="border-b border-gray-200 overflow-y-auto  overflow-x-hidden">
-      <ul className="flex-column space-y space-y-4 text-sm font-medium text-gray-500 md:me-4 mb-4 md:mb-0">
+    <div className="border-b border-gray-200 overflow-y-auto mb-48">
+      <ul className="flex flex-col space-y space-y-4 text-sm font-medium text-gray-500 md:me-4 mb-4 md:mb-0">
         {renderingResultsProcedures()}
       </ul>
     </div>

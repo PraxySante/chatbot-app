@@ -7,5 +7,5 @@
 }
 
 .menu-modal-item {
-  @apply w-full list-none cursor-pointer hover:bg-user hover:w-full;
+  @apply w-full list-none cursor-pointer hover:bg-bgUser hover:w-full;
 }

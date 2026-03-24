@@ -12,16 +12,29 @@ import icons from '../../constants/icons';
 import HeaderChat from './HeaderChat';
 import FooterChat from './FooterChat';
 import Modal from '../Modal/Modal';
-import { ROLE_ASSISTANT, ROLE_USER } from '../../constants/chat.constants';
+import {
+  ROLE_ASSISTANT,
+  ROLE_NONE,
+  ROLE_USER,
+} from '../../constants/chat.constants';
 import './Chat.css';
+import { STATUS_ERROR_TOO_MANY_REQUEST } from '../../constants/notifications.constants';
+import { useNotification } from '../../hooks/NotificationProvider';
 
 export default function Chat() {
   //Init Component
   //
-  const { messages, reformulateChatConversation, isUserWritten, isBotWritten } =
-    useChat();
+  const {
+    messages,
+    reformulateChatConversation,
+    isUserWritten,
+    isBotWritten,
+    whoIsWritten,
+  } = useChat();
   // Check selected language by user
   const { userLanguage } = useLanguage();
+  const { getMessageToNotification } = useNotification();
+
   const autoScrollMessage = useRef<HTMLDivElement | null>(null);
   const [isOpenModalFeedback, setIsOpenModalFeedback] =
     useState<boolean>(false);
@@ -39,7 +52,15 @@ export default function Chat() {
   }, [messages, isBotWritten, isUserWritten]);
 
   async function clickReformulateMessage() {
+    if (isBotWritten) {
+      getMessageToNotification(
+        STATUS_ERROR_TOO_MANY_REQUEST,
+        userLanguage ? userLanguage?.error_msg_wait_bot : ''
+      );
+      return;
+    }
     await reformulateChatConversation();
+    whoIsWritten(ROLE_NONE);
   }
 
   /* Render all messages exist */
@@ -55,14 +76,12 @@ export default function Chat() {
   function renderLoadingMessage(index: number, role: string) {
     return (
       <>
-        {index === messages.length - 1 &&
-          role === ROLE_USER &&
-          isBotWritten && (
-            <span className="chat-room-containers_loading-bot">
-              <IconButton className={'icon icon-bot'} icon={icons.bot} />
-              <MessageLoading className="wrapper-bot" role={'assistant'} />
-            </span>
-          )}
+        {index === messages.length - 1 && isBotWritten && (
+          <span className="chat-room-containers_loading-bot">
+            <IconButton className={'icon icon-bot'} icon={icons.bot} />
+            <MessageLoading className="wrapper-bot" role={'assistant'} />
+          </span>
+        )}
         {index === messages.length - 1 && isUserWritten && (
           <span className="chat-room-containers_loading-user">
             <MessageLoading className="wrapper-user" role={ROLE_USER} />
