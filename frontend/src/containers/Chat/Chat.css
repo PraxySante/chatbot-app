@@ -44,9 +44,9 @@
 }
 
 .wrapper-user {
-  @apply border border-borderUser border-solid right-4 text-textUser;
+  @apply border border-borderUser border-solid right-4 text-textUser bg-bgUser;
 }
 
 .wrapper-bot {
-  @apply border border-borderBot border-solid left-4 text-textBot;
+  @apply border border-borderBot border-solid left-4 text-textBot bg-bgBot;
 }
