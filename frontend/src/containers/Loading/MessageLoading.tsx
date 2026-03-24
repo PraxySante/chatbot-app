@@ -4,13 +4,9 @@ import './MessageLoading.css';
 
 type MessageLoadingType = {
   className: string;
-  role: string;
 };
 
-export default function MessageLoading({
-  className,
-  role,
-}: MessageLoadingType) {
+export default function MessageLoading({ className }: MessageLoadingType) {
   const { messageLoading } = useChat();
   return (
     <>

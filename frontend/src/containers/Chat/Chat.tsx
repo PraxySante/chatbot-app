@@ -12,11 +12,7 @@ import icons from '../../constants/icons';
 import HeaderChat from './HeaderChat';
 import FooterChat from './FooterChat';
 import Modal from '../Modal/Modal';
-import {
-  ROLE_ASSISTANT,
-  ROLE_NONE,
-  ROLE_USER,
-} from '../../constants/chat.constants';
+import { ROLE_ASSISTANT, ROLE_NONE } from '../../constants/chat.constants';
 import './Chat.css';
 import { STATUS_ERROR_TOO_MANY_REQUEST } from '../../constants/notifications.constants';
 import { useNotification } from '../../hooks/NotificationProvider';
@@ -68,23 +64,23 @@ export default function Chat() {
     return messages.map((message: MessageAttributes, index: number) => (
       <Fragment key={index}>
         <ListMessage message={message} />
-        {renderLoadingMessage(index, message.role)}
+        {renderLoadingMessage(index)}
       </Fragment>
     ));
   }
 
-  function renderLoadingMessage(index: number, role: string) {
+  function renderLoadingMessage(index: number) {
     return (
       <>
         {index === messages.length - 1 && isBotWritten && (
           <span className="chat-room-containers_loading-bot">
             <IconButton className={'icon icon-bot'} icon={icons.bot} />
-            <MessageLoading className="wrapper-bot" role={'assistant'} />
+            <MessageLoading className="wrapper-bot" />
           </span>
         )}
         {index === messages.length - 1 && isUserWritten && (
           <span className="chat-room-containers_loading-user">
-            <MessageLoading className="wrapper-user" role={ROLE_USER} />
+            <MessageLoading className="wrapper-user" />
             <IconButton className={'icon icon-user'} icon={icons.user} />
           </span>
         )}
