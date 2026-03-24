@@ -61,13 +61,13 @@ export default function DashBoard() {
       {/* Dashboard section */}
       <div id="dashboard" onClick={closeModalByClickBackGround}>
         {/* Rendering ModalParameter */}
-        {configClient.audioParameterOption === true && isOpenModal
+        {configClient?.options?.audioParameterOption === true && isOpenModal
           ? renderingModalParameter()
           : null}
 
         {/* Sidebar section */}
         {/* Button toggle Open/Close SideBar */}
-        {configClient.sideBarOption === true ? (
+        {configClient?.options?.sideBarOption === true ? (
           <>
             {!isOpenSideBar ? (
               <span className="icons-actions left">
@@ -81,7 +81,7 @@ export default function DashBoard() {
         ) : null}
 
         {/*  SideBar */}
-        {configClient.sideBarOption === true && isOpenSideBar ? (
+        {configClient?.options?.sideBarOption === true && isOpenSideBar ? (
           <SideBar toggleOpenCloseSideBar={toggleOpenCloseSideBar} />
         ) : null}
 
@@ -94,7 +94,7 @@ export default function DashBoard() {
           ) : null}
           {/* Button toggle Open/Close Modal Parameter */}
           {/* Button toggle Open/Close ModalMenu Parameters */}
-          {configClient.authAccountOption === true ? (
+          {configClient?.options?.authAccountOption === true ? (
             <>
               {isAuthenticated && selectedLanguage ? (
                 <Panel />

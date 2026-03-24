@@ -61,10 +61,10 @@ export default function Header({
         </span>
       </span>
       <span className="icons-actions right">
-        {configClient.menuParameterOption === true && (
+        {configClient?.options?.menuParameterOption === true && (
           <>
             <SelectLanguage />
-            {configClient.audioParameterOption && (
+            {configClient?.options?.audioParameterOption && (
               <IconButton
                 onClick={toggleOpenCloseModalMenu}
                 icon={icons.menuBar}

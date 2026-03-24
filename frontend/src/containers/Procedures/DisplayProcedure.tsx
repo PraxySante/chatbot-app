@@ -53,7 +53,7 @@ export default function DisplayProcedures({
             </>
           );
         case DOC_TYPE_DOC:
-          if (!configClient?.displayDocument) return null;
+          if (!configClient?.options?.displayDocument) return null;
           return (
             <>
               {userLanguage && (

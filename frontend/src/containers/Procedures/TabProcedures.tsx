@@ -20,7 +20,10 @@ export default function TabProcedures({
 
   function renderingResultsProcedures() {
     return displayedProcedure.map((procedure: any, index: number) => {
-      if (procedure?.doc_type === 'doc' && !configClient?.displayDocument)
+      if (
+        procedure?.doc_type === 'doc' &&
+        !configClient?.options?.displayDocument
+      )
         return null;
       {
         return (

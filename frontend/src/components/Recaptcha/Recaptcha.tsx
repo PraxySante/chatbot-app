@@ -18,7 +18,7 @@ export default function Recaptcha() {
   const { userLanguage } = useLanguage();
 
   useEffect(() => {
-    configClient.RecaptchaOption === true ? null : forcingNoRecaptcha();
+    configClient?.options?.RecaptchaOption === true ? null : forcingNoRecaptcha();
   }, []);
 
   async function submitForm() {
@@ -53,7 +53,7 @@ export default function Recaptcha() {
 
   return (
     <>
-      {configClient.RecaptchaOption === true ? (
+      {configClient?.options?.RecaptchaOption === true ? (
         <ReCAPTCHA
           onChange={submitForm}
           ref={recaptcha}

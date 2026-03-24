@@ -508,7 +508,7 @@ function ChatContextProvider({
 
   return (
     <>
-      {configClient.authAccountOption ? (
+      {configClient?.options?.authAccountOption ? (
         <>
           <ChatContext.Provider
             value={{

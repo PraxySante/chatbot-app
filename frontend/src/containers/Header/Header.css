@@ -3,7 +3,7 @@
 }
 
 .header-left-side {
-  @apply gap-2 items-center left-5 sm:left-10;
+  @apply gap-2 items-center left-5;
 }
 
 .header-logo {
@@ -11,7 +11,7 @@
 }
 
 .header-chatbot-title {
-  @apply flex flex-col h-fit;
+  @apply flex flex-col h-fit justify-center mt-2;
 }
 
 .header-btn_restart {

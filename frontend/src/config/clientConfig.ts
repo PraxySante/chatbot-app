@@ -15,6 +15,16 @@ type ModalMenuClientConfig = {
   name: string;
 };
 
+type OptionsClientConfig = {
+  isReformulateAuto: boolean;
+  displayDocument: boolean;
+  authAccountOption: boolean;
+  sideBarOption: boolean;
+  menuParameterOption: boolean;
+  audioParameterOption: boolean;
+  RecaptchaOption: boolean;
+};
+
 export type ClientConfig = {
   host: string;
   name: string;
@@ -24,12 +34,7 @@ export type ClientConfig = {
   languages: LanguagesClientConfig[];
   modalMenu: ModalMenuClientConfig[];
   feedback: string[];
-  displayDocument: boolean;
-  authAccountOption: boolean;
-  sideBarOption: boolean;
-  menuParameterOption: boolean;
-  audioParameterOption: boolean;
-  RecaptchaOption: boolean;
+  options: OptionsClientConfig;
 };
 
 export const clientsConfig: Record<string, ClientConfig> = {
@@ -55,6 +60,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇳🇱',
       },
     ],
+    options: {
+      isReformulateAuto: true,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: false,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -82,12 +96,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
   },
   'ahp.praxysante.fr': {
     host: import.meta.env.VITE_HOST_AHP,
@@ -111,6 +119,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇳🇱',
       },
     ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: false,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -138,12 +155,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
   },
   'hpsj.praxysante.fr': {
     host: import.meta.env.VITE_HOST_HPSJ,
@@ -167,6 +178,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇳🇱',
       },
     ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: false,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -194,12 +214,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
   },
   'ennov.praxysante.fr': {
     host: import.meta.env.VITE_HOST_ENNOV,
@@ -223,6 +237,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇳🇱',
       },
     ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: false,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -250,12 +273,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
   },
   'ccib.praxy.ai': {
     host: import.meta.env.VITE_HOST_CCIB,
@@ -279,6 +296,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇱🇧',
       },
     ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: true,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -306,12 +332,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: true,
-    audioParameterOption: false,
-    RecaptchaOption: false,
   },
   'deuxiemeavis.praxysante.fr': {
     host: import.meta.env.VITE_HOST_DA,
@@ -330,6 +350,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇫🇷',
       },
     ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: false,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -357,12 +386,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
   },
   'montecarlojointrepair.praxysante.fr': {
     host: import.meta.env.VITE_HOST_MCJR,
@@ -386,6 +409,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇫🇷',
       },
     ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: false,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: true,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -413,12 +445,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: false,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: true,
-    audioParameterOption: false,
-    RecaptchaOption: false,
   },
   'hfar.praxysante.fr': {
     host: import.meta.env.VITE_HOST_HFAR,
@@ -437,6 +463,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇫🇷',
       },
     ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: false,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -464,12 +499,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
   },
   'cms.praxysante.fr': {
     host: import.meta.env.VITE_HOST_CMS,
@@ -488,6 +517,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇫🇷',
       },
     ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: false,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -515,12 +553,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
   },
   'centre-iridis.praxysante.fr': {
     host: import.meta.env.VITE_HOST_IRIDIS,
@@ -539,6 +571,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇫🇷',
       },
     ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: false,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -566,12 +607,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
   },
   'dermomedicalcenter.praxysante.fr': {
     host: import.meta.env.VITE_HOST_DERMO,
@@ -590,6 +625,15 @@ export const clientsConfig: Record<string, ClientConfig> = {
         icon: '🇫🇷',
       },
     ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: false,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -617,12 +661,6 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: false,
-    audioParameterOption: true,
-    RecaptchaOption: false,
   },
   localhost: {
     host: import.meta.env.VITE_HOST_DEV,
@@ -640,12 +678,21 @@ export const clientsConfig: Record<string, ClientConfig> = {
         name: 'Français',
         icon: '🇫🇷',
       },
-      // {
-      //   id: 'en',
-      //   name: 'English',
-      //   icon: '🇬🇧',
-      // },
+      {
+        id: 'en',
+        name: 'English',
+        icon: '🇬🇧',
+      },
     ],
+    options: {
+      isReformulateAuto: true,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: true,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
     modalMenu: [
       {
         id: 're-run',
@@ -673,11 +720,5 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_accuracy',
       'feedback_hallucinations',
     ],
-    displayDocument: true,
-    authAccountOption: false,
-    sideBarOption: false,
-    menuParameterOption: true,
-    audioParameterOption: false,
-    RecaptchaOption: false,
   },
 };

@@ -63,7 +63,7 @@ export default function ListMessage({ message }: ListMessageType) {
         }
         if (
           message.doc_type === DOC_TYPE_DOC &&
-          !configClient?.displayDocument
+          !configClient?.options?.displayDocument
         ) {
           return;
         }
