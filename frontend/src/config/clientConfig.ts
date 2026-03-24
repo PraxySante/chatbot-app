@@ -1,7 +1,7 @@
 type LogoClientConfig = {
   urlImg: string;
-  width: string;
-  height: string;
+  width: number;
+  height: number;
 };
 
 type LanguagesClientConfig = {
@@ -44,8 +44,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_FOCH,
     logo: {
       urlImg: './bot-foch.png',
-      width: '14',
-      height: '14',
+      width: 12,
+      height: 12,
     },
     title: "l'Hôpital Foch 🏥",
     languages: [
@@ -103,8 +103,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_AHP,
     logo: {
       urlImg: './bot-test.png',
-      width: '14',
-      height: '14',
+      width: 12,
+      height: 12,
     },
     title: "l'Hôpital Américain de Paris",
     languages: [
@@ -162,8 +162,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_HPSJ,
     logo: {
       urlImg: './bot-test.png',
-      width: '14',
-      height: '14',
+      width: 12,
+      height: 12,
     },
     title: "l'Hôpital Paris Saint-Joseph",
     languages: [
@@ -221,8 +221,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_ENNOV,
     logo: {
       urlImg: './bot-test.png',
-      width: '14',
-      height: '14',
+      width: 12,
+      height: 12,
     },
     title: 'Ennov',
     languages: [
@@ -280,8 +280,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_CCIB,
     logo: {
       urlImg: './bot-test.png',
-      width: '14',
-      height: '14',
+      width: 12,
+      height: 12,
     },
     title: 'CCIB',
     languages: [
@@ -339,8 +339,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_DA,
     logo: {
       urlImg: './LOGO-DAFR-2023-COLOR-DARK.png',
-      width: '32',
-      height: '14',
+      width: 16,
+      height: 12,
     },
     title: 'Deuxième avis',
     languages: [
@@ -393,8 +393,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_MCJR,
     logo: {
       urlImg: './bot-test.png',
-      width: '14',
-      height: '14',
+      width: 12,
+      height: 12,
     },
     title: 'MCJR',
     languages: [
@@ -452,8 +452,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_HFAR,
     logo: {
       urlImg: './bot-test.png',
-      width: '14',
-      height: '14',
+      width: 12,
+      height: 12,
     },
     title: "l'Hôpital Fondation Rothschild",
     languages: [
@@ -506,8 +506,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_CMS,
     logo: {
       urlImg: './bot-test.png',
-      width: '14',
-      height: '14',
+      width: 12,
+      height: 12,
     },
     title: 'CMS',
     languages: [
@@ -560,8 +560,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_IRIDIS,
     logo: {
       urlImg: './bot-test.png',
-      width: '14',
-      height: '14',
+      width: 12,
+      height: 12,
     },
     title: 'IRIDIS',
     languages: [
@@ -614,8 +614,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_DERMO,
     logo: {
       urlImg: './bot-test.png',
-      width: '14',
-      height: '14',
+      width: 12,
+      height: 12,
     },
     title: 'DermoMedicalCenter',
     languages: [
@@ -668,8 +668,8 @@ export const clientsConfig: Record<string, ClientConfig> = {
     project: import.meta.env.VITE_PROJECT_DEV,
     logo: {
       urlImg: './LOGO-DAFR-2023-COLOR-DARK.png',
-      width: '10',
-      height: '12',
+      width: 12,
+      height: 12,
     },
     title: `${import.meta.env.VITE_PROJECT_DEV}`,
     languages: [
