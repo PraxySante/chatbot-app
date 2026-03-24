@@ -51,12 +51,32 @@ Provide all colors into project
 }
 
 .theme-ahp {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -64,12 +84,32 @@ Provide all colors into project
 }
 
 .theme-hpsj {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -77,12 +117,32 @@ Provide all colors into project
 }
 
 .theme-ennov {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -90,12 +150,32 @@ Provide all colors into project
 }
 
 .theme-ccib {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -136,12 +216,32 @@ Provide all colors into project
 }
 
 .theme-mcjr {
-  --color-primary: 0, 38, 76;
+  /* General */
+  --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -149,12 +249,32 @@ Provide all colors into project
 }
 
 .theme-hfar {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -162,12 +282,32 @@ Provide all colors into project
 }
 
 .theme-cms {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -175,12 +315,32 @@ Provide all colors into project
 }
 
 .theme-iridis {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -188,12 +348,32 @@ Provide all colors into project
 }
 
 .theme-dermo {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
