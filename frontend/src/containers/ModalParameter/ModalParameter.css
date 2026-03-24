@@ -1,0 +1,17 @@
+/* Modal parameter */
+
+#modal-parameter-background {
+  @apply w-screen h-screen fixed top-0 left-0 z-20 bg-slate-500/50 flex justify-center items-center;
+}
+
+.modal-parameter {
+  @apply z-30 p-4 w-fit h-fit bg-bg rounded-lg;
+}
+
+.modal-parameter_label {
+  @apply block text-sm font-medium text-text;
+}
+
+.modal-parameter_select-micro {
+  @apply border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5;
+}

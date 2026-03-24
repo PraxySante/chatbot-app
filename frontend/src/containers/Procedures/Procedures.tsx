@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../../hooks/UseLanguage';
 import Title from '../../components/Text/Title';
-
 import TabPanel from '../Panel/TabPanel/TabPanel';
 import TabProcedures from './TabProcedures';
 import DisplayProcedures from './DisplayProcedure';
-import { IProcedureAttributes } from '../../types/procedures/procedures.interface';
+import './Procedure.css'
 
-export default function Procedures({
-  selectedPanel,
-  setSelectedPanel,
-}: IProcedureAttributes) {
+export default function Procedures() {
   const { userLanguage } = useLanguage();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedProcedure, SetSelectedProcedure] = useState<number>(0);
@@ -22,10 +18,7 @@ export default function Procedures({
   return (
     <section id="procedure">
       <div className="flex relative w-screen h-12 justify-center">
-        <TabPanel
-          selectedPanel={selectedPanel}
-          setSelectedPanel={setSelectedPanel}
-        />
+        <TabPanel />
       </div>
 
       {isLoading && userLanguage ? (
@@ -42,9 +35,12 @@ export default function Procedures({
           />
         </section>
       ) : (
-        <section className="md:flex mt-2 h-screen overflow-y-auto overflow-x-hidden">
+        <section className="md:flex mt-2 h-screen">
           <>
-            <TabProcedures selectedProcedure={selectedProcedure} SetSelectedProcedure={SetSelectedProcedure} />
+            <TabProcedures
+              selectedProcedure={selectedProcedure}
+              SetSelectedProcedure={SetSelectedProcedure}
+            />
             <DisplayProcedures selectedProcedure={selectedProcedure} />
           </>
         </section>

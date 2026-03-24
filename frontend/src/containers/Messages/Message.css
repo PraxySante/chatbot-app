@@ -1,0 +1,39 @@
+.message-video {
+  @apply flex flex-row justify-start cursor-pointer;
+}
+
+.message-reformulate {
+  @pply flex flex-row justify-start cursor-pointer w-12;
+}
+
+.message-doc {
+  @apply flex flex-row justify-start cursor-pointer ml-4 w-full ml-8;
+}
+
+.message-containers_file-link {
+  @apply flex items-center gap-3 border border-solid border-secondary  whitespace-pre-line w-full sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-5/12 min-h-20 px-4 py-2 rounded-md hover:bg-secondary hover:text-textHover;
+}
+
+.message-containers_icons {
+  @apply flex-shrink-0 text-start text-red-400;
+}
+
+.message_containers_description {
+  @apply flex flex-col ml-2;
+}
+
+.message_title {
+  @apply text-sm text-start leading-snug;
+}
+
+.message_description {
+  @apply text-sm text-start leading-snug text-text;
+}
+
+.message_containers-bot {
+  @apply flex flex-row justify-start;
+}
+
+.message_containers-user {
+  @apply flex flex-row justify-end;
+}

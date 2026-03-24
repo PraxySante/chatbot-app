@@ -10,7 +10,7 @@ export default function AuthProvider({ children, useClient }: any) {
 
   return (
     <>
-      {configClient.authAccountOption === true ? (
+      {configClient?.options?.authAccountOption === true ? (
         <Auth0Provider
           domain={import.meta.env.VITE_AUTH0_DOMAIN}
           clientId={import.meta.env.VITE_AUTH0_CLIENTID}

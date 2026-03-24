@@ -1,4 +1,5 @@
 import { IInput } from '../../types/inputs/inputs.interface';
+import './Input.css';
 
 export default function Input({
   variant,
@@ -16,7 +17,7 @@ export default function Input({
         return (
           <textarea
             value={value ? value?.toString() : ''}
-            className={className ? className : 'input-user'}
+            className={className ? className : 'input-user outlined'}
             onChange={onChange || (() => {})}
             onKeyDown={handleKeyDown}
             placeholder={content}
@@ -26,7 +27,7 @@ export default function Input({
         );
       case 'checkbox':
         return (
-          <section className="flex flex-1 gap-4">
+          <section className="section-checkbox">
             <input
               id="default-checkbox"
               type={variant}
@@ -44,7 +45,7 @@ export default function Input({
         return (
           <input
             value={value ? value?.toString() : ''}
-            className={className ? className : 'input-user'}
+            className={className ? className : 'input-user outlined'}
             type={variant}
             {...(variant === 'number' && { min: '0', max: '5' })}
             onChange={onChange || (() => {})}

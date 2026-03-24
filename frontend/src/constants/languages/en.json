@@ -106,5 +106,6 @@
   "error_msg_not_enough_content": "Not enough content to provide your feedback.",
   "error_msg_too_many_request": "Too many requests, please wait 1 minute.",
   "error_msg_wrong_way": "Bad request, please submit your question.",
-  "error_msg_unauthorized": "Session lost, restart a new session or contact an administrator."
+  "error_msg_unauthorized": "Session lost, restart a new session or contact an administrator.",
+  "error_msg_wait_bot": "The chatbot is currently performing a task, please wait."
 }

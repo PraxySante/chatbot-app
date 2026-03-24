@@ -12,20 +12,28 @@ import {
   DOC_TYPE_URL,
   DOC_TYPE_VIDEO,
   ROLE_ASSISTANT,
+  ROLE_NONE,
   ROLE_USER,
 } from '../../constants/chat.constants';
 import Title from '../../components/Text/Title';
 import Description from '../../components/Text/Description';
 import { useLanguage } from '../../hooks/UseLanguage';
 import { useClient } from '../../hooks/ClientProvider';
+import './Message.css';
+import { useNotification } from '../../hooks/NotificationProvider';
+import { STATUS_ERROR_TOO_MANY_REQUEST } from '../../constants/notifications.constants';
 
-export default function ListMessage({
-  message,
-  setSelectedPanel,
-}: ListMessageType) {
-  const { stockMessageUser, whoIsWritten } = useChat();
+export default function ListMessage({ message }: ListMessageType) {
+  const {
+    stockMessageUser,
+    whoIsWritten,
+    updateSelectPanel,
+    isBotWritten,
+    reformulateChatConversation,
+  } = useChat();
   const { userLanguage } = useLanguage();
   const { configClient } = useClient();
+  const { getMessageToNotification } = useNotification();
 
   useEffect(() => {
     renderingMessage();
@@ -36,7 +44,7 @@ export default function ListMessage({
       case ROLE_ASSISTANT:
         if (message.doc_type === DOC_TYPE_VIDEO) {
           return (
-            <span className="flex flex-row justify-start cursor-pointer">
+            <span className="message-video">
               <IconButton className={'icon icon-bot'} icon={icons.bot} />
               {message.doc_ref && <Video fileDocument={message.doc_ref} />}
             </span>
@@ -44,8 +52,7 @@ export default function ListMessage({
         }
         if (message.doc_type === DOC_TYPE_REFORMULATE) {
           return (
-            <span className="flex flex-row justify-start cursor-pointer">
-              <IconButton className={'icon icon-bot'} icon={icons.bot} />
+            <span className="message-reformulate">
               <Button
                 type={'button'}
                 content={`${message.content}`}
@@ -56,43 +63,32 @@ export default function ListMessage({
         }
         if (
           message.doc_type === DOC_TYPE_DOC &&
-          !configClient?.displayDocument
+          !configClient?.options?.displayDocument
         ) {
           return;
         }
         if (message.doc_type) {
           return (
             <span
-              className="flex flex-row justify-start cursor-pointer ml-4 w-full ml-8"
+              className="message-doc"
               onClick={() => handleClick(message.content, message.doc_ref)}
             >
-              <span
-                className="
-                  flex  items-center gap-3
-                  border border-solid border-secondary 
-                  whitespace-pre-line
-                  w-full sm:w-11/12 md:w-3/4 lg:w-1/2 xl:w-5/12
-                  min-h-20 px-4 py-2
-                  rounded-md hover:bg-secondary group hover:text-white
-                "
-              >
+              <span className="message-containers_file-link group">
                 <IconButton
-                  className="flex-shrink-0 text-start text-red-400 group-hover:text-white"
+                  className="message-containers_icons group-hover:text-textHover"
                   type="button"
                   icon={message.doc_type === 'doc' ? icons.file : icons.chain}
                 />
-                <div className="flex flex-col ml-2">
+                <div className="message_containers_description">
                   <Title
                     content={`${userLanguage?.chat_link_text} ${message.doc_type === 'doc' ? userLanguage?.chat_link_type_doc : userLanguage?.chat_link_type_link} ${userLanguage?.chat_link_text_end}`}
                     tag="h2"
-                    className="text-sm text-start leading-snug group-hover:text-white"
+                    className="message_title group-hover:text-textHover"
                   />
                   <Description
                     content={`${message.content}`}
                     tag={'p'}
-                    className={
-                      'text-sm text-start leading-snug text-gray-600 group-hover:text-white'
-                    }
+                    className={'message_description group-hover:text-textHover'}
                   />
                 </div>
               </span>
@@ -101,7 +97,7 @@ export default function ListMessage({
         }
         return (
           <>
-            <span className="flex flex-row justify-start">
+            <span className="message_containers-bot">
               <IconButton className={'icon icon-bot'} icon={icons.bot} />
               <Message message={message} />
             </span>
@@ -111,7 +107,7 @@ export default function ListMessage({
       case ROLE_USER:
         return (
           <>
-            <span className="flex flex-row justify-end">
+            <span className="message_containers-user">
               <Message message={message} />
               <IconButton className={'icon icon-user'} icon={icons.user} />
             </span>
@@ -126,18 +122,27 @@ export default function ListMessage({
     requestReformulation: string,
     url: string | undefined
   ) {
+    if (isBotWritten) {
+      getMessageToNotification(
+        STATUS_ERROR_TOO_MANY_REQUEST,
+        userLanguage ? userLanguage?.error_msg_wait_bot : ''
+      );
+      return;
+    }
     switch (message.doc_type) {
       case DOC_TYPE_URL:
         window.open(url, '_blank', 'noopener,noreferrer');
         break;
 
       case DOC_TYPE_DOC:
-        setSelectedPanel('procedure');
+        updateSelectPanel('procedure');
         break;
 
       case DOC_TYPE_REFORMULATE:
         whoIsWritten(ROLE_ASSISTANT);
         await stockMessageUser(requestReformulation);
+        whoIsWritten(ROLE_NONE);
+
         break;
 
       default:
@@ -154,7 +159,7 @@ export default function ListMessage({
     >
       <div
         className={
-          message.role === ROLE_ASSISTANT ? 'message-bot' : 'message-user'
+          message.role === ROLE_ASSISTANT ? 'message-assistant' : 'message-user'
         }
       >
         {renderingMessage()}

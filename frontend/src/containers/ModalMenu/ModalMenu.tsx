@@ -4,12 +4,13 @@ import { Fragment } from 'react/jsx-runtime';
 import { IMenu } from '../../types/modal/modal.interface';
 import { useChat } from '../../hooks/ChatProvider';
 import { useClient } from '../../hooks/ClientProvider';
+import './ModalMenu.css';
 
 export default function ModalMenu({ setIsOpenModalParameter }: IMenu) {
   //
   const { selectedRestart } = useChat();
 
-  const { configClient } = useClient();;
+  const { configClient } = useClient();
 
   // Function user selection on modal menu
   function onClick(menuItem: string) {

@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
 import { MessageAttributes } from './messages.type';
-import { selectedPanelAttributes } from '../panel/panel.type';
 
 export interface IInputMessage {
   setIsBotWritten: Dispatch<SetStateAction<boolean>>;
@@ -9,5 +8,4 @@ export interface IInputMessage {
 
 export type ListMessageType = {
   message: MessageAttributes;
-  setSelectedPanel: Dispatch<SetStateAction<selectedPanelAttributes>>;
 };

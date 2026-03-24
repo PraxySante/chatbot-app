@@ -7,12 +7,43 @@ Provide all colors into project
 */
 
 .theme-foch {
-  --color-primary: 150, 190, 50;
+  /* --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
   --color-text: 100, 100, 0;
   --color-bot: 255, 188, 73;
   --color-user: 255, 107, 108;
   --color-bg: 255, 255, 255;
+  --color-success: 153, 204, 51;
+  --color-warning: 255, 204, 0;
+  --color-error: 255, 153, 102;
+  --color-information: 200, 231, 255; */
+
+  /* General */
+  --color-primary: 150, 190, 50;
+  --color-secondary: 0, 125, 190;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
+  --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -20,12 +51,32 @@ Provide all colors into project
 }
 
 .theme-ahp {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -33,12 +84,32 @@ Provide all colors into project
 }
 
 .theme-hpsj {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -46,12 +117,32 @@ Provide all colors into project
 }
 
 .theme-ennov {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -59,12 +150,32 @@ Provide all colors into project
 }
 
 .theme-ccib {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -72,25 +183,65 @@ Provide all colors into project
 }
 
 .theme-da {
-  --color-primary: 150, 190, 50;
-  --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+  /* General */
+  --color-primary: 0, 38, 76;
+  --color-secondary: 0, 140, 153;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 38, 76;
+  --color-subtitle: 0, 140, 153;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 255, 255, 255;
+  --color-link-hover: 0, 38, 76;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: 0, 38, 76;
+  --chat-text-user: 255, 255, 255;
+  --chat-border-user: 0, 38, 76;
+
+  --chat-bg-bot: 0, 140, 153;
+  --chat-text-bot: 255, 255, 255;
+  --chat-border-bot: 0, 140, 153;
+
+  /* Chat */
+  --color-bot: 230, 244, 246;
+  --color-user: 0, 140, 153;
+
+  /* États */
   --color-success: 153, 204, 51;
-  --color-warning: 255, 204, 0;
-  --color-error: 255, 153, 102;
+  --color-warning: 237, 108, 2;
+  --color-error: 198, 83, 83;
   --color-information: 200, 231, 255;
 }
 
 .theme-mcjr {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -98,12 +249,32 @@ Provide all colors into project
 }
 
 .theme-hfar {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -111,12 +282,32 @@ Provide all colors into project
 }
 
 .theme-cms {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -124,12 +315,32 @@ Provide all colors into project
 }
 
 .theme-iridis {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
@@ -137,36 +348,48 @@ Provide all colors into project
 }
 
 .theme-dermo {
+  /* General */
   --color-primary: 150, 190, 50;
   --color-secondary: 0, 125, 190;
-  --color-text: 100, 100, 0;
-  --color-bot: 255, 188, 73;
-  --color-user: 255, 107, 108;
+
+  --color-text: 0, 0, 0;
+  --color-title: 0, 125, 190;
+  --color-subtitle: 0, 125, 190;
+  --color-text-hover: 255, 255, 255;
+  --color-link: 0, 125, 190;
+  --color-link-hover: 150, 190, 50;
+
   --color-bg: 255, 255, 255;
+
+  --chat-bg-user: transparent;
+  --chat-text-user: 0, 0, 0;
+  --chat-border-user: 150, 190, 50;
+
+  --chat-bg-bot: transparent;
+  --chat-text-bot: 0, 0, 0;
+  --chat-border-bot: 0, 125, 190;
+
+  /* Chat */
+  --color-bot: 150, 190, 50;
+  --color-user: 0, 125, 190;
+
+  /* États */
   --color-success: 153, 204, 51;
   --color-warning: 255, 204, 0;
   --color-error: 255, 153, 102;
   --color-information: 200, 231, 255;
 }
 
-ul li,
-ol {
-  @apply text-black;
-}
-
 h1 {
-  @apply text-black font-bold text-lg px-2;
+  @apply text-subTitle font-bold text-lg px-2;
 }
 
 h2 {
-  @apply text-black font-bold text-sm px-2;
+  @apply text-title font-bold text-sm px-2;
 }
 
 h3 {
-  @apply text-black font-bold;
-}
-
-h4 {
+  @apply text-title font-bold;
 }
 
 p {
@@ -182,107 +405,9 @@ a {
 }
 
 input[type='number'] {
-  @apply rounded-md h-8 w-full bg-white;
+  @apply rounded-md h-8 w-full bg-bg;
   /*Firefox*/
   --moz-appearance: textfield;
-}
-
-/* Dashboard */
-#dashboard {
-  @apply relative flex flex-row h-screen w-screen;
-}
-
-/* SideBar */
-#side-bar {
-  @apply absolute flex flex-col z-20 bg-secondary w-1/5 h-screen pt-16 p-8 gap-2 items-center min-w-72 md:min-w-72 text-white;
-}
-
-/* Statut Login */
-#statut-login {
-  @apply flex flex-col mt-4 gap-2 w-full;
-}
-
-/* Main Page */
-
-#main {
-  @apply relative flex-1 bg-bg h-full w-full overflow-x-hidden overflow-y-hidden px-2 pb-4;
-}
-
-.main-reduce {
-  @apply md:ml-80;
-}
-
-/* Header */
-#header {
-  @apply flex flex-col h-16 flex-1 gap-4 mt-4 items-center;
-}
-
-/* Panel */
-#tab-panel {
-  @apply cursor-pointer absolute flex flex-row h-fit w-fit mt-1 rounded-md shadow-sm bg-white border border-solid border-gray-200 justify-center items-center;
-}
-
-/* Styles communs aux boutons */
-.tab,
-.tab-selected {
-  @apply flex flex-row justify-center items-center w-fit px-4 py-2 text-xs font-medium text-black bg-transparent hover:bg-primary hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white sm:text-sm;
-}
-
-/* Bouton sélectionné */
-.tab-selected {
-  @apply rounded-md text-white bg-primary;
-}
-
-/* Bouton gauche (premier) */
-.tab:first-child {
-  @apply rounded-l-md;
-}
-
-/* Bouton droit (dernier) */
-.tab:last-child {
-  @apply rounded-r-md;
-}
-
-/* Chat */
-#chat-room {
-  @apply flex flex-col h-full gap-4 pb-24 mt-1;
-}
-
-.chat-room-containers_tab-panel {
-  @apply absolute sticky flex w-screen justify-center z-10;
-}
-
-.chat-room-containers_list-messages {
-  @apply relative flex flex-col mt-8 mb-0 p-2 h-full gap-2 overflow-y-scroll overflow-x-hidden;
-}
-
-.chat-room-containers_reformulate {
-  @apply flex flex-row justify-start gap-2 mb-2 text-xs;
-}
-
-.chat-room-containers_loading-bot {
-  @apply flex flex-row justify-start;
-}
-
-.chat-room-containers_loading-user {
-  @apply flex flex-row justify-end;
-}
-
-.chat-room-containers_input-message {
-  @apply absolute sticky w-full flex bottom-0;
-}
-
-/* Information */
-.chat-information {
-  @apply absolute sticky bg-transparent flex flex-col bg-warning p-2 rounded-xl text-xs sm:text-sm text-justify;
-}
-
-.chat-info {
-  @apply flex-1 gap-2 transition ease-in-out delay-150 duration-150 text-xs sm:text-sm;
-}
-
-.chat-info-hidden {
-  @apply hidden transition ease-in-out delay-150 duration-150;
 }
 
 /* Messages */
@@ -300,37 +425,38 @@ input[type='number'] {
 }
 
 .bg-assistant {
-  @apply border border-secondary border-solid;
+  @apply border border-borderBot border-solid bg-bgBot;
 }
 
 .bg-user {
-  @apply border border-primary border-solid;
+  @apply border border-borderUser border-solid bg-bgUser;
 }
 
 .message-header {
-  @apply flex text-xs font-medium m-1;
+  @apply flex text-xs font-medium m-1 text-text;
 }
 
 .message-assistant {
-  @apply flex flex-col text-black text-justify text-sm rounded-tr-lg rounded-b-lg justify-start gap-2 text-wrap;
+  @apply flex flex-col text-textBot text-justify text-sm rounded-tr-lg rounded-b-lg justify-start gap-2 text-wrap;
 }
 .message-assistant,
 p {
-  @apply flex flex-col py-1;
+  @apply flex flex-col;
 }
 
 .message-user {
-  @apply flex flex-col text-black text-justify text-sm rounded-tl-lg rounded-b-lg justify-end gap-2;
+  @apply flex flex-col text-textUser text-justify text-sm rounded-tl-lg rounded-b-lg gap-2 border-borderUser;
 }
 
 .message-assistant,
 .message-user li {
-  @apply flex flex-col gap-2 my-2;
+  @apply flex flex-col gap-2 my-2 text-textUser;
 }
 
 .icon-bot {
   @apply text-secondary;
 }
+
 .icon-user {
   @apply text-primary;
 }
@@ -339,42 +465,9 @@ p {
   @apply h-8 rounded-xl px-2;
 }
 
-.text--bot {
-  @apply bg-secondary w-fit border-2 border-slate-300 hover:border-indigo-300 rounded-tr-lg rounded-b-lg text-justify justify-center content-center p-2;
-}
-
-.text--user {
-  @apply bg-primary border-2 border-slate-200 rounded-tl-lg rounded-b-lg justify-center content-center p-2 text-justify;
-}
-
-/* Procedures */
-#procedure {
-  @apply h-full;
-}
-
-.tab-procedure {
-  @apply w-full text-sm cursor-pointer inline-flex items-center px-4 py-3 text-third border outlined border-solid border-primary bg-white rounded-lg hover:bg-primary hover:text-white justify-between;
-}
-
-.tab-procedure_selected {
-  @apply text-sm cursor-pointer inline-flex items-center px-4 py-3 text-white bg-primary rounded-lg w-full justify-between;
-}
-
 /* Input Message */
 input[type='text'] {
-  @apply rounded-xl border border-solid border-slate-100 h-fit w-full bg-white pr-9;
-}
-
-.container-message_written {
-  @apply rounded-xl border border-solid border-secondary h-fit w-full bg-white pl-2 pr-24 py-2 overflow-y-auto text-sm;
-}
-
-.container-message_transcribed {
-  @apply rounded-xl border border-solid border-secondary h-24 w-full bg-white pl-2 pr-9 py-2 overflow-y-auto;
-}
-
-.container-icons-actions {
-  @apply absolute flex flex-row z-10 top-4 w-52;
+  @apply rounded-xl border border-solid border-slate-100 h-fit w-full bg-bg pr-9;
 }
 
 /* IconButtons */
@@ -395,31 +488,6 @@ input[type='text'] {
   @apply relative flex flex-row w-full;
 }
 
-.visualizer-container {
-  @apply relative w-full h-[50px] mr-28 bg-gray-100 border-2 border-gray-300 rounded-lg flex items-center justify-center;
-}
-
-.visualizer-canvas {
-  @apply w-full h-full rounded-lg;
-}
-.input-user {
-  @apply p-4 border border-primary outlined;
-}
-
-.icon-send-message {
-  @apply absolute text-secondary right-4 inline-block hover:text-primary h-full;
-}
-
-.icon-microphone {
-  @apply absolute text-secondary right-16 inline-block  hover:text-primary h-full;
-}
-
-.icon-stop {
-  @apply absolute text-secondary right-4 inline-block  hover:text-third hover:text-secondary h-full;
-}
-
-/* Inputs Evaluate */
-
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -427,83 +495,19 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-.icons-disabled {
-  @apply right-8 absolute inline-block border-secondary h-full p-1 opacity-40;
-}
-
-.icons-input {
-  @apply right-8 absolute inline-block border-secondary hover:text-third hover:bg-secondary h-full p-1;
-}
-
-.semi-rounded {
-  @apply right-0 rounded-r-lg;
-}
-
 /* Buttons */
 .btn_actions {
-  @apply text-black font-medium cursor-pointer w-fit h-fit rounded-md border p-2 hover:bg-secondary hover:text-white;
+  @apply text-text font-medium cursor-pointer w-fit h-fit rounded-md border border-secondary p-2 hover:bg-secondary hover:text-textHover;
 }
 
 .contained {
-  @apply hover:text-white hover:bg-secondary;
+  @apply hover:text-textHover hover:bg-secondary;
 }
 
 .outlined {
-  @apply border-primary bg-white hover:text-third hover:border-secondary;
-}
-
-/* Menu Modal */
-
-#menu-modal {
-  @apply absolute flex flex-col z-10 right-0 mt-10 rounded-lg shadow-xl bg-third p-2 w-52;
-}
-
-.list-menu-modal {
-  @apply flex flex-col w-full indent-2 mb-0;
-}
-
-.menu-modal-item {
-  @apply w-full list-none cursor-pointer hover:bg-user hover:w-full;
-}
-
-/* Modal parameter */
-
-#modal-parameter-background {
-  @apply w-screen h-screen fixed top-0 left-0 z-20 bg-slate-500/50 flex justify-center items-center;
-}
-
-.modal-parameter {
-  @apply z-30 p-4 w-fit h-fit bg-white rounded-lg;
-}
-
-.modal-close {
-  @apply end-2.5 text-gray-400 bg-transparent hover:bg-primary hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center;
+  @apply border-primary bg-bg hover:text-textHover hover:border-secondary;
 }
 
 form {
   @apply flex flex-col justify-around items-center gap-4;
-}
-
-/* Loader */
-
-.wrapper {
-  @apply bottom-24 w-fit h-fit rounded-lg;
-}
-
-.wrapper-user {
-  @apply border border-primary border-solid right-4;
-}
-
-.wrapper-bot {
-  @apply border border-secondary border-solid left-4;
-}
-
-.loader {
-  @apply flex flex-row p-2 w-fit h-fit text-sm font-normal text-gray-900 rounded-lg border border border-gray-200 hover:bg-gray-100 hover:text-secondary focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-secondary inline-flex items-center;
-}
-
-/* Feedback */
-
-.feedback-light {
-  @apply text-sm font-normal flex flex-row w-fit gap-2 items-center border rounded-lg border border-solid border-secondary ml-1 py-1 px-2;
 }

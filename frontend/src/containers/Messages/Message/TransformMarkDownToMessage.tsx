@@ -18,20 +18,20 @@ export default function TransformMarkDownToMessage({
               {...props}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 underline break-all"
+              className="text-link underline break-all hover:text-linkHover"
             >
               {props.children}
             </a>
           ),
           ol: ({ node, ...props }) => (
-            <ol className="list-decimal pl-6" {...props} />
+            <ol className="list-decimal pl-6 py-1" {...props} />
           ),
           ul: ({ node, ...props }) => (
-            <ul className="list-disc pl-6" {...props} />
+            <ul className="list-disc pl-6 py-1" {...props} />
           ),
           em: ({ node, ...props }) => <em className="italic" {...props} />,
           strong: ({ node, ...props }) => (
-            <strong className="font-bold" {...props} />
+            <strong className="font-bold py-1" {...props} />
           ),
         }}
       >

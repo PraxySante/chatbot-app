@@ -1,0 +1,11 @@
+.language-container_box {
+  @apply flex right-10 w-fit gap-2 px-2 border border-solid border-slate-200 rounded-lg bg-bg;
+}
+
+.language-container_select {
+  @apply absolute mt-12 bg-bg w-fit h-fit border border-solid border-slate-200 rounded-lg flex flex-col w-fit h-fit p-2 gap-2;
+}
+
+.language-container_flag {
+  @apply flex flex-row items-center gap-2 cursor-pointer;
+}

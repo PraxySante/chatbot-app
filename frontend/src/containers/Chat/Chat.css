@@ -1,0 +1,52 @@
+/* Chat */
+#chat-room {
+  @apply flex flex-col h-full gap-4 pb-24 mt-1;
+}
+
+.chat-room-header{
+  @apply h-fit
+}
+
+.chat-room-containers_tab-panel {
+  @apply absolute sticky flex w-screen justify-center z-10;
+}
+
+.chat-room-containers_list-messages {
+  @apply relative flex flex-col mt-8 mb-0 p-2 h-full overflow-y-scroll overflow-x-hidden;
+}
+
+.chat-room-containers_reformulate {
+  @apply flex flex-row justify-start gap-2 mb-2 text-xs;
+}
+
+.chat-room-containers_loading-bot {
+  @apply flex flex-row justify-start;
+}
+
+.chat-room-containers_loading-user {
+  @apply flex flex-row justify-end;
+}
+
+.chat-room-containers_input-message {
+  @apply absolute sticky w-full flex bottom-0;
+}
+
+.chat-room-containers_loading-bot {
+  @apply flex flex-row justify-start;
+}
+
+.chat-room-containers_loading-user {
+  @apply flex flex-row justify-end;
+}
+
+.chatbot-room_containers-feedback {
+  @apply flex flex-row overflow-y-auto overflow-x-hidden absolute z-50 justify-center items-center w-full h-3/4;
+}
+
+.wrapper-user {
+  @apply border border-borderUser border-solid right-4 text-textUser bg-bgUser;
+}
+
+.wrapper-bot {
+  @apply border border-borderBot border-solid left-4 text-textBot bg-bgBot;
+}

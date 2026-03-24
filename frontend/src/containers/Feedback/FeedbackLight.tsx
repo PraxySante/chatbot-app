@@ -3,6 +3,7 @@ import IconButton from '../../components/Buttons/IconButton';
 import { useChat } from '../../hooks/ChatProvider';
 import { iconSmileys } from '../../constants/feeback';
 import { useLanguage } from '../../hooks/UseLanguage';
+import './FeedBack.css';
 
 type FeedbackLightType = {
   setIsOpenModalFeedback: Dispatch<SetStateAction<boolean>>;
@@ -11,7 +12,6 @@ type FeedbackLightType = {
 export default function FeedbackLight({
   setIsOpenModalFeedback,
 }: FeedbackLightType) {
-
   const { setVoteUser } = useChat();
   const { userLanguage } = useLanguage();
 
@@ -42,8 +42,10 @@ export default function FeedbackLight({
   }
 
   return (
-    <span className="feedback-light hover:bg-secondary hover:text-white">
-      <p className="hidden md:inline">{userLanguage ? userLanguage?.btn_feedback_send : ''}</p>
+    <span className="feedback-light hover:bg-secondary hover:text-textHover">
+      <p className="hidden md:inline">
+        {userLanguage ? userLanguage?.btn_feedback_send : ''}
+      </p>
       {renderingFeedbackLight()}
     </span>
   );

@@ -1,0 +1,7 @@
+.input-user {
+  @apply p-4 border border-borderUser;
+}
+
+.section-checkbox {
+  @apply flex flex-1 gap-4
+}

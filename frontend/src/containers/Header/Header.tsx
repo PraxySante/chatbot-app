@@ -9,6 +9,7 @@ import useTranscription from '../../hooks/TranscriptionProvider';
 import { useClient } from '../../hooks/ClientProvider';
 import icons from '../../constants/icons';
 import { useLanguage } from '../../hooks/UseLanguage';
+import './Header.css';
 
 const Image = lazy(() => import('../../components/Logo/Logo'));
 
@@ -21,7 +22,7 @@ export default function Header({
 }: IHeaderAttributes) {
   // Init Component
 
-  const { selectedRestart } = useChat();
+  const { selectedRestart, updateSelectPanel } = useChat();
   const { stopTranscription, isRecord } = useTranscription();
   const { configClient } = useClient();
 
@@ -37,13 +38,16 @@ export default function Header({
       {/* Login/Logout selection */}
       {/* {isSelectLanguage ? !isAuthenticated ? <Auth /> : null : null} */}
       {/* Icons */}
-      <span className="icons-actions gap-2 items-center left-5 sm:left-10">
-        <span className="relative">
-          <Image imgSource={configClient.logo} classname="w-14 h-14" />
+      <span className="icons-actions header-left-side">
+        <span className="hedaer-logo" onClick={() => updateSelectPanel('chat')}>
+          <Image
+            imgSource={configClient.logo.urlImg}
+            classname={`w-${configClient.logo.width} h-${configClient.logo.height} cursor-pointer`}
+          />
           {/* <span className="absolute bottom-0 h-4 w-4 rounded-full bg-green-400"></span> */}
         </span>
 
-        <span className="flex flex-col h-fit">
+        <span className="header-chatbot-title">
           <Title
             content={configClient.name}
             tag={'h3'}
@@ -57,17 +61,19 @@ export default function Header({
         </span>
       </span>
       <span className="icons-actions right">
-        {configClient.menuParameterOption === true && (
+        {configClient?.options?.menuParameterOption === true && (
           <>
             <SelectLanguage />
-            {configClient.audioParameterOption &&<IconButton
-              onClick={toggleOpenCloseModalMenu}
-              icon={icons.menuBar}
-            />}
+            {configClient?.options?.audioParameterOption && (
+              <IconButton
+                onClick={toggleOpenCloseModalMenu}
+                icon={icons.menuBar}
+              />
+            )}
           </>
         )}
         <div
-          className="flex flex-row gap-2 items-center justify-center border border-secondary rounded-lg p-1 md:p-2 text-blue pointer-cursor hover:bg-secondary hover:text-white"
+          className="header-btn_restart"
           onClick={() => handleClickRestart()}
         >
           <IconButton

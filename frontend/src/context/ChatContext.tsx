@@ -16,6 +16,7 @@ import {
   ERROR_TYPE_FAILURE,
   ERROR_USE_NOTIFICATION,
   ERROR_USE_RECAPTCHA,
+  PANEL_CHAT,
   STATUS_SUCCESS,
 } from '../constants/notifications.constants';
 import {
@@ -28,6 +29,7 @@ import {
   ROLE_USER_TEXT,
 } from '../constants/chat.constants';
 import { useClient } from '../hooks/ClientProvider';
+import { selectedPanelAttributes } from '../types/panel/panel.type';
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
@@ -56,6 +58,8 @@ function ChatContextProvider({
   const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
   const [messageLoading, setMessageLoading] = useState<string>('');
+  const [selectedPanel, setSelectedPanel] =
+    useState<selectedPanelAttributes>(PANEL_CHAT);
 
   if (!useRecaptcha) {
     throw new Error(ERROR_USE_RECAPTCHA);
@@ -151,6 +155,7 @@ function ChatContextProvider({
     setIsRestart(!isRestart);
     getMessageToNotification(STATUS_SUCCESS, userLanguage?.success_msg_session);
     await restartConversation(selectedLanguage);
+    whoIsWritten(ROLE_NONE);
   }
 
   async function verifyStartChat(): Promise<void> {
@@ -406,6 +411,7 @@ function ChatContextProvider({
     const propositionChatConversation: any =
       await reformulateChat(selectedLanguage);
 
+      whoIsWritten(ROLE_NONE);
     if (
       propositionChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()
     ) {
@@ -496,9 +502,13 @@ function ChatContextProvider({
     }
   }
 
+  function updateSelectPanel(selectedPanel: selectedPanelAttributes) {
+    setSelectedPanel(selectedPanel);
+  }
+
   return (
     <>
-      {configClient.authAccountOption ? (
+      {configClient?.options?.authAccountOption ? (
         <>
           <ChatContext.Provider
             value={{
@@ -521,6 +531,8 @@ function ChatContextProvider({
               messageLoading,
               setVoteUser,
               uuidSession,
+              updateSelectPanel,
+              selectedPanel,
             }}
           >
             {children}
@@ -547,6 +559,8 @@ function ChatContextProvider({
             messageLoading,
             setVoteUser,
             uuidSession,
+            updateSelectPanel,
+            selectedPanel,
           }}
         >
           {children}

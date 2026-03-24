@@ -1,0 +1,7 @@
+.wrapper {
+  @apply bottom-24 w-fit h-fit rounded-lg my-2;
+}
+
+.loader {
+  @apply flex flex-row p-2 w-fit h-fit text-sm font-normal rounded-lg inline-flex items-center;
+}

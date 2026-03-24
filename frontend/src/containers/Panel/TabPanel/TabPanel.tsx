@@ -1,14 +1,16 @@
 import { tabPanelAttributes } from '../../../types/panel/tab.type';
 import { useLanguage } from '../../../hooks/UseLanguage';
-import { IPanel } from '../../../types/panel/panel.interface';
 import { Fragment } from 'react/jsx-runtime';
 import icons from '../../../constants/icons';
 import IconButton from '../../../components/Buttons/IconButton';
+import { useChat } from '../../../hooks/ChatProvider';
+import '../Panel.css';
 
-export default function TabPanel({ selectedPanel, setSelectedPanel }: IPanel) {
+export default function TabPanel() {
   //Init Component
   // Check selected language by user
   const { userLanguage } = useLanguage();
+  const { selectedPanel, updateSelectPanel } = useChat();
   // Init Tab Panel structure
   const tabPanel: tabPanelAttributes[] = [
     {
@@ -33,7 +35,7 @@ export default function TabPanel({ selectedPanel, setSelectedPanel }: IPanel) {
               type="button"
               icon={tab.icon}
               className={selectedPanel === tab.id ? 'tab-selected' : 'tab'}
-              onClick={() => setSelectedPanel(tab.id)}
+              onClick={() => updateSelectPanel(tab.id)}
               content={tab.name}
               title={tab.name}
             />

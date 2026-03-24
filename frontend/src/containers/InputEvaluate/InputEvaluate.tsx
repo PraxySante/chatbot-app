@@ -6,6 +6,7 @@ import { IInputEvaluate } from '../../types/inputs/inputs.interface';
 import Title from '../../components/Text/Title';
 import { useLanguage } from '../../hooks/UseLanguage';
 import TransformMarkDownToMessage from '../Messages/Message/TransformMarkDownToMessage';
+import './InputEvaluate.css';
 
 export default function InputEvaluate({
   content,
