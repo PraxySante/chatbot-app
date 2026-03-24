@@ -24,13 +24,8 @@ import { useNotification } from '../../hooks/NotificationProvider';
 import { STATUS_ERROR_TOO_MANY_REQUEST } from '../../constants/notifications.constants';
 
 export default function ListMessage({ message }: ListMessageType) {
-  const {
-    stockMessageUser,
-    whoIsWritten,
-    updateSelectPanel,
-    isBotWritten,
-    reformulateChatConversation,
-  } = useChat();
+  const { stockMessageUser, whoIsWritten, updateSelectPanel, isBotWritten } =
+    useChat();
   const { userLanguage } = useLanguage();
   const { configClient } = useClient();
   const { getMessageToNotification } = useNotification();
