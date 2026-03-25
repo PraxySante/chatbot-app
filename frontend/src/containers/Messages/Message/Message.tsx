@@ -4,9 +4,11 @@ import HeaderMeassage from './HeaderMessage';
 import { useEffect } from 'react';
 import { useChat } from '../../../hooks/ChatProvider';
 import { ROLE_NONE } from '../../../constants/chat.constants';
+import { useClient } from '../../../hooks/ClientProvider';
 
 export default function Message({ message }: CardMessageType) {
   const { reformulateChatConversation, whoIsWritten } = useChat();
+  const { configClient } = useClient();
 
   useEffect(() => {
     searchWord();
@@ -16,7 +18,8 @@ export default function Message({ message }: CardMessageType) {
     if (
       message.content.includes(
         'Pourriez-vous la reformuler pour que je puisse mieux vous aider ?'
-      )
+      ) &&
+      configClient?.options?.isReformulateAuto
     ) {
       await reformulateChatConversation();
       whoIsWritten(ROLE_NONE);
