@@ -33,7 +33,7 @@ export default {
         success: 'rgba(var(--color-success), 0.3)',
         warning: 'rgba(var(--color-warning), 0.3)',
         error: 'rgba(var(--color-error), 0.3)',
-        information: 'rgba(var(--color-information), 0.5)',
+        information: 'rgba(var(--color-information), 0.3)',
       },
       animation: {
         loading: 'loading 0.5s alternate infinite ease',

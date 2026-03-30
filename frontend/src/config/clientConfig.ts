@@ -335,14 +335,14 @@ export const clientsConfig: Record<string, ClientConfig> = {
   },
   'deuxiemeavis.praxysante.fr': {
     host: import.meta.env.VITE_HOST_DA,
-    name: 'Chat bot Deuxième avis',
+    name: 'Chatbot deuxiemeavis.fr',
     project: import.meta.env.VITE_PROJECT_DA,
     logo: {
       urlImg: './LOGO-DAFR-2023-COLOR-DARK.png',
       width: 16,
       height: 12,
     },
-    title: 'Deuxième avis',
+    title: 'deuxiemeavis.fr',
     languages: [
       {
         id: 'fr',

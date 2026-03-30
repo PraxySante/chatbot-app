@@ -1,6 +1,6 @@
 /* Information */
 .chat-information {
-  @apply absolute sticky flex flex-col p-2 rounded-xl text-xs sm:text-sm text-justify bg-warning;
+  @apply absolute sticky flex flex-col p-2 rounded-xl text-xs sm:text-sm text-justify bg-information;
 }
 
 .chat-area_info {
@@ -8,7 +8,7 @@
 }
 
 .chat-info {
-  @apply flex-1 gap-2 transition ease-in-out delay-150 duration-150 text-xs sm:text-xs;
+  @apply flex-1 gap-2 transition ease-in-out delay-150 duration-150 text-xs sm:text-xs pl-4;
 }
 
 .chat-info-hidden {
