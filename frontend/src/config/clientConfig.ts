@@ -662,6 +662,60 @@ export const clientsConfig: Record<string, ClientConfig> = {
       'feedback_hallucinations',
     ],
   },
+    'essai-clinique.praxysante.fr': {
+    host: import.meta.env.VITE_HOST_BEONEMED,
+    name: 'Chat bot de Be One medicines',
+    project: import.meta.env.VITE_PROJECT_BEONEMED,
+    logo: {
+      urlImg: './bot-test.png',
+      width: 12,
+      height: 12,
+    },
+    title: 'BEONEMED',
+    languages: [
+      {
+        id: 'fr',
+        name: 'Français',
+        icon: '🇫🇷',
+      },
+    ],
+    options: {
+      isReformulateAuto: false,
+      displayDocument: true,
+      authAccountOption: false,
+      sideBarOption: false,
+      menuParameterOption: false,
+      audioParameterOption: false,
+      RecaptchaOption: false,
+    },
+    modalMenu: [
+      {
+        id: 're-run',
+        name: 'Rerun',
+      },
+      {
+        id: 'settings',
+        name: 'Settings',
+      },
+      {
+        id: 'print',
+        name: 'Print',
+      },
+      {
+        id: 'record-screencast',
+        name: 'Record ad screencast',
+      },
+      {
+        id: 'about',
+        name: 'About',
+      },
+    ],
+    feedback: [
+      'feedback_exhaustivity',
+      'feedback_accuracy',
+      'feedback_hallucinations',
+    ],
+  },
   localhost: {
     host: import.meta.env.VITE_HOST_DEV,
     name: `Chat bot test sur project ${import.meta.env.VITE_PROJECT_DEV}`,
