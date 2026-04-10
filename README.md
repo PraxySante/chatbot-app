@@ -10,14 +10,14 @@ See below all chabots app deployed. Chatbot app is a multi-domain application.
 | **CCIB**               | [CCIB](https://ccib.praxy.ai/dev)                                  | [CCIB](https://ccib.praxy.ai/)                                  |
 | **CENTRE-IRIDIS**      | [IRIDIS](https://centre-iridis.praxysante.fr/dev)                  | [IRIDIS](https://centre-iridis.praxysante.fr/)                  |
 | **CMS**                | [CMS](https://cms.praxysante.fr/dev)                               | [CMS](https://cms.praxysante.fr/)                               |
-| **DA**                 | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/dev)             | [2EME AVIS](http://www.deuxiemeavis.praxysante.fr/)             |
+| **DA**                 | [2EME AVIS](https://www.deuxiemeavis.praxysante.fr/dev)             | [2EME AVIS](https://www.deuxiemeavis.praxysante.fr/)             |
 | **DERMOMEDICALCENTER** | [DERMOMEDICALCENTER](https://dermomedicalcenter.praxysante.fr/dev) | [DERMOMEDICALCENTER](https://dermomedicalcenter.praxysante.fr/) |
 | **ENNOV**              | [ENNOV](https://ennov.praxysante.fr/dev)                           | [ENNOV](https://ennov.praxysante.fr/)                           |
 | **ESSAI-CLINIQUE**     | [ESSAI-CLINIQUE](https://essai-clinique.praxysante.fr/dev)         | [ESSAI-CLINIQUE](https://essai-clinique.praxysante.fr/)         |
 | **FOCH**               | [FOCH](https://chatbotfoch.praxysante.fr/dev)                      | [FOCH](https://chatbotfoch.praxysante.fr/)                      |
 | **HFAR**               | [HFAR](https://hfar.praxysante.fr/dev)                             | [HFAR](https://hfar.praxysante.fr/)                             |
 | **HPSJ**               | [HPSJ](https://hpsj.praxysante.fr/dev)                             | [HPSJ](https://hpsj.praxysante.fr/)                             |
-| **MCJR**               | [MCJR](http://www.montecarlojointrepair.praxysante.fr/dev)         | [MCJR](http://www.montecarlojointrepair.praxysante.fr/)         |
+| **MCJR**               | [MCJR](https://www.montecarlojointrepair.praxysante.fr/dev)         | [MCJR](https://www.montecarlojointrepair.praxysante.fr/)         |
 
 ## Plateforme chatbot – Praxysanté
 
