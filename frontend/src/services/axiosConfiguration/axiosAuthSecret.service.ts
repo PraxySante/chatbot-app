@@ -50,6 +50,10 @@ switch (true) {
     project = import.meta.env.VITE_PROJECT_DERMO;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DERMO;
     break;
+  case hostname.includes(import.meta.env.VITE_HOST_BEONEMED):
+    project = import.meta.env.VITE_PROJECT_BEONEMED;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_BEONEMED;
+    break;
   default:
     project = import.meta.env.VITE_PROJECT_DEV;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DEV;
