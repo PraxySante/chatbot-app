@@ -613,7 +613,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
     name: 'Chat bot du centre DermoMedicalCenter',
     project: import.meta.env.VITE_PROJECT_DERMO,
     logo: {
-      urlImg: './bot-test.png',
+      urlImg: './logo-dermomedicalcenter.png',
       width: 12,
       height: 12,
     },
@@ -721,7 +721,7 @@ export const clientsConfig: Record<string, ClientConfig> = {
     name: `Chat bot test sur project ${import.meta.env.VITE_PROJECT_DEV}`,
     project: import.meta.env.VITE_PROJECT_DEV,
     logo: {
-      urlImg: './LOGO-DAFR-2023-COLOR-DARK.png',
+      urlImg: './bot-test.png',
       width: 12,
       height: 12,
     },
