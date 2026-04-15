@@ -12,6 +12,7 @@ import useTranscription from '../hooks/TranscriptionProvider';
 import Recaptcha from '../components/Recaptcha/Recaptcha';
 import useRecaptcha from '../hooks/RecaptchaProvider';
 import { useClient } from '../hooks/ClientProvider';
+import './Dashboard.css';
 
 export default function DashBoard() {
   //Init Component
@@ -60,13 +61,13 @@ export default function DashBoard() {
       {/* Dashboard section */}
       <div id="dashboard" onClick={closeModalByClickBackGround}>
         {/* Rendering ModalParameter */}
-        {configClient.audioParameterOption === true && isOpenModal
+        {configClient?.options?.audioParameterOption === true && isOpenModal
           ? renderingModalParameter()
           : null}
 
         {/* Sidebar section */}
         {/* Button toggle Open/Close SideBar */}
-        {configClient.sideBarOption === true ? (
+        {configClient?.options?.sideBarOption === true ? (
           <>
             {!isOpenSideBar ? (
               <span className="icons-actions left">
@@ -80,40 +81,31 @@ export default function DashBoard() {
         ) : null}
 
         {/*  SideBar */}
-        {configClient.sideBarOption === true && isOpenSideBar ? (
+        {configClient?.options?.sideBarOption === true && isOpenSideBar ? (
           <SideBar toggleOpenCloseSideBar={toggleOpenCloseSideBar} />
         ) : null}
 
         {/* Main section */}
         <section id="main" className={isOpenSideBar ? 'main-reduce' : ''}>
           {!isHuman ? (
-            <span className="absolute h-full w-full z-20 bg-gray-200/50 flex items-center justify-center">
+            <span className="main-recaptcha">
               <Recaptcha />
             </span>
           ) : null}
           {/* Button toggle Open/Close Modal Parameter */}
           {/* Button toggle Open/Close ModalMenu Parameters */}
-          {configClient.authAccountOption === true ? (
+          {configClient?.options?.authAccountOption === true ? (
             <>
               {isAuthenticated && selectedLanguage ? (
-                <>
-                  {/* Panel */}
-                  <Panel />
-                </>
+                <Panel />
               ) : (
-                <>
-                  {/* Header */}
-                  <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
-                </>
+                <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
               )}
             </>
           ) : (
             <>
-              {/* Header */}
               <Header toggleOpenCloseModalMenu={toggleOpenCloseModalMenu} />
               <hr />
-
-              {/* Panel */}
               <Panel />
             </>
           )}

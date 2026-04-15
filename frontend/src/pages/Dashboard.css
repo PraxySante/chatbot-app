@@ -1,0 +1,17 @@
+/* Dashboard */
+#dashboard {
+  @apply relative flex flex-row h-screen w-screen;
+}
+
+#main {
+  @apply relative flex-1 bg-bg h-full w-full overflow-x-hidden overflow-y-hidden px-2 pb-4;
+}
+
+.main-reduce {
+  @apply md:ml-80;
+}
+
+.main-recaptcha {
+  @apply absolute h-full w-full z-20 bg-gray-200/50 flex items-center justify-center
+}
+

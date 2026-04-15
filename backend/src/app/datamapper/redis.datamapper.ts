@@ -2,7 +2,7 @@ import {
 	ERROR_NOT_FOUND,
 	ERROR_NOT_FOUND_MESSAGE,
 	FAILURE_REDIS_MESSAGE,
-	ONE_HOUR,
+	SESSION_TTL_SECONDS,
 	SUCCESS_OK,
 } from "../constant/constant";
 import { client as redisClient } from "../services/Redis/redis.service";
@@ -108,11 +108,7 @@ async function createKeyRedis(
 			return { status: ERROR_NOT_FOUND, details: ERROR_NOT_FOUND_MESSAGE };
 		}
 
-		if (!isExist) {
-			await redisClient.set(keyRedis, value, { EX: ONE_HOUR });
-			return;
-		}
-		return;
+		await redisClient.set(keyRedis, value, { EX: SESSION_TTL_SECONDS });
 	} catch (error: any) {
 		console.log(FAILURE_REDIS_MESSAGE, error?.message);
 		return { status: error?.status, details: error.message };
@@ -174,11 +170,11 @@ async function updateKeyRedis(
 			default:
 				break;
 		}
-
+		
+		const remainingTTL = await redisClient.ttl(keyRedis);
 		await redisClient.set(keyRedis, JSON.stringify(storedData), {
-			EX: ONE_HOUR,
+			EX: remainingTTL > 0 ? remainingTTL : SESSION_TTL_SECONDS,
 		});
-		return;
 	} catch (error: any) {
 		console.log(FAILURE_REDIS_MESSAGE, error?.message);
 		return { status: error.status, details: error.message };

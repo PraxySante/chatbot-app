@@ -26,22 +26,20 @@ export default function IconButton({
   }, [className]);
 
   return (
-    <>
-      <button
-        title={title}
-        disabled={disabled}
-        className={formatClassName}
-        type={type}
-        onClick={onClick}
-        onMouseDown={onMouseDown}
-        onMouseLeave={onMouseLeave}
-        onMouseUp={onMouseUp}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-      >
-        {icon}
-        {content}
-      </button>
-    </>
+    <button
+      title={title}
+      disabled={disabled}
+      className={formatClassName}
+      type={type}
+      onClick={onClick}
+      onMouseDown={onMouseDown}
+      onMouseLeave={onMouseLeave}
+      onMouseUp={onMouseUp}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {icon}
+      {content}
+    </button>
   );
 }

@@ -1,0 +1,19 @@
+#header {
+  @apply flex flex-col h-16 flex-1 gap-4 mt-4 items-center;
+}
+
+.header-left-side {
+  @apply gap-2 items-center left-5;
+}
+
+.header-logo {
+  @apply relative;
+}
+
+.header-chatbot-title {
+  @apply flex flex-col h-fit justify-center mt-2;
+}
+
+.header-btn_restart {
+  @apply flex flex-row gap-2 items-center justify-center border border-solid border-secondary rounded-lg p-1 md:p-2 text-secondary cursor-pointer hover:bg-secondary hover:text-textHover;
+}

@@ -13,24 +13,16 @@ export default function Button({ type, content, onClick, children }: IButton) {
         setContentClassName('btn_actions contained');
         break;
       case 'Envoyer':
-        setContentClassName(
-          'w-full text-white bg-secondary hover:bg-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center'
-        );
+        setContentClassName('btn_actions send_btn');
         break;
       case 'La réponse ne correspond pas à ma question  😞👎':
-        setContentClassName(
-          'btn_actions border border-solid border-secondary  hover:bg-secondary hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center'
-        );
+        setContentClassName('btn_actions reformulate_btn');
         break;
       case 'Envoyez votre avis':
-        setContentClassName(
-          'btn_actions border border-solid border-secondary  hover:bg-secondary hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center'
-        );
+        setContentClassName('btn_actions feedback_btn');
         break;
       default:
-        setContentClassName(
-          'btn_actions border border-solid border-secondary whitespace-pre-line'
-        );
+        setContentClassName('btn_actions default_btn');
         break;
     }
   }, [content]);

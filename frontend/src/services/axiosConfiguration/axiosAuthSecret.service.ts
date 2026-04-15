@@ -38,9 +38,21 @@ switch (true) {
     project = import.meta.env.VITE_PROJECT_HFAR;
     baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_HFAR;
     break;
-  case hostname.includes(import.meta.env.VITE_HOST_CQFD):
-    project = import.meta.env.VITE_PROJECT_CQFD;
-    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_CQFD;
+  case hostname.includes(import.meta.env.VITE_HOST_CMS):
+    project = import.meta.env.VITE_PROJECT_CMS;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_CMS;
+    break;
+  case hostname.includes(import.meta.env.VITE_HOST_IRIDIS):
+    project = import.meta.env.VITE_PROJECT_IRIDIS;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_IRIDIS;
+    break;
+  case hostname.includes(import.meta.env.VITE_HOST_DERMO):
+    project = import.meta.env.VITE_PROJECT_DERMO;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_DERMO;
+    break;
+  case hostname.includes(import.meta.env.VITE_HOST_BEONEMED):
+    project = import.meta.env.VITE_PROJECT_BEONEMED;
+    baseUrl = import.meta.env.VITE_URL_API_FRONT_CHATBOT_BEONEMED;
     break;
   default:
     project = import.meta.env.VITE_PROJECT_DEV;
@@ -52,6 +64,7 @@ const axiosAuthSecret = axios.create({
   // Configuration axios to connect to Auth0
   baseURL: baseUrl,
   headers: { 'content-type': 'application/json' },
+  withCredentials: true,
 });
 
 axiosAuthSecret.interceptors.request.use((config) => {

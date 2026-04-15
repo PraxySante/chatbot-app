@@ -3,6 +3,7 @@ import { useChat } from '../../hooks/ChatProvider';
 import ModalHeader from './ModalHeader';
 import ModalContent from './ModalContent';
 import { ModalType } from '../../types/modal/modal.type';
+import './Modal.css';
 
 export default function Modal({ setIsOpenModalFeedback }: ModalType) {
   const { sendFeedback } = useChat();
@@ -25,8 +26,8 @@ export default function Modal({ setIsOpenModalFeedback }: ModalType) {
   }
   return (
     <>
-      <div className="relative p-4 w-full max-w-md max-h-full">
-        <div className="relative bg-white border border-solid border-primary rounded-lg shadow-sm">
+      <div className="modal_containers">
+        <div className="modal_containers_structural">
           <ModalHeader closeModal={closeModal} />
           <ModalContent
             getComment={getComment}

@@ -64,10 +64,28 @@ export async function authChatBot(
 				password: String(process.env.KEYCLOAK_PASSWORD_HFAR),
 			};
 			break;
-		case project.includes(String(process.env.PROJECT_CQFD)):
+		case project.includes(String(process.env.PROJECT_CMS)):
 			dataProject = {
-				username: String(process.env.KEYCLOAK_USERNAME_CQFD),
-				password: String(process.env.KEYCLOAK_PASSWORD_CQFD),
+				username: String(process.env.KEYCLOAK_USERNAME_CMS),
+				password: String(process.env.KEYCLOAK_PASSWORD_CMS),
+			};
+			break;
+		case project.includes(String(process.env.PROJECT_IRIDIS)):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_IRIDIS),
+				password: String(process.env.KEYCLOAK_PASSWORD_IRIDIS),
+			};
+			break;
+		case project.includes(String(process.env.PROJECT_DERMO)):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_DERMO),
+				password: String(process.env.KEYCLOAK_PASSWORD_DERMO),
+			};
+			break;
+		case project.includes(String(process.env.PROJECT_BEONEMED)):
+			dataProject = {
+				username: String(process.env.KEYCLOAK_USERNAME_BEONEMED),
+				password: String(process.env.KEYCLOAK_PASSWORD_BEONEMED),
 			};
 			break;
 		default:
@@ -99,7 +117,7 @@ export async function authChatBot(
 			details: data,
 		};
 	} catch (error: any) {
-		console.error("authChatBot", error);
+		console.error("authChatbot", error);
 		// return Message Error Typed
 		return {
 			status: error.status,

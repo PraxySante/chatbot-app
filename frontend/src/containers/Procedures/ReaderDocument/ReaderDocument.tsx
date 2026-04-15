@@ -5,9 +5,9 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import icons from '../../../constants/icons';
 import IconButton from '../../../components/Buttons/IconButton';
 import { ReaderDocumentType } from '../../../types/panel/panel.type';
-import { useChat } from '../../../hooks/ChatProvider';
 import { getDocumentFromApi } from '../../../services/ChatBot/getDocumentFromApi.service';
 import { useLanguage } from '../../../hooks/UseLanguage';
+import '../Procedure.css';
 
 export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
   const [selectedPages, setSelectedPages] = useState<number>(1);
@@ -15,7 +15,6 @@ export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
   const [pdfData, setPdfData] = useState<ArrayBuffer | null>(null);
 
   const { userLanguage, selectedLanguage } = useLanguage();
-  const { uuidSession } = useChat();
 
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 
@@ -30,7 +29,6 @@ export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
   useEffect(() => {
     async function launchBlobDocument() {
       const urlDocument = await getDocumentFromApi(
-        uuidSession,
         fileDocument,
         selectedLanguage
       );
@@ -56,7 +54,7 @@ export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
 
   function renderingDocument() {
     return (
-      <div className="w-full max-w-5xl mx-auto">
+      <div className="reader-document">
         <Document
           file={pdfData || undefined}
           onLoadSuccess={onDocumentLoadSuccess}
@@ -75,18 +73,18 @@ export default function ReaderDocument({ fileDocument }: ReaderDocumentType) {
   }
 
   return (
-    <div className="w-full mb-14">
-      <section className="w-full flex justify-between items-center">
+    <div className="reader-document_main">
+      <section className="reader-document_section">
         <IconButton
           icon={icons.arrowLeft}
           onClick={changePage}
-          className="border border-primary text-primary contained rounded-lg p-2 hover:bg-primary hover:text-white"
+          className="reader-document-icons contained"
           content={userLanguage?.btn_chat_previous}
         />
         <IconButton
           icon={icons.arrowRight}
           onClick={changePage}
-          className="border border-primary text-primary contained rounded-lg p-2 hover:bg-primary hover:text-white"
+          className="reader-document-icons contained"
           content={userLanguage?.btn_chat_next}
         />
       </section>

@@ -15,7 +15,10 @@ const NotifacationContext = createContext<
 >(undefined);
 
 function NotificationHandlerProvider({ children }: { children: ReactNode }) {
-  const [messageNotification, setMessageNotification] = useState<string>('');
+  const [messageNotification, setMessageNotification] = useState<{
+    message: string;
+    type: 'error' | 'warning' | 'success';
+  }>({ message: '', type: 'success' });
   const [isOpen, setIsOpen] = useState(false);
   const { userLanguage } = useLanguage();
 
@@ -23,55 +26,77 @@ function NotificationHandlerProvider({ children }: { children: ReactNode }) {
     if (value !== '') {
       switch (status) {
         case STATUS_ERROR_SERVER:
-          setMessageNotification(
-            `${value}: ${userLanguage?.error_msg_refresh}`
-          );
+          setMessageNotification({
+            message: `${value}: ${userLanguage?.error_msg_refresh}`,
+            type: 'error',
+          });
           setIsOpen(true);
           break;
         case STATUS_ERROR_SERVICE_NOT_AVAILABLE:
-          setMessageNotification(
-            `${userLanguage?.error_msg_not_enough_content}`
-          );
+          setMessageNotification({
+            message: `${userLanguage?.error_msg_not_enough_content}`,
+            type: 'error',
+          });
           setIsOpen(true);
           break;
         case STATUS_ERROR_TOO_MANY_REQUEST:
-          setMessageNotification(
-            `${value}: ${userLanguage?.error_msg_too_many_request}`
-          );
+          !value
+            ? setMessageNotification({
+                message: `${userLanguage?.error_msg_too_many_request}`,
+                type: 'warning',
+              })
+            : setMessageNotification({ message: value, type: 'warning' });
+
           setIsOpen(true);
           break;
         case STATUS_ERROR_WRONG_WAY:
-          setMessageNotification(`${userLanguage?.error_msg_wrong_way}`);
+          setMessageNotification({
+            message: `${userLanguage?.error_msg_wrong_way}`,
+            type: 'error',
+          });
           setIsOpen(true);
           break;
         case STATUS_ERROR_BAD_REQUEST:
-          setMessageNotification(`${userLanguage?.error_msg_wrong_way}`);
+          setMessageNotification({
+            message: `${userLanguage?.error_msg_wrong_way}`,
+            type: 'error',
+          });
           setIsOpen(true);
           break;
         case STATUS_ERROR_UNAUTHORIZED:
           !value
-            ? setMessageNotification(`${userLanguage?.error_msg_unauthorized}`)
-            : setMessageNotification(value);
+            ? setMessageNotification({
+                message: `${userLanguage?.error_msg_unauthorized}`,
+                type: 'error',
+              })
+            : setMessageNotification({ message: value, type: 'error' });
           setIsOpen(true);
           break;
         case 422:
           !value
-            ? setMessageNotification(`${userLanguage?.error_msg_refresh}`)
-            : setMessageNotification(value);
+            ? setMessageNotification({
+                message: `${userLanguage?.error_msg_refresh}`,
+                type: 'error',
+              })
+            : setMessageNotification({ message: value, type: 'error' });
           setIsOpen(true);
           break;
         case 200:
           !value
-            ? setMessageNotification(
-                `${userLanguage?.success_msg_request_done}`
-              )
-            : setMessageNotification(value);
+            ? setMessageNotification({
+                message: `${userLanguage?.success_msg_request_done}`,
+                type: 'success',
+              })
+            : setMessageNotification({ message: value, type: 'success' });
 
           setIsOpen(true);
           break;
 
         default:
-          setMessageNotification(`${userLanguage?.error_msg_refresh}`);
+          setMessageNotification({
+            message: `${userLanguage?.error_msg_refresh}`,
+            type: 'error',
+          });
           setIsOpen(true);
           break;
       }
@@ -79,7 +104,7 @@ function NotificationHandlerProvider({ children }: { children: ReactNode }) {
   }
   function changeStatutNotification(value: boolean) {
     setIsOpen(value);
-    setMessageNotification('');
+    setMessageNotification({ message: '', type: 'success' });
   }
 
   return (

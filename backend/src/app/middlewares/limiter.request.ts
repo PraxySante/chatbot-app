@@ -40,9 +40,9 @@ import {
 export default async function limiterRequestApi(
 	req: Request,
 	res: Response,
-	next: NextFunction,
-): Promise<void | Response> {
-	const { uuidSession } = req.body;
+	next: NextFunction
+): Promise<void | Response>{
+	const {uuidSession} = req.body
 	const userId = `${USER}-${uuidSession}-${req.ip}`;
 
 	const request = await redisClient.incr(userId);
@@ -58,5 +58,5 @@ export default async function limiterRequestApi(
 			retryAfter: ONE_MINUTE,
 		});
 	}
-	next();
+	next()
 }

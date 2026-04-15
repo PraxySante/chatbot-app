@@ -15,6 +15,7 @@ import {
 	FAILURE_TOKEN_EXPIRED,
 	MILLISECONDS,
 	RESTART,
+	SESSION_TTL_SECONDS,
 	SUCCESS_OK,
 	USER,
 } from "../constant/constant";
@@ -27,10 +28,10 @@ import {
  * - **Body** (`req.body`):
  *   - `project`: Company name
  *   - `language`: Language selected
- *   - `uuidSession` : session uiud
+ *   - `sessionId` : session uiud
  * @example
  * Requête POST avec un body JSON :
- * { projet: "Praxy IA", language: "fr", uuidSession: "04344-42340-..." }
+ * { projet: "Praxy IA", language: "fr", sessionId: "04344-42340-..." }
  * @param {Response} res - Return response failed or success
  * @param {NextFunction} _ - Next not used
  * @returns {Promise<Response>} - Return response JSON :
@@ -48,9 +49,8 @@ import {
 export default async function verifyAuthRedis(
 	req: Request,
 	res: Response,
-	next: NextFunction
+	next: NextFunction,
 ): Promise<void | Response> {
-
 	const { project, language, uuidSession } = req.body;
 	const { ip } = req;
 
@@ -60,16 +60,9 @@ export default async function verifyAuthRedis(
 			.json({ message: FAILURE_MESSAGE, details: FAILURE_MISSING_IP_HEADERS });
 	}
 
-	if (!uuidSession) {
-		return res.status(ERROR_BAD_REQUEST).json({
-			message: FAILURE_MESSAGE,
-			details: FAILURE_MISSING_UUID_SESSION,
-		});
-	}
-
 	// check good project from Redis
 	const { status, details }: ResponseKeyRedisType | ResponseFailureType =
-	await getKeyRedis(`${ip}-${uuidSession}`);
+		await getKeyRedis(`${ip}-${uuidSession}`);
 
 	if (status !== SUCCESS_OK && !req.url.includes(RESTART)) {
 		console.log(`${FAILURE_STORED_CACHE} ${ip}-${uuidSession}`);
@@ -81,12 +74,39 @@ export default async function verifyAuthRedis(
 	}
 
 	if (status !== SUCCESS_OK && req.url.includes(RESTART)) {
-		console.log(RESTART)
+		console.log(RESTART);
+		const uuidSession = req.signedCookies.sessionId;
 
-		await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
-		await authAndStartChat(ip, project, language, uuidSession);
-		const { status, details } = await startChatApiBot(ip, uuidSession);
-		return res.status(status).send(details);
+		if (uuidSession) {
+			await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
+			await deleteKeyRedis(`${ip}-${uuidSession}`);
+		}
+		const { status, details } = await authAndStartChat(
+			ip,
+			project,
+			language,
+			uuidSession,
+		);
+
+		if (status !== SUCCESS_OK) {
+			return res.status(status).json(details);
+		}
+
+		const cookieUuidSession = details as string;
+
+		if (cookieUuidSession) {
+			const { status, details } = await startChatApiBot(ip, cookieUuidSession);
+			return res
+				.cookie("sessionId", cookieUuidSession, {
+					httpOnly: true,
+					secure: true,
+					sameSite: "none",
+					signed: true,
+					maxAge: SESSION_TTL_SECONDS * 1000,
+				})
+				.status(status)
+				.send(details);
+		}
 	}
 
 	if (typeof details === "object" && "token_expires_in" in details) {
@@ -96,6 +116,11 @@ export default async function verifyAuthRedis(
 			await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
 			await deleteKeyRedis(`${ip}-${uuidSession}`);
 			return res
+				.clearCookie("sessionId", {
+					httpOnly: true,
+					secure: true,
+					sameSite: "none",
+				})
 				.status(ERROR_NOT_AUTHENTIFIED)
 				.json(ERROR_NOT_AUTHENTIFIED_MESSSAGE);
 		}
@@ -105,10 +130,43 @@ export default async function verifyAuthRedis(
 		if (project !== details?.project) {
 			await deleteKeyRedis(`${USER}-${uuidSession}-${ip}`);
 			await deleteKeyRedis(`${ip}-${uuidSession}`);
-			await authAndStartChat(ip, project, language, uuidSession);
-			const { status, details } = await startChatApiBot(ip, uuidSession);
-			return res.status(status).send(details);
+			const { status, details } = await authAndStartChat(
+				ip,
+				project,
+				language,
+				uuidSession,
+			);
+
+			if (status !== SUCCESS_OK) {
+				return res
+					.clearCookie("sessionId", {
+						httpOnly: true,
+						secure: true,
+						sameSite: "none",
+					})
+					.status(status)
+					.json(details);
+			}
+
+			const cookieUuidSession = details as string;
+
+			if (cookieUuidSession) {
+				const { status, details } = await startChatApiBot(
+					ip,
+					cookieUuidSession,
+				);
+				return res
+					.cookie("sessionId", cookieUuidSession, {
+						httpOnly: true,
+						secure: true,
+						sameSite: "none",
+						signed: true,
+						maxAge: SESSION_TTL_SECONDS * 1000,
+					})
+					.status(status)
+					.send(details);
+			}
 		}
 	}
-	next()
+	next();
 }

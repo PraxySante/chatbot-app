@@ -1,0 +1,24 @@
+#tab-panel {
+  @apply cursor-pointer absolute flex flex-row h-fit w-fit mt-1 rounded-md shadow-sm bg-bg border border-solid border-gray-200 justify-center items-center;
+}
+
+/* Styles communs aux boutons */
+.tab,
+.tab-selected {
+  @apply flex flex-row justify-center items-center w-fit px-4 py-2 text-xs font-medium text-text hover:bg-secondary hover:text-textHover sm:text-sm;
+}
+
+/* Bouton sélectionné */
+.tab-selected {
+  @apply rounded-md text-textHover bg-primary;
+}
+
+/* Bouton gauche (premier) */
+.tab:first-child {
+  @apply rounded-l-md;
+}
+
+/* Bouton droit (dernier) */
+.tab:last-child {
+  @apply rounded-r-md;
+}

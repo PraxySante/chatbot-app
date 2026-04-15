@@ -1,5 +1,5 @@
 type ImageAttributes = {
-  imgSource: string;
+  imgSource: any;
   classname: string;
   alt?: string;
 };

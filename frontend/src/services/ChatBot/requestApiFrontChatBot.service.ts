@@ -11,7 +11,8 @@ export async function requestApiFrontChatBot(
   try {
     const response: AxiosResponse = await axiosAuthSecret.post(
       '/auth',
-      payload
+      payload,
+      { withCredentials: true }
     );
     const { data, status } = response;
     if (status === 200) {

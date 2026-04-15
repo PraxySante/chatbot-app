@@ -23,6 +23,7 @@ import { ResponseKeyRedisType } from "../../types/redis.type";
 import { createConversationDirectus } from "../Directus/create.service";
 import { updateConversationDirectus } from "../Directus/update.service";
 import { axiosChatBot } from "./axiosChatBot.service";
+import saveError from "./saveError.service";
 
 /**
 	 * Request axios continue conversation API-chatbot
@@ -97,6 +98,7 @@ export async function requestChatToApiChatBot(
 
 	if (details?.idDirectus === "") {
 		const data: CreateConversationDirectusAttributes = {
+			Type: "Chatbot_web",
 			Name: details?.project,
 			Uuid_LLM: details.uuid,
 		};
@@ -182,6 +184,13 @@ export async function requestChatToApiChatBot(
 		};
 	} catch (error: any) {
 		console.error("continueChat", error);
+		await saveError(
+			error,
+			details,
+			"Chatbot_web",
+			"Chatbot_conversation",
+			"continueChat",
+		);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

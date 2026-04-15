@@ -14,6 +14,7 @@ import {
   ROLE_USER_MICROPHONE,
   ROLE_USER_TEXT,
 } from '../../constants/chat.constants';
+import './InputMessage.css'
 
 export default function InputMessage() {
   // Init component

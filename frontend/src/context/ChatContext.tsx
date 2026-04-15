@@ -16,6 +16,7 @@ import {
   ERROR_TYPE_FAILURE,
   ERROR_USE_NOTIFICATION,
   ERROR_USE_RECAPTCHA,
+  PANEL_CHAT,
   STATUS_SUCCESS,
 } from '../constants/notifications.constants';
 import {
@@ -28,6 +29,7 @@ import {
   ROLE_USER_TEXT,
 } from '../constants/chat.constants';
 import { useClient } from '../hooks/ClientProvider';
+import { selectedPanelAttributes } from '../types/panel/panel.type';
 
 const ChatContext = createContext<ChatContextAttributes | undefined>(undefined);
 
@@ -56,6 +58,8 @@ function ChatContextProvider({
   const [isUserWritten, setIsUserWritten] = useState<boolean>(false);
   const [isBotWritten, setIsBotWritten] = useState<boolean>(false);
   const [messageLoading, setMessageLoading] = useState<string>('');
+  const [selectedPanel, setSelectedPanel] =
+    useState<selectedPanelAttributes>(PANEL_CHAT);
 
   if (!useRecaptcha) {
     throw new Error(ERROR_USE_RECAPTCHA);
@@ -151,6 +155,7 @@ function ChatContextProvider({
     setIsRestart(!isRestart);
     getMessageToNotification(STATUS_SUCCESS, userLanguage?.success_msg_session);
     await restartConversation(selectedLanguage);
+    whoIsWritten(ROLE_NONE);
   }
 
   async function verifyStartChat(): Promise<void> {
@@ -184,10 +189,8 @@ function ChatContextProvider({
       if (responseRequest) {
         setUuidSession(responseRequest);
 
-        const responseStartChat: any = await startApiFrontChatBot(
-          responseRequest,
-          selectedLanguage
-        );
+        const responseStartChat: any =
+          await startApiFrontChatBot(selectedLanguage);
 
         if (responseStartChat.message === ERROR_TYPE_FAILURE.toLowerCase()) {
           getMessageToNotification({
@@ -218,7 +221,6 @@ function ChatContextProvider({
 
   async function restartConversation(userSelectedLanguage?: string) {
     const responseRequest: any = await restartChat(
-      uuidSession,
       userSelectedLanguage ? userSelectedLanguage : selectedLanguage
     );
 
@@ -347,7 +349,6 @@ function ChatContextProvider({
         role: ROLE_USER,
         content: userContent,
       },
-      uuidSession,
       selectedLanguage
     );
 
@@ -407,11 +408,10 @@ function ChatContextProvider({
 
     whoIsWritten(ROLE_ASSISTANT);
 
-    const propositionChatConversation: any = await reformulateChat(
-      uuidSession,
-      selectedLanguage
-    );
+    const propositionChatConversation: any =
+      await reformulateChat(selectedLanguage);
 
+      whoIsWritten(ROLE_NONE);
     if (
       propositionChatConversation.message === ERROR_TYPE_FAILURE.toLowerCase()
     ) {
@@ -452,7 +452,6 @@ function ChatContextProvider({
     const responseApi: any = await feedbackApiFrontChatBot(
       vote,
       comment,
-      uuidSession,
       selectedLanguage
     );
     if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
@@ -467,7 +466,7 @@ function ChatContextProvider({
   }
 
   async function endConversation() {
-    const responseApi: any = await endChat(uuidSession, selectedLanguage);
+    const responseApi: any = await endChat(selectedLanguage);
     if (responseApi.message === ERROR_TYPE_FAILURE.toLowerCase()) {
       getMessageToNotification(responseApi.status, responseApi.details);
       return;
@@ -503,9 +502,13 @@ function ChatContextProvider({
     }
   }
 
+  function updateSelectPanel(selectedPanel: selectedPanelAttributes) {
+    setSelectedPanel(selectedPanel);
+  }
+
   return (
     <>
-      {configClient.authAccountOption ? (
+      {configClient?.options?.authAccountOption ? (
         <>
           <ChatContext.Provider
             value={{
@@ -528,6 +531,8 @@ function ChatContextProvider({
               messageLoading,
               setVoteUser,
               uuidSession,
+              updateSelectPanel,
+              selectedPanel,
             }}
           >
             {children}
@@ -554,6 +559,8 @@ function ChatContextProvider({
             messageLoading,
             setVoteUser,
             uuidSession,
+            updateSelectPanel,
+            selectedPanel,
           }}
         >
           {children}

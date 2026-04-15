@@ -1,12 +1,7 @@
 import { useLanguage } from '../../hooks/UseLanguage';
 import { MessageAttributes } from '../../types/messages/messages.type';
 import { useChat } from '../../hooks/ChatProvider';
-import {
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import MessageLoading from '../Loading/MessageLoading';
 import Button from '../../components/Buttons/Button';
 import ListMessage from '../Messages/ListMessage';
@@ -17,21 +12,25 @@ import icons from '../../constants/icons';
 import HeaderChat from './HeaderChat';
 import FooterChat from './FooterChat';
 import Modal from '../Modal/Modal';
-import { IChatAttributes } from '../../types/chatbot/chatbot.interface';
-import { ROLE_ASSISTANT, ROLE_USER } from '../../constants/chat.constants';
+import { ROLE_ASSISTANT, ROLE_NONE } from '../../constants/chat.constants';
+import './Chat.css';
+import { STATUS_ERROR_TOO_MANY_REQUEST } from '../../constants/notifications.constants';
+import { useNotification } from '../../hooks/NotificationProvider';
 
-
-
-export default function Chat({
-  selectedPanel,
-  setSelectedPanel,
-}: IChatAttributes) {
+export default function Chat() {
   //Init Component
   //
-  const { messages, reformulateChatConversation, isUserWritten, isBotWritten } =
-    useChat();
+  const {
+    messages,
+    reformulateChatConversation,
+    isUserWritten,
+    isBotWritten,
+    whoIsWritten,
+  } = useChat();
   // Check selected language by user
   const { userLanguage } = useLanguage();
+  const { getMessageToNotification } = useNotification();
+
   const autoScrollMessage = useRef<HTMLDivElement | null>(null);
   const [isOpenModalFeedback, setIsOpenModalFeedback] =
     useState<boolean>(false);
@@ -49,31 +48,39 @@ export default function Chat({
   }, [messages, isBotWritten, isUserWritten]);
 
   async function clickReformulateMessage() {
+    if (isBotWritten) {
+      getMessageToNotification(
+        STATUS_ERROR_TOO_MANY_REQUEST,
+        userLanguage ? userLanguage?.error_msg_wait_bot : ''
+      );
+      return;
+    }
     await reformulateChatConversation();
+    whoIsWritten(ROLE_NONE);
   }
 
   /* Render all messages exist */
   function renderingMessages() {
     return messages.map((message: MessageAttributes, index: number) => (
       <Fragment key={index}>
-        <ListMessage message={message} setSelectedPanel={setSelectedPanel} />
-        {renderLoadingMessage(index, message.role)}
+        <ListMessage message={message} />
+        {renderLoadingMessage(index)}
       </Fragment>
     ));
   }
 
-  function renderLoadingMessage(index: number, role: string) {
+  function renderLoadingMessage(index: number) {
     return (
       <>
-        {index === messages.length - 1 && role === ROLE_USER && isBotWritten && (
-          <span className="flex flex-row justify-start">
+        {index === messages.length - 1 && isBotWritten && (
+          <span className="chat-room-containers_loading-bot">
             <IconButton className={'icon icon-bot'} icon={icons.bot} />
-            <MessageLoading className="wrapper-bot" role={'assistant'} />
+            <MessageLoading className="wrapper-bot" />
           </span>
         )}
         {index === messages.length - 1 && isUserWritten && (
-          <span className="flex flex-row justify-end">
-            <MessageLoading className="wrapper-user" role={ROLE_USER} />
+          <span className="chat-room-containers_loading-user">
+            <MessageLoading className="wrapper-user" />
             <IconButton className={'icon icon-user'} icon={icons.user} />
           </span>
         )}
@@ -83,23 +90,26 @@ export default function Chat({
 
   function renderingModalFeedback() {
     const className = isOpenModalFeedback
-      ? 'flex flex-row overflow-y-auto overflow-x-hidden absolute z-50 justify-center items-center w-full h-3/4'
+      ? 'chatbot-room_containers-feedback'
       : 'hidden';
     return (
       <>
-        <div id="authentication-modal" aria-hidden="true" className={className}>
-          <Modal setIsOpenModalFeedback={setIsOpenModalFeedback} />
-        </div>
+        {isOpenModalFeedback ? (
+          <div
+            id="authentication-modal"
+            aria-label="modal feedback"
+            className={className}
+          >
+            <Modal setIsOpenModalFeedback={setIsOpenModalFeedback} />
+          </div>
+        ) : null}
       </>
     );
   }
 
   return (
     <section id="chat-room">
-      <HeaderChat
-        selectedPanel={selectedPanel}
-        setSelectedPanel={setSelectedPanel}
-      />
+      <HeaderChat />
       {/* List messages chat */}
       {renderingModalFeedback()}
 
@@ -117,7 +127,7 @@ export default function Chat({
                 content={userLanguage?.reformulate_button}
                 onClick={() => clickReformulateMessage()}
               />
-            <FeedbackLight setIsOpenModalFeedback={setIsOpenModalFeedback} />
+              <FeedbackLight setIsOpenModalFeedback={setIsOpenModalFeedback} />
             </span>
           )}
       </div>

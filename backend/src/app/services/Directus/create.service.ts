@@ -3,6 +3,7 @@ import { ResponseFailureType } from "../../types/chatbot.type";
 import {
 	ConversationDirectusAttributes,
 	CreateConversationDirectusAttributes,
+	ErrorDirectusAttributes,
 } from "../../types/directus.type";
 import { FAILURE_MESSAGE, SUCCESS_OK } from "../../constant/constant";
 import axiosDirectus from "./axiosDirectus.service";
@@ -50,7 +51,9 @@ import axiosDirectus from "./axiosDirectus.service";
 	 */
 export async function createConversationDirectus(
 	collection: string,
-	preparedData: Partial<CreateConversationDirectusAttributes>,
+	preparedData: Partial<
+		CreateConversationDirectusAttributes | ErrorDirectusAttributes
+	>,
 ): Promise<ConversationDirectusAttributes | ResponseFailureType> {
 	try {
 		const response: AxiosResponse = await axiosDirectus.post(

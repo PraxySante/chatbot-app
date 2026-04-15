@@ -355,7 +355,7 @@ export default {
     <svg
       aria-hidden="true"
       role="status"
-      className="inline w-6 h-6 me-3 text-gray-200 animate-spin dark:text-gray-600"
+      className="inline w-6 h-6 me-3 text-gray-200 animate-spin"
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -461,6 +461,72 @@ export default {
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+      />
+    </svg>
+  ),
+  success: (
+    <svg
+      className="w-5 h-5"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+    </svg>
+  ),
+  warning: (
+    <svg
+      className="w-5 h-5"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18 17.94 6M18 18 6.06 6"
+      />
+    </svg>
+  ),
+  error: (
+    <svg
+      className="w-5 h-5"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18 17.94 6M18 18 6.06 6"
+      />
+    </svg>
+  ),
+  iconClose: (
+    <svg
+      className="w-3 h-3"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 14 14"
+    >
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
       />
     </svg>
   ),

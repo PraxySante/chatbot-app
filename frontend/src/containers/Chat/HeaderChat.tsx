@@ -4,14 +4,11 @@ import Information from '../Information/Information';
 import Notification from '../Notification/Notification';
 import TabPanel from '../Panel/TabPanel/TabPanel';
 import { useNotification } from '../../hooks/NotificationProvider';
-import { IChatAttributes } from '../../types/chatbot/chatbot.interface';
 import { useClient } from '../../hooks/ClientProvider';
 import { useLanguage } from '../../hooks/UseLanguage';
+import './Chat.css';
 
-export default function HeaderChat({
-  selectedPanel,
-  setSelectedPanel,
-}: IChatAttributes) {
+export default function HeaderChat() {
   const { messageNotification } = useNotification();
 
   const { configClient } = useClient();
@@ -19,7 +16,7 @@ export default function HeaderChat({
 
   useEffect(() => {
     renderingNotification();
-  }, [messageNotification]);
+  }, [messageNotification?.message]);
 
   function renderingNotification() {
     setTimeout(() => {
@@ -28,7 +25,7 @@ export default function HeaderChat({
   }
 
   return (
-    <section className="h-fit">
+    <section className="chat-room-header">
       {/* Data Inofrmation chat */}
       <Title
         content={`${userLanguage?.chat_title} ${configClient.title}`}
@@ -37,11 +34,8 @@ export default function HeaderChat({
       ></Title>
       <Information />
       <div className="chat-room-containers_tab-panel">
-        <TabPanel
-          selectedPanel={selectedPanel}
-          setSelectedPanel={setSelectedPanel}
-        />
-        {messageNotification && <Notification />}
+        <TabPanel />
+        {messageNotification?.message && <Notification />}
       </div>
     </section>
   );

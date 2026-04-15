@@ -97,6 +97,7 @@ export class WebSocketTranscription {
 					this.project = project;
 					const data: CreateConversationDirectusAttributes = {
 						Name: project,
+						Type: 'Chatbot_web',
 						Uuid_Transcription: uuidTranscription,
 					};
 
@@ -127,6 +128,7 @@ export class WebSocketTranscription {
 				} else {
 					const data: CreateConversationDirectusAttributes = {
 						Name: project,
+						Type: "Chatbot_web",
 						Uuid_Transcription: uuidTranscription,
 					};
 

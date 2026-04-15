@@ -13,6 +13,7 @@ import {
 	FAILURE_MESSAGE,
 	SUCCESS_OK,
 } from "../../constant/constant";
+import saveError from "./saveError.service";
 
 /**
  * Request axios Start conversation Api-Chatbot
@@ -83,6 +84,13 @@ export async function startChatApiBot(
 		return { status: status, details: data.message };
 	} catch (error: any) {
 		console.error("startChat", error);
+		await saveError(
+			error,
+			details,
+			"Chatbot_web",
+			"Chatbot_conversation",
+			"startChat",
+		);
 		return {
 			status: error.status,
 			message: FAILURE_MESSAGE,

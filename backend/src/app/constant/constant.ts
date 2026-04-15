@@ -1,6 +1,6 @@
-export const ONE_HOUR = 60 * 60;
+export const SESSION_TTL_SECONDS = 60 * 60 * 2;
 export const KEY_EXIST = 1;
-export const MAX_REQUEST_PER_MINUTE = 8;
+export const MAX_REQUEST_PER_MINUTE = 12;
 export const ONE_MINUTE = 60;
 
 export const MILLISECONDS = 1000;
@@ -13,9 +13,14 @@ export const ASSISTANT = "assistant";
 // FAILURE
 export const FAILURE_MESSAGE = "Failure";
 export const FAILURE_MISSING_IP_HEADERS = "Missing ip in request headers.";
-export const FAILURE_MISSING_UUID_SESSION = "Missing uuid session in request headers.";
-export const FAILURE_MISSING_URL_DOCUMENT = "Missing url document in request headers.";
+export const FAILURE_MISSING_UUID_SESSION =
+	"Missing uuid session in request headers.";
+export const FAILURE_MISSING_URL_DOCUMENT =
+	"Missing url document in request headers.";
 export const FAILURE_MISSING_LANGUAGE = "Missing language in request headers.";
+export const FAILURE_MISSING_CLIENDID = "Missing credentials"
+export const FAILURE_MISSING_APIKEY = "Invalid credentials"
+export const FAILURE_INVALID_CREDENTIALS = "Invalid credentials"
 
 
 export const FAILURE_STORED_CACHE = "Stored cache not found for ip";

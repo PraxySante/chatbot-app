@@ -1,4 +1,5 @@
 import InputMessage from '../InputMessage/InputMessage';
+import './Chat.css'
 
 export default function FooterChat() {
   return (
