@@ -461,10 +461,6 @@ input[type='number'] {
 .message-assistant {
   @apply flex flex-col text-textBot text-justify text-sm rounded-tr-lg rounded-b-lg justify-start gap-2 text-wrap;
 }
-.message-assistant,
-p {
-  @apply flex flex-col;
-}
 
 .message-user {
   @apply flex flex-col text-textUser text-justify text-sm rounded-tl-lg rounded-b-lg gap-2 border-borderUser;
